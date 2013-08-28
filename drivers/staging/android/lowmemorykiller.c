@@ -50,6 +50,7 @@
 #include <linux/zsmalloc.h>
 #endif
 #include <linux/vmpressure.h>
+#include <linux/vmstat.h>
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/almk.h>
@@ -375,7 +376,15 @@ void tune_lmk_param(int *other_free, int *other_file, struct shrink_control *sc)
 	}
 }
 
-static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
+static unsigned long lowmem_count(struct shrinker *s, struct shrink_control *sc)
+{
+       return global_page_state(NR_ACTIVE_ANON) +
+               global_page_state(NR_ACTIVE_FILE) +
+               global_page_state(NR_INACTIVE_ANON) +
+               global_page_state(NR_INACTIVE_FILE);
+}
+
+static unsigned long lowmem_scan(struct shrinker *s, struct shrink_control *sc)
 {
 	struct task_struct *tsk;
 #ifdef CONFIG_MULTIPLE_LMK
@@ -690,7 +699,8 @@ static int lowmem_shrink(struct shrinker *s, struct shrink_control *sc)
 }
 
 static struct shrinker lowmem_shrinker = {
-	.shrink = lowmem_shrink,
+	.scan_objects = lowmem_scan,
+	.count_objects = lowmem_count,
 	.seeks = DEFAULT_SEEKS * 16
 };
 
