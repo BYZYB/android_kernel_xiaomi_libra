@@ -4711,7 +4711,6 @@ SYSCALL_DEFINE0(sched_yield)
 
 int __sched _cond_resched(void)
 {
-	rcu_cond_resched();
 	if (should_resched()) {
 		preempt_schedule_common();
 		return 1;
@@ -4730,18 +4729,15 @@ EXPORT_SYMBOL(_cond_resched);
  */
 int __cond_resched_lock(spinlock_t *lock)
 {
-	bool need_rcu_resched = rcu_should_resched();
 	int resched = should_resched();
 	int ret = 0;
 
 	lockdep_assert_held(lock);
 
-	if (spin_needbreak(lock) || resched || need_rcu_resched) {
+	if (spin_needbreak(lock) || resched) {
 		spin_unlock(lock);
 		if (resched)
 			preempt_schedule_common();
-		else if (unlikely(need_rcu_resched))
-			rcu_resched();
 		else
 			cpu_relax();
 		ret = 1;
@@ -4755,7 +4751,6 @@ int __sched __cond_resched_softirq(void)
 {
 	BUG_ON(!in_softirq());
 
-	rcu_cond_resched();  /* BH disabled OK, just recording QSes. */
 	if (should_resched()) {
 		local_bh_enable();
 		preempt_schedule_common();
