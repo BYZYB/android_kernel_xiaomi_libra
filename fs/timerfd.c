@@ -96,7 +96,7 @@ static enum alarmtimer_restart timerfd_alarmproc(struct alarm *alarm,
  */
 void timerfd_clock_was_set(void)
 {
-	ktime_t moffs = ktime_get_monotonic_offset();
+	ktime_t moffs = ktime_mono_to_real((ktime_t){ .tv64 = 0 });
 	struct timerfd_ctx *ctx;
 	unsigned long flags;
 
@@ -136,7 +136,7 @@ static bool timerfd_canceled(struct timerfd_ctx *ctx)
 {
 	if (!ctx->might_cancel || ctx->moffs.tv64 != KTIME_MAX)
 		return false;
-	ctx->moffs = ktime_get_monotonic_offset();
+	ctx->moffs = ktime_mono_to_real((ktime_t){ .tv64 = 0 });
 	return true;
 }
 
@@ -354,7 +354,7 @@ SYSCALL_DEFINE2(timerfd_create, int, clockid, int, flags)
 		hrtimer_init(&ctx->t.tmr, clockid, HRTIMER_MODE_ABS);
 	}
 
-	ctx->moffs = ktime_get_monotonic_offset();
+	ctx->moffs = ktime_mono_to_real((ktime_t){ .tv64 = 0 });
 
 	instance = atomic_inc_return(&instance_count);
 	get_task_comm(task_comm_buf, current);
