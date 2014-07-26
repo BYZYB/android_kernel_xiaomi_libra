@@ -1127,7 +1127,7 @@ static void steal_suitable_fallback(struct zone *zone, struct page *page,
 		return;
 	}
 
-	pages = move_freepages_block(zone, page, start_type);
+	pages = move_freepages_block(zone, page, start_type, 0);
 
 	/* Claim the whole block if over half of it is free */
 	if (pages >= (1 << (pageblock_order-1)) ||
@@ -1200,6 +1200,8 @@ __rmqueue_fallback(struct zone *zone, int order, int start_migratetype)
 
 		/* Remove the page from the freelists */
 		area->nr_free--;
+		if (is_migrate_cma(start_migratetype))
+			area->nr_free_cma--;
 		list_del(&page->lru);
 		rmv_page_order(page);
 
