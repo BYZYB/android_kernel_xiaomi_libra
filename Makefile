@@ -654,7 +654,8 @@ KBUILD_CFLAGS += $(stackp-flag)
 ifeq ($(COMPILER),clang)
 KBUILD_CFLAGS += $(call cc-disable-warning, format-invalid-specifier) \
                  $(call cc-disable-warning, gnu) \
-                 $(call cc-disable-warning, unused-variable)
+                 $(call cc-disable-warning, unused-variable) \
+                 $(call cc-option, -fcatch-undefined-behavior)
 KBUILD_CPPFLAGS += $(call cc-option,-Qunused-arguments,) \
                    $(call cc-option,-Wno-unknown-warning-option,)
 # Quiet clang warning: comparison of unsigned expression < 0 is always false
