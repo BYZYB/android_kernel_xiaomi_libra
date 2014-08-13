@@ -4422,9 +4422,6 @@ static inline void hrtick_update(struct rq *rq)
 #ifdef CONFIG_SMP
 static bool cpu_overutilized(int cpu);
 unsigned long boosted_cpu_util(int cpu);
-#else
-#define boosted_cpu_util(cpu) cpu_util(cpu)
-#endif
 
 static void update_capacity_of(int cpu, bool request)
 {
@@ -4438,6 +4435,8 @@ static void update_capacity_of(int cpu, bool request)
 	req_cap = req_cap * SCHED_CAPACITY_SCALE / capacity_orig_of(cpu);
 	set_cfs_cpu_capacity(cpu, request, req_cap);
 }
+#else
+#define boosted_cpu_util(cpu) cpu_util(cpu)
 #endif
 
 /*
