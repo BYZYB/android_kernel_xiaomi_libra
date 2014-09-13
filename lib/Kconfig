@@ -54,6 +54,9 @@ config STMP_DEVICE
 config PERCPU_RWSEM
 	boolean
 
+config ARCH_HAS_FAST_MULTIPLIER
+	bool
+
 config CRC_CCITT
 	tristate "CRC-CCITT functions"
 	help
