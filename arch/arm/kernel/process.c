@@ -613,6 +613,39 @@ const char *arch_vma_name(struct vm_area_struct *vma)
 		return NULL;
 }
 
+/* If possible, provide a placement hint at a random offset from the
+ * stack for the signal page.
+ */
+static unsigned long sigpage_addr(const struct mm_struct *mm,
+				  unsigned int npages)
+{
+	unsigned long offset;
+	unsigned long first;
+	unsigned long last;
+	unsigned long addr;
+	unsigned int slots;
+
+	first = PAGE_ALIGN(mm->start_stack);
+
+	last = TASK_SIZE - (npages << PAGE_SHIFT);
+
+	/* No room after stack? */
+	if (first > last)
+		return 0;
+
+	/* Just enough room? */
+	if (first == last)
+		return first;
+
+	slots = ((last - first) >> PAGE_SHIFT) + 1;
+
+	offset = get_random_int() % slots;
+
+	addr = first + (offset << PAGE_SHIFT);
+
+	return addr;
+}
+
 static struct page *signal_page;
 extern struct page *get_signal_page(void);
 
@@ -626,16 +659,21 @@ int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
 	struct mm_struct *mm = current->mm;
 	struct vm_area_struct *vma;
 	unsigned long addr;
+	unsigned long hint;
 	int ret = 0;
 
 	if (!signal_page)
 		signal_page = get_signal_page();
+
 	if (!signal_page)
 		return -ENOMEM;
 
 	if (down_write_killable(&mm->mmap_sem))
 		return -EINTR;
-	addr = get_unmapped_area(NULL, 0, PAGE_SIZE, 0, 0);
+
+	hint = sigpage_addr(mm, 1);
+	addr = get_unmapped_area(NULL, hint, PAGE_SIZE, 0, 0);
+
 	if (IS_ERR_VALUE(addr)) {
 		ret = addr;
 		goto up_fail;
