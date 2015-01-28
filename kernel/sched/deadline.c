@@ -1099,6 +1099,7 @@ static void task_dead_dl(struct task_struct *p)
 	 * Since we are TASK_DEAD we won't slip out of the domain!
 	 */
 	raw_spin_lock_irq(&dl_b->lock);
+	/* XXX we should retain the bw until 0-lag */
 	dl_b->total_bw -= p->dl.dl_bw;
 	raw_spin_unlock_irq(&dl_b->lock);
 
@@ -1571,10 +1572,13 @@ void init_sched_dl_class(void)
 
 static void switched_from_dl(struct rq *rq, struct task_struct *p)
 {
-	if (hrtimer_active(&p->dl.dl_timer) && !dl_policy(p->policy))
-		hrtimer_try_to_cancel(&p->dl.dl_timer);
+	/* XXX we should retain the bw until 0-lag */
+	cancel_dl_timer(rq, p);
 
 	__dl_clear_params(p);
+	
+	if (hrtimer_active(&p->dl.dl_timer) && !dl_policy(p->policy))
+		hrtimer_try_to_cancel(&p->dl.dl_timer);
 
 	/*
 	 * Since this might be the only -deadline task on the rq,
