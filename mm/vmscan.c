@@ -3097,7 +3097,7 @@ loop_again:
 		 */
 		if (waitqueue_active(&pgdat->pfmemalloc_wait) &&
 				pfmemalloc_watermark_ok(pgdat))
-			wake_up(&pgdat->pfmemalloc_wait);
+			wake_up_all(&pgdat->pfmemalloc_wait);
 
 		if (pgdat_balanced(pgdat, order, *classzone_idx)) {
 			pgdat_is_balanced = true;
