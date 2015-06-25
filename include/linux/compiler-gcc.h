@@ -5,9 +5,9 @@
 /*
  * Common definitions for all gcc versions go here.
  */
-#define GCC_VERSION (__GNUC__ * 10000 \
-		   + __GNUC_MINOR__ * 100 \
-		   + __GNUC_PATCHLEVEL__)
+#define GCC_VERSION (__GNUC__ * 10000		\
+		     + __GNUC_MINOR__ * 100	\
+		     + __GNUC_PATCHLEVEL__)
 
 /* Optimization barrier */
 
@@ -46,19 +46,22 @@
  * the inline assembly constraint from =g to =r, in this particular
  * case either is valid.
  */
-#define RELOC_HIDE(ptr, off)					\
-  ({ unsigned long __ptr;					\
-    __asm__ ("" : "=r"(__ptr) : "0"(ptr));		\
-    (typeof(ptr)) (__ptr + (off)); })
+#define RELOC_HIDE(ptr, off)						\
+({									\
+	unsigned long __ptr;						\
+	__asm__ ("" : "=r"(__ptr) : "0"(ptr));				\
+	(typeof(ptr)) (__ptr + (off));					\
+})
 
 /* Make the optimizer believe the variable can be manipulated arbitrarily. */
-#define OPTIMIZER_HIDE_VAR(var) __asm__ ("" : "=r" (var) : "0" (var))
+#define OPTIMIZER_HIDE_VAR(var)						\
+	__asm__ ("" : "=r" (var) : "0" (var))
 
 #ifdef __CHECKER__
-#define __must_be_array(arr) 0
+#define __must_be_array(a)	0
 #else
 /* &a[0] degrades to a pointer: a different type from an array */
-#define __must_be_array(a) BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
+#define __must_be_array(a)	BUILD_BUG_ON_ZERO(__same_type((a), &(a)[0]))
 #endif
 
 /*
@@ -102,21 +105,23 @@
 #define __deprecated	__attribute__((deprecated))
 #define __packed	__attribute__((packed))
 #define __weak		__attribute__((weak))
-#define __alias(symbol)		__attribute__((alias(#symbol)))
+#define __alias(symbol)	__attribute__((alias(#symbol)))
 
 /*
- * it doesn't make sense on ARM (currently the only user of __naked) to trace
- * naked functions because then mcount is called without stack and frame pointer
- * being set up and there is no chance to restore the lr register to the value
- * before mcount was called.
+ * it doesn't make sense on ARM (currently the only user of __naked)
+ * to trace naked functions because then mcount is called without
+ * stack and frame pointer being set up and there is no chance to
+ * restore the lr register to the value before mcount was called.
  *
- * The asm() bodies of naked functions often depend on standard calling conventions,
- * therefore they must be noinline and noclone.  GCC 4.[56] currently fail to enforce
- * this, so we must do so ourselves.  See GCC PR44290.
+ * The asm() bodies of naked functions often depend on standard calling
+ * conventions, therefore they must be noinline and noclone.
+ *
+ * GCC 4.[56] currently fail to enforce this, so we must do so ourselves.
+ * See GCC PR44290.
  */
-#define __naked				__attribute__((naked)) noinline __noclone notrace
+#define __naked		__attribute__((naked)) noinline __noclone notrace
 
-#define __noreturn			__attribute__((noreturn))
+#define __noreturn	__attribute__((noreturn))
 
 /*
  * From the GCC manual:
@@ -128,14 +133,13 @@
  * would be.
  * [...]
  */
-#define __pure				__attribute__((pure))
-#define __aligned(x)			__attribute__((aligned(x)))
-#define __printf(a, b)			__attribute__((format(printf, a, b)))
-#define __scanf(a, b)			__attribute__((format(scanf, a, b)))
-#define  noinline			__attribute__((noinline))
-#define __attribute_const__		__attribute__((__const__))
-#define __maybe_unused			__attribute__((unused))
-#define __always_unused			__attribute__((unused))
+#define __pure			__attribute__((pure))
+#define __aligned(x)		__attribute__((aligned(x)))
+#define __printf(a, b)		__attribute__((format(printf, a, b)))
+#define __scanf(a, b)		__attribute__((format(scanf, a, b)))
+#define __attribute_const__	__attribute__((__const__))
+#define __maybe_unused		__attribute__((unused))
+#define __always_unused		__attribute__((unused))
 
 /* gcc version specific checks */
 
@@ -262,5 +266,3 @@
  * code
  */
 #define uninitialized_var(x) x = x
-
-#define __always_inline		inline __attribute__((always_inline))
