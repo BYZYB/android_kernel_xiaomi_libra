@@ -322,7 +322,6 @@ static int ashmem_mmap(struct file *file, struct vm_area_struct *vma)
 			if (!ret)
 				asma->file_is_setup = true;
 		}
-		vmfile->f_mode |= FMODE_LSEEK;
 		mutex_unlock(&mmap_lock);
 
 		if (do_setup && ret)
