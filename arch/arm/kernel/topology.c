@@ -180,6 +180,8 @@ static void __init parse_dt_topology(void)
 
 }
 
+static const struct sched_group_energy * const cpu_core_energy(int cpu);
+
 /*
  * Look for a customed capacity of a CPU in the cpu_capacity table during the
  * boot. The update of all CPUs is in O(n^2) for heteregeneous system but the
@@ -187,21 +189,14 @@ static void __init parse_dt_topology(void)
  */
 void update_cpu_power(unsigned int cpu, unsigned long hwid)
 {
-	unsigned int idx = 0;
+	unsigned long capacity = SCHED_CAPACITY_SCALE;
 
-	/* look for the cpu's hwid in the cpu capacity table */
-	for (idx = 0; idx < num_possible_cpus(); idx++) {
-		if (cpu_capacity[idx].hwid == hwid)
-			break;
-
-		if (cpu_capacity[idx].hwid == -1)
-			return;
+	if (cpu_core_energy(cpu)) {
+		int max_cap_idx = cpu_core_energy(cpu)->nr_cap_states - 1;
+		capacity = cpu_core_energy(cpu)->cap_states[max_cap_idx].cap;
 	}
 
-	if (idx == num_possible_cpus())
-		return;
-
-	set_power_scale(cpu, cpu_capacity[idx].capacity / middle_capacity);
+	set_capacity_scale(cpu, capacity);
 
 	printk(KERN_INFO "CPU%u: update cpu_power %lu\n",
 		cpu, arch_scale_freq_power(NULL, cpu));
