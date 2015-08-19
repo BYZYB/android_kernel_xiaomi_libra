@@ -642,14 +642,7 @@ endif
 endif
 KBUILD_CFLAGS += $(stackp-flag)
 
-ifeq ($(shell $(CC) -v 2>&1 | grep -c "clang version"), 1)
-COMPILER := clang
-else
-COMPILER := gcc
-endif
-export COMPILER
-
-ifeq ($(COMPILER),clang)
+ifeq ($(cc-name),clang)
 KBUILD_CFLAGS += $(call cc-disable-warning, format-invalid-specifier) \
                  $(call cc-disable-warning, gnu) \
                  $(call cc-disable-warning, unused-variable) \
