@@ -705,15 +705,23 @@ __SYSCALL(__NR_seccomp, sys_seccomp)
 __SYSCALL(__NR_getrandom, sys_getrandom)
 #define __NR_memfd_create 279
 __SYSCALL(__NR_memfd_create, sys_memfd_create)
+#define __NR_bpf 280
+__SYSCALL(__NR_bpf, sys_ni_syscall)
+#define __NR_execveat 281
+__SC_COMP(__NR_execveat, sys_ni_syscall, sys_ni_syscall)
+#define __NR_userfaultfd 282
+__SYSCALL(__NR_userfaultfd, sys_ni_syscall)
+#define __NR_membarrier 283
+__SYSCALL(__NR_membarrier, sys_membarrier)
 
 #undef __NR_syscalls
-#define __NR_syscalls 280
+#define __NR_syscalls 284
 
 /*
  * All syscalls below here should go away really,
  * these are provided for both review and as a porting
  * help for the C library version.
-*
+ *
  * Last chance: are any of these important enough to
  * enable by default?
  */
