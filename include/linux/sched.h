@@ -1371,6 +1371,10 @@ struct sched_rt_entity {
 	unsigned long timeout;
 	unsigned long watchdog_stamp;
 	unsigned int time_slice;
+	unsigned short on_rq;
+	unsigned short on_list;
+
+	/* Accesses for these must be guarded by rq->lock of the task's rq */
 	bool schedtune_enqueued;
 	struct hrtimer schedtune_timer;
 
