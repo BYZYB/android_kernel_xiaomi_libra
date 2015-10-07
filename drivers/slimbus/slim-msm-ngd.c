@@ -188,11 +188,6 @@ static int dsp_ssr_notify_cb(struct notifier_block *n, unsigned long code,
 		/* make sure autosuspend is not called until ADSP comes up*/
 		pm_runtime_get_noresume(dev->dev);
 		dev->state = MSM_CTRL_DOWN;
-		/* disconnect BAM pipes */
-		if (dev->use_rx_msgqs == MSM_MSGQ_ENABLED)
-			dev->use_rx_msgqs = MSM_MSGQ_DOWN;
-		if (dev->use_tx_msgqs == MSM_MSGQ_ENABLED)
-			dev->use_tx_msgqs = MSM_MSGQ_DOWN;
 		msm_slim_sps_exit(dev, false);
 		ngd_adsp_down(dev);
 		mutex_unlock(&dev->tx_lock);
@@ -716,9 +711,19 @@ static int ngd_bulk_wr(struct slim_controller *ctrl, u8 la, u8 mt, u8 mc,
 	u32 *header;
 	DECLARE_COMPLETION_ONSTACK(done);
 
-	msm_slim_get_ctrl(dev);
+	ret = msm_slim_get_ctrl(dev);
 	mutex_lock(&dev->tx_lock);
-	if (dev->state == MSM_CTRL_ASLEEP) {
+
+	if ((pm_runtime_enabled(dev->dev) && ret < 0) ||
+			dev->state == MSM_CTRL_DOWN) {
+		SLIM_WARN(dev, "vote failed/SSR in-progress ret:%d, state:%d",
+				ret, dev->state);
+		pm_runtime_set_suspended(dev->dev);
+		mutex_unlock(&dev->tx_lock);
+		msm_slim_put_ctrl(dev);
+		return -EREMOTEIO;
+	}
+	if (!pm_runtime_enabled(dev->dev) && dev->state == MSM_CTRL_ASLEEP) {
 		mutex_unlock(&dev->tx_lock);
 		ret = ngd_slim_runtime_resume(dev->dev);
 
@@ -1035,6 +1040,15 @@ static int ngd_get_laddr(struct slim_controller *ctrl, const u8 *ea,
 static void ngd_slim_setup_msg_path(struct msm_slim_ctrl *dev)
 {
 	if (dev->state == MSM_CTRL_DOWN) {
+		/* if called after SSR, cleanup and re-assign */
+		if (dev->use_tx_msgqs != MSM_MSGQ_RESET)
+			msm_slim_deinit_ep(dev, &dev->tx_msgq,
+					   &dev->use_tx_msgqs);
+
+		if (dev->use_rx_msgqs != MSM_MSGQ_RESET)
+			msm_slim_deinit_ep(dev, &dev->rx_msgq,
+					   &dev->use_rx_msgqs);
+
 		msm_slim_sps_init(dev, dev->bam_mem,
 			NGD_BASE(dev->ctrl.nr,
 			dev->ver) + NGD_STATUS, true);
