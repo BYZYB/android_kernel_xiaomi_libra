@@ -130,3 +130,21 @@ ENTRY(memcmp)
 	ret
 END(memcmp)
 
+.Lremain8:
+	/* Limit % 8 == 0 =>. all data are equal.*/
+	ands	limit, limit, #7
+	b.eq	.Lret0
+
+.Ltiny8proc:
+	ldrb	data1w, [src1], #1
+	ldrb	data2w, [src2], #1
+	subs	limit, limit, #1
+
+	ccmp	data1w, data2w, #0, ne  /* NZCV = 0b0000. */
+	b.eq	.Ltiny8proc
+	sub	result, data1, data2
+	ret
+.Lret0:
+	mov	result, #0
+	ret
+ENDPIPROC(memcmp)
