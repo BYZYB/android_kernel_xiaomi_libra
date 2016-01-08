@@ -5347,19 +5347,18 @@ xiaomi code confilcts Is it for energy_aware_wake_cpu? idk*/
 	 * point.
 	 */
 	do {
+		/* Assuming all cpus are the same in group */
+		int max_cap_cpu = group_first_cpu(sg);
+
 		/*
 		 * Assume smaller max capacity means more energy-efficient.
 		 * Ideally we should query the energy model for the right
 		 * answer but it easily ends up in an exhaustive search.
 		 */
-		for_each_cpu_and(i, tsk_cpus_allowed(p), sched_group_cpus(sg)) {
-
-			if (capacity_of(i) < target_max_cap &&
-			    task_fits_capacity(p, i)) {
+		if (capacity_of(max_cap_cpu) < target_max_cap &&
+		    task_fits_capacity(p, max_cap_cpu)) {
 				sg_target = sg;
-				target_max_cap = capacity_of(i);
-			} else if (cpu_rq(i)->rd->overutilized)
-				return select_idle_sibling(p, target);
+				target_max_cap = capacity_of(max_cap_cpu);
 		}
 
 	} while (sg = sg->next, sg != sd->groups);
@@ -5463,7 +5462,6 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag, int wake_f
 		prev_cpu = cpu;
 
 	if (sd_flag & SD_BALANCE_WAKE && want_sibling) {
-
 		if (energy_aware() && !cpu_rq(cpu)->rd->overutilized)
 			new_cpu = energy_aware_wake_cpu(p, prev_cpu, sync);
 		else
