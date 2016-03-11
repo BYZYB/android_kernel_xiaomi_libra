@@ -30,7 +30,6 @@ DECLARE_HASHTABLE(uid_hash_table, UID_HASH_BITS);
 
 static spinlock_t cpufreq_stats_lock;
 
-static DEFINE_SPINLOCK(cpufreq_stats_table_lock);
 static DEFINE_SPINLOCK(task_time_in_state_lock); /* task->time_in_state */
 static DEFINE_RT_MUTEX(uid_lock); /* uid_hash_table */
 
@@ -336,16 +335,14 @@ void acct_update_power(struct task_struct *task, cputime_t cputime) {
 	int cpu_freq_i;
 	int all_freq_i;
 	unsigned long flags;
-	unsigned long stl_flags;
 
 	if (!task)
 		return;
 
 	cpu_num = task_cpu(task);
-	spin_lock_irqsave(&cpufreq_stats_table_lock, stl_flags);
 	stats = per_cpu(cpufreq_stats_table, cpu_num);
 	if (!stats)
-		goto out;
+		return;
 
 	all_freq_i = atomic_read(&stats->all_freq_i);
 
@@ -366,18 +363,15 @@ void acct_update_power(struct task_struct *task, cputime_t cputime) {
 
 	powerstats = per_cpu(cpufreq_power_stats, cpu_num);
 	if (!powerstats)
-		goto out;
+		return;
 
 	cpu_freq_i = atomic_read(&stats->cpu_freq_i);
 	if (cpu_freq_i == -1)
-		goto out;
+		return;
 
 	curr = powerstats->curr[cpu_freq_i];
 	if (task->cpu_power != ULLONG_MAX)
 		task->cpu_power += curr * cputime_to_usecs(cputime);
-
-out:
-	spin_unlock_irqrestore(&cpufreq_stats_table_lock, stl_flags);
 }
 EXPORT_SYMBOL_GPL(acct_update_power);
 
@@ -655,23 +649,11 @@ error_out:
 
 static void cpufreq_stats_update_policy_cpu(struct cpufreq_policy *policy)
 {
-	struct cpufreq_stats *old;
-	struct cpufreq_stats *stat;
-	unsigned long flags;
+	struct cpufreq_stats *stat = per_cpu(cpufreq_stats_table,
+			policy->last_cpu);
 
-	spin_lock_irqsave(&cpufreq_stats_table_lock, flags);
-	old = per_cpu(cpufreq_stats_table, policy->cpu);
-	stat = per_cpu(cpufreq_stats_table, policy->last_cpu);
-
-	if (old) {
-		kfree(old->time_in_state);
-		kfree(old);
-	}
-
-	if (!stat) {
-		spin_unlock_irqrestore(&cpufreq_stats_table_lock, flags);
+	if (!stat)
 		return;
-	}
 
 	pr_debug("Updating stats_table for new_cpu %u from last_cpu %u\n",
 			policy->cpu, policy->last_cpu);
@@ -679,7 +661,6 @@ static void cpufreq_stats_update_policy_cpu(struct cpufreq_policy *policy)
 			policy->last_cpu);
 	per_cpu(cpufreq_stats_table, policy->last_cpu) = NULL;
 	stat->cpu = policy->cpu;
-	spin_unlock_irqrestore(&cpufreq_stats_table_lock, flags);
 }
 
 static void cpufreq_powerstats_create(unsigned int cpu,
@@ -1090,9 +1071,11 @@ static int __init cpufreq_stats_init(void)
 	if (ret) {
 		cpufreq_unregister_notifier(&notifier_policy_block,
 				CPUFREQ_POLICY_NOTIFIER);
+		get_online_cpus();
 		for_each_online_cpu(cpu)
 			cpufreq_stats_free_table(cpu);
 		free_all_freq_table();
+		put_online_cpus();
 		return ret;
 	}
 
