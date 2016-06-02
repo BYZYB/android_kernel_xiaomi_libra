@@ -1168,12 +1168,12 @@ asmlinkage int syscall_trace_enter(struct pt_regs *regs)
 {
 	unsigned int saved_syscallno = regs->syscallno;
 
-	/* Do the secure computing check first; failures should be fast. */
-	if (secure_computing(regs->syscallno) == -1)
-		return RET_SKIP_SYSCALL_TRACE;
-
 	if (test_thread_flag_relaxed(TIF_SYSCALL_TRACE))
 		tracehook_report_syscall(regs, PTRACE_SYSCALL_ENTER);
+
+	/* Do the secure computing after ptrace; failures should be fast. */
+	if (secure_computing(regs->syscallno) == -1)
+		return RET_SKIP_SYSCALL_TRACE;
 
 	if (test_thread_flag_relaxed(TIF_SYSCALL_TRACEPOINT))
 		trace_sys_enter(regs, regs->syscallno);
