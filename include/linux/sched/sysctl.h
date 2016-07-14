@@ -63,6 +63,7 @@ extern int sysctl_sched_freq_dec_notify;
 
 extern unsigned int sysctl_sched_is_big_little;
 extern unsigned int sysctl_sched_sync_hint_enable;
+extern unsigned int sysctl_sched_cstate_aware;
 
 enum sched_tunable_scaling {
 	SCHED_TUNABLESCALING_NONE,
