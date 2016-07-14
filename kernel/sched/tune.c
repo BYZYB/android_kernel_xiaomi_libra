@@ -124,6 +124,10 @@ struct schedtune {
 
 	/* Performance Constraint (C) region threshold params */
 	int perf_constrain_idx;
+
+	/* Hint to bias scheduling of tasks on that SchedTune CGroup
+	 * towards idle CPUs */
+	int prefer_idle;
 };
 
 static inline struct schedtune *css_st(struct cgroup_subsys_state *css)
@@ -161,6 +165,7 @@ root_schedtune = {
 	.boost = 0,
 	.perf_boost_idx = 0,
 	.perf_constrain_idx = 0,
+	.prefer_idle = 0,
 };
 
 int schedtune_accept_deltas(int nrg_delta, int cap_delta, struct task_struct *task)
@@ -531,6 +536,38 @@ int schedtune_task_boost(struct task_struct *p)
 	return task_boost;
 }
 
+int schedtune_prefer_idle(struct task_struct *p)
+{
+	struct schedtune *st;
+	int prefer_idle;
+
+	/* Get prefer_idle value */
+	rcu_read_lock();
+	st = task_schedtune(p);
+	prefer_idle = st->prefer_idle;
+	rcu_read_unlock();
+
+	return prefer_idle;
+}
+
+static u64
+prefer_idle_read(struct cgroup *cgrp, struct cftype *cft)
+{
+	struct schedtune *st = cgroup_st(cgrp);
+
+	return st->prefer_idle;
+}
+
+static int
+prefer_idle_write(struct cgroup *cgrp, struct cftype *cft,
+	    u64 prefer_idle)
+{
+	struct schedtune *st = cgroup_st(cgrp);
+	st->prefer_idle = prefer_idle;
+
+	return 0;
+}
+
 static s64
 boost_read(struct cgroup *cgrp, struct cftype *cft)
 {
@@ -566,6 +603,11 @@ static struct cftype files[] = {
 		.name = "boost",
 		.read_s64 = boost_read,
 		.write_s64 = boost_write,
+	},
+	{
+		.name = "prefer_idle",
+		.read_u64 = prefer_idle_read,
+		.write_u64 = prefer_idle_write,
 	},
 	{ }	/* terminate */
 };
