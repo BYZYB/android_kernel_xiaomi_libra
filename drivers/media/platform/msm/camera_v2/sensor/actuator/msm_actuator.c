@@ -19,6 +19,9 @@
 
 DEFINE_MSM_MUTEX(msm_actuator_mutex);
 
+#ifdef CONFIG_MACH_LEO
+#define ACTUATOR_IC_ONSEMI
+#endif
 #undef CDBG
 #define CDBG(fmt, args...) pr_debug(fmt, ##args)
 
@@ -43,6 +46,26 @@ static struct msm_actuator *actuators[] = {
 	&msm_hvcm_actuator_table,
 	&msm_bivcm_actuator_table,
 };
+
+#ifdef ACTUATOR_IC_ONSEMI
+static uint32_t msm_actuator_osm_i2c_write(
+		struct msm_actuator_ctrl_t *a_ctrl,
+		uint16_t byte1, uint16_t byte2)
+{
+	uint8_t out[4];
+	uint16_t addrout;
+
+	addrout = 0xF01A;
+	out[0] = 0x00;
+	out[1] = 0x01;
+	out[2] = byte1 & 0xFF;
+	out[3] = byte2 & 0xFF;
+
+	a_ctrl->i2c_client.addr_type = MSM_CAMERA_I2C_WORD_ADDR;
+	return a_ctrl->i2c_client.i2c_func_tbl->i2c_write_seq(
+			&a_ctrl->i2c_client, addrout, out, sizeof(out));
+}
+#endif
 
 static int32_t msm_actuator_piezo_set_default_focus(
 	struct msm_actuator_ctrl_t *a_ctrl,
@@ -630,8 +653,15 @@ static int32_t msm_actuator_move_focus(
 	reg_setting.reg_setting = a_ctrl->i2c_reg_tbl;
 	reg_setting.data_type = a_ctrl->i2c_data_type;
 	reg_setting.size = a_ctrl->i2c_tbl_index;
+
+#ifdef ACTUATOR_IC_ONSEMI
+	rc = msm_actuator_osm_i2c_write(a_ctrl,
+			reg_setting.reg_setting[0].reg_addr,
+			reg_setting.reg_setting[0].reg_data);
+#else
 	rc = a_ctrl->i2c_client.i2c_func_tbl->i2c_write_table_w_microdelay(
 		&a_ctrl->i2c_client, &reg_setting);
+#endif
 	if (rc < 0) {
 		pr_err("i2c write error:%d\n", rc);
 		return rc;
@@ -784,9 +814,15 @@ static int32_t msm_actuator_park_lens(struct msm_actuator_ctrl_t *a_ctrl)
 		reg_setting.size = a_ctrl->i2c_tbl_index;
 		reg_setting.data_type = a_ctrl->i2c_data_type;
 
+#ifdef ACTUATOR_IC_ONSEMI
+		rc = msm_actuator_osm_i2c_write(a_ctrl,
+				reg_setting.reg_setting[0].reg_addr,
+				reg_setting.reg_setting[0].reg_data);
+#else
 		rc = a_ctrl->i2c_client.i2c_func_tbl->
 			i2c_write_table_w_microdelay(
 			&a_ctrl->i2c_client, &reg_setting);
+#endif
 		if (rc < 0) {
 			pr_err("%s Failed I2C write Line %d\n",
 				__func__, __LINE__);
@@ -1088,9 +1124,15 @@ static int32_t msm_actuator_set_position(
 		reg_setting.size = a_ctrl->i2c_tbl_index;
 		reg_setting.data_type = a_ctrl->i2c_data_type;
 
+#ifdef ACTUATOR_IC_ONSEMI
+		rc = msm_actuator_osm_i2c_write(a_ctrl,
+				reg_setting.reg_setting[0].reg_addr,
+				reg_setting.reg_setting[0].reg_data);
+#else
 		rc = a_ctrl->i2c_client.i2c_func_tbl->
 			i2c_write_table_w_microdelay(
 			&a_ctrl->i2c_client, &reg_setting);
+#endif
 		if (rc < 0) {
 			pr_err("%s Failed I2C write Line %d\n",
 				__func__, __LINE__);
@@ -1383,6 +1425,7 @@ static struct msm_camera_i2c_fn_t msm_sensor_cci_func_tbl = {
 	.i2c_read = msm_camera_cci_i2c_read,
 	.i2c_read_seq = msm_camera_cci_i2c_read_seq,
 	.i2c_write = msm_camera_cci_i2c_write,
+	.i2c_write_seq = msm_camera_cci_i2c_write_seq,
 	.i2c_write_table = msm_camera_cci_i2c_write_table,
 	.i2c_write_seq_table = msm_camera_cci_i2c_write_seq_table,
 	.i2c_write_table_w_microdelay =

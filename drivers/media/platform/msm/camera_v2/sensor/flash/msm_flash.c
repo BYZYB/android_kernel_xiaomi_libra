@@ -26,6 +26,10 @@ DEFINE_MSM_MUTEX(msm_flash_mutex);
 
 static struct v4l2_file_operations msm_flash_v4l2_subdev_fops;
 static struct led_trigger *torch_trigger;
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+static struct msm_flash_ctrl_t *g_fctrl;
+static unsigned char g_flashlight_brightness;
+#endif
 
 static const struct of_device_id msm_flash_dt_match[] = {
 	{.compatible = "qcom,camera-flash", .data = NULL},
@@ -82,6 +86,222 @@ static struct led_classdev msm_torch_led[MAX_LED_TRIGGERS] = {
 		.brightness	= LED_OFF,
 	},
 };
+
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+static int32_t msm_flash_i2c_write_table(
+	struct msm_flash_ctrl_t *flash_ctrl,
+	struct msm_camera_i2c_reg_setting_array *settings);
+
+static int32_t msm_flashlight_init(struct msm_flash_ctrl_t *flash_ctrl)
+{
+	int32_t rc = 0;
+	struct msm_sensor_power_setting *power_setting_a;
+	struct msm_sensor_power_setting *power_down_setting_a;
+	struct msm_camera_i2c_reg_setting_array settings;
+
+	power_setting_a =
+		flash_ctrl->power_setting_array.power_setting_a;
+	power_down_setting_a =
+		flash_ctrl->power_setting_array.power_down_setting_a;
+
+	flash_ctrl->power_setting_array.size = 2;
+	power_setting_a[0].seq_type = SENSOR_GPIO;
+	power_setting_a[0].seq_val = SENSOR_GPIO_FL_EN;
+	power_setting_a[0].config_val = GPIO_OUT_HIGH;
+	power_setting_a[0].delay = 1;
+	power_setting_a[1].seq_type = SENSOR_VREG;
+	power_setting_a[1].seq_val = CAM_VIO;
+	power_setting_a[1].config_val = 0;
+	power_setting_a[1].delay = 0;
+
+	flash_ctrl->power_setting_array.size_down = 2;
+	power_down_setting_a[0].seq_type = SENSOR_VREG;
+	power_down_setting_a[0].seq_val = CAM_VIO;
+	power_down_setting_a[0].config_val = 0;
+	power_down_setting_a[0].delay = 0;
+	power_down_setting_a[1].seq_type = SENSOR_GPIO;
+	power_down_setting_a[1].seq_val = SENSOR_GPIO_FL_EN;
+	power_down_setting_a[1].config_val = GPIO_OUT_LOW;
+	power_down_setting_a[1].delay = 1;
+
+	flash_ctrl->power_info.power_setting =
+		flash_ctrl->power_setting_array.power_setting_a;
+	flash_ctrl->power_info.power_down_setting =
+		flash_ctrl->power_setting_array.power_down_setting_a;
+	flash_ctrl->power_info.power_setting_size =
+		flash_ctrl->power_setting_array.size;
+	flash_ctrl->power_info.power_down_setting_size =
+		flash_ctrl->power_setting_array.size_down;
+
+	rc = msm_camera_power_up(&flash_ctrl->power_info,
+		flash_ctrl->flash_device_type,
+		&flash_ctrl->flash_i2c_client);
+	if (rc < 0) {
+		pr_err("%s msm_camera_power_up failed %d\n",
+			__func__, __LINE__);
+		goto msm_flash_i2c_init_fail;
+	}
+
+	settings.size = 3;
+	settings.addr_type = MSM_CAMERA_I2C_BYTE_ADDR;
+	settings.data_type = MSM_CAMERA_I2C_BYTE_DATA;
+	settings.delay = 0;
+	settings.reg_setting_a[0].reg_addr = 0x4;
+	settings.reg_setting_a[0].reg_data = 0x7;
+	settings.reg_setting_a[0].delay = 0;
+	settings.reg_setting_a[1].reg_addr = 0x5;
+	settings.reg_setting_a[1].reg_data = 0x7a;
+	settings.reg_setting_a[1].delay = 0;
+	settings.reg_setting_a[2].reg_addr = 0x1;
+	settings.reg_setting_a[2].reg_data = 0xe1;
+	settings.reg_setting_a[2].delay = 0;
+
+	rc = msm_flash_i2c_write_table(flash_ctrl, &settings);
+	if (rc < 0) {
+		pr_err("%s:%d msm_flash_i2c_write_table rc %d failed\n",
+			__func__, __LINE__, rc);
+	}
+
+	g_flashlight_brightness = 0;
+
+	return 0;
+
+msm_flash_i2c_init_fail:
+	return rc;
+}
+
+static void msm_flashlight_brightness_set(struct led_classdev *led_cdev,
+		enum led_brightness value)
+{
+	int rc = 0;
+	static int32_t flash_powerup;
+	struct msm_camera_i2c_reg_setting_array settings;
+	CDBG("brightness value = %d\n", value);
+
+	if (!flash_powerup) {
+		rc = msm_flashlight_init(g_fctrl);
+		if (rc < 0) {
+			pr_err("%s msm_flashlight_init failed %d\n",
+				__func__, __LINE__);
+			return;
+		}
+		flash_powerup++;
+		CDBG("flash_powerup = %d\n", flash_powerup);
+	}
+
+	g_flashlight_brightness = value;
+
+	if (value == 0) {
+		settings.size = 1;
+		settings.addr_type = MSM_CAMERA_I2C_BYTE_ADDR;
+		settings.data_type = MSM_CAMERA_I2C_BYTE_DATA;
+		settings.delay = 0;
+		settings.reg_setting_a[0].reg_addr = 0x01;
+		settings.reg_setting_a[0].reg_data = 0xE1;
+	} else {
+		value = (128 - value) & 0x7F;
+		settings.size = 2;
+		settings.addr_type = MSM_CAMERA_I2C_BYTE_ADDR;
+		settings.data_type = MSM_CAMERA_I2C_BYTE_DATA;
+		settings.delay = 0;
+		settings.reg_setting_a[0].reg_addr = 0x07;
+		settings.reg_setting_a[0].reg_data = value;
+		settings.reg_setting_a[1].reg_addr = 0x01;
+		settings.reg_setting_a[1].reg_data = 0xE2;
+
+	}
+	rc = msm_flash_i2c_write_table(g_fctrl, &settings);
+	if (rc < 0) {
+		pr_err("%s:%d msm_flash_i2c_write_table rc %d failed\n",
+			__func__, __LINE__, rc);
+	}
+
+	if (!value) {
+		rc = msm_camera_power_down(&g_fctrl->power_info,
+					g_fctrl->flash_device_type,
+					&g_fctrl->flash_i2c_client);
+		if (rc < 0) {
+			pr_err("%s msm_camera_power_down failed %d\n",
+				__func__, __LINE__);
+		}
+		flash_powerup--;
+		CDBG("flash_powerdown = %d\n", flash_powerup);
+	}
+}
+
+static void msm_pmic_flashlight_brightness_set(struct led_classdev *led_cdev,
+		enum led_brightness value)
+{
+	uint32_t curr[2];
+	uint32_t max_current = 0;
+	int32_t i = 0;
+	struct msm_flash_ctrl_t *flash_ctrl = g_fctrl;
+
+	for (i = 0; i < flash_ctrl->torch_num_sources; i++) {
+		max_current += flash_ctrl->torch_max_current[i];
+	}
+
+	curr[0] = max_current * value / 128;
+	curr[1] = max_current - curr[0];
+
+	g_flashlight_brightness = value;
+
+	if (value == 0) {
+		for (i = 0; i < flash_ctrl->torch_num_sources; i++)
+			if (flash_ctrl->torch_trigger[i])
+				led_trigger_event(flash_ctrl->torch_trigger[i], 0);
+	} else {
+		for (i = 0; i < flash_ctrl->torch_num_sources; i++) {
+				led_trigger_event(flash_ctrl->torch_trigger[i], curr[i]);
+		}
+	}
+}
+
+static enum led_brightness msm_flashlight_brightness_get(struct led_classdev *led_cdev)
+{
+	return g_flashlight_brightness;
+}
+
+static struct led_classdev msm_flashlight_led = {
+	.name		= "flashlight",
+	.brightness_set	= msm_flashlight_brightness_set,
+	.brightness_get = msm_flashlight_brightness_get,
+	.brightness	= LED_OFF,
+};
+
+static struct led_classdev msm_pmic_flashlight_led = {
+	.name		= "flashlight",
+	.brightness_set	= msm_pmic_flashlight_brightness_set,
+	.brightness_get = msm_flashlight_brightness_get,
+	.brightness	= LED_OFF,
+};
+
+int32_t msm_flashlight_create_classdev(struct platform_device *pdev,
+		void *data)
+{
+	int32_t i, rc = 0;
+	struct msm_flash_ctrl_t *fctrl =
+		(struct msm_flash_ctrl_t *)data;
+
+	if (!fctrl) {
+		pr_err("Invalid fctrl\n");
+		return -EINVAL;
+	}
+
+	g_fctrl = fctrl;
+
+	if (fctrl->flash_driver_type == FLASH_DRIVER_I2C)
+		rc = led_classdev_register(&pdev->dev, &msm_flashlight_led);
+	else if (fctrl->flash_driver_type == FLASH_DRIVER_PMIC)
+		rc = led_classdev_register(&pdev->dev, &msm_pmic_flashlight_led);
+
+	if (rc) {
+		pr_err("Failed to register %d led dev. rc = %d\n", i, rc);
+		return rc;
+	}
+	return 0;
+}
+#endif
 
 static int32_t msm_torch_create_classdev(struct platform_device *pdev,
 				void *data)
@@ -244,12 +464,14 @@ static int32_t msm_flash_i2c_init(
 			flash_ctrl->power_setting_array.size_down);
 	} else
 #endif
+#ifndef CONFIG_MACH_XIAOMI_MSM8992
 	if (copy_from_user(&flash_ctrl->power_setting_array,
 		(void *)flash_init_info->power_setting_array,
 		sizeof(struct msm_sensor_power_setting_array))) {
 		pr_err("%s copy_from_user failed %d\n", __func__, __LINE__);
 		return -EFAULT;
 	}
+#endif
 
 	if (flash_ctrl->flash_device_type == MSM_CAMERA_PLATFORM_DEVICE) {
 		cci_client = flash_ctrl->flash_i2c_client.cci_client;
@@ -359,6 +581,9 @@ static int32_t msm_flash_i2c_release(
 		pr_err("%s:%d failed: %pK %pK\n",
 			__func__, __LINE__, &flash_ctrl->power_info,
 			&flash_ctrl->flash_i2c_client);
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+		flash_ctrl->flash_state = MSM_CAMERA_FLASH_RELEASE;
+#endif
 		return -EINVAL;
 	}
 
@@ -370,6 +595,10 @@ static int32_t msm_flash_i2c_release(
 			__func__, __LINE__);
 		return -EINVAL;
 	}
+
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+	flash_ctrl->flash_state = MSM_CAMERA_FLASH_RELEASE;
+#endif
 	return 0;
 }
 
@@ -658,6 +887,9 @@ static int32_t msm_flash_config(struct msm_flash_ctrl_t *flash_ctrl,
 	switch (flash_data->cfg_type) {
 	case CFG_FLASH_INIT:
 		rc = msm_flash_init_prepare(flash_ctrl, flash_data);
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+		g_flashlight_brightness = 0;
+#endif
 		break;
 	case CFG_FLASH_RELEASE:
 		if (flash_ctrl->flash_state == MSM_CAMERA_FLASH_INIT)
@@ -665,19 +897,31 @@ static int32_t msm_flash_config(struct msm_flash_ctrl_t *flash_ctrl,
 				flash_ctrl);
 		break;
 	case CFG_FLASH_OFF:
-		if (flash_ctrl->flash_state == MSM_CAMERA_FLASH_INIT)
+		if (flash_ctrl->flash_state == MSM_CAMERA_FLASH_INIT) {
 			rc = flash_ctrl->func_tbl->camera_flash_off(
 				flash_ctrl, flash_data);
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+			g_flashlight_brightness = 0;
+#endif
+		}
 		break;
 	case CFG_FLASH_LOW:
-		if (flash_ctrl->flash_state == MSM_CAMERA_FLASH_INIT)
+		if (flash_ctrl->flash_state == MSM_CAMERA_FLASH_INIT) {
 			rc = flash_ctrl->func_tbl->camera_flash_low(
 				flash_ctrl, flash_data);
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+			g_flashlight_brightness = 100;
+#endif
+		}
 		break;
 	case CFG_FLASH_HIGH:
-		if (flash_ctrl->flash_state == MSM_CAMERA_FLASH_INIT)
+		if (flash_ctrl->flash_state == MSM_CAMERA_FLASH_INIT) {
 			rc = flash_ctrl->func_tbl->camera_flash_high(
 				flash_ctrl, flash_data);
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+			g_flashlight_brightness = 100;
+#endif
+		}
 		break;
 	default:
 		rc = -EFAULT;
@@ -1099,6 +1343,7 @@ static int32_t msm_flash_platform_probe(struct platform_device *pdev)
 	int32_t rc = 0;
 	struct msm_flash_ctrl_t *flash_ctrl = NULL;
 	struct msm_camera_cci_client *cci_client = NULL;
+	uint32_t id_info[3];
 
 	CDBG("Enter");
 	if (!pdev->dev.of_node) {
@@ -1124,11 +1369,27 @@ static int32_t msm_flash_platform_probe(struct platform_device *pdev)
 		return -EINVAL;
 	}
 
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+	if (flash_ctrl->flash_driver_type == FLASH_DRIVER_I2C) {
+		rc = msm_camera_get_dt_vreg_data(pdev->dev.of_node,
+				&flash_ctrl->power_info.cam_vreg,
+				&flash_ctrl->power_info.num_vreg);
+		if (rc < 0) {
+			pr_err("%s:%d msm_flash_get_dt_vreg_data failed\n",
+					__func__, __LINE__);
+			return -EINVAL;
+		}
+	}
+#endif
+
 	flash_ctrl->flash_state = MSM_CAMERA_FLASH_RELEASE;
 	flash_ctrl->power_info.dev = &flash_ctrl->pdev->dev;
 	flash_ctrl->flash_device_type = MSM_CAMERA_PLATFORM_DEVICE;
 	flash_ctrl->flash_mutex = &msm_flash_mutex;
 	flash_ctrl->flash_i2c_client.i2c_func_tbl = &msm_sensor_cci_func_tbl;
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+	flash_ctrl->flash_i2c_client.addr_type = MSM_CAMERA_I2C_BYTE_ADDR;
+#endif
 	flash_ctrl->flash_i2c_client.cci_client = kzalloc(
 		sizeof(struct msm_camera_cci_client), GFP_KERNEL);
 	if (!flash_ctrl->flash_i2c_client.cci_client) {
@@ -1140,6 +1401,22 @@ static int32_t msm_flash_platform_probe(struct platform_device *pdev)
 	cci_client = flash_ctrl->flash_i2c_client.cci_client;
 	cci_client->cci_subdev = msm_cci_get_subdev();
 	cci_client->cci_i2c_master = flash_ctrl->cci_i2c_master;
+
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+	if (flash_ctrl->flash_driver_type == FLASH_DRIVER_I2C) {
+		rc = of_property_read_u32_array(pdev->dev.of_node, "qcom,slave-id",
+			id_info, 3);
+		if (rc < 0) {
+			pr_err("%s:%d get qcom,slave-id failed\n",
+				__func__, __LINE__);
+			return -EINVAL;
+		}
+		cci_client->sid = id_info[0] >> 1;
+		cci_client->retries = 3;
+		cci_client->id_map = 0;
+		cci_client->i2c_freq_mode = I2C_STANDARD_MODE;
+	}
+#endif
 
 	/* Initialize sub device */
 	v4l2_subdev_init(&flash_ctrl->msm_sd.sd, &msm_flash_subdev_ops);
@@ -1168,6 +1445,9 @@ static int32_t msm_flash_platform_probe(struct platform_device *pdev)
 	if (flash_ctrl->flash_driver_type == FLASH_DRIVER_PMIC)
 		rc = msm_torch_create_classdev(pdev, flash_ctrl);
 
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+	msm_flashlight_create_classdev(pdev, flash_ctrl);
+#endif
 	CDBG("probe success\n");
 	return rc;
 }

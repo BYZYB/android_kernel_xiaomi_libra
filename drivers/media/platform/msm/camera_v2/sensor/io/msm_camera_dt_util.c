@@ -541,6 +541,14 @@ int msm_camera_get_dt_power_setting_data(struct device_node *of_node,
 				ps[i].seq_val = SENSOR_GPIO_VAF;
 			else if (!strcmp(seq_name, "sensor_gpio_vio"))
 				ps[i].seq_val = SENSOR_GPIO_VIO;
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+			else if (!strcmp(seq_name, "sensor_gpio_fl_en"))
+				ps[i].seq_val = SENSOR_GPIO_FL_EN;
+			else if (!strcmp(seq_name, "sensor_gpio_fl_now"))
+				ps[i].seq_val = SENSOR_GPIO_FL_NOW;
+			else if (!strcmp(seq_name, "sensor_gpio_fl_reset"))
+				ps[i].seq_val = SENSOR_GPIO_FL_RESET;
+#endif
 			else if (!strcmp(seq_name, "sensor_gpio_custom1"))
 				ps[i].seq_val = SENSOR_GPIO_CUSTOM1;
 			else if (!strcmp(seq_name, "sensor_gpio_custom2"))
