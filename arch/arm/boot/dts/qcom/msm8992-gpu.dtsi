@@ -62,14 +62,15 @@
 		clock-names = "core_clk", "iface_clk", "rbbmtimer_clk";
 
 		/* Bus Scale Settings */
-                qcom,gpubw-dev = <&gpubw>;
+		qcom,gpubw-dev = <&gpubw>;
 		qcom,bus-control;
-                /*
-                 * qcom,msm-bus structures below define
-                 * GPU msm client and its vote data for
-                 * each of available power levels
-                 * (gpu-bus frequency combination)
-                 */
+		qcom,bus-width = <32>;
+		/*
+		 * qcom,msm-bus structures below define
+		 * GPU msm client and its vote data for
+		 * each of available power levels
+		 * (gpu-bus frequency combination)
+		 */
 		qcom,msm-bus,name = "grp3d";
 		qcom,msm-bus,num-cases = <9>;
 		qcom,msm-bus,num-paths = <1>;
