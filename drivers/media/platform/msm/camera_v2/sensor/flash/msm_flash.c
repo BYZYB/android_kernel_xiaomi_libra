@@ -602,7 +602,7 @@ static int32_t msm_flash_i2c_release(
 
 	CDBG("Enter\n");
 	if (!(&flash_ctrl->power_info) || !(&flash_ctrl->flash_i2c_client)) {
-		pr_err("%s:%d failed: %p %p\n",
+		pr_err("%s:%d failed: %pK %pK\n",
 			__func__, __LINE__, &flash_ctrl->power_info,
 			&flash_ctrl->flash_i2c_client);
 		flash_ctrl->flash_state = MSM_CAMERA_FLASH_RELEASE;
