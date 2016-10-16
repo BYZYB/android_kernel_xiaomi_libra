@@ -101,7 +101,7 @@ static ssize_t store_min_cpus(struct cpu_data *state,
 {
 	unsigned int val;
 
-	if (sscanf(buf, "%u\n", &val) != 1)
+	if (kstrtouint(buf, 0, &val))
 		return -EINVAL;
 
 	state->min_cpus = min(val, state->max_cpus);
@@ -120,7 +120,7 @@ static ssize_t store_max_cpus(struct cpu_data *state,
 {
 	unsigned int val;
 
-	if (sscanf(buf, "%u\n", &val) != 1)
+	if (kstrtouint(buf, 0, &val))
 		return -EINVAL;
 
 	val = min(val, state->num_cpus);
@@ -141,7 +141,7 @@ static ssize_t store_offline_delay_ms(struct cpu_data *state,
 {
 	unsigned int val;
 
-	if (sscanf(buf, "%u\n", &val) != 1)
+	if (kstrtouint(buf, 0, &val))
 		return -EINVAL;
 
 	state->offline_delay_ms = val;
@@ -160,7 +160,7 @@ static ssize_t store_task_thres(struct cpu_data *state,
 {
 	unsigned int val;
 
-	if (sscanf(buf, "%u\n", &val) != 1)
+	if (kstrtouint(buf, 0, &val))
 		return -EINVAL;
 
 	if (val < state->num_cpus)
@@ -244,7 +244,7 @@ static ssize_t store_is_big_cluster(struct cpu_data *state,
 {
 	unsigned int val;
 
-	if (sscanf(buf, "%u\n", &val) != 1)
+	if (kstrtouint(buf, 0, &val))
 		return -EINVAL;
 
 	state->is_big_cluster = val ? 1 : 0;
@@ -368,7 +368,7 @@ static ssize_t store_disable(struct cpu_data *state,
 {
 	unsigned int val;
 
-	if (sscanf(buf, "%u\n", &val) != 1)
+	if (kstrtouint(buf, 0, &val))
 		return -EINVAL;
 
 	val = !!val;
