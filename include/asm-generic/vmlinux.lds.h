@@ -112,7 +112,7 @@
 #ifdef CONFIG_EVENT_TRACING
 #define FTRACE_EVENTS()	. = ALIGN(8);					\
 			VMLINUX_SYMBOL(__start_ftrace_events) = .;	\
-			*(_ftrace_events)				\
+			KEEP(*(_ftrace_events))				\
 			VMLINUX_SYMBOL(__stop_ftrace_events) = .;
 #else
 #define FTRACE_EVENTS()
@@ -120,7 +120,7 @@
 
 #ifdef CONFIG_TRACING
 #define TRACE_PRINTKS() VMLINUX_SYMBOL(__start___trace_bprintk_fmt) = .;      \
-			 *(__trace_printk_fmt) /* Trace_printk fmt' pointer */ \
+			 KEEP(*(__trace_printk_fmt)) /* Trace_printk fmt' pointer */ \
 			 VMLINUX_SYMBOL(__stop___trace_bprintk_fmt) = .;
 #else
 #define TRACE_PRINTKS()
@@ -129,7 +129,7 @@
 #ifdef CONFIG_FTRACE_SYSCALLS
 #define TRACE_SYSCALLS() . = ALIGN(8);					\
 			 VMLINUX_SYMBOL(__start_syscalls_metadata) = .;	\
-			 *(__syscalls_metadata)				\
+			 KEEP(*(__syscalls_metadata))			\
 			 VMLINUX_SYMBOL(__stop_syscalls_metadata) = .;
 #else
 #define TRACE_SYSCALLS()
@@ -138,8 +138,8 @@
 #ifdef CONFIG_CLKSRC_OF
 #define CLKSRC_OF_TABLES() . = ALIGN(8);				\
 			   VMLINUX_SYMBOL(__clksrc_of_table) = .;	\
-			   *(__clksrc_of_table)				\
-			   *(__clksrc_of_table_end)
+			   KEEP(*(__clksrc_of_table))				\
+			   KEEP(*(__clksrc_of_table_end))
 #else
 #define CLKSRC_OF_TABLES()
 #endif
@@ -148,8 +148,8 @@
 #define IRQCHIP_OF_MATCH_TABLE()					\
 	. = ALIGN(8);							\
 	VMLINUX_SYMBOL(__irqchip_begin) = .;				\
-	*(__irqchip_of_table)		  				\
-	*(__irqchip_of_end)
+	KEEP(*(__irqchip_of_table))		  				\
+	KEEP(*(__irqchip_of_end))
 #else
 #define IRQCHIP_OF_MATCH_TABLE()
 #endif
@@ -157,8 +157,8 @@
 #ifdef CONFIG_COMMON_CLK
 #define CLK_OF_TABLES() . = ALIGN(8);				\
 			VMLINUX_SYMBOL(__clk_of_table) = .;	\
-			*(__clk_of_table)			\
-			*(__clk_of_table_end)
+			KEEP(*(__clk_of_table))			\
+			KEEP(*(__clk_of_table_end))
 #else
 #define CLK_OF_TABLES()
 #endif
@@ -166,7 +166,7 @@
 #ifdef CONFIG_OF
 #define CPU_METHOD_OF_TABLES() . = ALIGN(8);				\
 		VMLINUX_SYMBOL(__cpu_method_of_table) = .;		\
-		*(__cpu_method_of_table)				\
+		KEEP(*(__cpu_method_of_table))				\
 		VMLINUX_SYMBOL(__cpu_method_of_table_end) = .;
 #else
 #define CPU_METHOD_OF_TABLES()
@@ -175,7 +175,7 @@
 #define KERNEL_DTB()							\
 	STRUCT_ALIGN();							\
 	VMLINUX_SYMBOL(__dtb_start) = .;				\
-	*(.dtb.init.rodata)						\
+	KEEP(*(.dtb.init.rodata))					\
 	VMLINUX_SYMBOL(__dtb_end) = .;
 
 /*
@@ -196,11 +196,11 @@
 	/* implement dynamic printk debug */				\
 	. = ALIGN(8);                                                   \
 	VMLINUX_SYMBOL(__start___jump_table) = .;                       \
-	*(__jump_table)                                                 \
+	KEEP(*(__jump_table))                                           \
 	VMLINUX_SYMBOL(__stop___jump_table) = .;                        \
 	. = ALIGN(8);							\
 	VMLINUX_SYMBOL(__start___verbose) = .;                          \
-	*(__verbose)                                                    \
+	KEEP(*(__verbose))                                              \
 	VMLINUX_SYMBOL(__stop___verbose) = .;				\
 	LIKELY_PROFILE()		       				\
 	BRANCH_PROFILE()						\
@@ -241,10 +241,10 @@
 	.rodata           : AT(ADDR(.rodata) - LOAD_OFFSET) {		\
 		VMLINUX_SYMBOL(__start_rodata) = .;			\
 		*(.rodata) *(.rodata.*)					\
-		*(__vermagic)		/* Kernel version magic */	\
+		KEEP(*(__vermagic))		/* Kernel version magic */	\
 		. = ALIGN(8);						\
 		VMLINUX_SYMBOL(__start___tracepoints_ptrs) = .;		\
-		*(__tracepoints_ptrs)	/* Tracepoints: pointer array */\
+		KEEP(*(__tracepoints_ptrs)) /* Tracepoints: pointer array */ \
 		VMLINUX_SYMBOL(__stop___tracepoints_ptrs) = .;		\
 		*(__tracepoints_strings)/* Tracepoints: strings */	\
 	}								\
@@ -258,32 +258,32 @@
 	/* PCI quirks */						\
 	.pci_fixup        : AT(ADDR(.pci_fixup) - LOAD_OFFSET) {	\
 		VMLINUX_SYMBOL(__start_pci_fixups_early) = .;		\
-		*(.pci_fixup_early)					\
+		KEEP(*(.pci_fixup_early))				\
 		VMLINUX_SYMBOL(__end_pci_fixups_early) = .;		\
 		VMLINUX_SYMBOL(__start_pci_fixups_header) = .;		\
-		*(.pci_fixup_header)					\
+		KEEP(*(.pci_fixup_header))				\
 		VMLINUX_SYMBOL(__end_pci_fixups_header) = .;		\
 		VMLINUX_SYMBOL(__start_pci_fixups_final) = .;		\
-		*(.pci_fixup_final)					\
+		KEEP(*(.pci_fixup_final))				\
 		VMLINUX_SYMBOL(__end_pci_fixups_final) = .;		\
 		VMLINUX_SYMBOL(__start_pci_fixups_enable) = .;		\
-		*(.pci_fixup_enable)					\
+		KEEP(*(.pci_fixup_enable))				\
 		VMLINUX_SYMBOL(__end_pci_fixups_enable) = .;		\
 		VMLINUX_SYMBOL(__start_pci_fixups_resume) = .;		\
-		*(.pci_fixup_resume)					\
+		KEEP(*(.pci_fixup_resume))				\
 		VMLINUX_SYMBOL(__end_pci_fixups_resume) = .;		\
 		VMLINUX_SYMBOL(__start_pci_fixups_resume_early) = .;	\
-		*(.pci_fixup_resume_early)				\
+		KEEP(*(.pci_fixup_resume_early))			\
 		VMLINUX_SYMBOL(__end_pci_fixups_resume_early) = .;	\
 		VMLINUX_SYMBOL(__start_pci_fixups_suspend) = .;		\
-		*(.pci_fixup_suspend)					\
+		KEEP(*(.pci_fixup_suspend))				\
 		VMLINUX_SYMBOL(__end_pci_fixups_suspend) = .;		\
 	}								\
 									\
 	/* Built-in firmware blobs */					\
 	.builtin_fw        : AT(ADDR(.builtin_fw) - LOAD_OFFSET) {	\
 		VMLINUX_SYMBOL(__start_builtin_fw) = .;			\
-		*(.builtin_fw)						\
+		KEEP(*(.builtin_fw))					\
 		VMLINUX_SYMBOL(__end_builtin_fw) = .;			\
 	}								\
 									\
@@ -368,7 +368,7 @@
 									\
 	/* Kernel symbol table: strings */				\
         __ksymtab_strings : AT(ADDR(__ksymtab_strings) - LOAD_OFFSET) {	\
-		KEEP(*(__ksymtab_strings))				\
+		*(__ksymtab_strings)					\
 	}								\
 									\
 	/* __*init sections */						\
@@ -381,14 +381,14 @@
 	/* Built-in module parameters. */				\
 	__param : AT(ADDR(__param) - LOAD_OFFSET) {			\
 		VMLINUX_SYMBOL(__start___param) = .;			\
-		*(__param)						\
+		KEEP(*(__param))					\
 		VMLINUX_SYMBOL(__stop___param) = .;			\
 	}								\
 									\
 	/* Built-in module versions. */					\
 	__modver : AT(ADDR(__modver) - LOAD_OFFSET) {			\
 		VMLINUX_SYMBOL(__start___modver) = .;			\
-		*(__modver)						\
+		KEEP(*(__modver))					\
 		VMLINUX_SYMBOL(__stop___modver) = .;			\
 		. = ALIGN((align));					\
 		VMLINUX_SYMBOL(__end_rodata) = .;			\
@@ -475,7 +475,7 @@
 	. = ALIGN(align);						\
 	__ex_table : AT(ADDR(__ex_table) - LOAD_OFFSET) {		\
 		VMLINUX_SYMBOL(__start___ex_table) = .;			\
-		*(__ex_table)						\
+		KEEP(*(__ex_table))					\
 		VMLINUX_SYMBOL(__stop___ex_table) = .;			\
 	}
 
@@ -491,7 +491,7 @@
 #ifdef CONFIG_CONSTRUCTORS
 #define KERNEL_CTORS()	. = ALIGN(8);			   \
 			VMLINUX_SYMBOL(__ctors_start) = .; \
-			*(.ctors)			   \
+			KEEP(*(.ctors))			   \
 			VMLINUX_SYMBOL(__ctors_end) = .;
 #else
 #define KERNEL_CTORS()
@@ -604,7 +604,7 @@
 	. = ALIGN(8);							\
 	__bug_table : AT(ADDR(__bug_table) - LOAD_OFFSET) {		\
 		VMLINUX_SYMBOL(__start___bug_table) = .;		\
-		*(__bug_table)						\
+		KEEP(*(__bug_table))					\
 		VMLINUX_SYMBOL(__stop___bug_table) = .;			\
 	}
 #else
@@ -616,7 +616,7 @@
 	. = ALIGN(4);							\
 	.tracedata : AT(ADDR(.tracedata) - LOAD_OFFSET) {		\
 		VMLINUX_SYMBOL(__tracedata_start) = .;			\
-		*(.tracedata)						\
+		KEEP(*(.tracedata))					\
 		VMLINUX_SYMBOL(__tracedata_end) = .;			\
 	}
 #else
@@ -633,7 +633,7 @@
 #define INIT_SETUP(initsetup_align)					\
 		. = ALIGN(initsetup_align);				\
 		VMLINUX_SYMBOL(__setup_start) = .;			\
-		*(.init.setup)						\
+		KEEP(*(.init.setup))					\
 		VMLINUX_SYMBOL(__setup_end) = .;
 
 #define INIT_CALLS_LEVEL(level)						\
