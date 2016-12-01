@@ -201,7 +201,7 @@ int schedtune_accept_deltas(int nrg_delta, int cap_delta, struct task_struct *ta
  *    implementation especially for the computation of the per-CPU boost
  *    value
  */
-#define BOOSTGROUPS_COUNT 4
+#define BOOSTGROUPS_COUNT 5
 
 /* Array of configured boostgroups */
 static struct schedtune *allocated_group[BOOSTGROUPS_COUNT] = {
