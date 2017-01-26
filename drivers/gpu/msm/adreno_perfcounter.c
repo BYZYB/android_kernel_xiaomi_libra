@@ -261,9 +261,9 @@ int adreno_perfcounter_start(struct adreno_device *adreno_dev)
 			 */
 			if (gpudev->perfcounter_enable){
 				ret = gpudev->perfcounter_enable(adreno_dev, i, j, group->regs[j].countable);
-    }
 				if (ret)
 					goto done;
+			}
 		}
 	}
 done:
