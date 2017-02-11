@@ -141,6 +141,13 @@ fw-shipped-$(CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_LIBRA) += synaptics_biel_sharp_upd
 	synaptics_biel_lgd_update.fw \
 	synaptics_tpk_update.fw
 
+fw-shipped-$(CONFIG_TOUCHSCREEN_ATMEL_MXT_LIBRA) += mxt_336t_biel_config.fw \
+	mxt_336t_tpk_config.fw \
+	mxt_640t_config.fw \
+	mxt_874u_tpk_config.fw \
+	mxt_336u_ofilm_config.fw \
+	mXT336T21AA.fw mxT640T15AA.fw mXT874U10EC.fw mXT336U10AA.fw
+
 fw-shipped-all := $(fw-shipped-y) $(fw-shipped-m) $(fw-shipped-)
 
 # Directories which we _might_ need to create, so we have a rule for them.
