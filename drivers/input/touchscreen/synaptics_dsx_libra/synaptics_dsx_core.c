@@ -19,6 +19,7 @@
  */
 #include <linux/kernel.h>
 #include <linux/module.h>
+#include <linux/proc_fs.h>
 #include <linux/slab.h>
 #include <linux/interrupt.h>
 #include <linux/delay.h>
@@ -772,6 +773,41 @@ static ssize_t synaptics_rmi4_virtual_key_map_show(struct kobject *kobj,
 	}
 
 	return count;
+}
+
+static ssize_t synaptics_rmi4_proc_init(struct kobject *sysfs_node_parent) {
+	int ret = 0;
+	char *driver_path;
+
+	struct proc_dir_entry *proc_entry_ts;
+
+	// allocate memory for input device path
+	driver_path = kzalloc(PATH_MAX, GFP_KERNEL);
+	if(!driver_path) {
+		ret = -ENOMEM;
+		goto exit;
+	}
+
+	// store input device path
+	sprintf(driver_path, "/sys%s",
+			kobject_get_path(sysfs_node_parent, GFP_KERNEL));
+
+	printk("driver_path: %s\n", driver_path);
+
+	// remove existing entry
+	remove_proc_entry("touchscreen", NULL);
+
+	// symlink /proc/touchscreen to input device
+	proc_entry_ts = proc_symlink("touchscreen", NULL, driver_path);
+	if(!proc_entry_ts) {
+		ret = -ENOMEM;
+		goto free;
+	}
+free:
+	kfree(driver_path);
+exit:
+	pr_err("%s: Couldn't symlink to touchscreen\n", __func__);
+	return ret;
 }
 
 static int synaptics_rmi4_f11_abs_report(struct synaptics_rmi4_data *rmi4_data,
@@ -3563,6 +3599,8 @@ static int synaptics_rmi4_probe(struct platform_device *pdev)
 			goto err_sysfs;
 		}
 	}
+
+	synaptics_rmi4_proc_init(&rmi4_data->input_dev->dev.kobj);
 
 	rmi4_data->rb_workqueue =
 			alloc_ordered_workqueue("dsx_rebuild_workqueue", WQ_HIGHPRI);
