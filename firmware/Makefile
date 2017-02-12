@@ -136,6 +136,11 @@ fw-shipped-$(CONFIG_USB_VICAM) += vicam/firmware.fw
 fw-shipped-$(CONFIG_VIDEO_CPIA2) += cpia2/stv0672_vp4.bin
 fw-shipped-$(CONFIG_YAM) += yam/1200.bin yam/9600.bin
 
+fw-shipped-$(CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_LIBRA) += synaptics_biel_sharp_update.fw \
+	synaptics_biel_auo_update.fw \
+	synaptics_biel_lgd_update.fw \
+	synaptics_tpk_update.fw
+
 fw-shipped-all := $(fw-shipped-y) $(fw-shipped-m) $(fw-shipped-)
 
 # Directories which we _might_ need to create, so we have a rule for them.
