@@ -392,7 +392,7 @@ static int update_prox_threhold(struct cm36686_data *data)
 	ret = cm_i2c_write_word(client, PS_THDH, ps_high_thrd);
 	if (ret < 0)
 		pr_err("cm36686: write PS_THDH fail\n");
-	pr_info("cm36686: store offset = %d\n", data->prox_offset);
+	pr_debug("cm36686: store offset = %d\n", data->prox_offset);
 	return ret;
 }
 
@@ -595,7 +595,7 @@ static ssize_t cm_store_continus_mode(struct device *dev,
 	if (ret >= 0) {
 		mutex_lock(&data->mutex);
 		data->prox_continus = value;
-		pr_info("cm_store_continus_mode value = %ld\n", value);
+		pr_debug("cm_store_continus_mode value = %ld\n", value);
 		if (data->prox_enabled) {
 			if (data->prox_continus == CM36686_POLLING_MODE) {
 				psensor_enable(iio_device, false, CM36686_INT_MODE);
@@ -802,7 +802,7 @@ static int psensor_enable(struct iio_dev *indio_dev, bool en, bool mode)
 	uint16_t ps_high_thrd;
 	struct cm36686_data *data = *((struct cm36686_data **)iio_priv(indio_dev));
 	struct i2c_client *client = data->client;
-	pr_info("cm36686: psensor_enable en = %d, mode = %d, prox_enabled = %d\n", en, mode, data->prox_enabled);
+	pr_debug("cm36686: psensor_enable en = %d, mode = %d, prox_enabled = %d\n", en, mode, data->prox_enabled);
 
 	if (data->prox_enabled == en)
 		goto exit_err_state;
@@ -855,7 +855,7 @@ static int lsensor_enable(struct iio_dev *indio_dev, bool en, bool mode)
 	struct i2c_client *client = data->client;
 
 	(void)mode;
-	pr_info("cm36686: lsensor_enable en = %d, mode = %d, als_enabled = %d\n", en, mode, data->als_enabled);
+	pr_debug("cm36686: lsensor_enable en = %d, mode = %d, als_enabled = %d\n", en, mode, data->als_enabled);
 	if (data->als_enabled == en)
 		goto exit_err_state;
 
@@ -1250,7 +1250,7 @@ static irqreturn_t cm_irqthread_handler(int irq, void *dev_id)
 			ret, int_reg);
 		goto cm_end_irq;
 	}
-	pr_info("cm36686: cm_irqthread_handler: int_reg = %x\n", int_reg);
+	pr_debug("cm36686: cm_irqthread_handler: int_reg = %x\n", int_reg);
 
 	if ((int_reg & (INT_FLAG_PS_IF_CLOSE | INT_FLAG_PS_IF_AWAY)) != 0) {
 		if ((int_reg & INT_FLAG_PS_IF_AWAY) == INT_FLAG_PS_IF_AWAY)
@@ -1263,7 +1263,7 @@ static irqreturn_t cm_irqthread_handler(int irq, void *dev_id)
 			goto cm_end_irq;
 		}
 		el_data.data2 = raw;
-		pr_info("cm36686: proximity rawdata = %d\n", raw);
+		pr_debug("cm36686: proximity rawdata = %d\n", raw);
 
 		mutex_lock(&data->mutex);
 		data->prox_first_data = false;
