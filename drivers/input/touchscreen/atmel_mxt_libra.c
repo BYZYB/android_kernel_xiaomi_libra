@@ -749,6 +749,9 @@ struct mxt_data {
 #ifdef CONFIG_FB
 	struct notifier_block fb_notif;
 #endif
+#ifdef CONFIG_TOUCHSCREEN_ATMEL_MXT_LIBRA_EDGE_SUPPORT
+	enum mxt_edge_mode edge_mode;
+#endif
 };
 
 static struct mxt_suspend mxt_save[] = {
@@ -5132,6 +5135,42 @@ static ssize_t mxt_mem_access_write(struct file *filp, struct kobject *kobj,
 	return ret == 0 ? count : 0;
 }
 
+#ifdef CONFIG_TOUCHSCREEN_ATMEL_MXT_LIBRA_EDGE_SUPPORT
+static ssize_t mxt_edge_mode_show(struct device *dev,
+		struct device_attribute *attr, char *buf)
+{
+	struct mxt_data *data = dev_get_drvdata(dev);
+
+	return snprintf(buf, PAGE_SIZE, "%u\n",
+			data->edge_mode);
+}
+
+int mxt_enable_edge_touch(struct mxt_data *data, enum mxt_edge_mode edge_mode);
+
+static ssize_t mxt_edge_mode_store(struct device *dev,
+		struct device_attribute *attr, const char *buf, size_t count)
+{
+	unsigned int input;
+	struct mxt_data *data = dev_get_drvdata(dev);
+
+	if (sscanf(buf, "%u", &input) != 1)
+		return -EINVAL;
+
+	dev_info(dev, "%s: input %d\n", __func__, input);
+
+	if (input < EDGE_DISABLE || input > EDGE_FINGER_HANDGRIP)
+		return count;
+
+	if (mxt_enable_edge_touch(data, input) != 0) {
+		dev_err(dev,
+			"Unable to switch edge touch mode\n");
+	} else
+		data->edge_mode = input;
+
+	return count;
+}
+#endif
+
 static DEVICE_ATTR(update_fw, (S_IWUSR | S_IRUSR),
 		mxt_update_fw_show,
 		mxt_update_fw_store);
@@ -5186,6 +5225,11 @@ static DEVICE_ATTR(hover_from_flash, S_IWUSR,
 static DEVICE_ATTR(panel_color, S_IRUSR,
 		mxt_panel_color_show,
 		NULL);
+#ifdef CONFIG_TOUCHSCREEN_ATMEL_MXT_LIBRA_EDGE_SUPPORT
+static DEVICE_ATTR(edge_touch_mode, (S_IRUGO | S_IWUGO),
+		mxt_edge_mode_show,
+		mxt_edge_mode_store);
+#endif
 
 static struct attribute *mxt_attrs[] = {
 	&dev_attr_update_fw.attr,
@@ -5206,6 +5250,7 @@ static struct attribute *mxt_attrs[] = {
 	&dev_attr_hover_tune.attr,
 	&dev_attr_hover_from_flash.attr,
 	&dev_attr_panel_color.attr,
+	&dev_attr_edge_touch_mode.attr,
 	NULL
 };
 
