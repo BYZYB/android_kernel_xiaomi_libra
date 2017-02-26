@@ -699,6 +699,7 @@ struct mxt_data {
 	u8 lockdown_info[MXT_LOCKDOWN_SIZE];
 	u8 config_info[MXT_CONFIG_INFO_SIZE];
 	char *raw_ref_buf;
+	bool button_0d_enabled;
 
 	/* Slowscan parameters	*/
 	int slowscan_enabled;
@@ -1583,6 +1584,9 @@ static void mxt_proc_t15_messages(struct mxt_data *data, u8 *msg)
 	if (!input_dev)
 		return;
 
+	if(!data->button_0d_enabled)
+		return;
+
 	for (key = 0; key < pdata->config_array[index].key_num; key++) {
 		curr_state = test_bit(key, &data->keystatus);
 		new_state = test_bit(key, &keystates);
@@ -1790,6 +1794,9 @@ static void mxt_proc_t97_messages(struct mxt_data *data, u8 *msg)
 	unsigned long keystates = le32_to_cpu(msg[2]);
 
 	if (!input_dev)
+		return;
+
+	if(!data->button_0d_enabled)
 		return;
 
 	for (key = 0; key < pdata->config_array[index].key_num; key++) {
@@ -3351,6 +3358,8 @@ static int mxt_initialize(struct mxt_data *data)
 	struct mxt_info *info = &data->info;
 	int error;
 	u8 retry_count = 0;
+
+	data->button_0d_enabled = true;
 
 retry_probe:
 	/* Read info block */
@@ -5156,6 +5165,33 @@ static ssize_t mxt_mem_access_write(struct file *filp, struct kobject *kobj,
 	return ret == 0 ? count : 0;
 }
 
+static ssize_t mxt_0dbutton_show(struct device *dev,
+		struct device_attribute *attr, char *buf)
+{
+	struct mxt_data *data = dev_get_drvdata(dev);
+	return snprintf(buf, PAGE_SIZE, "%u\n",
+			data->button_0d_enabled);
+}
+
+static ssize_t mxt_0dbutton_store(struct device *dev,
+		struct device_attribute *attr, const char *buf, size_t count)
+{
+
+	unsigned int input;
+	struct mxt_data *data = dev_get_drvdata(dev);
+
+	if (sscanf(buf, "%u", &input) != 1)
+		return -EINVAL;
+
+	input = input > 0 ? 1 : 0;
+
+	dev_info(dev, "%s: input %d\n", __func__, input);
+
+	data->button_0d_enabled = input;
+
+	return count;
+}
+
 #ifdef CONFIG_TOUCHSCREEN_ATMEL_MXT_EDGE_SUPPORT
 static ssize_t mxt_edge_mode_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
@@ -5213,6 +5249,7 @@ static DEVICE_ATTR(double_tap_enable, S_IWUSR | S_IRUSR, mxt_wakeup_mode_show, m
 static DEVICE_ATTR(hover_tune, S_IWUSR | S_IRUSR, mxt_hover_tune_show, mxt_hover_tune_store);
 static DEVICE_ATTR(hover_from_flash, S_IWUSR, NULL, mxt_hover_from_flash_store);
 static DEVICE_ATTR(panel_color, S_IRUSR, mxt_panel_color_show, NULL);
+static DEVICE_ATTR(nav_button_enable, S_IRUGO | S_IWUGO, mxt_0dbutton_show, mxt_0dbutton_store);
 #ifdef CONFIG_TOUCHSCREEN_ATMEL_MXT_EDGE_SUPPORT
 static DEVICE_ATTR(edge_touch_mode, S_IRUGO | S_IWUGO, mxt_edge_mode_show, mxt_edge_mode_store);
 #endif
@@ -5236,6 +5273,7 @@ static struct attribute *mxt_attrs[] = {
 	&dev_attr_hover_tune.attr,
 	&dev_attr_hover_from_flash.attr,
 	&dev_attr_panel_color.attr,
+	&dev_attr_nav_button_enable.attr,
 #ifdef CONFIG_TOUCHSCREEN_ATMEL_MXT_EDGE_SUPPORT
 	&dev_attr_edge_touch_mode.attr,
 #endif
