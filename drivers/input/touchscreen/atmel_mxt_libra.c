@@ -5132,27 +5132,60 @@ static ssize_t mxt_mem_access_write(struct file *filp, struct kobject *kobj,
 	return ret == 0 ? count : 0;
 }
 
-static DEVICE_ATTR(update_fw, S_IWUSR | S_IRUSR, mxt_update_fw_show, mxt_update_fw_store);
-static DEVICE_ATTR(debug_enable, S_IWUSR | S_IRUSR, mxt_debug_enable_show,
-			mxt_debug_enable_store);
-static DEVICE_ATTR(pause_driver, S_IWUSR | S_IRUSR, mxt_pause_show,
-			mxt_pause_store);
-static DEVICE_ATTR(version, S_IRUGO, mxt_version_show, NULL);
-static DEVICE_ATTR(build, S_IRUGO, mxt_build_show, NULL);
-static DEVICE_ATTR(slowscan_enable, S_IWUSR | S_IRUSR,
-			mxt_slowscan_show, mxt_slowscan_store);
-static DEVICE_ATTR(self_tune, S_IWUSR, NULL, mxt_self_tune_store);
-static DEVICE_ATTR(update_fw_flag, S_IWUSR, NULL, mxt_update_fw_flag_store);
-static DEVICE_ATTR(selftest,  S_IWUSR | S_IRUSR, mxt_selftest_show, mxt_selftest_store);
-static DEVICE_ATTR(stylus, S_IWUSR | S_IRUSR, mxt_stylus_show, mxt_stylus_store);
-static DEVICE_ATTR(diagnostic, S_IWUSR | S_IRUSR, mxt_diagnostic_show, mxt_diagnostic_store);
-static DEVICE_ATTR(sensitive_mode, S_IWUSR | S_IRUSR, mxt_sensitive_mode_show, mxt_sensitive_mode_store);
-static DEVICE_ATTR(chip_reset, S_IWUSR, NULL, mxt_chip_reset_store);
-static DEVICE_ATTR(chg_state, S_IRUGO, mxt_chg_state_show, NULL);
-static DEVICE_ATTR(wakeup_mode, S_IWUSR | S_IRUSR, mxt_wakeup_mode_show, mxt_wakeup_mode_store);
-static DEVICE_ATTR(hover_tune, S_IWUSR | S_IRUSR, mxt_hover_tune_show, mxt_hover_tune_store);
-static DEVICE_ATTR(hover_from_flash, S_IWUSR, NULL, mxt_hover_from_flash_store);
-static DEVICE_ATTR(panel_color, S_IRUSR, mxt_panel_color_show, NULL);
+static DEVICE_ATTR(update_fw, (S_IWUSR | S_IRUSR),
+		mxt_update_fw_show,
+		mxt_update_fw_store);
+static DEVICE_ATTR(debug_enable, (S_IWUSR | S_IRUSR),
+		mxt_debug_enable_show,
+		mxt_debug_enable_store);
+static DEVICE_ATTR(pause_driver, (S_IWUSR | S_IRUSR),
+		mxt_pause_show,
+		mxt_pause_store);
+static DEVICE_ATTR(version, S_IRUGO,
+		mxt_version_show,
+		NULL);
+static DEVICE_ATTR(build, S_IRUGO,
+		mxt_build_show,
+		NULL);
+static DEVICE_ATTR(slowscan_enable, (S_IWUSR | S_IRUSR),
+		mxt_slowscan_show,
+		mxt_slowscan_store);
+static DEVICE_ATTR(self_tune, S_IWUSR,
+		NULL,
+		mxt_self_tune_store);
+static DEVICE_ATTR(update_fw_flag, S_IWUSR,
+		NULL,
+		mxt_update_fw_flag_store);
+static DEVICE_ATTR(selftest,  (S_IWUSR | S_IRUSR),
+		mxt_selftest_show,
+		mxt_selftest_store);
+static DEVICE_ATTR(stylus, (S_IWUSR | S_IRUSR),
+		mxt_stylus_show,
+		mxt_stylus_store);
+static DEVICE_ATTR(diagnostic, (S_IWUSR | S_IRUSR),
+		mxt_diagnostic_show,
+		mxt_diagnostic_store);
+static DEVICE_ATTR(sensitive_mode, (S_IWUSR | S_IRUSR),
+		mxt_sensitive_mode_show,
+		mxt_sensitive_mode_store);
+static DEVICE_ATTR(chip_reset, S_IWUSR,
+		NULL,
+		mxt_chip_reset_store);
+static DEVICE_ATTR(chg_state, S_IRUGO,
+		mxt_chg_state_show,
+		NULL);
+static DEVICE_ATTR(double_tap_enable, (S_IWUSR | S_IRUSR),
+		mxt_wakeup_mode_show,
+		mxt_wakeup_mode_store);
+static DEVICE_ATTR(hover_tune, (S_IWUSR | S_IRUSR),
+		mxt_hover_tune_show,
+		mxt_hover_tune_store);
+static DEVICE_ATTR(hover_from_flash, S_IWUSR,
+		NULL,
+		mxt_hover_from_flash_store);
+static DEVICE_ATTR(panel_color, S_IRUSR,
+		mxt_panel_color_show,
+		NULL);
 
 static struct attribute *mxt_attrs[] = {
 	&dev_attr_update_fw.attr,
@@ -5169,7 +5202,7 @@ static struct attribute *mxt_attrs[] = {
 	&dev_attr_sensitive_mode.attr,
 	&dev_attr_chip_reset.attr,
 	&dev_attr_chg_state.attr,
-	&dev_attr_wakeup_mode.attr,
+	&dev_attr_double_tap_enable.attr,
 	&dev_attr_hover_tune.attr,
 	&dev_attr_hover_from_flash.attr,
 	&dev_attr_panel_color.attr,
