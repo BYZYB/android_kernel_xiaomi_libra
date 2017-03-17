@@ -1,0 +1,24 @@
+# Xiaomi configuration options
+
+config MACH_XIAOMI
+	bool "Xiaomi device"
+	depends on ARCH_MSM
+	help
+	 Support for Xiaomi products
+
+config MACH_XIAOMI_MSM8992
+	bool "Xiaomi MSM8992"
+	depends on ARCH_MSM8992
+	select MACH_XIAOMI
+	help
+	 Support for MSM8992 Xiaomi variants
+
+menu "Xiaomi board selection"
+
+config MACH_LIBRA
+	bool "Libra board variant"
+	select MACH_XIAOMI_MSM8992
+	help
+	 Support for Xiaomi Libra variant
+
+endmenu
