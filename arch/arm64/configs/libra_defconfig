@@ -3840,12 +3840,7 @@ CONFIG_SERIAL_NUM=y
 # CONFIG_FIRMWARE_MEMMAP is not set
 # CONFIG_MSM_TZ_LOG is not set
 
-#
-# TouchSense driver support
-#
-CONFIG_TSPDRV=y
-# CONFIG_TSPDRV_DRV2604 is not set
-CONFIG_TSPDRV_ISA1000=y
+CONFIG_HAPTIC_ISA1000=y
 
 #
 # Firmware Drivers
