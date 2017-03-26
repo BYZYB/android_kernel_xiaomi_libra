@@ -566,6 +566,13 @@ config TSIF_DEBUG
 	---help---
 	  This turns on debugging information for the tsif driver
 
+config HAPTIC_ISA1000
+	depends on ANDROID_TIMED_OUTPUT
+	tristate "ISA1000 haptic support"
+	default n
+	help
+	  The ISA1000 is a vibrator driver.
+
 config HAPTIC_ISA1200
 	tristate "ISA1200 haptic support"
 	depends on I2C
