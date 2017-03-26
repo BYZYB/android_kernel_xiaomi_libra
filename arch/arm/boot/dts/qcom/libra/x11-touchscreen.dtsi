@@ -1,0 +1,197 @@
+/* Copyright (c) 2017, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&tlmm_pinmux {
+	pmx_ts {
+		qcom,pins = <&gp 60>, <&gp 61>, <&gp 96>, <&gp 110>;
+	};
+};
+
+&soc {
+	ts_vreg: ts_vreg {
+		compatible = "regulator-fixed";
+		regulator-name = "ts_vreg";
+		regulator-min-microvolt = <3100000>;
+		regulator-max-microvolt = <3100000>;
+		gpio = <&msm_gpio 110 0>;
+		startup-delay-us = <10000>;
+		enable-active-high;
+	};
+};
+
+&i2c_2 {
+	qcom,clk-freq-out = <400000>;
+	atmel_mxt_ts_336t@4a {
+		compatible = "atmel,mxt-ts";
+		reg = <0x4a>;
+		interrupt-parent = <&msm_gpio>;
+		interrupts = <61 0x2008>;
+		vddio-supply = <&tp1v8_vreg>;
+		vdd-supply = <&ts_vreg>;
+		/* pins used by touchscreen */
+		pinctrl-names = "pmx_ts_active","pmx_ts_suspend";
+		pinctrl-0 = <&ts_active>;
+		pinctrl-1 = <&ts_suspend>;
+		atmel,reset-gpio = <&msm_gpio 60 0x00>;
+		atmel,irq-gpio = <&msm_gpio 61 0x2008>;
+		atmel,mxt-fw-name = "mXT874U10EC.fw";
+		atmel,config-array-size = <4>;
+		atmel,default-config = <3>;
+		atmel,default-panel-id = <0x36>;
+		atmel,use-ptc-key;
+		atmel,irqflags = <0x2008>;
+		atmel,gpio-mask = <0xC>;
+		atmel,cfg_1 {
+			atmel,family-id = <0xA4>;
+			atmel,variant-id = <0x15>;
+			atmel,version = <0x21>;
+			atmel,build = <0xAA>;
+			atmel,rev-id = <0x2>;
+			atmel,mxt-cfg-name = "mxt_336t_biel_config.fw";
+			atmel,vendor-id = <0x0C>;
+			atmel,panel-id = <0x31>; /* Biel D1 id = 0x31 */
+			atmel,key-codes = <102 139 158>;
+			atmel,selfintthr-stylus = <0>;
+			atmel,t71-tchthr-pos = <22>;
+			atmel,self-chgtime-min = <0>;
+			atmel,self-chgtime-max = <0>;
+			atmel,mult-intthr-sensitive = <12>;
+			atmel,mult-intthr-not-sensitive = <17>;
+			atmel,atchthr-sensitive = <6>;
+			atmel,mult-tchthr-sensitive = <0>;
+			atmel,mult-tchthr-not-sensitive = <0>;
+			atmel,wake-up-self-adcx = <16>;
+			atmel,support-wakeup-gesture;
+		};
+		atmel,cfg_2 {
+			atmel,family-id = <0xA4>;
+			atmel,variant-id = <0x15>;
+			atmel,version = <0x21>;
+			atmel,build = <0xAA>;
+			atmel,rev-id = <0x2>;
+			atmel,mxt-cfg-name = "mxt_336t_biel_config.fw";
+			atmel,vendor-id = <0x0C>;
+			atmel,panel-id = <0x35>; /* Biel TPB id = 0x35 */
+			atmel,key-codes = <102 139 158>;
+			atmel,selfintthr-stylus = <0>;
+			atmel,t71-tchthr-pos = <22>;
+			atmel,self-chgtime-min = <0>;
+			atmel,self-chgtime-max = <0>;
+			atmel,mult-intthr-sensitive = <12>;
+			atmel,mult-intthr-not-sensitive = <17>;
+			atmel,atchthr-sensitive = <6>;
+			atmel,mult-tchthr-sensitive = <0>;
+			atmel,mult-tchthr-not-sensitive = <0>;
+			atmel,wake-up-self-adcx = <16>;
+			atmel,support-wakeup-gesture;
+		};
+		atmel,cfg_3 {
+			atmel,family-id = <0xA4>;
+			atmel,variant-id = <0x15>;
+			atmel,version = <0x21>;
+			atmel,build = <0xAA>;
+			atmel,rev-id = <0x2>;
+			atmel,mxt-cfg-name = "mxt_336t_tpk_config.fw";
+			atmel,vendor-id = <0x0C>;
+			atmel,panel-id = <0x36>; /* TPK id = 0x36 */
+			atmel,key-codes = <102 139 158>;
+			atmel,selfintthr-stylus = <0>;
+			atmel,t71-tchthr-pos = <22>;
+			atmel,self-chgtime-min = <0>;
+			atmel,self-chgtime-max = <0>;
+			atmel,mult-intthr-sensitive = <12>;
+			atmel,mult-intthr-not-sensitive = <17>;
+			atmel,atchthr-sensitive = <6>;
+			atmel,mult-tchthr-sensitive = <0>;
+			atmel,mult-tchthr-not-sensitive = <0>;
+			atmel,wake-up-self-adcx = <16>;
+			atmel,support-wakeup-gesture;
+		};
+		atmel,cfg_4 {
+			atmel,family-id = <0xA6>;
+			atmel,variant-id = <0x00>;
+			atmel,version = <0x10>;
+			atmel,build = <0xEC>;
+			atmel,rev-id = <0x72>;
+			atmel,mxt-cfg-name = "mxt_874u_tpk_config.fw";
+			atmel,vendor-id = <0x0C>;
+			atmel,panel-id = <0x36>; /* TPK id = 0x36 */
+			atmel,key-codes = <158 102 139>;
+			atmel,selfintthr-stylus = <0>;
+			atmel,t71-tchthr-pos = <22>;
+			atmel,self-chgtime-min = <0>;
+			atmel,self-chgtime-max = <0>;
+			atmel,mult-intthr-sensitive = <12>;
+			atmel,mult-intthr-not-sensitive = <17>;
+			atmel,atchthr-sensitive = <6>;
+			atmel,mult-tchthr-sensitive = <0>;
+			atmel,mult-tchthr-not-sensitive = <0>;
+			atmel,wake-up-self-adcx = <16>;
+			atmel,support-wakeup-gesture;
+		};
+	};
+	synaptics@70 {
+		compatible = "synaptics,dsx-i2c";
+		reg = <0x70>;
+		interrupt-parent = <&msm_gpio>;
+		interrupts = <61 0x2008>;
+		vddio-supply = <&tp1v8_vreg>;
+		vdd-supply = <&ts_vreg>;
+		synaptics,pwr-reg-name = "vdd";
+		synaptics,bus-reg-name = "vddio";
+		synaptics,ub-i2c-addr = <0x70>;
+		pinctrl-names = "pmx_ts_active", "pmx_ts_suspend";
+		pinctrl-0 = <&ts_active>;
+		pinctrl-1 = <&ts_suspend>;
+		synaptics,panel-x = <1080>;
+		synaptics,panel-y = <1920>;
+		synaptics,max-major = <255>;
+		synaptics,max-minor = <255>;
+		synaptics,max-finger-num = <10>;
+		synaptics,reset-gpio = <&msm_gpio 60 0x00>;
+		synaptics,irq-gpio = <&msm_gpio 61 0x2008>;
+		synaptics,reset-gpio-name = "dsx_reset";
+		synaptics,irq-gpio-name = "dsx_irq";
+		synaptics,irq-on-state = <0>;
+		synaptics,irq-flags = <0x2008>; /* IRQF_ONESHOFT | IRQF_TRIGGER_LOW */
+		synaptics,power-delay-ms = <5>;
+		synaptics,reset-delay-ms = <15>;
+		synaptics,reset-active-ms = <5>;
+		synaptics,power-on-state = <1>;
+		synaptics,reset-on-state = <0>;
+		synaptics,cap-button-codes = <139 102 158>;
+		synaptics,guest-serialization-as-lockdown;
+		synaptics,use-charger-bit;
+		synaptics,tp-id-byte = /bits/ 8 <0 1>;
+		synaptics,config-array-size = <5>;
+		synaptics,cfg_1 {
+			synaptics,tp-id = /bits/ 8 <0x31 0x33>;
+			synaptics,fw-name = "synaptics_biel_sharp_update.fw";
+		};
+		synaptics,cfg_2 {
+			synaptics,tp-id = /bits/ 8 <0x35 0x32>;
+			synaptics,fw-name = "synaptics_biel_lgd_update.fw";
+		};
+		synaptics,cfg_3 {
+			synaptics,tp-id = /bits/ 8 <0x36 0x33>;
+			synaptics,fw-name = "synaptics_tpk_update.fw";
+		};
+		synaptics,cfg_4 {
+			synaptics,tp-id = /bits/ 8 <0x31 0x34>;
+			synaptics,fw-name = "synaptics_biel_auo_update.fw";
+		};
+		synaptics,cfg_5 {
+			synaptics,tp-id = /bits/ 8 <0x36 0x34>;
+			synaptics,fw-name = "synaptics_tpk_update.fw";
+		};
+	};
+};

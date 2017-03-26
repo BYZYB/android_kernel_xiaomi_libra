@@ -1,0 +1,54 @@
+/* Copyright (c) 2017, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/{
+	mtp_batterydata: qcom,battery-data {
+		qcom,batt-id-range-pct = <15>;
+		#include "batterydata-a10-atl-3260mah.dtsi"
+		#include "batterydata-a10-sdi-3260mah.dtsi"
+		#include "batterydata-itech-3020mah.dtsi"
+	};
+};
+
+&pmi8994_charger {
+	/delete-property/ qcom,parallel-usb-min-current-ma;
+	/delete-property/ qcom,parallel-usb-9v-min-current-ma;
+	/delete-property/ qcom,parallel-allowed-lowering-ma;
+	/delete-property/ qcom,autoadjust-vfloat;
+	/delete-property/ qcom,dc-psy-type;
+	/delete-property/ qcom,dc-psy-ma;
+
+	qcom,fastchg-current-ma = <1800>;
+	qcom,fastchg-current-comp = <900>;
+	qcom,float-voltage-mv = <4400>;
+	qcom,resume-delta-mv = <200>;
+	qcom,chg-inhibit-fg;
+	qcom,rparasitic-uohm = <100000>;
+	qcom,bms-psy-name = "bms";
+	qcom,thermal-mitigation = <1200 1100 1000 950 700>;
+	qcom,float-voltage-comp = <16>;
+};
+
+&pmi8994_fg {
+	/delete-property/ qcom,fg-cc-cv-threshold-mv;
+
+	qcom,battery-data = <&mtp_batterydata>;
+	qcom,ext-sense-type;
+	qcom,warm-bat-decidegc = <450>;
+	qcom,cool-bat-decidegc = <100>;
+	qcom,hot-bat-decidegc  = <600>;
+	qcom,cold-bat-decidegc = <0>;
+	qcom,resume-soc = <99>;
+	qcom,fg-cutoff-voltage-mv = <3400>;
+	qcom,thermal-coefficients = [b7 85 b2 49 71 35];
+	qcom,fg-vbat-estimate-diff-mv = <100>;
+};

@@ -1,0 +1,130 @@
+/* Copyright (c) 2017, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&tlmm_pinmux {
+	pmx_ts {
+		qcom,pins = <&gp 60>, <&gp 61>, <&gp 96>, <&gp 110>;
+	};
+};
+
+&soc {
+	ts_vreg: ts_vreg {
+		compatible = "regulator-fixed";
+		regulator-name = "ts_vreg";
+		regulator-min-microvolt = <3100000>;
+		regulator-max-microvolt = <3100000>;
+		gpio = <&msm_gpio 110 0>;
+		startup-delay-us = <10000>;
+		enable-active-high;
+	};
+
+	gen-vkeys {
+		compatible = "qcom,gen-vkeys";
+		label = "ft5x46";
+		qcom,disp-maxx = <1080>;
+		qcom,disp-maxy = <1920>;
+		qcom,panel-maxx = <1080>;
+		qcom,panel-maxy = <2080>;
+		qcom,key-codes = <139 102 158>;
+	};
+};
+
+&i2c_2 {
+	atmel_mxt_ts_336u@4a {
+		compatible = "atmel,mxt-ts";
+		reg = <0x4a>;
+		interrupt-parent = <&msm_gpio>;
+		interrupts = <61 0x2008>;
+		vddio-supply = <&tp1v8_vreg>;
+		vdd-supply = <&ts_vreg>;
+		/* pins used by touchscreen */
+		pinctrl-names = "pmx_ts_active","pmx_ts_suspend";
+		pinctrl-0 = <&ts_active>;
+		pinctrl-1 = <&ts_suspend>;
+		atmel,reset-gpio = <&msm_gpio 60 0x00>;
+		atmel,irq-gpio = <&msm_gpio 61 0x2008>;
+		atmel,mxt-fw-name = "mXT336U10AA.fw";
+		atmel,config-array-size = <1>;
+		atmel,default-config = <0>;
+		atmel,default-panel-id = <0x34>;
+		atmel,irqflags = <0x2008>;
+		atmel,gpio-mask = <0xC>;
+		atmel,cfg_1 {
+			atmel,family-id = <0xA6>;
+			atmel,variant-id = <0x06>;
+			atmel,version = <0x10>;
+			atmel,build = <0xAA>;
+			atmel,rev-id = <0x2>;
+			atmel,mxt-cfg-name = "mxt_336u_ofilm_config.fw";
+			atmel,vendor-id = <0x0C>;
+			atmel,panel-id = <0x34>; /* Ofilm = 0x34 */
+			atmel,key-codes = <158 102 139>;
+			atmel,selfintthr-stylus = <0>;
+			atmel,t71-tchthr-pos = <22>;
+			atmel,self-chgtime-min = <0>;
+			atmel,self-chgtime-max = <0>;
+			atmel,mult-intthr-sensitive = <12>;
+			atmel,mult-intthr-not-sensitive = <17>;
+			atmel,atchthr-sensitive = <6>;
+			atmel,mult-tchthr-sensitive = <0>;
+			atmel,mult-tchthr-not-sensitive = <0>;
+			atmel,wake-up-self-adcx = <16>;
+			atmel,support-wakeup-gesture;
+		};
+	};
+
+	ft5x46_i2c@38 {
+		compatible = "ft,ft5x46_i2c";
+		reg = <0x38>;
+		interrupt-parent = <&msm_gpio>;
+		interrupts = <61 0x2008>;
+		vddio-supply = <&tp1v8_vreg>;
+		vdd-supply = <&ts_vreg>;
+		/* pins used by touchscreen */
+		pinctrl-names = "pmx_ts_active","pmx_ts_suspend";
+		pinctrl-0 = <&ts_active>;
+		pinctrl-1 = <&ts_suspend>;
+		ft5x46_i2c,i2c-pull-up;
+		ft5x46_i2c,irqflags = <0x2008>;
+		ft5x46_i2c,x-max = <1080>;
+		ft5x46_i2c,y-max = <1920>;
+		ft5x46_i2c,z-max = <255>;
+		ft5x46_i2c,w-max = <200>;
+		ft5x46_i2c,reset-gpio = <&msm_gpio 60 0x00>;
+		ft5x46_i2c,irq-gpio = <&msm_gpio 61 0x2008>;
+		ft5x46_i2c,landing-jiffies = <1000>;
+		ft5x46_i2c,landing-threshold = <16>;
+		ft5x46_i2c,staying-threshold = <8>;
+		ft5x46_i2c,raw-min = <7000>;
+		ft5x46_i2c,raw-max = <10000>;
+		ft5x46_i2c,fw-delay-55-ms = <2>;
+		ft5x46_i2c,fw-delay-aa-ms = <2>;
+		ft5x46_i2c,fw-upgrade-id1 = <0x54>;
+		ft5x46_i2c,fw-upgrade-id2 = <0x2C>;
+		ft5x46_i2c,fw-delay-readid-ms = <20>;
+		ft5x46_i2c,firmware-array-size = <2>;
+		ft5x46_i2c,cfg_0 {
+			ft5x46_i2c,chip = <0x54>;
+			ft5x46_i2c,vendor = <0x6d>;
+			ft5x46_i2c,fw-name = "ft5346_lens.fw";
+			ft5x46_i2c,tx-num = <24>;
+			ft5x46_i2c,rx-num = <13>;
+		};
+		ft5x46_i2c,cfg_1 {
+			ft5x46_i2c,chip = <0x54>;
+			ft5x46_i2c,vendor = <0x3b>;
+			ft5x46_i2c,fw-name = "ft5346_biel.fw";
+			ft5x46_i2c,tx-num = <24>;
+			ft5x46_i2c,rx-num = <13>;
+		};
+	};
+};

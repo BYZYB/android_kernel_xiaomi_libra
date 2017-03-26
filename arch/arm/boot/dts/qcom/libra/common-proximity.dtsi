@@ -1,0 +1,95 @@
+/* Copyright (c) 2017, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/ {
+	aliases {
+		i2c7  = &i2c_7;
+	};
+};
+
+&tlmm_pinmux {
+	pmx_i2c_7 {
+		qcom,pins = <&gp 43>, <&gp 44>; /* SDA, SCL */
+		qcom,num-grp-pins = <2>;
+		qcom,pin-func = <3>;
+		label = "pmx_i2c_7";
+
+		i2c_7_active: i2c_7_active {
+			drive-strength = <2>;
+			bias-disable;
+		};
+
+		i2c_7_sleep: i2c_7_sleep {
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
+
+	cm36686_int_pin {
+		qcom,pins = <&gp 40>;
+		qcom,num-grp-pins = <1>;
+		qcom,pin-func = <0>;
+		label = "cm36686-irq";
+		cm36686_int_default: cm36686_int_default {
+			bias-pull-up;
+			input-enable;
+			drive-strength = <2>;
+		};
+	};
+};
+
+&soc {
+	i2c_7: i2c@f9963000 { /* BLSP7 from (1~12) point view*/
+		compatible = "qcom,i2c-msm-v2";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg-names = "qup_phys_addr";
+		reg = <0xf9963000 0x1000>;
+		interrupt-names = "qup_irq";
+		interrupts = <0 101 0>;
+		qcom,clk-freq-out = <400000>;
+		qcom,clk-freq-in  = <19200000>;
+		clock-names = "iface_clk", "core_clk";
+		clocks = <&clock_gcc clk_gcc_blsp2_ahb_clk>,
+			<&clock_gcc clk_gcc_blsp2_qup1_i2c_apps_clk>;
+
+		pinctrl-names = "i2c_active", "i2c_sleep";
+		pinctrl-0 = <&i2c_7_active>;
+		pinctrl-1 = <&i2c_7_sleep>;
+		qcom,noise-rjct-scl = <0>;
+		qcom,noise-rjct-sda = <0>;
+		dmas = <&dma_blsp2 12 64 0x20000020 0x20>,
+			<&dma_blsp2 13 32 0x20000020 0x20>;
+		dma-names = "tx", "rx";
+		qcom,master-id = <84>;
+
+		cm36686@60 {
+			compatible = "cm,cm36686";
+			reg = <0x60>;
+
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <40 0x2008>;
+
+			pinctrl-names = "default";
+			pinctrl-0 = <&cm36686_int_default>;
+
+			vdd-supply = <&pm8994_l18>;
+			prox-int-supply = <&pm8994_s4>;
+			i2c-supply = <&pm8994_lvs2>;
+
+			als_trans_ratio = <16>;
+			prox_default_offset = <1000>;
+			prox_thres_near = <300>;
+			prox_thres_far = <200>;
+		};
+	};
+};

@@ -1,0 +1,138 @@
+/* Copyright (c) 2017, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/ {
+	aliases {
+		i2c13  = &i2c_13;
+	};
+};
+
+&tlmm_pinmux {
+	pmx_i2c_5_1 {
+		qcom,pins = <&gp 23>; /* SDA*/
+		qcom,num-grp-pins = <1>;
+		qcom,pin-func = <4>;
+		label = "pmx_i2c_5_1";
+
+		i2c_5_1_active: i2c_5_1_active {
+			drive-strength = <2>;
+			bias-disable;
+		};
+
+		i2c_5_1_sleep: i2c_5_1_sleep {
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
+
+	pmx_i2c_5_2 {
+		qcom,pins = <&gp 24>; /* SCL*/
+		qcom,num-grp-pins = <1>;
+		qcom,pin-func = <5>;
+		label = "pmx_i2c_5_2";
+
+		i2c_5_2_active: i2c_5_2_active {
+			drive-strength = <2>;
+			bias-disable;
+		};
+
+		i2c_5_2_sleep: i2c_5_2_sleep {
+			drive-strength = <2>;
+			bias-disable;
+		};
+	};
+
+	x6db0_int_pin {
+		qcom,pins = <&gp 64>;
+		qcom,pin-func = <0>;
+		qcom,num-grp-pins = <1>;
+		label = "x6db0-irq";
+		x6db0_int_default: x6db0_int_default {
+			drive-strength = <6>;
+			bias-pull-up;
+		};
+		x6db0_int_sleep: x6db0_int_sleep {
+			drive-strength = <2>;
+			bias-pull-down;
+		};
+	};
+
+	x6db0_reset_pin {
+		qcom,pins = <&gp 74>;
+		qcom,pin-func = <0>;
+		qcom,num-grp-pins = <1>;
+		label = "x6db0-reset";
+		x6db0_reset_default: x6db0_reset_default {
+			drive-strength = <6>;
+			bias-pull-up;
+		};
+		x6db0_reset_sleep: x6db0_reset_sleep {
+			drive-strength = <2>;
+			bias-pull-down;
+		};
+	};
+
+	x6db0_wakeup_pin {
+		qcom,pins = <&gp 42>;
+		qcom,pin-func = <0>;
+		qcom,num-grp-pins = <1>;
+		label = "x6db0-wakeup";
+		x6db0_wakeup_default: x6db0_wakeup_default {
+			drive-strength = <6>;
+			bias-pull-up;
+		};
+		x6db0_wakeup_sleep: x6db0_wakeup_sleep {
+			drive-strength = <2>;
+			bias-pull-down;
+		};
+	};
+};
+
+&soc {
+	i2c_13: i2c@f9927000 { /* BLSP5 from (1~12) point view*/
+		compatible = "qcom,i2c-msm-v2";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg-names = "qup_phys_addr";
+		reg = <0xf9927000 0x1000>;
+		interrupt-names = "qup_irq";
+		interrupts = <0 99 0>;
+		qcom,clk-freq-out = <400000>;
+		qcom,clk-freq-in  = <19200000>;
+		clock-names = "iface_clk", "core_clk";
+		clocks = <&clock_gcc clk_gcc_blsp1_ahb_clk>,
+			<&clock_gcc clk_gcc_blsp1_qup5_i2c_apps_clk>;
+
+		pinctrl-names = "i2c_active", "i2c_sleep";
+		pinctrl-0 = <&i2c_5_1_active &i2c_5_2_active>;
+		pinctrl-1 = <&i2c_5_1_sleep &i2c_5_2_sleep>;
+		qcom,noise-rjct-scl = <0>;
+		qcom,noise-rjct-sda = <0>;
+		dmas = <&dma_blsp1 20 64 0x20000020 0x20>,
+			<&dma_blsp1 21 32 0x20000020 0x20>;
+		dma-names = "tx", "rx";
+		qcom,master-id = <86>;
+
+		x6db0@08 {
+			compatible = "st,lsm6db0";
+			reg = <0x08>;
+
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <64 0x2004>;
+			st,reset-gpio = <&msm_gpio 74 0x00>;
+			st,wakeup-gpio = <&msm_gpio 42 0x00>;
+			vdd-supply = <&pm8994_lvs2>;
+			vmag-supply = <&pm8994_l18>;
+			i2c-supply = <&pm8994_lvs2>;
+		};
+	};
+};

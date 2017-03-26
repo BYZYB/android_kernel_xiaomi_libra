@@ -1,0 +1,152 @@
+/* Copyright (c) 2017, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&spmi_bus {
+    qcom,pm8994@0 {
+        keypad_bl_gpio5: qcom,leds@c400 {
+			compatible = "qcom,leds-qpnp";
+			reg = <0xc400 0x100>;
+			status = "okay";
+			qcom,led_gpio_5 {
+				label = "kpdbl";
+				linux,name = "button-backlight";
+				qcom,mode = "pwm";
+				pwms = <&pm8994_pwm_2 0 0>;
+				qcom,pwm-us = <1000>;
+				qcom,id = <7>;
+				qcom,max-current = <5>;
+				qcom,row-id = <0>;
+				qcom,row-src-en;
+				qcom,start-idx = <1>;
+				qcom,ramp-step-ms = <120>;
+				qcom,idx-len = <22>;
+				qcom,duty-pcts = [00
+						00 03 0b 19 2a
+						3b 4b 59 61 64
+						64 61 59 4b 3b
+						2a 19 0b 03 00
+						00];
+				qcom,use-blink;
+				qcom,in-order-command-processing;
+			};
+		};
+
+		keypad_bl_gpio10: qcom,leds@c900 {
+			compatible = "qcom,leds-qpnp";
+			reg = <0xc900 0x100>;
+			status = "okay";
+			qcom,led_gpio_10 {
+				label = "kpdbl";
+				linux,name = "button-backlight1";
+				qcom,mode = "pwm";
+				pwms = <&pm8994_pwm_6 0 0>;
+				qcom,pwm-us = <1000>;
+				qcom,id = <7>;
+				qcom,max-current = <5>;
+				qcom,row-id = <0>;
+				qcom,row-src-en;
+				qcom,start-idx = <1>;
+				qcom,ramp-step-ms = <120>;
+				qcom,idx-len = <22>;
+				qcom,duty-pcts = [00
+						00 03 0b 19 2a
+						3b 4b 59 61 64
+						64 61 59 4b 3b
+						2a 19 0b 03 00
+						00];
+				qcom,use-blink;
+				qcom,in-order-command-processing;
+			};
+		};
+    };
+
+	qcom,pmi8994@3 {
+		qcom,leds@d800 {
+			qcom,switch-freq-khz = <600>;
+			qcom,fs-curr-ua = <20000>;
+			qcom,en-cabc;
+			qcom,en-phase-stag;
+			qcom,led-strings-list = [00 01];
+		};
+		qcom,leds@d000 {
+			qcom,rgb_0 {
+				/delete-property/ linux,default-trigger;
+				qcom,use-blink;
+				qcom,idx-len = <22>;
+				qcom,duty-pcts = [
+					00 00 03 0b 19 2a
+					3b 4b 59 61 64
+					64 61 59 4b 3b
+					2a 19 0b 03 00
+					00];
+				qcom,lut-flags = <3>;
+				qcom,pause-lo = <0>;
+				qcom,pause-hi = <0>;
+				qcom,start-idx = <1>;
+				qcom,ramp-step-ms = <150>;
+			};
+
+			qcom,rgb_1 {
+				/delete-property/ linux,default-trigger;
+				qcom,use-blink;
+				qcom,idx-len = <22>;
+				qcom,duty-pcts = [
+					00 00 03 0b 19 2a
+					3b 4b 59 61 64
+					64 61 59 4b 3b
+					2a 19 0b 03 00
+					00];
+				qcom,lut-flags = <3>;
+				qcom,pause-lo = <0>;
+				qcom,pause-hi = <0>;
+				qcom,start-idx = <1>;
+				qcom,ramp-step-ms = <150>;
+			};
+
+			qcom,rgb_2 {
+				/delete-property/ linux,default-trigger;
+				qcom,use-blink;
+				qcom,idx-len = <22>;
+				qcom,duty-pcts = [
+					00 00 03 0b 19 2a
+					3b 4b 59 61 64
+					64 61 59 4b 3b
+					2a 19 0b 03 00
+					00];
+				qcom,lut-flags = <3>;
+				qcom,pause-lo = <0>;
+				qcom,pause-hi = <0>;
+				qcom,start-idx = <1>;
+				qcom,ramp-step-ms = <150>;
+			};
+		};
+	};
+};
+
+&soc {
+	pwm_ir {
+        compatible = "pwm-ir";
+	    pwms = <&pm8994_pwm_3 0 0>;
+    };
+};
+
+&pm8994_pwm_2 {
+	status = "okay";
+};
+
+&pm8994_pwm_3 {
+	status = "okay";
+};
+
+&pm8994_pwm_6 {
+	status = "okay";
+};

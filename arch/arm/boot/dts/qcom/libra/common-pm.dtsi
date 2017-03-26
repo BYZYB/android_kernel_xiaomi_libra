@@ -1,0 +1,38 @@
+/* Copyright (c) 2017, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+&spmi_bus {
+    qcom,pm8994@0 {
+        qcom,power-on@800 {
+			qcom,s3-debounce = <16>;
+			qcom,s3-src = "kpdpwr";
+
+            qcom,pon_1 {
+                qcom,s1-timer = <4480>;
+                qcom,s2-type = <7>;
+            };
+
+            qcom,pon_3 {
+                /delete-node/ qcom,support-reset;
+                /delete-node/ qcom,s1-timer;
+                /delete-node/ qcom,s2-timer;
+                /delete-node/ qcom,s2-type;
+            };
+        };
+    };
+    
+    qcom,pm8994@1 {
+        pm8994_pwm_1: pwm@b100 {
+            qcom,supported-sizes = <6>, <9>;
+        };
+    };
+};
