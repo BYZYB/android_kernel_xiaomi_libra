@@ -111,7 +111,6 @@ struct synaptics_dsx_board_data {
 	u32 power_gpio_flags;
 	u32 reset_gpio_flags;
 	u32 irq_gpio_flags;
-	bool cut_off_power;
 	bool use_charger_bit;
 	int (*gpio_config)(int gpio, bool configure, int dir, int state);
 	const char *pwr_reg_name;

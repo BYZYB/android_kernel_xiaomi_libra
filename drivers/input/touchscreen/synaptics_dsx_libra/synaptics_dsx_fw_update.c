@@ -31,15 +31,6 @@
 #define FW_IMAGE_NAME "synaptics/startup_fw_update.img"
 #define DO_STARTUP_FW_UPDATE
 
-/*
-#ifdef DO_STARTUP_FW_UPDATE
-#ifdef CONFIG_FB
-#define WAIT_FOR_FB_READY
-#define FB_READY_WAIT_MS 100
-#define FB_READY_TIMEOUT_S 30
-#endif
-#endif
-*/
 #define FORCE_UPDATE false
 #define DO_LOCKDOWN false
 
@@ -3651,29 +3642,10 @@ EXPORT_SYMBOL(synaptics_fw_updater);
 static void fwu_startup_fw_update_work(struct work_struct *work)
 {
 	static unsigned char do_once = 1;
-#ifdef WAIT_FOR_FB_READY
-	unsigned int timeout;
-	struct synaptics_rmi4_data *rmi4_data = fwu->rmi4_data;
-#endif
 
 	if (!do_once)
 		return;
 	do_once = 0;
-
-#ifdef WAIT_FOR_FB_READY
-	timeout = FB_READY_TIMEOUT_S * 1000 / FB_READY_WAIT_MS + 1;
-
-	while (!rmi4_data->fb_ready) {
-		msleep(FB_READY_WAIT_MS);
-		timeout--;
-		if (timeout == 0) {
-			dev_err(rmi4_data->pdev->dev.parent,
-					"%s: Timed out waiting for FB ready\n",
-					__func__);
-			return;
-		}
-	}
-#endif
 
 	synaptics_fw_updater(NULL);
 

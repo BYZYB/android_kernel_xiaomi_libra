@@ -697,12 +697,12 @@ static enum flash_area fwu_go_nogo(struct image_header_data *header)
 			"%s: Image firmware ID = %d\n",
 			__func__, (unsigned int)image_fw_id);
 
-	if (image_fw_id > device_fw_id) {
+	if (image_fw_id != device_fw_id) {
 		flash_area = UI_FIRMWARE;
 		goto exit;
-	} else if (image_fw_id < device_fw_id) {
+	} else if (image_fw_id == device_fw_id) {
 		dev_info(rmi4_data->pdev->dev.parent,
-				"%s: Image firmware ID older than device firmware ID\n",
+				"%s: Image firmware ID is the same as device firmware ID\n",
 				__func__);
 		flash_area = NONE;
 		goto exit;
