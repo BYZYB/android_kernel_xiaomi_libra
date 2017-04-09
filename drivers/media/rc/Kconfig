@@ -353,6 +353,24 @@ config IR_MSM_GENI
 	   To compile this driver as a module, choose M here: the
 	   module will be called msm-geni-ir.
 
+config IR_GPIO
+	tristate "GPIO IR remote control"
+	depends on RC_CORE
+	---help---
+	   Say Y if you want to use GPIO based IR.
+
+	   To compile this driver as a module, choose M here: the module will
+	   be called gpio-ir.
+
+config IR_PWM
+	tristate "PWM IR remote control"
+	depends on RC_CORE
+	---help---
+	   Say Y if you want to use PWM based IR.
+
+	   To compile this driver as a module, choose M here: the module will
+	   be called pwm-ir.
+
 config IR_MSM_GENI_TX
 	bool "MSM GENI IR Controller trasmitter"
 	depends on IR_MSM_GENI
