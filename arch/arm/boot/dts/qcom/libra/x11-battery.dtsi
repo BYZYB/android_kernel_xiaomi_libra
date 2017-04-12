@@ -47,7 +47,7 @@
 	qcom,cool-bat-decidegc = <100>;
 	qcom,hot-bat-decidegc  = <600>;
 	qcom,cold-bat-decidegc = <0>;
-	qcom,resume-soc = <99>;
+	qcom,resume-soc = <95>;
 	qcom,fg-cutoff-voltage-mv = <3400>;
 	qcom,thermal-coefficients = [dd 85 63 4a e6 35];
 	qcom,fg-vbat-estimate-diff-mv = <100>;
