@@ -658,8 +658,7 @@ KBUILD_CFLAGS += $(CLANG_TARGET) $(CLANG_GCC_TC) \
                  $(call cc-disable-warning, unused-variable) \
                  $(call cc-option, -fcatch-undefined-behavior) \
                  $(call cc-option, -no-integrated-as)
-KBUILD_CPPFLAGS += $(call cc-option,-Qunused-arguments,) \
-                   $(call cc-option,-Wno-unknown-warning-option,)
+KBUILD_CPPFLAGS += $(call cc-option,-Qunused-arguments,)
 # Quiet clang warning: comparison of unsigned expression < 0 is always false
 KBUILD_CFLAGS += $(call cc-disable-warning, tautological-compare)
 # CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
