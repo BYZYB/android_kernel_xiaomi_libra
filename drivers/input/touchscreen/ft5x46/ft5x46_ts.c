@@ -1809,10 +1809,45 @@ static struct attribute *ft5x46_attrs[] = {
 	&dev_attr_selftest.attr,
 	&dev_attr_lockdown_info.attr,
 	&dev_attr_config_info.attr,
-	&dev_attr_wakeup_mode.attr,
+	&dev_attr_double_tap_enable.attr,
 	&dev_attr_panel_color.attr,
 	NULL
 };
+
+static int ft5x46_proc_init(struct kobject *sysfs_node_parent) {
+	int ret = 0;
+	char *driver_path;
+
+	struct proc_dir_entry *proc_entry_ts;
+
+	// allocate memory for input device path
+	driver_path = kzalloc(PATH_MAX, GFP_KERNEL);
+	if(!driver_path) {
+		ret = -ENOMEM;
+		goto exit;
+	}
+
+	// store input device path
+	sprintf(driver_path, "/sys%s",
+			kobject_get_path(sysfs_node_parent, GFP_KERNEL));
+
+	printk("driver_path: %s\n", driver_path);
+
+	// remove existing entry
+	remove_proc_entry("touchscreen", NULL);
+
+	// symlink /proc/touchscreen to input device
+	proc_entry_ts = proc_symlink("touchscreen", NULL, driver_path);
+	if(!proc_entry_ts) {
+		ret = -ENOMEM;
+		goto free;
+	}
+free:
+	kfree(driver_path);
+exit:
+	pr_err("%s: Couldn't symlink to touchscreen\n", __func__);
+	return ret;
+}
 
 static const struct attribute_group ft5x46_attr_group = {
 	.attrs = ft5x46_attrs
@@ -2693,6 +2728,8 @@ struct ft5x46_data *ft5x46_probe(struct device *dev,
 		dev_err(dev, "fail to export sysfs entires\n");
 		goto err_free_irq;
 	}
+
+	ft5x46_proc_init(&dev->kobj);
 
 	error = ft5x46_configure_sleep(ft5x46, true);
 	if (error) {
