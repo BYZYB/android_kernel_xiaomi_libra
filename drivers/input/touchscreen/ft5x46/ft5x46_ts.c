@@ -1769,30 +1769,36 @@ static ssize_t ft5x46_panel_color_show(struct device *dev,
 	return count;
 }
 
-/* sysfs */
-#ifdef FT5X46_DEBUG_PERMISSION
-static DEVICE_ATTR(tpfwver, 0666, ft5x46_tpfwver_show, NULL);
-static DEVICE_ATTR(object, 0666, ft5x46_object_show, ft5x46_object_store);
-static DEVICE_ATTR(dbgdump, 0666, ft5x46_dbgdump_show, ft5x46_dbgdump_store);
-static DEVICE_ATTR(updatefw, 0222, NULL, ft5x46_updatefw_store);
-static DEVICE_ATTR(rawdatashow, 0666, ft5x46_rawdata_show, NULL);
-static DEVICE_ATTR(selftest, 0666, ft5x46_selftest_show, ft5x46_selftest_store);
-static DEVICE_ATTR(lockdown_info, 0666, ft5x46_lockdown_info_show, ft5x46_lockdown_info_store);
-static DEVICE_ATTR(config_info, 0666, ft5x46_config_info_show, NULL);
-static DEVICE_ATTR(wakeup_mode, 0666, ft5x46_wakeup_mode_show, ft5x46_wakeup_mode_store);
-static DEVICE_ATTR(panel_color, 0666, ft5x46_panel_color_show, NULL);
-#else
-static DEVICE_ATTR(tpfwver, 0644, ft5x46_tpfwver_show, NULL);
-static DEVICE_ATTR(object, 0644, ft5x46_object_show, ft5x46_object_store);
-static DEVICE_ATTR(dbgdump, 0644, ft5x46_dbgdump_show, ft5x46_dbgdump_store);
-static DEVICE_ATTR(updatefw, 0200, NULL, ft5x46_updatefw_store);
-static DEVICE_ATTR(rawdatashow, 0644, ft5x46_rawdata_show, NULL);
-static DEVICE_ATTR(selftest, 0644, ft5x46_selftest_show, ft5x46_selftest_store);
-static DEVICE_ATTR(lockdown_info, 0644, ft5x46_lockdown_info_show, ft5x46_lockdown_info_store);
-static DEVICE_ATTR(config_info, 0644, ft5x46_config_info_show, NULL);
-static DEVICE_ATTR(wakeup_mode, 0644, ft5x46_wakeup_mode_show, ft5x46_wakeup_mode_store);
-static DEVICE_ATTR(panel_color, 0444, ft5x46_panel_color_show, NULL);
-#endif
+static DEVICE_ATTR(tpfwver, 0666,
+		ft5x46_tpfwver_show,
+		NULL);
+static DEVICE_ATTR(object, 0666,
+		ft5x46_object_show,
+		ft5x46_object_store);
+static DEVICE_ATTR(dbgdump, 0666,
+		ft5x46_dbgdump_show,
+		ft5x46_dbgdump_store);
+static DEVICE_ATTR(updatefw, 0222,
+		NULL,
+		ft5x46_updatefw_store);
+static DEVICE_ATTR(rawdatashow, 0666,
+		ft5x46_rawdata_show,
+		NULL);
+static DEVICE_ATTR(selftest, 0666,
+		ft5x46_selftest_show,
+		ft5x46_selftest_store);
+static DEVICE_ATTR(lockdown_info, 0666,
+		ft5x46_lockdown_info_show,
+		ft5x46_lockdown_info_store);
+static DEVICE_ATTR(config_info, 0666,
+		ft5x46_config_info_show,
+		NULL);
+static DEVICE_ATTR(wakeup_mode, 0666,
+		ft5x46_wakeup_mode_show,
+		ft5x46_wakeup_mode_store);
+static DEVICE_ATTR(panel_color, 0666,
+		ft5x46_panel_color_show,
+		NULL);
 
 static struct attribute *ft5x46_attrs[] = {
 	&dev_attr_tpfwver.attr,
