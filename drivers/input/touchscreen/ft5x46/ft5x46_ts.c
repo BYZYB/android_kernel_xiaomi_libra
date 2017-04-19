@@ -1665,7 +1665,7 @@ static DEVICE_ATTR(rawdatashow, 0666, ft5x46_rawdata_show, NULL);
 static DEVICE_ATTR(selftest, 0666, ft5x46_selftest_show, ft5x46_selftest_store);
 static DEVICE_ATTR(lockdown_info, 0666, ft5x46_lockdown_info_show, ft5x46_lockdown_info_store);
 static DEVICE_ATTR(config_info, 0666, ft5x46_config_info_show, NULL);
-static DEVICE_ATTR(wakeup_mode, 0666, ft5x46_wakeup_mode_show, ft5x46_wakeup_mode_store);
+static DEVICE_ATTR(double_tap_enable, 0666, ft5x46_wakeup_mode_show, ft5x46_wakeup_mode_store);
 static DEVICE_ATTR(panel_color, 0666, ft5x46_panel_color_show, NULL);
 #else
 static DEVICE_ATTR(tpfwver, 0644, ft5x46_tpfwver_show, NULL);
@@ -1676,7 +1676,7 @@ static DEVICE_ATTR(rawdatashow, 0644, ft5x46_rawdata_show, NULL);
 static DEVICE_ATTR(selftest, 0644, ft5x46_selftest_show, ft5x46_selftest_store);
 static DEVICE_ATTR(lockdown_info, 0644, ft5x46_lockdown_info_show, ft5x46_lockdown_info_store);
 static DEVICE_ATTR(config_info, 0644, ft5x46_config_info_show, NULL);
-static DEVICE_ATTR(wakeup_mode, 0644, ft5x46_wakeup_mode_show, ft5x46_wakeup_mode_store);
+static DEVICE_ATTR(double_tap_enable, 0644, ft5x46_wakeup_mode_show, ft5x46_wakeup_mode_store);
 static DEVICE_ATTR(panel_color, 0444, ft5x46_panel_color_show, NULL);
 #endif
 
