@@ -1793,7 +1793,7 @@ static DEVICE_ATTR(lockdown_info, 0666,
 static DEVICE_ATTR(config_info, 0666,
 		ft5x46_config_info_show,
 		NULL);
-static DEVICE_ATTR(wakeup_mode, 0666,
+static DEVICE_ATTR(double_tap_enable, 0666,
 		ft5x46_wakeup_mode_show,
 		ft5x46_wakeup_mode_store);
 static DEVICE_ATTR(panel_color, 0666,
