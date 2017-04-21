@@ -643,7 +643,16 @@ endif
 KBUILD_CFLAGS += $(stackp-flag)
 
 ifeq ($(cc-name),clang)
-KBUILD_CFLAGS += $(call cc-disable-warning, format-invalid-specifier) \
+ifneq ($(CROSS_COMPILE),)
+CLANG_TARGET := -target $(notdir $(CROSS_COMPILE:%-=%))
+GCC_TOOLCHAIN := $(realpath $(dir $(shell which $(LD)))/..)
+endif
+ifneq ($(GCC_TOOLCHAIN),)
+CLANG_GCC_TC := -gcc-toolchain $(GCC_TOOLCHAIN)
+endif
+KBUILD_AFLAGS += $(CLANG_TARGET) $(CLANG_GCC_TC)
+KBUILD_CFLAGS += $(CLANG_TARGET) $(CLANG_GCC_TC) \
+                 $(call cc-disable-warning, format-invalid-specifier) \
                  $(call cc-disable-warning, gnu) \
                  $(call cc-disable-warning, unused-variable) \
                  $(call cc-option, -fcatch-undefined-behavior)
