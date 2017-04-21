@@ -653,6 +653,7 @@ endif
 KBUILD_AFLAGS += $(CLANG_TARGET) $(CLANG_GCC_TC) \
                  $(call cc-option, -no-integrated-as)
 KBUILD_CFLAGS += $(CLANG_TARGET) $(CLANG_GCC_TC) \
+                 $(call cc-disable-warning, address-of-packed-member) \
                  $(call cc-disable-warning, format-invalid-specifier) \
                  $(call cc-disable-warning, gnu) \
                  $(call cc-disable-warning, unused-variable) \
