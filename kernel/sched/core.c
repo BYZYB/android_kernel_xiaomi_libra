@@ -6043,6 +6043,10 @@ static void build_group_mask(struct sched_domain *sd, struct sched_group *sg)
 		 */
 		if (!sibling->child)
 			continue;
+
+		/* If we would not end up here, we can't continue from here */
+		if (!cpumask_equal(sg_span, sched_domain_span(sibling->child)))
+			continue;
 		cpumask_set_cpu(i, sched_group_mask(sg));
 	}
 
