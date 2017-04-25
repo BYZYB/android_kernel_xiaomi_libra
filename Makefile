@@ -650,12 +650,14 @@ endif
 ifneq ($(GCC_TOOLCHAIN),)
 CLANG_GCC_TC := -gcc-toolchain $(GCC_TOOLCHAIN)
 endif
-KBUILD_AFLAGS += $(CLANG_TARGET) $(CLANG_GCC_TC)
+KBUILD_AFLAGS += $(CLANG_TARGET) $(CLANG_GCC_TC) \
+                 $(call cc-option, -no-integrated-as)
 KBUILD_CFLAGS += $(CLANG_TARGET) $(CLANG_GCC_TC) \
                  $(call cc-disable-warning, format-invalid-specifier) \
                  $(call cc-disable-warning, gnu) \
                  $(call cc-disable-warning, unused-variable) \
-                 $(call cc-option, -fcatch-undefined-behavior)
+                 $(call cc-option, -fcatch-undefined-behavior) \
+                 $(call cc-option, -no-integrated-as)
 KBUILD_CPPFLAGS += $(call cc-option,-Qunused-arguments,) \
                    $(call cc-option,-Wno-unknown-warning-option,)
 # Quiet clang warning: comparison of unsigned expression < 0 is always false
