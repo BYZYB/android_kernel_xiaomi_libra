@@ -25,6 +25,14 @@
 			reg = <0 0x06400000 0 0x9f00000>;
 			label = "memory_hole";
 		};
+
+		ramoops_mem: ramoops_region@1ff00000 {
+			linux,reserve-contiguous-region;
+			linux,reserve-region;
+			linux,remove-completely;
+			reg = <0x0 0x1ff00000 0x0 0x40000>;
+			label = "ramoops_mem";
+		};
 	};
 };
 
@@ -48,5 +56,17 @@
 				<55 512 120000 1200000>,
 				<55 512 393600 3936000>;
 		qcom,ce-opp-freq = <171430000>;
+	};
+
+	ramoops {
+		compatible = "ramoops";
+		status = "okay";
+
+		android,ramoops-buffer-start = <0x1ff00000>;
+		android,ramoops-buffer-size =  <0x40000>;
+		android,ramoops-console-size = <0x10000>;
+		android,ramoops-record-size = <0x10000>;
+		android,ramoops-pmsg-size = <0x20000>;
+		android,ramoops-dump-oops = <0x1>;
 	};
 };
