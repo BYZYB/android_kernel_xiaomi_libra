@@ -1925,6 +1925,7 @@ static ssize_t snd_timer_user_read(struct file *file, char __user *buffer,
 	}
 	spin_unlock_irq(&tu->qlock);
  _error:
+	mutex_unlock(&tu->ioctl_lock);
 	return result > 0 ? result : err;
 }
 
