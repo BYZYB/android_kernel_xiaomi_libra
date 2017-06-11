@@ -80,7 +80,6 @@
 #define F12_PALM_STATUS 0x03
 #define F12_HOVERING_FINGER_STATUS 0x05
 #define F12_GLOVED_FINGER_STATUS 0x06
-#define F12_EDGE_FINGER_STATUS 0x0E
 
 #define MAX_NUMBER_OF_BUTTONS 4
 #define MAX_INTR_REGISTERS 4
@@ -119,13 +118,6 @@ enum exp_fn {
 	RMI_VIDEO,
 	RMI_DEBUG,
 	RMI_LAST,
-};
-
-enum synaptics_edge_mode {
-	EDGE_DISABLE = 0,
-	EDGE_FINGER,
-	EDGE_HANDGRIP,
-	EDGE_FINGER_HANDGRIP,	/* Should not be used */
 };
 
 /*
@@ -298,9 +290,6 @@ struct synaptics_rmi4_device_info {
 struct synaptics_rmi4_data {
 	struct platform_device *pdev;
 	struct input_dev *input_dev;
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	struct input_dev *edge_input_dev;
-#endif
 	struct notifier_block power_supply_notifier;
 	const struct synaptics_dsx_hw_interface *hw_if;
 	struct synaptics_rmi4_device_info rmi4_mod_info;
@@ -341,7 +330,6 @@ struct synaptics_rmi4_data {
 	unsigned short f51_ctrl_base_addr;
 	unsigned short f54_cmd_base_addr;
 	unsigned int firmware_id;
-	enum synaptics_edge_mode edge_mode;
 	unsigned char lockdown_info[LOCKDOWN_INFO_SIZE];
 	int irq;
 	int sensor_max_x;

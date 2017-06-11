@@ -34,9 +34,6 @@
 #endif
 
 #define INPUT_PHYS_NAME "synaptics_dsx/touch_input"
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-#define INPUT_EDGE_PHYS_NAME "synaptics_dsx/edge_input"
-#endif
 
 #define VIRTUAL_KEY_MAP_FILE_NAME "virtualkeys." PLATFORM_DRIVER_NAME
 
@@ -76,8 +73,6 @@
 #define F01_BUID_ID_OFFSET 18
 #define F01_PROD_ID_OFFSET 11
 
-#define F51_EDGE_RESP_CTRL_OFFSET 58
-
 #define STATUS_NO_ERROR 0x00
 #define STATUS_RESET_OCCURRED 0x01
 #define STATUS_INVALID_CONFIG 0x02
@@ -98,18 +93,10 @@
 #define F12_CONTINUOUS_MODE 0x00
 #define F12_WAKEUP_GESTURE_MODE 0x02
 
-#define INPUT_EVENT_START			0
-#define INPUT_EVENT_SENSITIVE_MODE_OFF		0
-#define INPUT_EVENT_SENSITIVE_MODE_ON		1
-#define INPUT_EVENT_STYLUS_MODE_OFF		2
-#define INPUT_EVENT_STYLUS_MODE_ON		3
-#define INPUT_EVENT_WAKUP_MODE_OFF		4
-#define INPUT_EVENT_WAKUP_MODE_ON		5
-#define INPUT_EVENT_EDGE_DISABLE		6
-#define INPUT_EVENT_EDGE_FINGER			7
-#define INPUT_EVENT_EDGE_HANDGRIP		8
-#define INPUT_EVENT_EDGE_FINGER_HANDGRIP	9
-#define INPUT_EVENT_END				9
+#define INPUT_EVENT_START               0
+#define INPUT_EVENT_WAKEUP_MODE_OFF     4
+#define INPUT_EVENT_WAKEUP_MODE_ON      5
+#define INPUT_EVENT_END                 9
 
 static int synaptics_rmi4_f12_set_enables(struct synaptics_rmi4_data *rmi4_data,
 		unsigned short ctrl28);
@@ -166,12 +153,6 @@ static ssize_t synaptics_rmi4_wake_gesture_show(struct device *dev,
 		struct device_attribute *attr, char *buf);
 
 static ssize_t synaptics_rmi4_wake_gesture_store(struct device *dev,
-		struct device_attribute *attr, const char *buf, size_t count);
-
-static ssize_t synaptics_rmi4_edge_mode_show(struct device *dev,
-		struct device_attribute *attr, char *buf);
-
-static ssize_t synaptics_rmi4_edge_mode_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t count);
 
 static ssize_t synaptics_rmi4_virtual_key_map_show(struct kobject *kobj,
@@ -573,9 +554,6 @@ static struct device_attribute attrs[] = {
 	__ATTR(double_tap_enable, (S_IRUGO | S_IWUGO),
 			synaptics_rmi4_wake_gesture_show,
 			synaptics_rmi4_wake_gesture_store),
-	__ATTR(edge_touch_mode, (S_IRUGO | S_IWUGO),
-			synaptics_rmi4_edge_mode_show,
-			synaptics_rmi4_edge_mode_store),
 };
 
 static struct kobj_attribute virtual_key_map_attr = {
@@ -776,76 +754,6 @@ static ssize_t synaptics_rmi4_wake_gesture_store(struct device *dev,
 
 	return count;
 }
-
-static int synaptics_rmi4_enable_edge_touch(struct synaptics_rmi4_data *rmi4_data,
-		enum synaptics_edge_mode edge_mode)
-{
-	int retval;
-	unsigned char value;
-
-	dev_info(rmi4_data->pdev->dev.parent,
-		"Switch to edge mode %d\n", (int)edge_mode);
-
-	if (edge_mode == EDGE_DISABLE)
-		value = 0;
-	else if (edge_mode == EDGE_FINGER)
-		value = 0x11;
-	else if (edge_mode == EDGE_HANDGRIP)
-		value = 0x13;
-	else if (edge_mode == EDGE_FINGER_HANDGRIP)
-		value = 0x15;
-
-	retval = synaptics_rmi4_reg_write(rmi4_data,
-			rmi4_data->f51_ctrl_base_addr + F51_EDGE_RESP_CTRL_OFFSET,
-			&value, 1);
-	if (retval < 0) {
-		dev_err(rmi4_data->pdev->dev.parent,
-			"Failed to write reg 0x%x\n",
-			rmi4_data->f51_ctrl_base_addr + F51_EDGE_RESP_CTRL_OFFSET);
-	}
-
-	value = 1 << 2;		/* Force Update */
-	retval = synaptics_rmi4_reg_write(rmi4_data,
-			rmi4_data->f54_cmd_base_addr, &value, 1);
-	if (retval < 0) {
-		dev_err(rmi4_data->pdev->dev.parent,
-			"Failed to write reg 0x%x\n",
-			rmi4_data->f54_cmd_base_addr);
-	}
-
-	return retval;
-}
-
-static ssize_t synaptics_rmi4_edge_mode_show(struct device *dev,
-		struct device_attribute *attr, char *buf)
-{
-	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(dev);
-
-	return snprintf(buf, PAGE_SIZE, "%u\n",
-			rmi4_data->edge_mode);
-}
-
-static ssize_t synaptics_rmi4_edge_mode_store(struct device *dev,
-		struct device_attribute *attr, const char *buf, size_t count)
-{
-	unsigned int input;
-	struct synaptics_rmi4_data *rmi4_data = dev_get_drvdata(dev);
-
-	if (sscanf(buf, "%u", &input) != 1)
-		return -EINVAL;
-
-	if (input < EDGE_DISABLE || input > EDGE_FINGER_HANDGRIP)
-		return count;
-
-	if (synaptics_rmi4_enable_edge_touch(rmi4_data, input) < 0) {
-		dev_err(rmi4_data->pdev->dev.parent,
-			"Unable to switch edge touch mode\n");
-	} else
-		rmi4_data->edge_mode = input;
-
-	return count;
-}
-
 
 static ssize_t synaptics_rmi4_virtual_key_map_show(struct kobject *kobj,
 		struct kobj_attribute *attr, char *buf)
@@ -1056,10 +964,6 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 	static unsigned char fingers_already_present;
 #endif
 	bool report_to_cyttsp = false;
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	bool report_edge_gesture_key = false;
-	unsigned int gesture_key_code;
-#endif
 
 	fingers_to_process = fhandler->num_of_data_points;
 	data_addr = fhandler->full_addr.data_base;
@@ -1082,36 +986,6 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 
 		return 0;
 	}
-
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	if (detected_gestures[0] == 0x30) {
-		/* Edge gestures */
-		if (detected_gestures[1] == HAND_GRIP_LEFT ||
-				detected_gestures[1] == HAND_GRIP_RIGHT)
-			rmi4_data->hand_grip = detected_gestures[1];
-		else if (detected_gestures[1] == SIDE_DBL_TAP_LEFT ||
-				detected_gestures[1] == SIDE_DBL_TAP_RIGHT) {
-			report_edge_gesture_key = true;
-			gesture_key_code = KEY_BACK;
-		} else if (detected_gestures[1] == SIDE_DBL_TAP_BOTH) {
-			report_edge_gesture_key = true;
-			gesture_key_code = KEY_SYSRQ;
-		} else if (detected_gestures[1] == SIDE_DBL_SWIPE_BOTH) {
-			report_edge_gesture_key = true;
-			gesture_key_code = KEY_CLEAR;
-		}
-
-		if (report_edge_gesture_key) {
-			input_report_key(rmi4_data->edge_input_dev, gesture_key_code, 1);
-			input_sync(rmi4_data->edge_input_dev);
-			input_report_key(rmi4_data->edge_input_dev, gesture_key_code, 0);
-			input_sync(rmi4_data->edge_input_dev);
-		}
-	}
-	dev_dbg(rmi4_data->pdev->dev.parent,
-			"%s: detected_gestures = 0x%x 0x%x\n",
-			__func__, detected_gestures[0], detected_gestures[1]);
-#endif
 
 	/* Determine the total number of fingers to process */
 	if (extra_data->data15_size) {
@@ -1255,47 +1129,6 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 
 			touch_count++;
 			break;
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-		case F12_EDGE_FINGER_STATUS:
-#ifdef TYPE_B_PROTOCOL
-			input_mt_slot(rmi4_data->edge_input_dev, finger);
-			input_mt_report_slot_state(rmi4_data->edge_input_dev,
-				MT_TOOL_FINGER, 1);
-#endif
-			input_report_key(rmi4_data->edge_input_dev,
-					BTN_TOUCH, 1);
-			input_report_key(rmi4_data->edge_input_dev,
-					BTN_TOOL_EDGE_TOUCH, 1);
-			if (x == 0)	/* Left finger */
-				input_report_abs(rmi4_data->edge_input_dev,
-						ABS_MT_POSITION_X, 0);
-			else if (x == 1) /* Right finger */
-				input_report_abs(rmi4_data->edge_input_dev,
-						ABS_MT_POSITION_X, 1079);
-			input_report_abs(rmi4_data->edge_input_dev,
-					ABS_MT_POSITION_Y, y);
-			input_report_abs(rmi4_data->edge_input_dev,
-					ABS_MT_TOUCH_MAJOR, 1);
-			input_report_abs(rmi4_data->edge_input_dev,
-					ABS_MT_TOUCH_MINOR, 1);
-#ifndef TYPE_B_PROTOCOL
-			input_mt_sync(rmi4_data->edge_input_dev);
-#endif
-
-			dev_dbg(rmi4_data->pdev->dev.parent,
-					"%s: Finger %d: "
-					"status = 0x%02x, "
-					"x = %d, "
-					"y = %d, "
-					"wx = %d, "
-					"wy = %d\n",
-					__func__, finger,
-					finger_status,
-					x, y, wx, wy);
-
-			touch_count++;
-			break;
-#endif
 		case F12_PALM_STATUS:
 			dev_dbg(rmi4_data->pdev->dev.parent,
 					"%s: Finger %d: "
@@ -1312,11 +1145,6 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 			input_mt_report_slot_state(rmi4_data->input_dev,
 					MT_TOOL_FINGER, 0);
 #endif
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-			input_mt_slot(rmi4_data->edge_input_dev, finger);
-			input_mt_report_slot_state(rmi4_data->edge_input_dev,
-					MT_TOOL_FINGER, 0);
-#endif
 			break;
 		}
 	}
@@ -1329,25 +1157,12 @@ static int synaptics_rmi4_f12_abs_report(struct synaptics_rmi4_data *rmi4_data,
 				BTN_TOUCH, 0);
 		input_report_key(rmi4_data->input_dev,
 				BTN_TOOL_FINGER, 0);
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-		input_report_key(rmi4_data->edge_input_dev,
-				BTN_TOUCH, 0);
-		input_report_key(rmi4_data->edge_input_dev,
-				BTN_TOOL_EDGE_TOUCH, 0);
-#endif
 #ifndef TYPE_B_PROTOCOL
 		input_mt_sync(rmi4_data->input_dev);
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-		input_mt_sync(rmi4_data->edge_input_dev);
-#endif
 #endif
 	}
 
 	input_sync(rmi4_data->input_dev);
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	input_sync(rmi4_data->edge_input_dev);
-#endif
-
 	mutex_unlock(&(rmi4_data->rmi4_report_mutex));
 
 	return touch_count;
@@ -2916,38 +2731,13 @@ static void synaptics_rmi4_set_params(struct synaptics_rmi4_data *rmi4_data)
 			bdata->max_minor, 0, 0);
 #endif
 
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	input_set_abs_params(rmi4_data->edge_input_dev,
-			ABS_MT_POSITION_X, 0,
-			bdata->panel_x, 0, 0);
-	input_set_abs_params(rmi4_data->edge_input_dev,
-			ABS_MT_POSITION_Y, 0,
-			bdata->panel_y, 0, 0);
-#ifdef REPORT_2D_W
-	input_set_abs_params(rmi4_data->edge_input_dev,
-			ABS_MT_TOUCH_MAJOR, 0,
-			bdata->max_major, 0, 0);
-	input_set_abs_params(rmi4_data->edge_input_dev,
-			ABS_MT_TOUCH_MINOR, 0,
-			bdata->max_minor, 0, 0);
-#endif
-#endif
-
 #ifdef TYPE_B_PROTOCOL
 #ifdef KERNEL_ABOVE_3_6
 	input_mt_init_slots(rmi4_data->input_dev,
 			bdata->max_finger_num, INPUT_MT_DIRECT);
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	input_mt_init_slots(rmi4_data->edge_input_dev,
-			bdata->max_finger_num, INPUT_MT_DIRECT);
-#endif
 #else
 	input_mt_init_slots(rmi4_data->input_dev,
 			bdata->max_finger_num);
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	input_mt_init_slots(rmi4_data->edge_input_dev,
-			bdata->max_finger_num);
-#endif
 #endif
 #endif
 
@@ -2976,15 +2766,6 @@ static void synaptics_rmi4_set_params(struct synaptics_rmi4_data *rmi4_data)
 					EV_KEY, vir_button_map->map[ii * 5]);
 		}
 	}
-
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	input_set_capability(rmi4_data->edge_input_dev,
-			EV_KEY, KEY_BACK);
-	input_set_capability(rmi4_data->edge_input_dev,
-			EV_KEY, KEY_SYSRQ);
-	input_set_capability(rmi4_data->edge_input_dev,
-			EV_KEY, KEY_CLEAR);
-#endif
 
 	if (rmi4_data->f11_wakeup_gesture || rmi4_data->f12_wakeup_gesture) {
 		set_bit(KEY_WAKEUP, rmi4_data->input_dev->keybit);
@@ -3029,19 +2810,9 @@ static void synaptics_rmi4_switch_mode_work(struct work_struct *work)
 	struct synaptics_rmi4_data *rmi4_data = ms->data;
 	const struct synaptics_dsx_board_data *bdata = rmi4_data->hw_if->board_data;
 	unsigned char value = ms->mode;
-	int retval;
 
-	if (value >= INPUT_EVENT_EDGE_DISABLE && value <= INPUT_EVENT_EDGE_HANDGRIP) {
-		retval = synaptics_rmi4_enable_edge_touch(rmi4_data,
-				value - INPUT_EVENT_EDGE_DISABLE);
-		if (retval < 0) {
-			dev_err(rmi4_data->pdev->dev.parent,
-				"Error setting edge touch mode %d\n",
-				value - INPUT_EVENT_EDGE_DISABLE);
-		} else
-			rmi4_data->edge_mode = value - INPUT_EVENT_EDGE_DISABLE;
-	} else if (value >= INPUT_EVENT_WAKUP_MODE_OFF && value <= INPUT_EVENT_WAKUP_MODE_ON) {
-		rmi4_data->enable_wakeup_gesture = value - INPUT_EVENT_WAKUP_MODE_OFF;
+	if (value >= INPUT_EVENT_WAKEUP_MODE_OFF && value <= INPUT_EVENT_WAKEUP_MODE_ON) {
+		rmi4_data->enable_wakeup_gesture = value - INPUT_EVENT_WAKEUP_MODE_OFF;
 
 		if (rmi4_data->suspend)
 			synaptics_rmi4_wakeup_reconfigure(rmi4_data,
@@ -3106,18 +2877,6 @@ static int synaptics_rmi4_set_input_dev(struct synaptics_rmi4_data *rmi4_data)
 		goto err_input_device;
 	}
 
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	rmi4_data->edge_input_dev = input_allocate_device();
-	if (rmi4_data->edge_input_dev == NULL) {
-		dev_err(rmi4_data->pdev->dev.parent,
-				"%s: Failed to allocate edge input device\n",
-				__func__);
-		retval = -ENOMEM;
-		goto err_edge_input_device;
-	}
-
-#endif
-
 	retval = synaptics_rmi4_query_device(rmi4_data);
 	if (retval < 0) {
 		dev_err(rmi4_data->pdev->dev.parent,
@@ -3143,25 +2902,6 @@ static int synaptics_rmi4_set_input_dev(struct synaptics_rmi4_data *rmi4_data)
 	set_bit(INPUT_PROP_DIRECT, rmi4_data->input_dev->propbit);
 #endif
 
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	rmi4_data->edge_input_dev->name = PLATFORM_EDGE_DRIVER_NAME;
-	rmi4_data->edge_input_dev->phys = INPUT_EDGE_PHYS_NAME;
-	rmi4_data->edge_input_dev->id.product = SYNAPTICS_DSX_DRIVER_PRODUCT;
-	rmi4_data->edge_input_dev->id.version = SYNAPTICS_DSX_DRIVER_VERSION;
-	rmi4_data->edge_input_dev->dev.parent = rmi4_data->pdev->dev.parent;
-	input_set_drvdata(rmi4_data->edge_input_dev, rmi4_data);
-
-	set_bit(EV_SYN, rmi4_data->edge_input_dev->evbit);
-	set_bit(EV_KEY, rmi4_data->edge_input_dev->evbit);
-	set_bit(EV_ABS, rmi4_data->edge_input_dev->evbit);
-	set_bit(BTN_TOUCH, rmi4_data->edge_input_dev->keybit);
-	set_bit(BTN_TOOL_FINGER, rmi4_data->edge_input_dev->keybit);
-	set_bit(BTN_TOOL_EDGE_TOUCH, rmi4_data->edge_input_dev->keybit);
-#ifdef INPUT_PROP_DIRECT
-	set_bit(INPUT_PROP_DIRECT, rmi4_data->edge_input_dev->propbit);
-#endif
-#endif
-
 	if (bdata->swap_axes) {
 		temp = rmi4_data->sensor_max_x;
 		rmi4_data->sensor_max_x = rmi4_data->sensor_max_y;
@@ -3181,29 +2921,11 @@ static int synaptics_rmi4_set_input_dev(struct synaptics_rmi4_data *rmi4_data)
 		goto err_register_input;
 	}
 
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	retval = input_register_device(rmi4_data->edge_input_dev);
-	if (retval) {
-		dev_err(rmi4_data->pdev->dev.parent,
-				"%s: Failed to register edge input device\n",
-				__func__);
-		goto err_register_edge_input;
-	}
-#endif
-
 	return 0;
 
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-err_register_edge_input:
-	input_unregister_device(rmi4_data->input_dev);
-#endif
 err_register_input:
 err_query_device:
 	synaptics_rmi4_empty_fn_list(rmi4_data);
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	input_free_device(rmi4_data->edge_input_dev);
-err_edge_input_device:
-#endif
 	input_free_device(rmi4_data->input_dev);
 err_input_device:
 	return retval;
@@ -3381,11 +3103,6 @@ static int synaptics_rmi4_free_fingers(struct synaptics_rmi4_data *rmi4_data)
 		input_mt_slot(rmi4_data->input_dev, ii);
 		input_mt_report_slot_state(rmi4_data->input_dev,
 				MT_TOOL_FINGER, 0);
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-		input_mt_slot(rmi4_data->edge_input_dev, ii);
-		input_mt_report_slot_state(rmi4_data->edge_input_dev,
-				MT_TOOL_FINGER, 0);
-#endif
 	}
 #endif
 	input_report_key(rmi4_data->input_dev,
@@ -3396,17 +3113,6 @@ static int synaptics_rmi4_free_fingers(struct synaptics_rmi4_data *rmi4_data)
 	input_mt_sync(rmi4_data->input_dev);
 #endif
 	input_sync(rmi4_data->input_dev);
-
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	input_report_key(rmi4_data->edge_input_dev,
-			BTN_TOUCH, 0);
-	input_report_key(rmi4_data->edge_input_dev,
-			BTN_TOOL_EDGE_TOUCH, 0);
-#ifndef TYPE_B_PROTOCOL
-	input_mt_sync(rmi4_data->edge_input_dev);
-#endif
-	input_sync(rmi4_data->edge_input_dev);
-#endif
 
 	mutex_unlock(&(rmi4_data->rmi4_report_mutex));
 
@@ -3470,10 +3176,6 @@ static void synaptics_rmi4_rebuild_work(struct work_struct *work)
 	synaptics_rmi4_empty_fn_list(rmi4_data);
 	input_unregister_device(rmi4_data->input_dev);
 	rmi4_data->input_dev = NULL;
-#ifdef CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_EDGE_SUPPORT_LIBRA
-	input_unregister_device(rmi4_data->edge_input_dev);
-	rmi4_data->edge_input_dev = NULL;
-#endif
 
 	retval = synaptics_rmi4_sw_reset(rmi4_data);
 	if (retval < 0) {
