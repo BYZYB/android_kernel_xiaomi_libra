@@ -219,11 +219,7 @@ struct cm36686_el_data {
 
 static const struct iio_chan_spec cm_proximity_channels[] = {
 	CM_SENSORS_CHANNELS(IIO_PROXIMITY,
-#ifdef CONFIG_X7_SENSOR_HAL
-		BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_OFFSET) | BIT(IIO_CHAN_INFO_SAMP_FREQ),
-#else
 		BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SAMP_FREQ),
-#endif
 		0, 0, IIO_NO_MOD, 'u', IIO_LE, 16, 16, 0),
 	CM_SENSORS_CHANNELS(IIO_CUSTOM, 0,
 		1, 0, IIO_NO_MOD, 'u', IIO_LE, 16, 16, 0),
@@ -362,12 +358,6 @@ static int cm_proximity_read_raw(struct iio_dev *indio_dev,
 
 	mutex_lock(&data->mutex);
 	switch (mask) {
-#ifdef CONFIG_X7_SENSOR_HAL
-	case IIO_CHAN_INFO_OFFSET:
-		*val = data->prox_offset;
-		ret = IIO_VAL_INT;
-		break;
-#endif
 	case IIO_CHAN_INFO_RAW:
 		if (data->prox_enabled)
 			*val = data->prox_raw;
@@ -416,19 +406,6 @@ static int cm_proximity_write_raw(struct iio_dev *indio_dev,
 	data = *((struct cm36686_data **)iio_priv(indio_dev));
 
 	switch (mask) {
-#ifdef CONFIG_X7_SENSOR_HAL
-	case IIO_CHAN_INFO_OFFSET:
-		mutex_lock(&data->mutex);
-		if (val >= 0 && val < 4096) {
-			data->prox_offset = val;
-			update_prox_threhold(data);
-		} else {
-			dev_err(&indio_dev->dev, "%s: invalid offset:%d\n", __func__, val);
-			ret = -EINVAL;
-		}
-		mutex_unlock(&data->mutex);
-		break;
-#endif
 	case IIO_CHAN_INFO_SAMP_FREQ:
 		break;
 	default:
@@ -632,7 +609,7 @@ static ssize_t cm_store_continus_mode(struct device *dev,
 	}
 	return ret < 0 ? ret : size;
 }
-#ifndef CONFIG_X7_SENSOR_HAL
+
 static ssize_t cm_show_sampling_frequency_available(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
@@ -683,7 +660,7 @@ static ssize_t cm_store_calibration_offset(struct device *dev,
 	mutex_unlock(&data->mutex);
 	return ret < 0 ? ret : size;
 }
-#endif
+
 static ssize_t cm_show_prox_thres_far(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
@@ -765,12 +742,10 @@ static DEVICE_ATTR(dump_register, S_IWUSR | S_IRUGO,
 		cm_show_dump_register, cm_store_dump_register);
 static DEVICE_ATTR(continus_mode, S_IWUSR | S_IRUGO,
 		cm_show_continus_mode, cm_store_continus_mode);
-#ifndef CONFIG_X7_SENSOR_HAL
 static DEVICE_ATTR(sampling_frequency_available, S_IWUSR | S_IRUGO,
 		cm_show_sampling_frequency_available, NULL);
 static DEVICE_ATTR(calibration_offset, S_IWUSR | S_IRUGO,
 		cm_show_calibration_offset, cm_store_calibration_offset);
-#endif
 static DEVICE_ATTR(prox_thres_far, S_IWUSR | S_IRUGO,
 		cm_show_prox_thres_far, cm_store_prox_thres_far);
 static DEVICE_ATTR(prox_thres_near, S_IWUSR | S_IRUGO,
@@ -780,10 +755,8 @@ static struct attribute *cm_prox_attributes[] = {
 	&dev_attr_dump_output.attr,
 	&dev_attr_dump_register.attr,
 	&dev_attr_continus_mode.attr,
-#ifndef CONFIG_X7_SENSOR_HAL
 	&dev_attr_sampling_frequency_available.attr,
 	&dev_attr_calibration_offset.attr,
-#endif
 	&dev_attr_prox_thres_far.attr,
 	&dev_attr_prox_thres_near.attr,
 	NULL,
@@ -796,9 +769,7 @@ static struct attribute_group cm_prox_attribute_group = {
 static struct attribute *cm_als_attributes[] = {
 	&dev_attr_dump_output.attr,
 	&dev_attr_dump_register.attr,
-#ifndef CONFIG_X7_SENSOR_HAL
 	&dev_attr_sampling_frequency_available.attr,
-#endif
 	NULL,
 };
 
@@ -1343,9 +1314,6 @@ static int cm36686_probe(struct i2c_client *client,
 	struct regulator *cm_vdd;
 	struct regulator *prox_int_vdd;
 	struct regulator *i2c_vdd;
-#ifdef CONFIG_X7_SENSOR_HAL
-	unsigned int hwid = 0;
-#endif
 
 	dev_info(&client->dev, "start cm36686 PLSensor probe\n");
 
@@ -1399,14 +1367,6 @@ static int cm36686_probe(struct i2c_client *client,
 	data->client = client;
 	data->irq = client->irq;
 	dev_info(&client->dev, "irq number = %d\n", data->irq);
-#ifdef CONFIG_X7_SENSOR_HAL
-	hwid = get_hw_version_major();
-	if (hwid == 0 || hwid == 1) {
-		data->irq = irq_of_parse_and_map(client->dev.of_node, 1);
-		dev_info(&client->dev, "it is a legacy board!!!, hwid = %d\n", hwid);
-		dev_info(&client->dev, "irq number = %d\n", data->irq);
-	}
-#endif
 
 	ret = cm_parse_dt(client);
 	if (ret < 0)
