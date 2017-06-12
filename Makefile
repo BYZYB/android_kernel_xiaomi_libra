@@ -593,6 +593,7 @@ HOSTCXXFLAGS += -Ofast
 KBUILD_AFLAGS += -Ofast
 KBUILD_CFLAGS += -Ofast
 KBUILD_CPPFLAGS += -Ofast
+endif
 
 ifdef CONFIG_LTO
 LTO_CFLAGS := -flto -flto=jobserver -fno-fat-lto-objects -fuse-linker-plugin -fwhole-program
@@ -603,7 +604,6 @@ AR := $(CROSS_COMPILE)gcc-ar
 NM := $(CROSS_COMPILE)gcc-nm
 DISABLE_LTO := -fno-lto
 export DISABLE_LTO LDFINAL
-endif
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
