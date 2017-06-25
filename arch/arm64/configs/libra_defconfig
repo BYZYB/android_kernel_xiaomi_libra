@@ -3783,7 +3783,7 @@ CONFIG_MOBICORE_API=m
 # CONFIG_CORESIGHT is not set
 # CONFIG_BIF is not set
 # CONFIG_SENSORS is not set
-CONFIG_SENSORS_SSC=y
+# CONFIG_SENSORS_SSC is not set
 
 #
 # PHY Subsystem
