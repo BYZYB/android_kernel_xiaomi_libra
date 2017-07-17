@@ -2070,7 +2070,11 @@ static void *def_codec_mbhc_cal(void)
 #undef S
 #define S(X, Y) ((WCD9XXX_MBHC_CAL_PLUG_TYPE_PTR(codec_cal)->X) = (Y))
 	S(v_no_mic, 30);
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+	S(v_hs_max, 2700);
+#else
 	S(v_hs_max, 2400);
+#endif
 #undef S
 #define S(X, Y) ((WCD9XXX_MBHC_CAL_BTN_DET_PTR(codec_cal)->X) = (Y))
 	S(c[0], 62);
