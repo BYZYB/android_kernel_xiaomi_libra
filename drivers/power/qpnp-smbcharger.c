@@ -3118,6 +3118,15 @@ static void smbchg_external_power_changed(struct power_supply *psy)
 	smbchg_aicl_deglitch_wa_check(chip);
 	if (chip->bms_psy) {
 		check_battery_type(chip);
+
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+		rc = smbchg_charging_en(chip, true);
+		if (rc < 0)
+			pr_smb(PR_MISC,
+				"Couldn't enable battery charging rc=%d\n",
+									rc);
+#endif
+
 		soc = get_prop_batt_capacity(chip);
 		if (chip->previous_soc != soc) {
 			chip->previous_soc = soc;
