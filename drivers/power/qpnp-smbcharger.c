@@ -4937,6 +4937,17 @@ static int smbchg_hw_init(struct smbchg_chip *chip)
 		return rc;
 	}
 
+#ifdef CONFIG_MACH_XIAOMI_MSM8992
+	/* Turn off AICL ADC to improve accuracy */
+	rc = smbchg_sec_masked_write(chip, chip->misc_base + MISC_TRIM_OPT_15_8,
+			CHG_EN_COMMAND_BIT | CHG_EN_SRC_BIT, 0);
+	if (rc < 0) {
+		dev_err(chip->dev, "Couldn't disable AICL ADC function rc=%d\n",
+				rc);
+		return rc;
+	}
+#endif
+
 	/*
 	 * Do not force using current from the register i.e. use auto
 	 * power source detect (APSD) mA ratings for the initial current values.
