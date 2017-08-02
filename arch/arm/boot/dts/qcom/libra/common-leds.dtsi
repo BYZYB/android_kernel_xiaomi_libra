@@ -49,56 +49,41 @@
 			qcom,en-phase-stag;
 			qcom,led-strings-list = [00 01];
 		};
+
 		qcom,leds@d000 {
+			qcom,rgb-sync;
+
 			qcom,rgb_0 {
-				/delete-property/ linux,default-trigger;
+				linux,default-trigger = "none";
+				qcom,duty-pcts = [ 00 0E 1C 2A 38 46 54 64 ];
+				qcom,start-idx = <0>;
+				qcom,pause-lo = <500>;
+				qcom,pause-hi = <500>;
+				qcom,ramp-step-ms = <50>;
+				qcom,lut-flags = <31>; /* loop, ramp up, reverse, pause hi, pause lo */
 				qcom,use-blink;
-				qcom,idx-len = <22>;
-				qcom,duty-pcts = [
-					00 00 03 0b 19 2a
-					3b 4b 59 61 64
-					64 61 59 4b 3b
-					2a 19 0b 03 00
-					00];
-				qcom,lut-flags = <3>;
-				qcom,pause-lo = <0>;
-				qcom,pause-hi = <0>;
-				qcom,start-idx = <1>;
-				qcom,ramp-step-ms = <150>;
 			};
 
 			qcom,rgb_1 {
-				/delete-property/ linux,default-trigger;
+				linux,default-trigger = "none";
+				qcom,duty-pcts = [ 00 0E 1C 2A 38 46 54 64 ];
+				qcom,start-idx = <8>;
+				qcom,pause-lo = <500>;
+				qcom,pause-hi = <500>;
+				qcom,ramp-step-ms = <50>;
+				qcom,lut-flags = <31>; /* loop, ramp up, reverse, pause hi, pause lo */
 				qcom,use-blink;
-				qcom,idx-len = <22>;
-				qcom,duty-pcts = [
-					00 00 03 0b 19 2a
-					3b 4b 59 61 64
-					64 61 59 4b 3b
-					2a 19 0b 03 00
-					00];
-				qcom,lut-flags = <3>;
-				qcom,pause-lo = <0>;
-				qcom,pause-hi = <0>;
-				qcom,start-idx = <1>;
-				qcom,ramp-step-ms = <150>;
 			};
 
 			qcom,rgb_2 {
-				/delete-property/ linux,default-trigger;
+				linux,default-trigger = "none";
+				qcom,duty-pcts = [ 00 0E 1C 2A 38 46 54 64 ];
+				qcom,start-idx = <16>;
+				qcom,pause-lo = <500>;
+				qcom,pause-hi = <500>;
+				qcom,ramp-step-ms = <50>;
+				qcom,lut-flags = <31>; /* loop, ramp up, reverse, pause hi, pause lo */
 				qcom,use-blink;
-				qcom,idx-len = <22>;
-				qcom,duty-pcts = [
-					00 00 03 0b 19 2a
-					3b 4b 59 61 64
-					64 61 59 4b 3b
-					2a 19 0b 03 00
-					00];
-				qcom,lut-flags = <3>;
-				qcom,pause-lo = <0>;
-				qcom,pause-hi = <0>;
-				qcom,start-idx = <1>;
-				qcom,ramp-step-ms = <150>;
 			};
 		};
 	};
