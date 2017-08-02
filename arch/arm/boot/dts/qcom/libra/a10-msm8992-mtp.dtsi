@@ -15,6 +15,7 @@
 #include "a10-usb.dtsi"
 #include "common-sound.dtsi"
 #include "a10-battery.dtsi"
+#include "common-leds.dtsi"
 #include "a10-leds.dtsi"
 #include "common-sensors.dtsi"
 #include "common-memory.dtsi"
