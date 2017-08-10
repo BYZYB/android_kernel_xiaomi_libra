@@ -92,10 +92,10 @@ static ssize_t isa1000_pwm_store(struct device *dev,
 }
 
 static struct device_attribute isa1000_device_attrs[] = {
-	__ATTR(vtg_min, S_IRUGO | S_IWUSR,
+	__ATTR(vtg_min, S_IRUGO,
 			isa1000_pwm_min_show,
 			NULL),
-	__ATTR(vtg_max, S_IRUGO | S_IWUSR,
+	__ATTR(vtg_max, S_IRUGO,
 			isa1000_pwm_max_show,
 			NULL),
 	__ATTR(vtg_level, S_IRUGO | S_IWUSR,
