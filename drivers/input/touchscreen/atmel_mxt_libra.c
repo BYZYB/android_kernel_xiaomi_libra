@@ -5309,6 +5309,7 @@ static int mxt_proc_init(struct kobject *sysfs_node_parent) {
 	driver_path = kzalloc(PATH_MAX, GFP_KERNEL);
 	if(!driver_path) {
 		ret = -ENOMEM;
+		pr_err("%s: failed to allocate memory\n", __func__);
 		goto exit;
 	}
 
@@ -5316,21 +5317,19 @@ static int mxt_proc_init(struct kobject *sysfs_node_parent) {
 	sprintf(driver_path, "/sys%s",
 			kobject_get_path(sysfs_node_parent, GFP_KERNEL));
 
-	printk("driver_path: %s\n", driver_path);
-
-	// remove existing entry
-	remove_proc_entry("touchscreen", NULL);
+	pr_debug("%s: driver_path:%s\n", __func__, driver_path);
 
 	// symlink /proc/touchscreen to input device
 	proc_entry_ts = proc_symlink("touchscreen", NULL, driver_path);
-	if(!proc_entry_ts) {
+	if (!proc_entry_ts) {
 		ret = -ENOMEM;
-		goto free;
+		pr_err("%s: failed to symlink to touchscreen\n", __func__);
+		goto free_driver_path;
 	}
-free:
+
+free_driver_path:
 	kfree(driver_path);
 exit:
-	pr_err("%s: Couldn't symlink to touchscreen\n", __func__);
 	return ret;
 }
 
