@@ -184,7 +184,7 @@ static ssize_t store_busy_up_thres(struct cpu_data *state,
 	unsigned int val[MAX_CPUS_PER_GROUP];
 	int ret, i;
 
-	ret = sscanf(buf, "%u %u %u %u\n", &val[0], &val[1], &val[2], &val[3]);
+	ret = sscanf(buf, "%u %u %u %u", &val[0], &val[1], &val[2], &val[3]);
 	if (ret != 1 && ret != state->num_cpus)
 		return -EINVAL;
 
@@ -215,7 +215,7 @@ static ssize_t store_busy_down_thres(struct cpu_data *state,
 	unsigned int val[MAX_CPUS_PER_GROUP];
 	int ret, i;
 
-	ret = sscanf(buf, "%u %u %u %u\n", &val[0], &val[1], &val[2], &val[3]);
+	ret = sscanf(buf, "%u %u %u %u", &val[0], &val[1], &val[2], &val[3]);
 	if (ret != 1 && ret != state->num_cpus)
 		return -EINVAL;
 
@@ -331,7 +331,7 @@ static ssize_t store_not_preferred(struct cpu_data *state,
 	unsigned int val[MAX_CPUS_PER_GROUP];
 	int ret;
 
-	ret = sscanf(buf, "%u %u %u %u\n", &val[0], &val[1], &val[2], &val[3]);
+	ret = sscanf(buf, "%u %u %u %u", &val[0], &val[1], &val[2], &val[3]);
 	if (ret != 1 && ret != state->num_cpus)
 		return -EINVAL;
 
