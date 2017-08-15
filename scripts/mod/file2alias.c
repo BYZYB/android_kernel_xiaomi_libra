@@ -1209,13 +1209,13 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
 	name = strstr(symname, "__mod_");
 	if (!name)
 		return;
-	name += strlen("__mod_");
+	name += sizeof("__mod_") - 1;
 	namelen = strlen(name);
-	if (namelen < strlen("_device_table"))
+	if (namelen < sizeof("_device_table") - 1)
 		return;
-	if (strcmp(name + namelen - strlen("_device_table"), "_device_table"))
+	if (strcmp(name + namelen - sizeof("_device_table"), "_device_table") - 1)
 		return;
-	namelen -= strlen("_device_table");
+	namelen -= sizeof("_device_table") - 1;
 
 	/* Handle all-NULL symbols allocated into .bss */
 	if (info->sechdrs[get_secindex(info, sym)].sh_type & SHT_NOBITS) {

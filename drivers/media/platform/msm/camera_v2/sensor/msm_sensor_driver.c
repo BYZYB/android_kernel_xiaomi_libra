@@ -800,9 +800,9 @@ int32_t msm_sensor_driver_probe(void *setting,
 		}
 	}
 	if ((strncmp(slave_info->eeprom_name, "imx258",
-				strlen("imx258")) == 0) ||
+				DSTRLEN("imx258")) == 0) ||
 	    (strncmp(slave_info->eeprom_name, "s5k3m2xm",
-				strlen("s5k3m2xm")) == 0)) {
+				DSTRLEN("s5k3m2xm")) == 0)) {
 		x11_get_back_sensor_name(x11_back_sensor_name);
 		CDBG("slave_info sensor_name = %s, back_sensor_name - %s\n",
 				slave_info->sensor_name, x11_back_sensor_name);
@@ -823,7 +823,7 @@ int32_t msm_sensor_driver_probe(void *setting,
 		}
 	}
 	if (strncmp(slave_info->eeprom_name, "ov5670",
-				strlen("ov5670")) == 0) {
+				DSTRLEN("ov5670")) == 0) {
 		x11_get_front_sensor_name(x11_front_sensor_name);
 		CDBG("slave_info sensor_name = %s, front_sensor_name - %s\n",
 				slave_info->sensor_name, x11_front_sensor_name);

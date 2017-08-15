@@ -300,7 +300,7 @@ static int recv_notification(struct notifier_block *nb, unsigned long evt,
  */
 static int eth_addr2str(struct tipc_media_addr *a, char *str_buf, int str_size)
 {
-	if (str_size < 18)	/* 18 = strlen("aa:bb:cc:dd:ee:ff\0") */
+	if (str_size < 18)	/* 18 = DSTRLEN("aa:bb:cc:dd:ee:ff\0") */
 		return 1;
 
 	sprintf(str_buf, "%pM", a->value);

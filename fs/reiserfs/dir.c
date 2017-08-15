@@ -270,7 +270,7 @@ void make_empty_dir_item_v1(char *body, __le32 dirid, __le32 objid,
 	deh[0].deh_dir_id = dirid;
 	deh[0].deh_objectid = objid;
 	deh[0].deh_state = 0;	/* Endian safe if 0 */
-	put_deh_location(&(deh[0]), EMPTY_DIR_SIZE_V1 - strlen("."));
+	put_deh_location(&(deh[0]), EMPTY_DIR_SIZE_V1 - DSTRLEN("."));
 	mark_de_visible(&(deh[0]));
 
 	/* direntry header of ".." */
@@ -280,7 +280,7 @@ void make_empty_dir_item_v1(char *body, __le32 dirid, __le32 objid,
 	deh[1].deh_dir_id = par_dirid;
 	deh[1].deh_objectid = par_objid;
 	deh[1].deh_state = 0;	/* Endian safe if 0 */
-	put_deh_location(&(deh[1]), deh_location(&(deh[0])) - strlen(".."));
+	put_deh_location(&(deh[1]), deh_location(&(deh[0])) - DSTRLEN(".."));
 	mark_de_visible(&(deh[1]));
 
 	/* copy ".." and "." */
@@ -303,7 +303,7 @@ void make_empty_dir_item(char *body, __le32 dirid, __le32 objid,
 	deh[0].deh_dir_id = dirid;
 	deh[0].deh_objectid = objid;
 	deh[0].deh_state = 0;	/* Endian safe if 0 */
-	put_deh_location(&(deh[0]), EMPTY_DIR_SIZE - ROUND_UP(strlen(".")));
+	put_deh_location(&(deh[0]), EMPTY_DIR_SIZE - ROUND_UP(DSTRLEN(".")));
 	mark_de_visible(&(deh[0]));
 
 	/* direntry header of ".." */
@@ -314,7 +314,7 @@ void make_empty_dir_item(char *body, __le32 dirid, __le32 objid,
 	deh[1].deh_objectid = par_objid;
 	deh[1].deh_state = 0;	/* Endian safe if 0 */
 	put_deh_location(&(deh[1]),
-			 deh_location(&(deh[0])) - ROUND_UP(strlen("..")));
+			 deh_location(&(deh[0])) - ROUND_UP(DSTRLEN("..")));
 	mark_de_visible(&(deh[1]));
 
 	/* copy ".." and "." */

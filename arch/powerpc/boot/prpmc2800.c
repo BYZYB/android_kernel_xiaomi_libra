@@ -449,7 +449,7 @@ static void prpmc2800_fixups(void)
 		if (devp == NULL)
 			fatal("Error: Missing marvell,mv64360"
 					" device tree node\n\r");
-		setprop(devp, "model", "mv64362", strlen("mv64362") + 1);
+		setprop(devp, "model", "mv64362", DSTRLEN("mv64362") + 1);
 	}
 
 	/* Set User FLASH size */

@@ -215,7 +215,7 @@ static void append_func(Elf_Ehdr *const ehdr,
 
 	/* new sections __mcount_loc and .rel__mcount_loc */
 	t += 2*sizeof(mcsec);
-	mcsec.sh_name = w((sizeof(Elf_Rela) == rel_entsize) + strlen(".rel")
+	mcsec.sh_name = w((sizeof(Elf_Rela) == rel_entsize) + DSTRLEN(".rel")
 		+ old_shstr_sh_size);
 	mcsec.sh_type = w(SHT_PROGBITS);
 	mcsec.sh_flags = _w(SHF_ALLOC);

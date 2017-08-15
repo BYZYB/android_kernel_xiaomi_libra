@@ -354,15 +354,15 @@ static ssize_t radeon_set_pm_profile(struct device *dev,
 
 	mutex_lock(&rdev->pm.mutex);
 	if (rdev->pm.pm_method == PM_METHOD_PROFILE) {
-		if (strncmp("default", buf, strlen("default")) == 0)
+		if (strncmp("default", buf, DSTRLEN("default")) == 0)
 			rdev->pm.profile = PM_PROFILE_DEFAULT;
-		else if (strncmp("auto", buf, strlen("auto")) == 0)
+		else if (strncmp("auto", buf, DSTRLEN("auto")) == 0)
 			rdev->pm.profile = PM_PROFILE_AUTO;
-		else if (strncmp("low", buf, strlen("low")) == 0)
+		else if (strncmp("low", buf, DSTRLEN("low")) == 0)
 			rdev->pm.profile = PM_PROFILE_LOW;
-		else if (strncmp("mid", buf, strlen("mid")) == 0)
+		else if (strncmp("mid", buf, DSTRLEN("mid")) == 0)
 			rdev->pm.profile = PM_PROFILE_MID;
-		else if (strncmp("high", buf, strlen("high")) == 0)
+		else if (strncmp("high", buf, DSTRLEN("high")) == 0)
 			rdev->pm.profile = PM_PROFILE_HIGH;
 		else {
 			count = -EINVAL;
@@ -400,13 +400,13 @@ static ssize_t radeon_set_pm_method(struct device *dev,
 	struct radeon_device *rdev = ddev->dev_private;
 
 
-	if (strncmp("dynpm", buf, strlen("dynpm")) == 0) {
+	if (strncmp("dynpm", buf, DSTRLEN("dynpm")) == 0) {
 		mutex_lock(&rdev->pm.mutex);
 		rdev->pm.pm_method = PM_METHOD_DYNPM;
 		rdev->pm.dynpm_state = DYNPM_STATE_PAUSED;
 		rdev->pm.dynpm_planned_action = DYNPM_ACTION_DEFAULT;
 		mutex_unlock(&rdev->pm.mutex);
-	} else if (strncmp("profile", buf, strlen("profile")) == 0) {
+	} else if (strncmp("profile", buf, DSTRLEN("profile")) == 0) {
 		mutex_lock(&rdev->pm.mutex);
 		/* disable dynpm */
 		rdev->pm.dynpm_state = DYNPM_STATE_DISABLED;

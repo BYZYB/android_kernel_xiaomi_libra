@@ -99,7 +99,7 @@ static void setup_env_path(void)
 	}
 
 	/* append /usr/lib/uml to the existing path */
-	path_len += strlen("PATH=" UML_LIB_PATH) + 1;
+	path_len += DSTRLEN("PATH=" UML_LIB_PATH) + 1;
 	new_path = malloc(path_len);
 	if (!new_path) {
 		perror("couldn't malloc to set a new PATH");

@@ -918,7 +918,7 @@ const char *sym_escape_string_value(const char *in)
 	char *res;
 	size_t l;
 
-	reslen = strlen(in) + strlen("\"\"") + 1;
+	reslen = strlen(in) + sizeof("\"\"");
 
 	p = in;
 	for (;;) {

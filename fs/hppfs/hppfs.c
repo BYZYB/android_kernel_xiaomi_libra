@@ -75,7 +75,7 @@ static char *dentry_name(struct dentry *dentry, int extra)
 	parent = dentry;
 	while (parent->d_parent != parent) {
 		if (is_pid(parent))
-			len += strlen("pid") + 1;
+			len += DSTRLEN("pid") + 1;
 		else len += parent->d_name.len + 1;
 		parent = parent->d_parent;
 	}
@@ -91,7 +91,7 @@ static char *dentry_name(struct dentry *dentry, int extra)
 	while (parent->d_parent != parent) {
 		if (is_pid(parent)) {
 			seg_name = "pid";
-			seg_len = strlen("pid");
+			seg_len = DSTRLEN("pid");
 		}
 		else {
 			seg_name = parent->d_name.name;
@@ -116,7 +116,7 @@ static int file_removed(struct dentry *dentry, const char *file)
 	if (file != NULL)
 		extra += strlen(file) + 1;
 
-	host_file = dentry_name(dentry, extra + strlen("/remove"));
+	host_file = dentry_name(dentry, extra + DSTRLEN("/remove"));
 	if (host_file == NULL) {
 		printk(KERN_ERR "file_removed : allocation failed\n");
 		return -ENOMEM;
@@ -429,7 +429,7 @@ static int hppfs_open(struct inode *inode, struct file *file)
 	if (data == NULL)
 		goto out;
 
-	host_file = dentry_name(file->f_path.dentry, strlen("/rw"));
+	host_file = dentry_name(file->f_path.dentry, DSTRLEN("/rw"));
 	if (host_file == NULL)
 		goto out_free2;
 

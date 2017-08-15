@@ -1096,13 +1096,13 @@ static int secref_whitelist(const struct sectioncheck *mismatch,
 	/* Check for pattern 1 */
 	if (match(tosec, init_data_sections) &&
 	    match(fromsec, data_sections) &&
-	    (strncmp(fromsym, "__param", strlen("__param")) == 0))
+	    (strncmp(fromsym, "__param", sizeof("__param")) - 1 == 0))
 		return 0;
 
 	/* Check for pattern 1a */
 	if (strcmp(tosec, ".init.text") == 0 &&
 	    match(fromsec, data_sections) &&
-	    (strncmp(fromsym, "__param_ops_", strlen("__param_ops_")) == 0))
+	    (strncmp(fromsym, "__param_ops_", sizeof("__param_ops_")) - 1 == 0))
 		return 0;
 
 	/* Check for pattern 2 */
@@ -1563,7 +1563,7 @@ static void section_rela(const char *modname, struct elf_info *elf,
 	Elf_Rela *stop  = (void *)start + sechdr->sh_size;
 
 	fromsec = sech_name(elf, sechdr);
-	fromsec += strlen(".rela");
+	fromsec += sizeof(".rela") - 1;
 	/* if from section (name) is know good then skip it */
 	if (match(fromsec, section_white_list))
 		return;
@@ -1607,7 +1607,7 @@ static void section_rel(const char *modname, struct elf_info *elf,
 	Elf_Rel *stop  = (void *)start + sechdr->sh_size;
 
 	fromsec = sech_name(elf, sechdr);
-	fromsec += strlen(".rel");
+	fromsec += sizeof(".rel") - 1;
 	/* if from section (name) is know good then skip it */
 	if (match(fromsec, section_white_list))
 		return;

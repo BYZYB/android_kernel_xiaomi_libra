@@ -1019,7 +1019,7 @@ static char *setup_root_args(char *args)
 	}
 
 	strcpy(dst, "subvolid=0");
-	dst += strlen("subvolid=0");
+	dst += DSTRLEN("subvolid=0");
 
 	/*
 	 * If there is a "," after the original subvol=... string,

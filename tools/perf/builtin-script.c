@@ -932,14 +932,14 @@ static int read_script_info(struct script_desc *desc, const char *filename)
 		if (strlen(p) && p[strlen(p) - 1] == '\n')
 			p[strlen(p) - 1] = '\0';
 
-		if (!strncmp(p, "description:", strlen("description:"))) {
-			p += strlen("description:");
+		if (!strncmp(p, "description:", DSTRLEN("description:"))) {
+			p += DSTRLEN("description:");
 			desc->half_liner = strdup(ltrim(p));
 			continue;
 		}
 
-		if (!strncmp(p, "args:", strlen("args:"))) {
-			p += strlen("args:");
+		if (!strncmp(p, "args:", DSTRLEN("args:"))) {
+			p += DSTRLEN("args:");
 			desc->args = strdup(ltrim(p));
 			continue;
 		}
@@ -1302,13 +1302,13 @@ int cmd_script(int argc, const char **argv, const char *prefix __maybe_unused)
 	argc = parse_options(argc, argv, options, script_usage,
 			     PARSE_OPT_STOP_AT_NON_OPTION);
 
-	if (argc > 1 && !strncmp(argv[0], "rec", strlen("rec"))) {
+	if (argc > 1 && !strncmp(argv[0], "rec", DSTRLEN("rec"))) {
 		rec_script_path = get_script_path(argv[1], RECORD_SUFFIX);
 		if (!rec_script_path)
 			return cmd_record(argc, argv, NULL);
 	}
 
-	if (argc > 1 && !strncmp(argv[0], "rep", strlen("rep"))) {
+	if (argc > 1 && !strncmp(argv[0], "rep", DSTRLEN("rep"))) {
 		rep_script_path = get_script_path(argv[1], REPORT_SUFFIX);
 		if (!rep_script_path) {
 			fprintf(stderr,

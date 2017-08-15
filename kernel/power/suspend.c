@@ -407,7 +407,7 @@ static void pm_suspend_marker(char *annotation)
 		annotation, tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday,
 		tm.tm_hour, tm.tm_min, tm.tm_sec, ts.tv_nsec);
 
-	if (!strncmp(annotation, "entry", strlen("entry"))) {
+	if (!strncmp(annotation, "entry", DSTRLEN("entry"))) {
 		old_ts.tv_sec = ts.tv_sec;
 		old_ts.tv_nsec = ts.tv_nsec;
 	} else {

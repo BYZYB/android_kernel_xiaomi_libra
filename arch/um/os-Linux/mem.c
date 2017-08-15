@@ -127,7 +127,7 @@ static void which_tmpdir(void)
 		if (found != 1)
 			break;
 
-		if (!strncmp(buf, "/dev/shm", strlen("/dev/shm")))
+		if (!strncmp(buf, "/dev/shm", DSTRLEN("/dev/shm")))
 			goto found;
 
 		found = next(fd, buf, ARRAY_SIZE(buf), '\n');
@@ -151,7 +151,7 @@ found:
 	if (found != 1)
 		goto err;
 
-	if (strncmp(buf, "tmpfs", strlen("tmpfs"))) {
+	if (strncmp(buf, "tmpfs", DSTRLEN("tmpfs"))) {
 		printf("not tmpfs\n");
 		goto out;
 	}

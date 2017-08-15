@@ -483,7 +483,7 @@ static int strip_rcs_crap(char *version)
 {
 	unsigned int len, full_len;
 
-	if (strncmp(version, "$Revision", strlen("$Revision")) != 0)
+	if (strncmp(version, "$Revision", sizeof("$Revision")) - 1 != 0)
 		return 0;
 
 	/* Space for version string follows. */
@@ -491,7 +491,7 @@ static int strip_rcs_crap(char *version)
 
 	/* Move string to start with version number: prefix will be
 	 * $Revision$ or $Revision: */
-	len = strlen("$Revision");
+	len = sizeof("$Revision") - 1;
 	if (version[len] == ':' || version[len] == '$')
 		len++;
 	while (isspace(version[len]))
