@@ -86,6 +86,10 @@
 				qcom,use-blink;
 			};
 		};
+
+		qcom,leds@d300 {
+			qcom,pon-dev = <&pmi8994_pon>;
+		};
 	};
 };
 
