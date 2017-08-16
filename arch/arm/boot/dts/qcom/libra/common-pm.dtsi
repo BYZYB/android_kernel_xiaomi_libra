@@ -22,10 +22,10 @@
             };
 
             qcom,pon_3 {
-                /delete-node/ qcom,support-reset;
-                /delete-node/ qcom,s1-timer;
-                /delete-node/ qcom,s2-timer;
-                /delete-node/ qcom,s2-type;
+                /delete-property/ qcom,support-reset;
+                /delete-property/ qcom,s1-timer;
+                /delete-property/ qcom,s2-timer;
+                /delete-property/ qcom,s2-type;
             };
         };
     };
