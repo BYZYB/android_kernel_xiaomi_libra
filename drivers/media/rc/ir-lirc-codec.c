@@ -312,12 +312,29 @@ static long ir_lirc_ioctl(struct file *filep, unsigned int cmd,
 
 static int ir_lirc_open(void *data)
 {
-	return 0;
+	struct lirc_codec *lirc = data;
+	struct rc_dev *dev = lirc->dev;
+	int ret = 0;
+
+	mutex_lock(&dev->lock);
+	if (!dev->open_count++ && dev->open)
+		ret = dev->open(dev);
+	if (ret < 0)
+		dev->open_count--;
+	mutex_unlock(&dev->lock);
+
+	return ret;
 }
 
 static void ir_lirc_close(void *data)
 {
-	return;
+	struct lirc_codec *lirc = data;
+	struct rc_dev *dev = lirc->dev;
+
+	mutex_lock(&dev->lock);
+	if (!--dev->open_count && dev->close)
+		dev->close(dev);
+	mutex_unlock(&dev->lock);
 }
 
 static const struct file_operations lirc_fops = {

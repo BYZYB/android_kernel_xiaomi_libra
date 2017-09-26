@@ -113,6 +113,7 @@ struct rc_dev {
 	u32				timeout;
 	u32				min_timeout;
 	u32				max_timeout;
+	u32				open_count;
 	u32				rx_resolution;
 	u32				tx_resolution;
 	int				(*change_protocol)(struct rc_dev *dev, u64 *rc_type);
