@@ -397,7 +397,8 @@ struct snd_pcm_substream {
 	struct snd_pcm_ops *ops;
 	/* -- runtime information -- */
 	struct snd_pcm_runtime *runtime;
-        /* -- timer section -- */
+	spinlock_t runtime_lock;
+	/* -- timer section -- */
 	struct snd_timer *timer;		/* timer */
 	unsigned timer_running: 1;	/* time is running */
 	/* -- next substream -- */
