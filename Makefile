@@ -239,12 +239,6 @@ HOSTCXX      = g++
 HOSTCFLAGS   = -fomit-frame-pointer
 HOSTCXXFLAGS =
 
-ifeq ($(shell $(HOSTCC) -v 2>&1 | grep -c "clang version"), 1)
-HOSTCFLAGS  += -Wno-missing-field-initializers \
-               -Wno-unused-parameter \
-               -Wno-unused-value
-endif
-
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
 
