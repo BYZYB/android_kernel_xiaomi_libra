@@ -37,7 +37,6 @@ struct isa1000_vib {
 
 	struct regulator *regulator_vdd;
 	unsigned int pwm_frequency;
-	int pwm_duty_percent;
 	int enable_gpio;
 	int timeout;
 	bool state;
@@ -45,9 +44,16 @@ struct isa1000_vib {
 
 static struct isa1000_vib vib_dev = {
 	.pwm_frequency = PWM_FREQUENCY,
-	.pwm_duty_percent = PWM_PERCENT_MAX,
 	.timeout = PWM_TIMEOUT
 };
+
+static int isa1000_config(struct isa1000_vib *vib, int percent) {
+	unsigned int period_ns = NSEC_PER_SEC / vib->pwm_frequency;
+	unsigned int duty_ns =
+			(period_ns * (percent + PWM_PERCENT_MAX)) / (2 * PWM_PERCENT_MAX);
+
+	return pwm_config(vib->pwm_dev, duty_ns, period_ns);
+}
 
 static ssize_t isa1000_pwm_min_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
@@ -61,32 +67,24 @@ static ssize_t isa1000_pwm_max_show(struct device *dev,
 	return sprintf(buf, "%d\n", PWM_PERCENT_MAX);
 }
 
-static ssize_t isa1000_pwm_show(struct device *dev,
-		struct device_attribute *attr, char *buf)
-{
-	struct timed_output_dev *timed_dev = dev_get_drvdata(dev);
-	struct isa1000_vib *vib =
-			container_of(timed_dev, struct isa1000_vib, timed_dev);
-
-	return sprintf(buf, "%d\n", vib->pwm_duty_percent);
-}
-
 static ssize_t isa1000_pwm_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t size)
 {
 	struct timed_output_dev *timed_dev = dev_get_drvdata(dev);
 	struct isa1000_vib *vib =
 			container_of(timed_dev, struct isa1000_vib, timed_dev);
-	int tmp;
+	int duty_percent;
 
-	sscanf(buf, "%d", &tmp);
+	sscanf(buf, "%d", &duty_percent);
 
-	if (tmp > PWM_PERCENT_MAX)
-		tmp = PWM_PERCENT_MAX;
-	else if (tmp < PWM_PERCENT_MIN)
-		tmp = PWM_PERCENT_MIN;
+	if (duty_percent > PWM_PERCENT_MAX)
+		duty_percent = PWM_PERCENT_MAX;
+	else if (duty_percent < PWM_PERCENT_MIN)
+		duty_percent = PWM_PERCENT_MIN;
 
-	vib->pwm_duty_percent = tmp;
+	if (isa1000_config(vib, duty_percent) < 0) {
+		pr_err("%s: failed to configure pwm\n", __func__);
+	}
 
 	return size;
 }
@@ -98,18 +96,10 @@ static struct device_attribute isa1000_device_attrs[] = {
 	__ATTR(vtg_max, S_IRUGO,
 			isa1000_pwm_max_show,
 			NULL),
-	__ATTR(vtg_level, S_IRUGO | S_IWUSR,
-			isa1000_pwm_show,
+	__ATTR(vtg_level, S_IWUSR,
+			NULL,
 			isa1000_pwm_store),
 };
-
-static int isa1000_config(struct isa1000_vib *vib, int percent) {
-	unsigned int period_ns = NSEC_PER_SEC / vib->pwm_frequency;
-	unsigned int duty_ns =
-			(period_ns * (percent + PWM_PERCENT_MAX)) / (2 * PWM_PERCENT_MAX);
-
-	return pwm_config(vib->pwm_dev, duty_ns, period_ns);
-}
 
 static int isa1000_set_state(struct isa1000_vib *vib, bool on)
 {
@@ -122,7 +112,7 @@ static int isa1000_set_state(struct isa1000_vib *vib, bool on)
 			return rc;
 		}
 
-		rc = isa1000_config(vib, vib->pwm_duty_percent);
+		rc = isa1000_config(vib, PWM_PERCENT_MAX);
 		if (rc < 0) {
 			pr_err("%s: failed to configure pwm\n", __func__);
 			return rc;
@@ -223,12 +213,6 @@ static int isa1000_probe(struct platform_device *pdev)
 			"isa1000,timeout-ms", &temp_val);
 	if (!rc) {
 		vib->timeout = temp_val;
-	}
-
-	rc = isa1000_config(vib, vib->pwm_duty_percent);
-	if (rc < 0) {
-		dev_err(&pdev->dev, "%s: failed to configure pwm\n", __func__);
-		return rc;
 	}
 
 	rc = regulator_enable(vib->regulator_vdd);
