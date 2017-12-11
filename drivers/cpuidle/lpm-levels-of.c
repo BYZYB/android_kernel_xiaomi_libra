@@ -716,7 +716,6 @@ failed:
 void free_cluster_node(struct lpm_cluster *cluster)
 {
 	struct list_head *list;
-	int i;
 
 	list_for_each(list, &cluster->child) {
 		struct lpm_cluster *n;
