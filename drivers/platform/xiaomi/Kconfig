@@ -19,6 +19,12 @@ config MACH_LIBRA
 	bool "Libra board variant"
 	select MACH_XIAOMI_MSM8992
 	help
-	 Support for Xiaomi Libra variant
+	 Support for Xiaomi Libra (4C) variant
+
+config MACH_AQUA
+	bool "Aqua board variant"
+	select MACH_XIAOMI_MSM8992
+	help
+	 Support for Xiaomi Aqua (4S) variant
 
 endmenu
