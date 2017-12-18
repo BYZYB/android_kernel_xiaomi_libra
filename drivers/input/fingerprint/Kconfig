@@ -1,0 +1,16 @@
+menuconfig INPUT_FINGERPRINT
+	bool "Fingerprint"
+	default n
+	help
+	  Say Y here, and a list of supported fingerprint device drivers will be displayed.
+	  If unsure, say N.
+
+if INPUT_FINGERPRINT
+
+config FINGERPRINT_FPC1020
+	tristate "FPC1020 fingerprint support"
+	depends on SPI
+	help
+	  Say Y here if you have an aqua device.
+
+endif
