@@ -27,6 +27,7 @@
 #include "common-proximity.dtsi"
 #include "common-gyroscope.dtsi"
 #include "common-vibrator.dtsi"
+#include "a10-fingerprint.dtsi"
 
 #include "dsi-panel-sharp-rsp61322-1080p-video.dtsi"
 #include "dsi-panel-auo-nt35596-1080p-video.dtsi"
