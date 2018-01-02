@@ -225,7 +225,7 @@ dtb-$(CONFIG_ARCH_APQ8084) += apq8084-v1.0-old-pwr-grid-liquid.dtb \
 	apq8084-v1.1-mdm9x35-alt-cdp.dtb \
 	apq8084-v1.1-sbc.dtb
 
-ifeq ($(CONFIG_MACH_LIBRA),y)
+ifeq ($(CONFIG_MACH_XIAOMI_MSM8992),y)
 dtb-$(CONFIG_ARCH_MSM8992) += x11-msm8992-mtp.dtb \
 	a10-msm8992-mtp.dtb
 else
