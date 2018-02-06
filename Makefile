@@ -653,7 +653,6 @@ KBUILD_AFLAGS += $(call cc-option, -no-integrated-as)
 KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member) \
                  $(call cc-disable-warning, format-invalid-specifier) \
                  $(call cc-disable-warning, gnu) \
-                 $(call cc-disable-warning, unused-variable) \
                  $(call cc-option, -fcatch-undefined-behavior) \
                  $(call cc-option, -no-integrated-as)
 KBUILD_CPPFLAGS += $(call cc-option,-Qunused-arguments,)
@@ -672,9 +671,10 @@ KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member) \
                  $(call cc-disable-warning, format-security) \
                  $(call cc-disable-warning, incompatible-pointer-types) \
                  $(call cc-disable-warning, shift-overflow) \
-                 $(call cc-disable-warning, unused-but-set-variable) \
-                 $(call cc-disable-warning, unused-const-variable)
+                 $(call cc-disable-warning, unused-but-set-variable)
 endif
+
+KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
 
 ifdef CONFIG_FRAME_POINTER
 KBUILD_CFLAGS += -fno-omit-frame-pointer -fno-optimize-sibling-calls
