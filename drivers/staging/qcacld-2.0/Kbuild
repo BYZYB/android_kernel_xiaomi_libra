@@ -1446,6 +1446,20 @@ ifeq ($(call cc-option-yn, -Wmaybe-uninitialized),y)
 EXTRA_CFLAGS += -Wmaybe-uninitialized
 endif
 
+# Disable certain flags for Clang as they are spammy and I'm not fixing them :^)
+ifeq ($(cc-name),clang)
+EXTRA_CFLAGS += -Wno-enum-conversion \
+		-Wno-header-guard \
+		-Wno-int-in-bool-context \
+		-Wno-logical-not-parentheses \
+		-Wno-non-literal-null-conversion \
+		-Wno-parentheses-equality \
+		-Wno-pointer-bool-conversion \
+		-Wno-shift-count-negative \
+		-Wno-shift-count-overflow \
+		-Wno-typedef-redefinition
+endif
+
 # Module information used by KBuild framework
 obj-$(CONFIG_QCA_CLD_WLAN) += $(MODNAME).o
 $(MODNAME)-y := $(OBJS)
