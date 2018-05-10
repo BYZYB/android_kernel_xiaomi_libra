@@ -1085,4 +1085,9 @@ struct ol_txrx_peer_t {
 #endif
 };
 
+struct ol_fw_data {
+	void *data;
+	uint32_t len;
+};
+
 #endif /* _OL_TXRX_TYPES__H_ */
