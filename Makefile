@@ -580,9 +580,9 @@ ifneq ($(GCC_TOOLCHAIN),)
 CLANG_GCC_TC := --gcc-toolchain=$(GCC_TOOLCHAIN)
 endif
 KBUILD_AFLAGS += $(CLANG_TARGET) $(CLANG_GCC_TC) $(CLANG_PREFIX) \
-                 $(call cc-option, -no-integrated-as)
+                 -no-integrated-as
 KBUILD_CFLAGS += $(CLANG_TARGET) $(CLANG_GCC_TC) $(CLANG_PREFIX) \
-                 $(call cc-option, -no-integrated-as)
+                 -no-integrated-as
 endif
 
 ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
