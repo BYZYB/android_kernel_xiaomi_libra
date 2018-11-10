@@ -39,7 +39,13 @@
 #define ISA1000_VIB_DEFAULT_TIMEOUT	15000
 #define ISA1000_DEFAULT_PWM_FREQ	30000
 
+#define	MAX_VIBE_STRENGTH		0x7f
+#define	MIN_VIBE_STRENGTH		0x46
+#define	DEF_VIBE_STRENGTH		MAX_VIBE_STRENGTH
+
 static const unsigned int pwm_period_ns = NSEC_PER_SEC / ISA1000_DEFAULT_PWM_FREQ;
+
+static int vibe_strength = DEF_VIBE_STRENGTH;
 
 struct isa1000_pwm_info {
 	struct pwm_device *pwm_dev;
@@ -65,11 +71,84 @@ struct isa1000_vib {
 
 static struct isa1000_vib *vib_dev = NULL;
 
+static ssize_t isa1000_vib_min_show(struct device *dev,
+                                    struct device_attribute *attr, char *buf)
+{
+    return scnprintf(buf, PAGE_SIZE, "%d\n", MIN_VIBE_STRENGTH);
+}
+
+static ssize_t isa1000_vib_max_show(struct device *dev,
+                                    struct device_attribute *attr, char *buf)
+{
+    return scnprintf(buf, PAGE_SIZE, "%d\n", MAX_VIBE_STRENGTH);
+}
+
+static ssize_t isa1000_vib_default_show(struct device *dev,
+                                        struct device_attribute *attr, char *buf)
+{
+    return scnprintf(buf, PAGE_SIZE, "%d\n", DEF_VIBE_STRENGTH);
+}
+
+static ssize_t isa1000_vib_level_show(struct device *dev,
+                                      struct device_attribute *attr, char *buf)
+{
+    return scnprintf(buf, PAGE_SIZE, "%d\n", vibe_strength);
+}
+
+static ssize_t isa1000_vib_level_store(struct device *dev,
+                                       struct device_attribute *attr,
+                                       const char *buf, size_t count)
+{
+    int rc, val;
+    
+    rc = kstrtoint(buf, 10, &val);
+    if (rc) {
+        pr_err("%s: error getting level\n", __func__);
+        return -EINVAL;
+    }
+    
+    if (val < MIN_VIBE_STRENGTH) {
+        pr_err("%s: level %d not in range (%d - %d), using min.\n",
+               __func__, val, MIN_VIBE_STRENGTH, MAX_VIBE_STRENGTH);
+        val = MIN_VIBE_STRENGTH;
+    } else if (val > MAX_VIBE_STRENGTH) {
+        pr_err("%s: level %d not in range (%d - %d), using max.\n",
+               __func__, val, MIN_VIBE_STRENGTH, MAX_VIBE_STRENGTH);
+        val = MAX_VIBE_STRENGTH;
+    }
+    
+    vibe_strength = val;
+    
+    return strnlen(buf, count);
+}
+static DEVICE_ATTR(vtg_min, S_IRUGO, isa1000_vib_min_show, NULL);
+static DEVICE_ATTR(vtg_max, S_IRUGO, isa1000_vib_max_show, NULL);
+static DEVICE_ATTR(vtg_default, S_IRUGO, isa1000_vib_default_show, NULL);
+static DEVICE_ATTR(vtg_level, S_IRUGO | S_IWUSR, isa1000_vib_level_show, isa1000_vib_level_store);
+
+static struct attribute *timed_dev_attrs[] = {
+    &dev_attr_vtg_min.attr,
+    &dev_attr_vtg_max.attr,
+    &dev_attr_vtg_default.attr,
+    &dev_attr_vtg_level.attr,
+    NULL,
+};
+
+static struct attribute_group timed_dev_attr_group = {
+    .attrs = timed_dev_attrs,
+};
+
 static int isa1000_vib_set(struct isa1000_vib *vib, int on)
 {
 	int rc;
 
 	if (on) {
+		rc = pwm_config(vib_dev->pwm_info.pwm_dev,
+						(pwm_period_ns  * (vibe_strength + 128)) / 256,
+						pwm_period_ns);
+		if (rc < 0){
+			pr_err( "Unable to config pwm%d\n",rc);
+		}
 		rc = pwm_enable(vib->pwm_info.pwm_dev);
 		if (rc < 0) {
 			dev_err(&vib->pdev->dev, "Unable to enable pwm\n");
@@ -372,6 +451,11 @@ VibeStatus ImmVibeSPI_ForceOut_Initialize(void)
 		pr_err("isa1000 driver register failed %d\n", Ret);
 		return VIBE_E_FAIL;
 	}
+
+    	if (sysfs_create_group(&vib_dev->timed_dev.dev->kobj, &timed_dev_attr_group)) {
+		printk(KERN_ALERT"isa1000: fail to create strength tunables\n");
+		return VIBE_E_FAIL;
+   	}
 
 	return VIBE_S_SUCCESS;
 }
