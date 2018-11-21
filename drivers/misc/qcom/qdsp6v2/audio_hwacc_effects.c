@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2016, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2014, 2016-2017, The Linux Foundation. All rights reserved.
  * Copyright (C) 2018 XiaoMi, Inc.
  *
  * This software is licensed under the terms of the GNU General Public
@@ -18,7 +18,6 @@
 #include "q6audio_common.h"
 #include "audio_utils_aio.h"
 #include <sound/msm-audio-effects-q6-v2.h>
-#include <sound/msm-dts-eagle.h>
 
 #define MAX_CHANNELS_SUPPORTED		8
 #define WAIT_TIMEDOUT_DURATION_SECS	1
@@ -54,31 +53,11 @@ static void audio_effects_init_pp(struct audio_client *ac)
 		pr_err("%s: audio client null to init pp\n", __func__);
 		return;
 	}
-	switch (ac->topology) {
-	case ASM_STREAM_POSTPROC_TOPO_ID_HPX_MASTER:
-
-		ret = q6asm_set_softvolume_v2(ac, &softvol,
-					      SOFT_VOLUME_INSTANCE_1);
-		if (ret < 0)
-			pr_err("%s: Send SoftVolume1 Param failed ret=%d\n",
-				__func__, ret);
-		ret = q6asm_set_softvolume_v2(ac, &softvol,
-					      SOFT_VOLUME_INSTANCE_2);
-		if (ret < 0)
-			pr_err("%s: Send SoftVolume2 Param failed ret=%d\n",
-				 __func__, ret);
-
-		msm_dts_eagle_init_master_module(ac);
-
-		break;
-	default:
-		ret = q6asm_set_softvolume_v2(ac, &softvol,
-					      SOFT_VOLUME_INSTANCE_1);
-		if (ret < 0)
-			pr_err("%s: Send SoftVolume Param failed ret=%d\n",
-				__func__, ret);
-		break;
-	}
+	ret = q6asm_set_softvolume_v2(ac, &softvol,
+				      SOFT_VOLUME_INSTANCE_1);
+	if (ret < 0)
+		pr_err("%s: Send SoftVolume Param failed ret=%d\n",
+			__func__, ret);
 }
 
 static void audio_effects_deinit_pp(struct audio_client *ac)
@@ -86,13 +65,6 @@ static void audio_effects_deinit_pp(struct audio_client *ac)
 	if (!ac) {
 		pr_err("%s: audio client null to deinit pp\n", __func__);
 		return;
-	}
-	switch (ac->topology) {
-	case ASM_STREAM_POSTPROC_TOPO_ID_HPX_MASTER:
-		msm_dts_eagle_deinit_master_module(ac);
-		break;
-	default:
-		break;
 	}
 }
 
@@ -242,8 +214,11 @@ static int audio_effects_shared_ioctl(struct file *file, unsigned cmd,
 		uint32_t idx = 0;
 		uint32_t size = 0;
 
+		mutex_lock(&effects->lock);
+
 		if (!effects->started) {
 			rc = -EFAULT;
+			mutex_unlock(&effects->lock);
 			goto ioctl_fail;
 		}
 
@@ -253,11 +228,13 @@ static int audio_effects_shared_ioctl(struct file *file, unsigned cmd,
 		if (!rc) {
 			pr_err("%s: write wait_event_timeout\n", __func__);
 			rc = -EFAULT;
+			 mutex_unlock(&effects->lock);
 			goto ioctl_fail;
 		}
 		if (!atomic_read(&effects->out_count)) {
 			pr_err("%s: pcm stopped out_count 0\n", __func__);
 			rc = -EFAULT;
+			mutex_unlock(&effects->lock);
 			goto ioctl_fail;
 		}
 
@@ -267,6 +244,7 @@ static int audio_effects_shared_ioctl(struct file *file, unsigned cmd,
 				copy_from_user(bufptr, (void *)arg,
 					effects->config.buf_cfg.output_len)) {
 				rc = -EFAULT;
+				mutex_unlock(&effects->lock);
 				goto ioctl_fail;
 			}
 			rc = q6asm_write(effects->ac,
@@ -274,6 +252,7 @@ static int audio_effects_shared_ioctl(struct file *file, unsigned cmd,
 					 0, 0, NO_TIMESTAMP);
 			if (rc < 0) {
 				rc = -EFAULT;
+				mutex_unlock(&effects->lock);
 				goto ioctl_fail;
 			}
 			atomic_dec(&effects->out_count);
@@ -281,6 +260,7 @@ static int audio_effects_shared_ioctl(struct file *file, unsigned cmd,
 			pr_err("%s: AUDIO_EFFECTS_WRITE: Buffer dropped\n",
 				__func__);
 		}
+		mutex_unlock(&effects->lock);
 		break;
 	}
 	case AUDIO_EFFECTS_READ: {
@@ -413,33 +393,6 @@ static long audio_effects_set_pp_param(struct q6audio_effects *effects,
 			      &(effects->audio_effects.topo_switch_vol),
 			      (long *)&values[1], SOFT_VOLUME_INSTANCE_2);
 		break;
-	case DTS_EAGLE_MODULE_ENABLE:
-		pr_debug("%s: DTS_EAGLE_MODULE_ENABLE\n", __func__);
-		if (msm_audio_effects_is_effmodule_supp_in_top(
-			effects_module, effects->ac->topology)) {
-			/*
-			 * HPX->OFF: first disable HPX and then
-			 * enable SA+
-			 * HPX->ON: first disable SA+ and then
-			 * enable HPX
-			 */
-			bool hpx_state = (bool)values[1];
-			if (hpx_state)
-				msm_audio_effects_enable_extn(effects->ac,
-					&(effects->audio_effects),
-					false);
-			msm_dts_eagle_enable_asm(effects->ac,
-				hpx_state,
-				AUDPROC_MODULE_ID_DTS_HPX_PREMIX);
-			msm_dts_eagle_enable_asm(effects->ac,
-				hpx_state,
-				AUDPROC_MODULE_ID_DTS_HPX_POSTMIX);
-			if (!hpx_state)
-				msm_audio_effects_enable_extn(effects->ac,
-					&(effects->audio_effects),
-					true);
-		}
-		break;
 	default:
 		pr_err("%s: Invalid effects config module\n", __func__);
 		rc = -EINVAL;
@@ -479,6 +432,7 @@ static long audio_effects_ioctl(struct file *file, unsigned int cmd,
 		break;
 	}
 	case AUDIO_EFFECTS_SET_BUF_LEN: {
+		mutex_lock(&effects->lock);
 		if (copy_from_user(&effects->config.buf_cfg, (void *)arg,
 				   sizeof(effects->config.buf_cfg))) {
 			pr_err("%s: copy from user for AUDIO_EFFECTS_SET_BUF_LEN failed\n",
@@ -488,6 +442,7 @@ static long audio_effects_ioctl(struct file *file, unsigned int cmd,
 		pr_debug("%s: write buf len: %d, read buf len: %d\n",
 			 __func__, effects->config.buf_cfg.output_len,
 			 effects->config.buf_cfg.input_len);
+		mutex_unlock(&effects->lock);
 		break;
 	}
 	case AUDIO_EFFECTS_GET_BUF_AVAIL: {
@@ -748,6 +703,7 @@ static int audio_effects_release(struct inode *inode, struct file *file)
 	}
 	q6asm_audio_client_free(effects->ac);
 
+	mutex_destroy(&effects->lock);
 	kfree(effects);
 
 	pr_debug("%s: close session success\n", __func__);
@@ -778,6 +734,7 @@ static int audio_effects_open(struct inode *inode, struct file *file)
 
 	init_waitqueue_head(&effects->read_wait);
 	init_waitqueue_head(&effects->write_wait);
+	mutex_init(&effects->lock);
 
 	effects->opened = 0;
 	effects->started = 0;

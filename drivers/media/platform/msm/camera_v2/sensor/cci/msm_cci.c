@@ -367,7 +367,7 @@ static int32_t msm_cci_i2c_read(struct v4l2_subdev *sd,
 		pr_err("%s:%d Invalid I2C master %d\n",
 			__func__, __LINE__, master);
 		return -EINVAL;
-}
+	}
 
 	mutex_lock(&cci_dev->cci_master_info[master].mutex);
 

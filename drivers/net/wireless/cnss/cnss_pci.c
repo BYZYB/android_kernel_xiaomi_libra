@@ -252,7 +252,7 @@ static struct cnss_data {
 	struct pci_saved_state *saved_state;
 	u16 revision_id;
 	bool recovery_in_progress;
-	bool fw_available;
+	atomic_t fw_available;
 	struct codeswap_codeseg_info *cnss_seg_info;
 	/* Virtual Address of the DMA page */
 	void *codeseg_cpuaddr[CODESWAP_MAX_CODESEGS];
@@ -280,6 +280,8 @@ static struct cnss_data {
 	u32 fw_dma_size;
 	u32 fw_seg_count;
 	struct segment_memory fw_seg_mem[MAX_NUM_OF_SEGMENTS];
+	/* Firmware setup complete lock */
+	struct mutex fw_setup_stat_lock;
 	void *bdata_cpu;
 	dma_addr_t bdata_dma;
 	u32 bdata_dma_size;
@@ -1198,10 +1200,12 @@ int cnss_get_fw_image(struct image_desc_info *image_desc_info)
 	    !penv->fw_seg_count || !penv->bdata_seg_count)
 		return -EINVAL;
 
+	mutex_lock(&penv->fw_setup_stat_lock);
 	image_desc_info->fw_addr = penv->fw_dma;
 	image_desc_info->fw_size = penv->fw_dma_size;
 	image_desc_info->bdata_addr = penv->bdata_dma;
 	image_desc_info->bdata_size = penv->bdata_dma_size;
+	mutex_unlock(&penv->fw_setup_stat_lock);
 
 	return 0;
 }
@@ -1243,7 +1247,7 @@ static int cnss_wlan_pci_probe(struct pci_dev *pdev,
 
 	penv->pdev = pdev;
 	penv->id = id;
-	penv->fw_available = false;
+	atomic_set(&penv->fw_available, 0);
 	penv->device_id = pdev->device;
 
 	if (penv->pci_register_again) {
@@ -1293,7 +1297,9 @@ static int cnss_wlan_pci_probe(struct pci_dev *pdev,
 		goto err_pcie_suspend;
 	}
 
+	mutex_lock(&penv->fw_setup_stat_lock);
 	cnss_wlan_fw_mem_alloc(pdev);
+	mutex_unlock(&penv->fw_setup_stat_lock);
 
 	ret = device_create_file(&penv->pldev->dev, &dev_attr_wlan_setup);
 
@@ -1546,8 +1552,13 @@ static ssize_t fw_image_setup_store(struct device *dev,
 	if (!penv)
 		return -ENODEV;
 
-	if (sscanf(buf, "%d", &val) != 1)
+	mutex_lock(&penv->fw_setup_stat_lock);
+	pr_info("%s: Firmware setup in progress\n", __func__);
+
+	if (kstrtoint(buf, 0, &val)) {
+		mutex_unlock(&penv->fw_setup_stat_lock);
 		return -EINVAL;
+	}
 
 	if (val == FW_IMAGE_FTM || val == FW_IMAGE_MISSION
 	    || val == FW_IMAGE_BDATA) {
@@ -1556,6 +1567,7 @@ static ssize_t fw_image_setup_store(struct device *dev,
 		if (ret != 0) {
 			pr_err("%s: Invalid parsing of FW image files %d",
 			       __func__, ret);
+			mutex_unlock(&penv->fw_setup_stat_lock);
 			return -EINVAL;
 		}
 		penv->fw_image_setup = val;
@@ -1565,6 +1577,8 @@ static ssize_t fw_image_setup_store(struct device *dev,
 		penv->bmi_test = val;
 	}
 
+	pr_info("%s: Firmware setup completed\n", __func__);
+	mutex_unlock(&penv->fw_setup_stat_lock);
 	return count;
 }
 
@@ -1649,16 +1663,21 @@ int cnss_get_codeswap_struct(struct codeswap_codeseg_info *swap_seg)
 {
 	struct codeswap_codeseg_info *cnss_seg_info = penv->cnss_seg_info;
 
+	mutex_lock(&penv->fw_setup_stat_lock);
 	if (!cnss_seg_info) {
 		swap_seg = NULL;
+		mutex_unlock(&penv->fw_setup_stat_lock);
 		return -ENOENT;
 	}
-	if (!penv->fw_available) {
+
+	if (!atomic_read(&penv->fw_available)) {
 		pr_debug("%s: fw is not available\n", __func__);
+		mutex_unlock(&penv->fw_setup_stat_lock);
 		return -ENOENT;
 	}
 
 	*swap_seg = *cnss_seg_info;
+	mutex_unlock(&penv->fw_setup_stat_lock);
 
 	return 0;
 }
@@ -1677,26 +1696,31 @@ static void cnss_wlan_memory_expansion(void)
 	u_int32_t total_length = 0;
 	struct pci_dev *pdev;
 
+	mutex_lock(&penv->fw_setup_stat_lock);
 	pdev = penv->pdev;
 	dev = &pdev->dev;
 	cnss_seg_info = penv->cnss_seg_info;
 
 	if (!cnss_seg_info) {
 		pr_debug("cnss: cnss_seg_info is NULL\n");
+		mutex_unlock(&penv->fw_setup_stat_lock);
 		goto end;
 	}
 
-	if (penv->fw_available) {
+	if (atomic_read(&penv->fw_available)) {
 		pr_debug("cnss: fw code already copied to host memory\n");
+		mutex_unlock(&penv->fw_setup_stat_lock);
 		goto end;
 	}
 
 	if (request_firmware(&fw_entry, filename, dev) != 0) {
+		mutex_unlock(&penv->fw_setup_stat_lock);
 		pr_err("cnss:failed to get fw: %s\n", filename);
 		goto end;
 	}
 
 	if (!fw_entry || !fw_entry->data) {
+		mutex_unlock(&penv->fw_setup_stat_lock);
 		pr_err("%s: INVALID FW entries\n", __func__);
 		goto release_fw;
 	}
@@ -1732,7 +1756,8 @@ static void cnss_wlan_memory_expansion(void)
 	}
 	pr_debug("cnss: total_bytes copied: %d\n", total_length);
 	cnss_seg_info->codeseg_total_bytes = total_length;
-	penv->fw_available = 1;
+	atomic_set(&penv->fw_available, 1);
+	mutex_unlock(&penv->fw_setup_stat_lock);
 
 release_fw:
 	release_firmware(fw_entry);
@@ -2492,6 +2517,7 @@ static int cnss_probe(struct platform_device *pdev)
 	penv->vreg_info.wlan_reg = NULL;
 	penv->vreg_info.state = VREG_OFF;
 	penv->pci_register_again = false;
+	mutex_init(&penv->fw_setup_stat_lock);
 
 	ret = cnss_wlan_get_resources(pdev);
 	if (ret)

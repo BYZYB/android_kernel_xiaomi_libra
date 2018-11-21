@@ -3,7 +3,6 @@
  *
  * Copyright (C) 2007 Google Incorporated
  * Copyright (c) 2008-2017, The Linux Foundation. All rights reserved.
- * Copyright (C) 2018 XiaoMi, Inc.
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -3793,7 +3792,6 @@ static int mdss_fb_handle_buf_sync_ioctl(struct msm_sync_pt_data *sync_pt_data,
 
 skip_retire_fence:
 	sync_fence_install(rel_fence, rel_fen_fd);
-
 	mutex_unlock(&sync_pt_data->sync_mutex);
 
 	if (buf_sync->flags & MDP_BUF_SYNC_FLAG_WAIT)

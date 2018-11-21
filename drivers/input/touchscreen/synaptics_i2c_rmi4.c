@@ -3764,6 +3764,7 @@ err_enable_irq:
 	input_unregister_device(rmi4_data->input_dev);
 
 err_register_input:
+err_free_gpios:
 	mutex_lock(&rmi->support_fn_list_mutex);
 	if (!list_empty(&rmi->support_fn_list)) {
 		list_for_each_entry_safe(fhandler, next_fhandler,
@@ -3771,14 +3772,15 @@ err_register_input:
 			if (fhandler->fn_number == SYNAPTICS_RMI4_F1A)
 				synaptics_rmi4_f1a_kfree(fhandler);
 			else {
-				kfree(fhandler->data);
-				kfree(fhandler->extra);
+				if (fhandler->data != NULL)
+					kfree(fhandler->data);
+				if (fhandler->extra != NULL)
+					kfree(fhandler->extra);
 			}
 			kfree(fhandler);
 		}
 	}
 	mutex_unlock(&rmi->support_fn_list_mutex);
-err_free_gpios:
 	if (gpio_is_valid(rmi4_data->board->reset_gpio))
 		gpio_free(rmi4_data->board->reset_gpio);
 	if (gpio_is_valid(rmi4_data->board->irq_gpio))

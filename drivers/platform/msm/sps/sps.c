@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2015, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2015,2017, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -103,7 +103,6 @@ static u32 debugfs_buf_used;
 static int wraparound;
 static struct mutex sps_debugfs_lock;
 
-
 struct dentry *dent;
 struct dentry *dfile_info;
 struct dentry *dfile_logging_option;
@@ -154,6 +153,7 @@ static ssize_t sps_read_info(struct file *file, char __user *ubuf,
 		ret = simple_read_from_buffer(ubuf, count, ppos,
 				debugfs_buf, size);
 	}
+	mutex_unlock(&sps_debugfs_lock);
 
 	mutex_unlock(&sps_debugfs_lock);
 	return ret;
@@ -170,9 +170,10 @@ static ssize_t sps_set_info(struct file *file, const char __user *buf,
 	int i;
 	u32 buf_size_kb = 0;
 	u32 new_buf_size;
+	u32 size = sizeof(str) < count ? sizeof(str) : count;
 
 	memset(str, 0, sizeof(str));
-	missing = copy_from_user(str, buf, sizeof(str));
+	missing = copy_from_user(str, buf, size);
 	if (missing)
 		return -EFAULT;
 
@@ -264,9 +265,10 @@ static ssize_t sps_set_logging_option(struct file *file, const char __user *buf,
 	char str[MAX_MSG_LEN];
 	int i;
 	u8 option = 0;
+	u32 size = sizeof(str) < count ? sizeof(str) : count;
 
 	memset(str, 0, sizeof(str));
-	missing = copy_from_user(str, buf, sizeof(str));
+	missing = copy_from_user(str, buf, size);
 	if (missing)
 		return -EFAULT;
 
@@ -292,6 +294,7 @@ static ssize_t sps_set_logging_option(struct file *file, const char __user *buf,
 	}
 
 	logging_option = option;
+	mutex_unlock(&sps_debugfs_lock);
 
 	mutex_unlock(&sps_debugfs_lock);
 	return count;
@@ -315,9 +318,10 @@ static ssize_t sps_set_bam_addr(struct file *file, const char __user *buf,
 	struct sps_bam *bam;
 	u32 num_pipes = 0;
 	void *vir_addr;
+	u32 size = sizeof(str) < count ? sizeof(str) : count;
 
 	memset(str, 0, sizeof(str));
-	missing = copy_from_user(str, buf, sizeof(str));
+	missing = copy_from_user(str, buf, size);
 	if (missing)
 		return -EFAULT;
 
@@ -618,6 +622,8 @@ static void sps_debugfs_init(void)
 			"bam_addr.\n");
 		goto bam_addr_err;
 	}
+
+	mutex_init(&sps_debugfs_lock);
 
 	return;
 
