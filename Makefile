@@ -373,6 +373,7 @@ LINUXINCLUDE := \
 
 # Use arch specific optimization
 KBUILD_CFLAGS += \
+		-fdiagnostics-color \
 		-fgraphite \
 		-fgraphite-identity \
 		-fira-loop-pressure \
