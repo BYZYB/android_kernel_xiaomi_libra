@@ -24,7 +24,7 @@
 	interrupt-parent = <&intc>;
 
 	chosen {
-		bootargs = "";
+		bootargs = "noirqdebug";
 	};
 
 	firmware: firmware {
