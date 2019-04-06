@@ -549,7 +549,7 @@
 			compatible = "qcom,spm-regulator";
 			reg = <0x2900 0x100>;
 			regulator-name = "pm8994_s8";
-			regulator-min-microvolt = <700000>;
+			regulator-min-microvolt = <680000>;
 			regulator-max-microvolt = <1180000>;
 			qcom,cpu-num = <0>;
 		};
@@ -841,7 +841,7 @@
 		qcom,cpr-init-voltage-ref = <900000 900000 1000000 1230000>;
 		qcom,cpr-init-voltage-step = <10000>;
 
-		qcom,cpr-corner-map = <1 2 2 2 2 3 3 3 4 4 4 4 4 4 4>;
+		qcom,cpr-corner-map = <1 2 2 2 2 3 3 3 4 4 4 4 4 4 4 4>;
 		qcom,cpr-voltage-ceiling-override =
 				<0xFFFFFFFF 0  900000  900000  900000  900000
 					       900000 1000000 1000000 1000000
