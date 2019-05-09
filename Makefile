@@ -655,8 +655,7 @@ KBUILD_CFLAGS += $(stackp-flag)
 ifeq ($(cc-name),clang)
 KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member) \
                  $(call cc-disable-warning, format-invalid-specifier) \
-                 $(call cc-disable-warning, gnu) \
-                 $(call cc-option, -fcatch-undefined-behavior) \
+                 $(call cc-disable-warning, gnu)
 KBUILD_CPPFLAGS += $(call cc-option,-Qunused-arguments,)
 # Quiet clang warning: comparison of unsigned expression < 0 is always false
 KBUILD_CFLAGS += $(call cc-disable-warning, tautological-compare)
