@@ -579,7 +579,8 @@ endif
 ifneq ($(GCC_TOOLCHAIN),)
 CLANG_FLAGS += --gcc-toolchain=$(GCC_TOOLCHAIN)
 endif
-CLANG_FLAGS += -no-integrated-as
+CLANG_FLAGS += -no-integrated-as \
+               -Werror=unknown-warning-option
 KBUILD_AFLAGS += $(CLANG_FLAGS)
 KBUILD_CFLAGS += $(CLANG_FLAGS)
 export CLANG_FLAGS
