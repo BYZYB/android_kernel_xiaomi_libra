@@ -114,7 +114,7 @@ export CROSS CC AR STRIP RANLIB CFLAGS LDFLAGS LIB_OBJS
 cc-supports = ${shell if $(CC) ${1} -S -o /dev/null -x c /dev/null > /dev/null 2>&1; then echo "$(1)"; fi;}
 
 # use '-Os' optimization if available, else use -O2
-OPTIMIZATION := $(call cc-supports,-Os,-O2)
+OPTIMIZATION := -O2
 
 WARNINGS := -Wall -Wchar-subscripts -Wpointer-arith -Wsign-compare
 WARNINGS += $(call cc-supports,-Wno-pointer-sign)
