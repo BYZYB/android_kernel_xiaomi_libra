@@ -1,11 +1,6 @@
 #
 # this makefile is called from the kernel make syste
-ifeq ($(MODE),release)
-    ccflags-y += -O2 -DNDEBUG
-else  # DEBUG
-    # "-O" is needed to expand inlines
-    ccflags-y += -O -g3 -DDEBUG
-endif # DEBUG/RELEASE
+ccflags-y += -Ofast -DNDEBUG
 
 ifdef MOBICORE_CFLAGS
     ccflags-y +=$(MOBICORE_CFLAGS)

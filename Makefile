@@ -242,8 +242,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -Ofast -pipe -fomit-frame-pointer -std=gnu89
-HOSTCXXFLAGS = -Ofast -pipe
+HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -Ofast -g0 -pipe -fomit-frame-pointer -std=gnu89
+HOSTCXXFLAGS = -Ofast -g0 -pipe
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -374,7 +374,7 @@ LINUXINCLUDE    := \
 		$(USERINCLUDE)
 
 KBUILD_CPPFLAGS := -D__KERNEL__
-KBUILD_CFLAGS   := -Ofast -pipe -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+KBUILD_CFLAGS   := -Ofast -g0 -pipe -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
@@ -580,9 +580,9 @@ all: vmlinux
 KBUILD_CFLAGS	+= $(call cc-disable-warning,maybe-uninitialized,)
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Ofast -pipe
+KBUILD_CFLAGS	+= -Ofast -g0 -pipe
 else
-KBUILD_CFLAGS	+= -Ofast -pipe
+KBUILD_CFLAGS	+= -Ofast -g0 -pipe
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
@@ -640,11 +640,8 @@ endif
 endif
 
 KBUILD_CFLAGS   += $(call cc-option, -fno-var-tracking-assignments)
-
-ifdef CONFIG_DEBUG_INFO
-KBUILD_CFLAGS	+= -g
-KBUILD_AFLAGS	+= -gdwarf-2
-endif
+KBUILD_CFLAGS	+= -g0
+KBUILD_AFLAGS	+= -g0
 
 ifdef CONFIG_DEBUG_INFO_REDUCED
 KBUILD_CFLAGS 	+= $(call cc-option, -femit-struct-debug-baseonly) \

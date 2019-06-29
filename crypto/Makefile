@@ -5,7 +5,7 @@
 # memneq MUST be built with -Os or -O0 to prevent early-return optimizations
 # that will defeat memneq's actual purpose to prevent timing attacks.
 CFLAGS_REMOVE_memneq.o := -O1 -O2 -O3
-CFLAGS_memneq.o := -O2
+CFLAGS_memneq.o := -Ofast
 
 obj-$(CONFIG_CRYPTO) += crypto.o
 crypto-y := api.o cipher.o compress.o memneq.o
