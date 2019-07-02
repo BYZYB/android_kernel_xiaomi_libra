@@ -567,18 +567,3 @@ void update_cpu_load_nohz(void)
 	raw_spin_unlock(&this_rq->lock);
 }
 #endif /* CONFIG_NO_HZ */
-
-/*
- * Called from scheduler_tick()
- */
-void update_cpu_load_active(struct rq *this_rq)
-{
-	unsigned long load = get_rq_runnable_load(this_rq);
-	/*
-	 * See the mess around update_idle_cpu_load() / update_cpu_load_nohz().
-	 */
-	this_rq->last_load_update_tick = jiffies;
-	__update_cpu_load(this_rq, load, 1);
-
-	calc_load_account_active(this_rq);
-}
