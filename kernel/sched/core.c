@@ -867,6 +867,8 @@ static void set_load_weight(struct task_struct *p)
 		return;
 	}
 
+    prio = array_index_nospec(prio, 40);
+
 	load->weight = scale_load(prio_to_weight[prio]);
 	load->inv_weight = prio_to_wmult[prio];
 }
@@ -3036,7 +3038,24 @@ again:
  *          - return from syscall or exception to user-space
  *          - return from interrupt-handler to user-space
  */
+static void __sched __schedule(void)
+{
+	struct task_struct *prev, *next;
+	unsigned long *switch_count;
+	struct rq *rq;
+	int cpu;
 
+need_resched:
+	preempt_disable();
+	cpu = smp_processor_id();
+	rq = cpu_rq(cpu);
+	rcu_note_context_switch(cpu);
+	prev = rq->curr;
+
+	schedule_debug(prev);
+
+	if (sched_feat(HRTICK))
+		hrtick_clear(rq);
 #if defined(CONFIG_MT_SCHED_MONITOR) && defined(CONFIG_MTPROF)
 	__raw_get_cpu_var(MT_trace_in_sched) = 1;
 #endif
@@ -6035,9 +6054,12 @@ static void build_group_mask(struct sched_domain *sd, struct sched_group *sg)
 		sibling = *per_cpu_ptr(sdd->sd, i);
 		if (!cpumask_test_cpu(i, sched_domain_span(sibling)))
 			continue;
-
+            
 		cpumask_set_cpu(i, sched_group_mask(sg));
 	}
+
+	/* We must not have empty masks here */
+	WARN_ON_ONCE(cpumask_empty(sched_group_mask(sg)));
 }
 
 /*
