@@ -1690,9 +1690,6 @@ static void switched_from_dl(struct rq *rq, struct task_struct *p)
 	 */
 	if (!start_dl_timer(p))
 		__dl_clear_params(p);
-
-	/* XXX we should retain the bw until 0-lag */
-	cancel_dl_timer(rq, p);
 	
 	if (hrtimer_active(&p->dl.dl_timer) && !dl_policy(p->policy))
 		hrtimer_try_to_cancel(&p->dl.dl_timer);
