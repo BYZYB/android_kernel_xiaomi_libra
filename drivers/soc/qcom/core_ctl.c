@@ -454,7 +454,7 @@ static void update_running_avg(bool trigger_update)
 {
 	int cpu;
 	struct cpu_data *pcpu;
-	int avg, iowait_avg, big_avg, old_nrrun;
+	int avg, big_avg, old_nrrun;
 	s64 now;
 	unsigned long flags;
 
@@ -466,7 +466,6 @@ static void update_running_avg(bool trigger_update)
 		return;
 	}
 	rq_avg_timestamp_ms = now;
-	sched_get_nr_running_avg(&avg, &iowait_avg, &big_avg);
 
 	spin_unlock_irqrestore(&state_lock, flags);
 
