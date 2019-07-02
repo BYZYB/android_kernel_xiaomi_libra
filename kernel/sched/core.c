@@ -1173,6 +1173,31 @@ fail:
 	return ret;
 }
 
+/*
+ * migration_cpu_stop - this will be executed by a highprio stopper thread
+ * and performs thread migration by bumping thread off CPU then
+ * 'pushing' onto another runqueue.
+ */
+static int migration_cpu_stop(void *data)
+{
+	struct migration_arg *arg = data;
+
+	/*
+	 * The original target cpu might have gone down and we might
+	 * be on another cpu but it doesn't matter.
+	 */
+	local_irq_disable();
+	/*
+	 * We need to explicitly wake pending tasks before running
+	 * __migrate_task() such that we will not miss enforcing cpus_allowed
+	 * during wakeups, see set_cpus_allowed_ptr()'s TASK_WAKING test.
+	 */
+	sched_ttwu_pending();
+	__migrate_task(arg->task, raw_smp_processor_id(), arg->dest_cpu);
+	local_irq_enable();
+	return 0;
+}
+
 void do_set_cpus_allowed(struct task_struct *p, const struct cpumask *new_mask)
 {
 	if (p->sched_class->set_cpus_allowed)
@@ -1298,29 +1323,6 @@ struct migration_swap_arg {
 	int src_cpu, dst_cpu;
 };
 
-/*                EAS: Backport EAS scheduler from 3.18
-bool have_sched_same_pwr_cost_cpus;
-cpumask_var_t sched_same_pwr_cost_cpus;
-static int __init set_sched_same_power_cost_cpus(char *str)
-{
-	char buf[64];
-
-	alloc_bootmem_cpumask_var(&sched_same_pwr_cost_cpus);
-	if (cpulist_parse(str, sched_same_pwr_cost_cpus) < 0) {
-		pr_warn("sched: Incorrect sched_same_power_cost_cpus cpumask\n");
-		return -EINVAL;
-	}
-
-	cpulist_scnprintf(buf, sizeof(buf), sched_same_pwr_cost_cpus);
-	if (!cpumask_empty(sched_same_pwr_cost_cpus))
-		have_sched_same_pwr_cost_cpus = true;
-	return 0;
-}
-
-early_param("sched_same_power_cost_cpus", set_sched_same_power_cost_cpus);
-
-static inline int got_boost_kick(void)
-*/
 #ifdef TJK_HMP
 static int migrate_swap_stop(void *data)
 {
@@ -2079,7 +2081,7 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
 
 #ifdef CONFIG_NUMA_BALANCING
 	if (p->mm && atomic_read(&p->mm->mm_users) == 1) {
-		p->mm->numa_next_scan = jiffies + 				msecs_to_jiffies(sysctl_numa_balancing_scan_delay);
+		p->mm->numa_next_scan = jiffies + msecs_to_jiffies(sysctl_numa_balancing_scan_delay);
 		p->mm->numa_scan_seq = 0;
 	}
 
@@ -2100,86 +2102,6 @@ static void __sched_fork(unsigned long clone_flags, struct task_struct *p)
 	INIT_LIST_HEAD(&p->numa_entry);
 	p->numa_group = NULL;
 #endif /* CONFIG_NUMA_BALANCING */
-}
-
-/* Should be called under rq lock held */
-static void update_power_cost_table(struct rq *rq)
-{
-	int i;
-	u64 max_demand;
-	unsigned int max_freq, freqs, load;
-	struct cpu_pwr_stats *per_cpu_info = get_cpu_pwr_stats();
-	struct cpu_pstate_pwr *costs;
-	struct hmp_power_cost_table *ptr;
-	struct hmp_power_cost *map;
-
-	ptr = &rq->pwr_cost_table;
-	if (!sysctl_sched_enable_power_aware ||
-	    (!per_cpu_info || !per_cpu_info[rq->cpu].ptable))
-		return;
-
-	freqs = per_cpu_info[rq->cpu].len;
-	BUG_ON(freqs <= 0);
-
-	if (!ptr->len) {
-		map = kmalloc(sizeof(*(ptr->map)) * freqs, GFP_ATOMIC);
-		BUG_ON(!map);
-	} else {
-		BUG_ON(freqs != ptr->len);
-		map = ptr->map;
-	}
-	max_demand = div64_u64(max_task_load(), max_possible_capacity);
-	max_demand *= rq->max_possible_capacity;
-
-	costs = per_cpu_info[rq->cpu].ptable;
-	max_freq = costs[freqs - 1].freq;
-	for (i = 0; i < freqs; i++) {
-		load = costs[i].freq * 100 / max_freq;
-		map[i].freq = costs[i].freq;
-		map[i].power_cost = &costs[i].power;
-		map[i].demand = div64_u64(max_demand * load, 100);
-	}
-
-	/*
-	 * power_cost() doesn't hold rq lock, so set the rq->pwr_cost_table
-	 * afterwards.
-	 */
-	ptr->map = map;
-	ptr->len = freqs;
-}
-
-int sched_enable_power_aware_handler(struct ctl_table *table, int write,
-				     void __user *buffer, size_t *lenp,
-				     loff_t *ppos)
-{
-	int ret;
-	int i;
-	unsigned long flags;
-	unsigned int *data = (unsigned int *)table->data;
-	unsigned int old_val = *data;
-
-	ret = proc_dointvec(table, write, buffer, lenp, ppos);
-	if (ret || !write)
-		goto done;
-
-	if (write && (old_val == *data))
-		goto done;
-
-	if (*data != 0 && *data != 1) {
-		ret = -EINVAL;
-		*data = old_val;
-		goto done;
-	}
-
-	if (*data == 1) {
-		for_each_possible_cpu(i) {
-			raw_spin_lock_irqsave(&cpu_rq(i)->lock, flags);
-			update_power_cost_table(cpu_rq(i));
-			raw_spin_unlock_irqrestore(&cpu_rq(i)->lock, flags);
-		}
-	}
-done:
-	return ret;
 }
 
 #ifdef CONFIG_NUMA_BALANCING
@@ -2221,23 +2143,6 @@ int sysctl_numa_balancing(struct ctl_table *table, int write,
 	return err;
 }
 #endif
-
-#endif
-
-void sched_get_cpus_busy(unsigned long *busy, const struct cpumask *query_cpus)
-
-{
-	unsigned long flags;
-	struct rq *rq;
-	const int cpus = cpumask_weight(query_cpus);
-	u64 load[cpus];
-	unsigned int cur_freq[cpus], max_freq[cpus];
-	int notifier_sent[cpus];
-	int cpu, i = 0;
-	unsigned int window_size;
-
-	if (unlikely(cpus == 0))
-		return;
 #endif
 
 /*
@@ -2254,71 +2159,11 @@ int sched_fork(unsigned long clone_flags, struct task_struct *p)
 	 * nobody will actually run it, and a signal or other external
 	 * event cannot wake it up and insert it on the runqueue either.
 	 */
-	local_irq_save(flags);
-	for_each_cpu(cpu, query_cpus)
-		raw_spin_lock(&cpu_rq(cpu)->lock);
-
-	window_size = sched_ravg_window;
-
-	for_each_cpu(cpu, query_cpus) {
-		rq = cpu_rq(cpu);
-
-		update_task_ravg(rq->curr, rq, TASK_UPDATE, sched_clock(), 0);
-		load[i] = rq->old_busy_time = rq->prev_runnable_sum;
-		/*
-		 * Scale load in reference to rq->max_possible_freq.
-		 *
-		 * Note that scale_load_to_cpu() scales load in reference to
-		 * rq->max_freq.
-		 */
-		load[i] = scale_load_to_cpu(load[i], cpu);
-
-		cur_freq[i] = rq->cur_freq;
-		max_freq[i] = rq->max_freq;
-		i++;
-	}
-
-	for_each_cpu(cpu, query_cpus)
-		raw_spin_unlock(&(cpu_rq(cpu))->lock);
-	local_irq_restore(flags);
-
-	i = 0;
-	for_each_cpu(cpu, query_cpus) {
-		rq = cpu_rq(cpu);
-		}
-		trace_sched_get_busy(cpu, busy[i]);
-		i++;
-}
-/*      Backport EAS scheduler from 3.18
-	raw_spin_lock_irqsave(&rq->lock, flags);
-	update_task_ravg(rq->curr, rq, TASK_UPDATE, sched_clock(), 0);
-	load = rq->old_busy_time = rq->prev_runnable_sum;
-	raw_spin_unlock_irqrestore(&rq->lock, flags);
 	p->state = TASK_RUNNING;
-*/
-
 
 	/*
 	 * Make sure we do not leak PI boosting priority to the child.
 	 */
-
-/*      Backport EAS scheduler from 3.18 
-	load = scale_load_to_cpu(load, cpu);
-	load = div64_u64(load * (u64)rq->max_freq, (u64)rq->max_possible_freq);
-	load = div64_u64(load, NSEC_PER_USEC);
-
-	trace_sched_get_busy(cpu, load);
-*/
-unsigned long sched_get_busy(int cpu)
-{
-	struct cpumask query_cpu = CPU_MASK_NONE;
-	unsigned long busy;
-
-	cpumask_set_cpu(cpu, &query_cpu);
-	sched_get_cpus_busy(&busy, &query_cpu);
-
-	return busy;
-}
 	p->prio = current->normal_prio;
 
 	/*
@@ -3191,6 +3036,7 @@ again:
  *          - return from syscall or exception to user-space
  *          - return from interrupt-handler to user-space
  */
+
 #if defined(CONFIG_MT_SCHED_MONITOR) && defined(CONFIG_MTPROF)
 	__raw_get_cpu_var(MT_trace_in_sched) = 1;
 #endif
