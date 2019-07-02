@@ -1206,7 +1206,7 @@ static int inode_doinit_with_dentry(struct inode *inode, struct dentry *opt_dent
 	struct inode_security_struct *isec = inode->i_security;
 	u32 sid;
 	struct dentry *dentry;
-	char context_onstack[SZ_1K];
+	char context_onstack[SZ_4K] __aligned(8);
 	char *context = NULL;
 	unsigned len = 0;
 	int rc = 0;
