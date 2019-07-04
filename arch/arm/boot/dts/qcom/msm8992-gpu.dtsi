@@ -109,7 +109,7 @@
 
 			qcom,gpu-pwrlevel@0 {
 				reg = <0>;
-				qcom,gpu-freq = <640000000>;
+				qcom,gpu-freq = <650000000>;
 				qcom,bus-freq = <7>;
 				qcom,bus-min = <6>;
 				qcom,bus-max = <7>;
@@ -175,13 +175,13 @@
                         qcom,msm-bus,num-cases = <7>;
                         qcom,msm-bus,num-paths = <1>;
                         qcom,msm-bus,vectors-KBps =
-				<89 662 0 9600000>,     /* gpu=640 */
+				<89 662 0 9600000>,     /* gpu=650 */
 				<89 662 0 7840000>,     /* gpu=490 */
 				<89 662 0 7200000>,     /* gpu=450 */
 				<89 662 0 5872000>,     /* gpu=367 */
 				<89 662 0 4800000>,     /* gpu=300 */
 				<89 662 0 2880000>,     /* gpu=180 */
-                                <89 662 0 0>;
+				<89 662 0       0>;
                 };
 	};
 };
