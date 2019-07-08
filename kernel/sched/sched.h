@@ -8,7 +8,7 @@
 #include <linux/stop_machine.h>
 #include <linux/tick.h>
 #include <linux/slab.h>
-
+#include <linux/static_key.h>
 #include "cpupri.h"
 #include "cpudeadline.h"
 #include "cpuacct.h"
