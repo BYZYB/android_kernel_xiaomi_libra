@@ -24,7 +24,7 @@
 	interrupt-parent = <&intc>;
 
 	chosen {
-		bootargs = "sched_same_power_cost_cpus=0-3";
+		bootargs = "";
 	};
 
 	firmware: firmware {
@@ -221,7 +221,7 @@
 		energy-costs {
  			CPU_COST_0: core-cost0 {
  				busy-cost-data = <
-					119	5	/*302*/
+					120     4	/*302*/
 					136     7
 					174    16
 					212    26
@@ -240,6 +240,7 @@
  			};
  			CPU_COST_1: core-cost1 {
  				busy-cost-data = <
+					 180   282	/*302*/	
 					 220   306
 					 290   320
 					 360   334
@@ -260,7 +261,7 @@
  			};
  			CLUSTER_COST_0: cluster-cost0 {
  				busy-cost-data = <
-					110    10	/*302*/
+					120     7	/*302*/
 					136    14
 					174    27
 					212    39
@@ -279,6 +280,7 @@
 			};
 			CLUSTER_COST_1: cluster-cost1 {
 				busy-cost-data = <
+					 180   80	/*302*/
 					 220   80
 					 290   80
 					 360   80
@@ -910,7 +912,7 @@
 				< 1536000  7102 >,
 				< 1632000  7102 >;
 			cpu-to-dev-map-4 =
-				<  384000  1525 >,
+				<  302400  1525 >,
 				<  633600  2288 >,
 				<  768000  3509 >,
 				<  864000  4173 >,
@@ -981,6 +983,7 @@
 			< 1632000 >;
 
 		qcom,cpufreq-table-4 =
+			<  302400 >,
 			<  384000 >,
 			<  480000 >,
 			<  633600 >,
@@ -1038,6 +1041,7 @@
 				< 1632000000 12>;
 		qcom,a57-speedbin0-v0 =
 				<	   0 0>,
+				<  302400000 5>,
 				<  384000000 5>,
 				<  480000000 5>,
 				<  633600000 5>,
@@ -2836,10 +2840,10 @@
 	qcom,msm-thermal {
 		compatible = "qcom,msm-thermal";
 		qcom,sensor-id = <7>;
-		qcom,poll-ms = <250>;
-		qcom,limit-temp = <60>;
+		qcom,poll-ms = <500>;
+		qcom,limit-temp = <75>;
 		qcom,temp-hysteresis = <10>;
-		qcom,therm-reset-temp = <115>;
+		qcom,therm-reset-temp = <120>;
 		qcom,disable-ocr;
 		qcom,disable-psm;
 		qcom,disable-gfx-phase-ctrl;
@@ -2849,7 +2853,7 @@
 		qcom,core-limit-temp = <80>;
 		qcom,core-temp-hysteresis = <10>;
 		qcom,core-control-mask = <0x3e>;
-		qcom,hotplug-temp = <105>;
+		qcom,hotplug-temp = <110>;
 		qcom,hotplug-temp-hysteresis = <40>;
 		qcom,cpu-sensors = "tsens_tz_sensor7", "tsens_tz_sensor7",
 				   "tsens_tz_sensor9", "tsens_tz_sensor10",
