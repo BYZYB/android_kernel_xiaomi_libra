@@ -80,7 +80,7 @@ enum {
 #define HPH_PA_ENABLE true
 #define HPH_PA_DISABLE false
 
-#define SLIM_BW_CLK_GEAR_9 6200000
+#define SLIM_BW_CLK_GEAR_9 12400000
 #define SLIM_BW_UNVOTE 0
 
 static int cpe_debug_mode;
@@ -339,8 +339,9 @@ static struct afe_param_id_clip_bank_sel clip_bank_sel = {
 };
 
 #define WCD9330_RATES (SNDRV_PCM_RATE_8000 | SNDRV_PCM_RATE_16000 |\
-			SNDRV_PCM_RATE_32000 | SNDRV_PCM_RATE_48000 |\
-			SNDRV_PCM_RATE_96000 | SNDRV_PCM_RATE_192000)
+			SNDRV_PCM_RATE_32000 | SNDRV_PCM_RATE_44100 |\
+			SNDRV_PCM_RATE_48000 | SNDRV_PCM_RATE_96000 |\
+			SNDRV_PCM_RATE_192000)
 
 #define NUM_DECIMATORS 10
 #define NUM_INTERPOLATORS 8
@@ -357,11 +358,13 @@ static struct afe_param_id_clip_bank_sel clip_bank_sel = {
 #define TOMTOM_MCLK_CLK_12P288MHZ 12288000
 #define TOMTOM_MCLK_CLK_9P6MHZ 9600000
 
-#define TOMTOM_FORMATS_S16_S24_LE (SNDRV_PCM_FMTBIT_S16_LE | \
-			SNDRV_PCM_FORMAT_S24_LE | \
-			SNDRV_PCM_FMTBIT_S24_3LE)
+#define TOMTOM_FORMATS_S16_S24_LE (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FORMAT_S16_LE |\
+			SNDRV_PCM_FORMAT_S24_LE | SNDRV_PCM_FMTBIT_S24_LE |\
+			SNDRV_PCM_FMTBIT_S24_3LE | SNDRV_PCM_FORMAT_S24_LE)
 
-#define TOMTOM_FORMATS (SNDRV_PCM_FMTBIT_S16_LE)
+#define TOMTOM_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FORMAT_S16_LE |\
+			SNDRV_PCM_FORMAT_S24_LE | SNDRV_PCM_FMTBIT_S24_LE |\
+			SNDRV_PCM_FMTBIT_S24_3LE | SNDRV_PCM_FORMAT_S24_LE)
 
 #define TOMTOM_SLIM_PGD_PORT_INT_TX_EN0 (TOMTOM_SLIM_PGD_PORT_INT_EN0 + 2)
 #define TOMTOM_ZDET_BOX_CAR_AVG_LOOP_COUNT 1
@@ -689,14 +692,14 @@ int tomtom_enable_qfuse_sensing(struct snd_soc_codec *codec)
 }
 EXPORT_SYMBOL(tomtom_enable_qfuse_sensing);
 
-static int tomtom_get_sample_rate(struct snd_soc_codec *codec, int path)
+/* static int tomtom_get_sample_rate(struct snd_soc_codec *codec, int path)
 {
 	if (path == RX8_PATH)
 		return snd_soc_read(codec, TOMTOM_A_CDC_RX8_B5_CTL);
 	else
 		return snd_soc_read(codec,
 			(TOMTOM_A_CDC_RX1_B5_CTL + 8 * (path - 1)));
-}
+} */
 
 static int tomtom_compare_bit_format(struct snd_soc_codec *codec,
 				int bit_format)
@@ -719,12 +722,9 @@ static int tomtom_update_uhqa_mode(struct snd_soc_codec *codec, int path)
 	int ret = 0;
 	struct tomtom_priv *tomtom_p = snd_soc_codec_get_drvdata(codec);
 
-	/* UHQA path has fs=192KHz & bit=24 bit */
-	if (((tomtom_get_sample_rate(codec, path) & 0xE0) == 0xA0) &&
-		(tomtom_compare_bit_format(codec, 24))) {
+	/* UHQA path has fs=192KHz & bit=24 bit | 16 bit */
+	if ((tomtom_compare_bit_format(codec, 24)) || (tomtom_compare_bit_format(codec, 16))) {
 		tomtom_p->uhqa_mode = 1;
-	} else {
-		tomtom_p->uhqa_mode = 0;
 	}
 	dev_dbg(codec->dev, "%s: uhqa_mode=%d", __func__, tomtom_p->uhqa_mode);
 	return ret;
