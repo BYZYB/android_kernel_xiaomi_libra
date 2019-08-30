@@ -243,6 +243,7 @@ config DEBUG_SECTION_MISMATCH
 
 config DEBUG_KERNEL
 	bool "Kernel debugging"
+	default n
 	help
 	  Say Y here if you are developing drivers or trying to debug and
 	  identify kernel problems.
