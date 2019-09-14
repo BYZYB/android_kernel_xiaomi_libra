@@ -1312,10 +1312,6 @@ static const struct file_operations proc_pid_sched_operations = {
 
 #endif
 
-/*
- * Print out various scheduling related per-task fields:
- */
-
 #ifdef CONFIG_SCHED_AUTOGROUP
 /*
  * Print out autogroup related information:
