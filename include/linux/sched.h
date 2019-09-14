@@ -2247,7 +2247,7 @@ static inline void calc_load_exit_idle(void) { }
 
 static inline void set_wake_up_idle(bool enabled)
 {
-	// do nothing
+	/* do nothing yet for EAS */
 }
 
 /*
