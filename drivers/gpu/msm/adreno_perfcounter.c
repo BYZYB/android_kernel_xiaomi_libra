@@ -259,9 +259,9 @@ int adreno_perfcounter_start(struct adreno_device *adreno_dev)
 			 * enable function, but since this function is called
 			 * during start we already know the GPU is idle
 			 */
-			if (gpudev->perfcounter_enable)
-				ret = gpudev->perfcounter_enable(adreno_dev, i,
-					j, group->regs[j].countable);
+			if (gpudev->perfcounter_enable){
+				ret = gpudev->perfcounter_enable(adreno_dev, i, j, group->regs[j].countable);
+    }
 				if (ret)
 					goto done;
 		}
