@@ -1408,12 +1408,10 @@ struct task_struct {
 	int nr_cpus_allowed;
 	cpumask_t cpus_allowed;
 
-#ifdef CONFIG_PREEMPT_RCU
+#ifdef CONFIG_TREE_PREEMPT_RCU
 	int rcu_read_lock_nesting;
 	char rcu_read_unlock_special;
 	struct list_head rcu_node_entry;
-#endif /* #ifdef CONFIG_PREEMPT_RCU */
-#ifdef CONFIG_TREE_PREEMPT_RCU
 	struct rcu_node *rcu_blocked_node;
 #endif /* #ifdef CONFIG_TREE_PREEMPT_RCU */
 
@@ -2233,12 +2231,12 @@ extern void task_clear_jobctl_pending(struct task_struct *task,
 
 static inline void rcu_copy_process(struct task_struct *p)
 {
-#ifdef CONFIG_PREEMPT_RCU
+#ifdef CONFIG_TREE_PREEMPT_RCU
 	p->rcu_read_lock_nesting = 0;
 	p->rcu_read_unlock_special = 0;
 	p->rcu_blocked_node = NULL;
 	INIT_LIST_HEAD(&p->rcu_node_entry);
-#endif /* #ifdef CONFIG_PREEMPT_RCU */
+#endif /* #ifdef CONFIG_TREE_PREEMPT_RCU */
 #ifdef CONFIG_RCU_BOOST
 	p->rcu_boost_mutex = NULL;
 #endif /* #ifdef CONFIG_RCU_BOOST */
@@ -3052,7 +3050,7 @@ extern int __cond_resched_softirq(void);
 
 static inline void cond_resched_rcu(void)
 {
-#if defined(CONFIG_DEBUG_ATOMIC_SLEEP) || !defined(CONFIG_PREEMPT_RCU)
+#if defined(CONFIG_DEBUG_ATOMIC_SLEEP) || !defined(CONFIG_TREE_PREEMPT_RCU)
 	rcu_read_unlock();
 	cond_resched();
 	rcu_read_lock();
