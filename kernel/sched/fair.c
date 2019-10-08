@@ -5511,10 +5511,6 @@ static inline int find_best_target(struct task_struct *p)
 static int energy_aware_wake_cpu(struct task_struct *p, int target, int sync)
 {
 	struct sched_domain *sd;
-/*int target_max_cap = INT_MAX;
-int target_cpu = task_cpu(p);
-xiaomi code confilcts Is it for energy_aware_wake_cpu? idk*/
-
 	struct sched_group *sg, *sg_target;
 	int target_max_cap = INT_MAX;
 	int target_cpu = -1;
@@ -5528,20 +5524,11 @@ xiaomi code confilcts Is it for energy_aware_wake_cpu? idk*/
 			return cpu;
 	}
 
-
-	/*
-	 * xiaomi code change from merge!
-	 */
 	sd = rcu_dereference(per_cpu(sd_ea, task_cpu(p)));
+	
 	if (!sd)
 		return target;
 
-	/*	
-	 sd = rcu_dereference(per_cpu(sd_llc, target));
-		if (!sd)
-			return target;
-	commit?
-	*/
 	sg = sd->groups;
 	sg_target = sg;
 
