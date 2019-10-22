@@ -368,7 +368,7 @@ static int update_userspace_power(struct sched_params __user *argp)
 {
 	int i;
 	int ret;
-	int cpu;
+	int cpu = 0;
 	struct cpu_activity_info *node;
 	struct cpu_static_info *sp, *clear_sp;
 	int mpidr = (argp->cluster << 8);
@@ -465,9 +465,11 @@ static long msm_core_ioctl(struct file *file, unsigned int cmd,
 	long ret = 0;
 	struct cpu_activity_info *node = NULL;
 	struct sched_params __user *argp = (struct sched_params __user *)arg;
-	int i, cpu = num_possible_cpus();
+	int i = 0, cpu = 0;
 	int mpidr;
 	int cluster, cpumask;
+
+	cpu = num_possible_cpus();
 
 	if (!argp)
 		return -EINVAL;

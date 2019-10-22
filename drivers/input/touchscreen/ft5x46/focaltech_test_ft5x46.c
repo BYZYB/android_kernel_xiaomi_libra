@@ -71,7 +71,7 @@ unsigned char FT5X46_TestItem_RawDataTest(struct i2c_client *client)
 	unsigned char strSwitch = 0;
 	unsigned char OriginValue = 0xff;
 	int index = 0;
-	int iRow, iCol;
+	int iRow = 0, iCol = 0;
 	int iValue = 0;
 	struct ft5x46_data *ft5x46 = i2c_get_clientdata(client);
 	struct ft5x46_ts_platform_data *pdata = ft5x46->dev->platform_data;

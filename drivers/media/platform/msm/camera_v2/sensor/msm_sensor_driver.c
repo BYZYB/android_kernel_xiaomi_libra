@@ -1452,7 +1452,7 @@ static int __init msm_sensor_driver_init(void)
 	CDBG("Enter");
 #ifdef CAMERA_MODULE_INFO
 	if (!camera_name_sysfs_inited) {
-		int rc_local;
+		int rc_local = 0;
 		camera_name_kobj = kobject_create_and_add("camera_name", NULL);
 		if (camera_name_kobj)
 			rc_local = sysfs_create_group(camera_name_kobj, &camera_name_attrs_group);

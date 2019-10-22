@@ -4731,7 +4731,7 @@ static ssize_t mxt_mutual_ref_write(struct file *filp, struct kobject *kobj,
 {
 	struct device *dev = container_of(kobj, struct device, kobj);
 	struct mxt_data *data = dev_get_drvdata(dev);
-	int chan_x, chan_y, max_nodes;
+	int chan_x = 0, chan_y = 0, max_nodes = 0;
 	s16* ref_buf;
 	int error = 0, i, j;
 	unsigned int value;
@@ -4827,7 +4827,7 @@ static ssize_t mxt_self_ref_write(struct file *filp, struct kobject *kobj,
 {
 	struct device *dev = container_of(kobj, struct device, kobj);
 	struct mxt_data *data = dev_get_drvdata(dev);
-	int chan_x, chan_y, chan_x_reserved, even_x_start, odd_x_start;
+	int chan_x = 0, chan_y = 0, chan_x_reserved = 0, even_x_start = 0, odd_x_start = 0;
 	s16* ref_buf;
 	int error = 0, i;
 	unsigned int value;
@@ -6481,7 +6481,7 @@ static ssize_t mxt_selftest_read(struct file *file, char __user *buf, size_t cou
 
 static ssize_t mxt_selftest_write(struct file *file, const char __user *buf, size_t count, loff_t *pos)
 {
-	int retval;
+	int retval = 0;
 
 	if (!strncmp(buf, "short", 5)) {
 		retval = short_test();
