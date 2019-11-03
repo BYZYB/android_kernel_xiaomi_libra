@@ -338,21 +338,6 @@ int register_cpu(struct cpu *cpu, int num)
 					   &dev_attr_crash_notes_size);
 #endif
 
-#ifdef CONFIG_SCHED_HMP
-	if (!error)
-		error = device_create_file(&cpu->dev,
-					 &dev_attr_sched_mostly_idle_load);
-	if (!error)
-		error = device_create_file(&cpu->dev,
-					 &dev_attr_sched_mostly_idle_nr_run);
-	if (!error)
-		error = device_create_file(&cpu->dev,
-					 &dev_attr_sched_mostly_idle_freq);
-	if (!error)
-		error = device_create_file(&cpu->dev,
-					 &dev_attr_sched_prefer_idle);
-#endif
-
 	return error;
 }
 
