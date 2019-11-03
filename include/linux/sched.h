@@ -2290,7 +2290,6 @@ static inline void sched_set_cluster_dstate(const cpumask_t *cluster_cpus,
 #endif
 
 extern int sched_set_wake_up_idle(struct task_struct *p, int wake_up_idle);
-extern u32 sched_get_wake_up_idle(struct task_struct *p);
 
 #ifdef CONFIG_SCHED_HMP
 
