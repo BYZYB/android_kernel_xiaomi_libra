@@ -50,7 +50,7 @@ extern unsigned int sysctl_sched_migration_fixup;
 extern unsigned int sysctl_sched_heavy_task_pct;
 extern unsigned int sysctl_sched_enable_power_aware;
 
-#if defined(CONFIG_SCHED_FREQ_INPUT) || defined(CONFIG_SCHED_HMP)
+#if defined(CONFIG_SCHED_FREQ_INPUT)
 extern unsigned int sysctl_sched_init_task_load_pct;
 #endif
 
@@ -59,33 +59,8 @@ extern int sysctl_sched_freq_inc_notify;
 extern int sysctl_sched_freq_dec_notify;
 #endif
 
-#ifdef CONFIG_SCHED_HMP
-extern unsigned int sysctl_sched_spill_nr_run;
-extern unsigned int sysctl_sched_spill_load_pct;
-extern unsigned int sysctl_sched_upmigrate_pct;
-extern unsigned int sysctl_sched_downmigrate_pct;
-extern int sysctl_sched_upmigrate_min_nice;
-extern unsigned int sysctl_sched_powerband_limit_pct;
-extern unsigned int sysctl_sched_boost;
-extern unsigned int sysctl_power_aware_timer_migration;
-extern unsigned int sysctl_early_detection_duration;
-
-#ifdef CONFIG_SCHED_QHMP
-extern unsigned int sysctl_sched_min_runtime;
-extern unsigned int sysctl_sched_small_task_pct;
-#else
-extern unsigned int sysctl_sched_lowspill_freq;
-extern unsigned int sysctl_sched_pack_freq;
-#if defined(CONFIG_SCHED_FREQ_INPUT)
-extern unsigned int sysctl_sched_new_task_windows;
-#endif
-#endif
-
-#else /* CONFIG_SCHED_HMP */
-
 #define sysctl_sched_enable_hmp_task_placement 0
 
-#endif /* CONFIG_SCHED_HMP */
 extern unsigned int sysctl_sched_is_big_little;
 extern unsigned int sysctl_sched_sync_hint_enable;
 

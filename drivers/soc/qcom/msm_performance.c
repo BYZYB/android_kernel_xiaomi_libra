@@ -83,8 +83,6 @@ static int init_cluster_control(void);
 static int rm_high_pwr_cost_cpus(struct cluster *cl);
 static int init_events_group(void);
 
-static DEFINE_PER_CPU(unsigned int, cpu_power_cost);
-
 struct load_stats {
 	u64 last_wallclock;
 	/* IO wait related */
@@ -1539,69 +1537,7 @@ static struct notifier_block perf_govinfo_nb = {
  */
 static int __ref rm_high_pwr_cost_cpus(struct cluster *cl)
 {
-	unsigned int cpu, i;
-	struct cpu_pwr_stats *per_cpu_info = get_cpu_pwr_stats();
-	struct cpu_pstate_pwr *costs;
-	unsigned int *pcpu_pwr;
-	unsigned int max_cost_cpu, max_cost;
-	int any_cpu = -1;
-
-	if (!per_cpu_info)
-		return -ENOSYS;
-
-	for_each_cpu(cpu, cl->cpus) {
-		costs = per_cpu_info[cpu].ptable;
-		if (!costs || !costs[0].freq)
-			continue;
-
-		i = 1;
-		while (costs[i].freq)
-			i++;
-
-		pcpu_pwr = &per_cpu(cpu_power_cost, cpu);
-		*pcpu_pwr = costs[i - 1].power;
-		any_cpu = (int)cpu;
-		pr_debug("msm_perf: CPU:%d Power:%u\n", cpu, *pcpu_pwr);
-	}
-
-	if (any_cpu < 0)
-		return -EAGAIN;
-
-	for (i = 0; i < cpumask_weight(cl->cpus); i++) {
-		max_cost = 0;
-		max_cost_cpu = cpumask_first(cl->cpus);
-
-		for_each_cpu(cpu, cl->cpus) {
-			pcpu_pwr = &per_cpu(cpu_power_cost, cpu);
-			if (max_cost < *pcpu_pwr) {
-				max_cost = *pcpu_pwr;
-				max_cost_cpu = cpu;
-			}
-		}
-
-		if (!cpu_online(max_cost_cpu))
-			goto end;
-
-		pr_debug("msm_perf: Offlining CPU%d Power:%d\n", max_cost_cpu,
-								max_cost);
-		cpumask_set_cpu(max_cost_cpu, cl->offlined_cpus);
-		if (cpu_down(max_cost_cpu)) {
-			cpumask_clear_cpu(max_cost_cpu, cl->offlined_cpus);
-			pr_debug("msm_perf: Offlining CPU%d failed\n",
-								max_cost_cpu);
-		}
-
-end:
-		pcpu_pwr = &per_cpu(cpu_power_cost, max_cost_cpu);
-		*pcpu_pwr = 0;
-		if (num_online_managed(cl->cpus) <= cl->max_cpu_request)
-			break;
-	}
-
-	if (num_online_managed(cl->cpus) > cl->max_cpu_request)
-		return -EAGAIN;
-	else
-		return 0;
+	return -ENOSYS;
 }
 
 /*
