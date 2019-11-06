@@ -19,18 +19,22 @@
 #include <linux/nodemask.h>
 #include <linux/of.h>
 #include <linux/sched.h>
-#include <linux/slab.h>
 #include <linux/sched_energy.h>
 
 #include <asm/cputype.h>
-#include <asm/smp_plat.h>
 #include <asm/topology.h>
 
 static DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
 
 unsigned long scale_cpu_capacity(struct sched_domain *sd, int cpu)
 {
+#ifdef CONFIG_CPU_FREQ
+	unsigned long max_freq_scale = cpufreq_scale_max_freq_capacity(cpu);
+
+	return per_cpu(cpu_scale, cpu) * max_freq_scale >> SCHED_CAPACITY_SHIFT;
+#else
 	return per_cpu(cpu_scale, cpu);
+#endif
 }
 
 static void set_capacity_scale(unsigned int cpu, unsigned long capacity)
@@ -204,13 +208,9 @@ static int __init parse_dt_topology(void)
 	 * Check that all cores are in the topology; the SMP code will
 	 * only mark cores described in the DT as possible.
 	 */
-	for_each_possible_cpu(cpu) {
-		if (cpu_topology[cpu].cluster_id == -1) {
-			pr_err("CPU%d: No topology information specified\n",
-			       cpu);
+	for_each_possible_cpu(cpu)
+		if (cpu_topology[cpu].cluster_id == -1)
 			ret = -EINVAL;
-		}
-	}
 
 out_map:
 	of_node_put(map);
@@ -225,7 +225,18 @@ out:
 struct cpu_topology cpu_topology[NR_CPUS];
 EXPORT_SYMBOL_GPL(cpu_topology);
 
-static inline const struct sched_group_energy *cpu_core_energy(int cpu)
+/* sd energy functions */
+static inline const struct sched_group_energy * const cpu_cluster_energy(int cpu)
+{
+	struct sched_group_energy *sge = sge_array[cpu][SD_LEVEL1];
+	if (!sge) {
+		pr_warn("Invalid sched_group_energy for Cluster%d\n", cpu);
+		return NULL;
+	}
+	return sge;
+}
+
+static inline const struct sched_group_energy * const cpu_core_energy(int cpu)
 {
 	struct sched_group_energy *sge = sge_array[cpu][SD_LEVEL0];
 
@@ -241,6 +252,20 @@ const struct cpumask *cpu_coregroup_mask(int cpu)
 {
 	return &cpu_topology[cpu].core_sibling;
 }
+
+static inline int cpu_corepower_flags(void)
+{
+	return SD_SHARE_PKG_RESOURCES  | SD_SHARE_POWERDOMAIN | \
+	       SD_SHARE_CAP_STATES;
+}
+
+static struct sched_domain_topology_level arm64_topology[] = {
+#ifdef CONFIG_SCHED_MC
+	{ cpu_coregroup_mask, cpu_corepower_flags, cpu_core_energy, SD_INIT_NAME(MC) },
+#endif
+	{ cpu_cpu_mask, NULL, cpu_cluster_energy, SD_INIT_NAME(DIE) },
+	{ NULL, },
+};
 
 static void update_cpu_capacity(unsigned int cpu)
 {
@@ -298,32 +323,24 @@ void store_cpu_topology(unsigned int cpuid)
 
 	mpidr = read_cpuid_mpidr();
 
+	/* Uniprocessor systems can rely on default topology values */
+	if (mpidr & MPIDR_UP_BITMASK)
+		return;
+
 	/* Create cpu topology mapping based on MPIDR. */
-	if (mpidr & MPIDR_UP_BITMASK) {
-		/* Uniprocessor system */
-		cpuid_topo->thread_id  = -1;
-		cpuid_topo->core_id    = MPIDR_AFFINITY_LEVEL(mpidr, 0);
-		cpuid_topo->cluster_id = 0;
-	} else if (mpidr & MPIDR_MT_BITMASK) {
+	if (mpidr & MPIDR_MT_BITMASK) {
 		/* Multiprocessor system : Multi-threads per core */
 		cpuid_topo->thread_id  = MPIDR_AFFINITY_LEVEL(mpidr, 0);
 		cpuid_topo->core_id    = MPIDR_AFFINITY_LEVEL(mpidr, 1);
-		cpuid_topo->cluster_id =
-			((mpidr & MPIDR_AFF_MASK(2)) >> mpidr_hash.shift_aff[2] |
-			 (mpidr & MPIDR_AFF_MASK(3)) >> mpidr_hash.shift_aff[3])
-			>> mpidr_hash.shift_aff[1] >> mpidr_hash.shift_aff[0];
+		cpuid_topo->cluster_id = MPIDR_AFFINITY_LEVEL(mpidr, 2);
 	} else {
 		/* Multiprocessor system : Single-thread per core */
 		cpuid_topo->thread_id  = -1;
 		cpuid_topo->core_id    = MPIDR_AFFINITY_LEVEL(mpidr, 0);
-		cpuid_topo->cluster_id =
-			((mpidr & MPIDR_AFF_MASK(1)) >> mpidr_hash.shift_aff[1] |
-			 (mpidr & MPIDR_AFF_MASK(2)) >> mpidr_hash.shift_aff[2] |
-			 (mpidr & MPIDR_AFF_MASK(3)) >> mpidr_hash.shift_aff[3])
-			>> mpidr_hash.shift_aff[0];
+		cpuid_topo->cluster_id = MPIDR_AFFINITY_LEVEL(mpidr, 1);
 	}
 
-	pr_debug("CPU%u: cluster %d core %d thread %d mpidr %llx\n",
+	pr_debug("CPU%u: cluster %d core %d thread %d mpidr %#016llx\n",
 		 cpuid, cpuid_topo->cluster_id, cpuid_topo->core_id,
 		 cpuid_topo->thread_id, mpidr);
 
@@ -335,46 +352,17 @@ topology_populated:
 static void __init reset_cpu_topology(void)
 {
 	unsigned int cpu;
-
 	for_each_possible_cpu(cpu) {
 		struct cpu_topology *cpu_topo = &cpu_topology[cpu];
-
 		cpu_topo->thread_id = -1;
 		cpu_topo->core_id = 0;
 		cpu_topo->cluster_id = -1;
-
 		cpumask_clear(&cpu_topo->core_sibling);
 		cpumask_set_cpu(cpu, &cpu_topo->core_sibling);
 		cpumask_clear(&cpu_topo->thread_sibling);
 		cpumask_set_cpu(cpu, &cpu_topo->thread_sibling);
 	}
 }
-
-static inline const struct sched_group_energy *cpu_cluster_energy(int cpu)
-{
-	struct sched_group_energy *sge = sge_array[cpu][SD_LEVEL1];
-
-	if (!sge) {
-		pr_warn("Invalid sched_group_energy for Cluster%d\n", cpu);
-		return NULL;
-	}
-
-	return sge;
-}
-
-static inline int cpu_corepower_flags(void)
-{
-	return SD_SHARE_PKG_RESOURCES  | SD_SHARE_POWERDOMAIN | \
-	       SD_SHARE_CAP_STATES;
-}
-
-static struct sched_domain_topology_level arm64_topology[] = {
-#ifdef CONFIG_SCHED_MC
-	{ cpu_coregroup_mask, cpu_corepower_flags, cpu_core_energy, SD_INIT_NAME(MC) },
-#endif
-	{ cpu_cpu_mask, 0, cpu_cluster_energy, SD_INIT_NAME(DIE) },
-	{ NULL, },
-};
 
 void __init init_cpu_topology(void)
 {

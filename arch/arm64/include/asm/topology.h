@@ -26,9 +26,6 @@ const struct cpumask *cpu_coregroup_mask(int cpu);
 
 struct sched_domain;
 
-extern unsigned long arch_scale_freq_capacity(struct sched_domain *sd, int cpu);
-DECLARE_PER_CPU(atomic_long_t, cpu_freq_capacity);
-
 #ifdef CONFIG_CPU_FREQ
 #define arch_scale_freq_capacity cpufreq_scale_freq_capacity
 
