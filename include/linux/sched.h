@@ -33,9 +33,6 @@ struct sched_param {
 
 #include <linux/smp.h>
 #include <linux/sem.h>
-#ifdef TJK_HMP
-#include <linux/shm.h>
-#endif
 #include <linux/signal.h>
 #include <linux/compiler.h>
 #include <linux/completion.h>
@@ -181,9 +178,6 @@ extern unsigned long nr_iowait(void);
 extern unsigned long nr_iowait_cpu(int cpu);
 extern void get_iowait_load(unsigned long *nr_waiters, unsigned long *load);
 
-extern void sched_update_nr_prod(int cpu, long delta, bool inc);
-extern void sched_get_nr_running_avg(int *avg, int *iowait_avg, int *big_avg);
-
 extern void calc_global_load(unsigned long ticks);
 
 #if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
@@ -282,17 +276,6 @@ extern char ___assert_task_state[1 - 2*!!(
 
 /* Task command name length */
 #define TASK_COMM_LEN 16
-
-extern const char *sched_window_reset_reasons[];
-
-enum task_event {
-	PUT_PREV_TASK   = 0,
-	PICK_NEXT_TASK  = 1,
-	TASK_WAKE       = 2,
-	TASK_MIGRATE    = 3,
-	TASK_UPDATE     = 4,
-	IRQ_UPDATE	= 5,
-};
 
 #include <linux/spinlock.h>
 
@@ -558,14 +541,6 @@ struct task_cputime {
 		.stime = 0,					\
 		.sum_exec_runtime = 0,				\
 	}
-
-#ifdef TJK_HMP
-#ifdef CONFIG_PREEMPT_COUNT
-#define PREEMPT_DISABLED	(1 + PREEMPT_ENABLED)
-#else
-#define PREEMPT_DISABLED	PREEMPT_ENABLED
-#endif
-#endif
 
 /*
  * Disable preemption until the scheduler is running.
@@ -906,6 +881,14 @@ enum cpu_idle_type {
 #define SCHED_CAPACITY_SHIFT	10
 #define SCHED_CAPACITY_SCALE	(1L << SCHED_CAPACITY_SHIFT)
 
+struct sched_capacity_reqs {
+	unsigned long cfs;
+	unsigned long rt;
+	unsigned long dl;
+
+	unsigned long total;
+};
+
 /*
  * sched-domains (multiprocessor balancing) declarations:
  */
@@ -1147,30 +1130,11 @@ struct load_weight {
 };
 
 struct sched_avg {
-	u64 last_runnable_update;
-	s64 decay_count;
-	/*
-	 * utilization_avg_contrib describes the amount of time that a
-	 * sched_entity is running on a CPU. It is based on running_avg_sum
-	 * and is scaled in the range [0..SCHED_LOAD_SCALE].
-	 * load_avg_contrib described the amount of time that a sched_entity
-	 * is runnable on a rq. It is based on both runnable_avg_sum and the
-	 * weight of the task.
-	 */
-	unsigned long load_avg_contrib, utilization_avg_contrib;
- 	/*
- 	 * These sums represent an infinite geometric series and so are bound
- 	 * above by 1024/(1-y).  Thus we only need a u32 to store them for all
- 	 * choices of y < 1-2^(-32)*1024.
-	 * running_avg_sum reflects the time that the sched_entity is
-	 * effectively running on the CPU.
-	 * runnable_avg_sum represents the amount of time a sched_entity is on
-	 * a runqueue which includes the running time that is monitored by
-	 * running_avg_sum.
-	 */
-	u32 runnable_avg_sum, avg_period, running_avg_sum;
+	u64 last_update_time, load_sum;
+	u32 util_sum, period_contrib;
+	unsigned long load_avg, util_avg;
 };
- 
+
 #ifdef CONFIG_SCHEDSTATS
 struct sched_statistics {
 	u64			wait_start;
@@ -1206,41 +1170,6 @@ struct sched_statistics {
 	u64			nr_wakeups_idle;
 };
 #endif
-
-#define RAVG_HIST_SIZE_MAX  5
-
-/* ravg represents frequency scaled cpu-demand of tasks */
-struct ravg {
-	/*
-	 * 'mark_start' marks the beginning of an event (task waking up, task
-	 * starting to execute, task being preempted) within a window
-	 *
-	 * 'sum' represents how runnable a task has been within current
-	 * window. It incorporates both running time and wait time and is
-	 * frequency scaled.
-	 *
-	 * 'sum_history' keeps track of history of 'sum' seen over previous
-	 * RAVG_HIST_SIZE windows. Windows where task was entirely sleeping are
-	 * ignored.
-	 *
-	 * 'demand' represents maximum sum seen over previous
-	 * sysctl_sched_ravg_hist_size windows. 'demand' could drive frequency
-	 * demand for tasks.
-	 *
-	 * 'curr_window' represents task's contribution to cpu busy time
-	 * statistics (rq->curr_runnable_sum) in current window
-	 *
-	 * 'prev_window' represents task's contribution to cpu busy time
-	 * statistics (rq->prev_runnable_sum) in previous window
-	 */
-	u64 mark_start;
-	u32 sum, demand;
-	u32 sum_history[RAVG_HIST_SIZE_MAX];
-#ifdef CONFIG_SCHED_FREQ_INPUT
-	u32 curr_window, prev_window;
-	u16 active_windows;
-#endif
-};
 
 struct sched_entity {
 	struct load_weight	load;		/* for load-balancing */
@@ -1753,9 +1682,6 @@ struct task_struct {
 	unsigned long timer_slack_ns;
 	unsigned long default_timer_slack_ns;
 
-#ifdef CONFIG_KASAN
-	unsigned int kasan_depth;
-#endif
 #ifdef CONFIG_FUNCTION_GRAPH_TRACER
 	/* Index of current stored address in ret_stack */
 	int curr_ret_stack;
@@ -2034,47 +1960,6 @@ static inline cputime_t task_gtime(struct task_struct *t)
 extern void task_cputime_adjusted(struct task_struct *p, cputime_t *ut, cputime_t *st);
 extern void thread_group_cputime_adjusted(struct task_struct *p, cputime_t *ut, cputime_t *st);
 
-extern int task_free_register(struct notifier_block *n);
-extern int task_free_unregister(struct notifier_block *n);
-
-struct sched_load {
-	unsigned long prev_load;
-	unsigned long new_task_load;
-};
-
-#if defined(CONFIG_SCHED_FREQ_INPUT)
-extern int sched_set_window(u64 window_start, unsigned int window_size);
-extern unsigned long sched_get_busy(int cpu);
-extern void sched_get_cpus_busy(struct sched_load *busy,
-				const struct cpumask *query_cpus);
-extern void sched_set_io_is_busy(int val);
-#ifdef CONFIG_SCHED_QHMP
-static inline int sched_update_freq_max_load(const cpumask_t *cpumask)
-{
-	return 0;
-}
-#else
-int sched_update_freq_max_load(const cpumask_t *cpumask);
-#endif
-#else
-static inline int sched_set_window(u64 window_start, unsigned int window_size)
-{
-	return -EINVAL;
-}
-static inline unsigned long sched_get_busy(int cpu)
-{
-	return 0;
-}
-static inline void sched_get_cpus_busy(struct sched_load *busy,
-				       const struct cpumask *query_cpus) {};
-static inline void sched_set_io_is_busy(int val) {};
-
-static inline int sched_update_freq_max_load(const cpumask_t *cpumask)
-{
-	return 0;
-}
-#endif
-
 /*
  * Per process flags
  */
@@ -2253,6 +2138,8 @@ extern void sched_set_cpu_cstate(int cpu, int cstate,
 			 int wakeup_energy, int wakeup_latency);
 extern void sched_set_cluster_dstate(const cpumask_t *cluster_cpus, int dstate,
 				int wakeup_energy, int wakeup_latency);
+extern int sched_set_wake_up_idle(struct task_struct *p, int wake_up_idle);
+extern u32 sched_get_wake_up_idle(struct task_struct *p);
 #else
 static inline void do_set_cpus_allowed(struct task_struct *p,
 				      const struct cpumask *new_mask)
@@ -2277,13 +2164,6 @@ static inline void sched_set_cluster_dstate(const cpumask_t *cluster_cpus,
 }
 #endif
 
-extern int sched_set_wake_up_idle(struct task_struct *p, int wake_up_idle);
-
-static inline int sched_set_boost(int enable)
-{
-	return -EINVAL;
-}
-
 #ifdef CONFIG_NO_HZ_COMMON
 void calc_load_enter_idle(void);
 void calc_load_exit_idle(void);
@@ -2296,13 +2176,6 @@ static inline void set_wake_up_idle(bool enabled)
 {
 	// do nothing
 }
-
-#ifndef CONFIG_CPUMASK_OFFSTACK
-static inline int set_cpus_allowed(struct task_struct *p, cpumask_t new_mask)
-{
-	return set_cpus_allowed_ptr(p, &new_mask);
-}
-#endif
 
 /*
  * Do not use outside of architecture code which knows its limitations.
@@ -2369,7 +2242,7 @@ extern unsigned long long
 task_sched_runtime(struct task_struct *task);
 
 /* sched_exec is called by processes performing an exec */
-#if defined(CONFIG_SMP)
+#ifdef CONFIG_SMP
 extern void sched_exec(void);
 #else
 #define sched_exec()   {}
@@ -3246,18 +3119,18 @@ static inline void mm_update_next_owner(struct mm_struct *mm)
 {
 }
 static inline void mm_init_owner(struct mm_struct *mm, struct task_struct *p) {}
-#endif /* CONFIG_MEMCG */
+#endif /* CONFIG_MM_OWNER */
 
 static inline unsigned long task_rlimit(const struct task_struct *tsk,
 		unsigned int limit)
 {
-	return ACCESS_ONCE(tsk->signal->rlim[limit].rlim_cur);
+	return READ_ONCE(tsk->signal->rlim[limit].rlim_cur);
 }
 
 static inline unsigned long task_rlimit_max(const struct task_struct *tsk,
 		unsigned int limit)
 {
-	return ACCESS_ONCE(tsk->signal->rlim[limit].rlim_max);
+	return READ_ONCE(tsk->signal->rlim[limit].rlim_cur);
 }
 
 static inline unsigned long rlimit(unsigned int limit)
