@@ -61,7 +61,6 @@
 #include <linux/page-debug-flags.h>
 #include <linux/hugetlb.h>
 #include <linux/sched/rt.h>
-#include <linux/cpu_input_boost.h>
 
 #include <asm/sections.h>
 #include <asm/tlbflush.h>
@@ -2659,9 +2658,6 @@ rebalance:
 			goto restart;
 		}
 	}
-
-	/* Boost when memory is low so allocation latency doesn't get too bad */
-	cpu_input_boost_kick_max(100);
 
 	/* Check if we should retry the allocation */
 	pages_reclaimed += did_some_progress;
