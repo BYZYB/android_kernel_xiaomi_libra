@@ -64,6 +64,16 @@ typedef enum
 // classifier ID is coded as 0-3: tsid, 4-5:direction
 #define LIM_MAKE_CLSID(tsid, dir) (((tsid) & 0x0F) | (((dir) & 0x03) << 4))
 
+#define LIM_SET_STA_BA_STATE(pSta, tid, newVal) \
+{\
+    pSta->baState = ((pSta->baState | (0x3 << tid*2)) & ((newVal << tid*2) | ~(0x3 << tid*2)));\
+}
+
+#define LIM_GET_STA_BA_STATE(pSta, tid, pCurVal)\
+{\
+    *pCurVal = (tLimBAState)(((pSta->baState >> tid*2) & 0x3));\
+}
+
 #define VHT_MCS_3x3_MASK    0x30
 #define VHT_MCS_2x2_MASK    0x0C
 
@@ -344,12 +354,51 @@ tANI_U32 result = 1, i;
   return result;
 }
 
+
+
+tSirRetStatus limPostMlmAddBAReq( tpAniSirGlobal pMac,
+    tpDphHashNode pStaDs,
+    tANI_U8 tid, tANI_U16 startingSeqNum,tpPESession psessionEntry);
+tSirRetStatus limPostMlmAddBARsp( tpAniSirGlobal pMac,
+    tSirMacAddr peerMacAddr,
+    tSirMacStatusCodes baStatusCode,
+    tANI_U8 baDialogToken,
+    tANI_U8 baTID,
+    tANI_U8 baPolicy,
+    tANI_U16 baBufferSize,
+    tANI_U16 baTimeout,
+    tpPESession psessionEntry);
+tSirRetStatus limPostMlmDelBAReq( tpAniSirGlobal pMac,
+    tpDphHashNode pSta,
+    tANI_U8 baDirection,
+    tANI_U8 baTID,
+    tSirMacReasonCodes baReasonCode ,
+    tpPESession psessionEntry);
+tSirRetStatus limPostMsgAddBAReq( tpAniSirGlobal pMac,
+    tpDphHashNode pSta,
+    tANI_U8 baDialogToken,
+    tANI_U8 baTID,
+    tANI_U8 baPolicy,
+    tANI_U16 baBufferSize,
+    tANI_U16 baTimeout,
+    tANI_U16 baSSN,
+    tANI_U8 baDirection,
+    tpPESession psessionEntry);
+tSirRetStatus limPostMsgDelBAInd( tpAniSirGlobal pMac,
+    tpDphHashNode pSta,
+    tANI_U8 baTID,
+    tANI_U8 baDirection,
+    tpPESession psessionEntry);
+
 tSirRetStatus limPostSMStateUpdate(tpAniSirGlobal pMac,
     tANI_U16 StaIdx,
     tSirMacHTMIMOPowerSaveState MIMOPSState,
     tANI_U8 *pPeerStaMac, tANI_U8 sessionId);
 
 void limDeleteStaContext(tpAniSirGlobal pMac, tpSirMsgQ limMsg);
+void limProcessAddBaInd(tpAniSirGlobal pMac, tpSirMsgQ limMsg);
+void limDeleteBASessions(tpAniSirGlobal pMac, tpPESession pSessionEntry, tANI_U32 baDirection);
+void limDelAllBASessions(tpAniSirGlobal pMac);
 void limDeleteDialogueTokenList(tpAniSirGlobal pMac);
 tSirRetStatus limSearchAndDeleteDialogueToken(tpAniSirGlobal pMac, tANI_U8 token, tANI_U16 assocId, tANI_U16 tid);
 void limRessetScanChannelInfo(tpAniSirGlobal pMac);
@@ -404,15 +453,13 @@ uint32_t lim_get_max_rate_flags(tpAniSirGlobal mac_ctx, tpDphHashNode sta_ds);
 
 #ifdef WLAN_FEATURE_11AC
 tANI_BOOLEAN limCheckVHTOpModeChange( tpAniSirGlobal pMac, tpPESession psessionEntry,
-                                      tANI_U8 chanWidth, tANI_U8 chanMode, tANI_U8 staId, tANI_U8 *peerMac);
+                                      tANI_U8 chanWidth, tANI_U8 staId, tANI_U8 *peerMac);
 tANI_BOOLEAN limSetNssChange( tpAniSirGlobal pMac, tpPESession psessionEntry,
                               tANI_U8 rxNss, tANI_U8 staId, tANI_U8 *peerMac);
 tANI_BOOLEAN limCheckMembershipUserPosition( tpAniSirGlobal pMac, tpPESession psessionEntry,
                                              tANI_U32 membership, tANI_U32 userPosition,
                                              tANI_U8 staId);
 #endif
-
-#ifdef FEATURE_WLAN_DIAG_SUPPORT
 
 typedef enum
 {
@@ -494,8 +541,14 @@ typedef enum
     WLAN_PE_DIAG_AUTH_TIMEOUT,
 } WLAN_PE_DIAG_EVENT_TYPE;
 
+#ifdef FEATURE_WLAN_DIAG_SUPPORT
 void limDiagEventReport(tpAniSirGlobal pMac, tANI_U16 eventType, tpPESession pSessionEntry, tANI_U16 status, tANI_U16 reasonCode);
-
+#else
+static inline void limDiagEventReport(tpAniSirGlobal pMac, tANI_U16 eventType,
+			tpPESession pSessionEntry, tANI_U16 status,
+			tANI_U16 reasonCode)
+{
+}
 #endif /* FEATURE_WLAN_DIAG_SUPPORT */
 
 void peSetResumeChannel(tpAniSirGlobal pMac, tANI_U16 channel, ePhyChanBondState cbState);
@@ -621,9 +674,5 @@ tANI_U8 lim_compute_ext_cap_ie_length (tDot11fIEExtCap *ext_cap);
 bool lim_is_robust_mgmt_action_frame(uint8_t action_catagory);
 void lim_update_caps_info_for_bss(tpAniSirGlobal mac_ctx,
 				uint16_t *caps, uint16_t bss_caps);
-void lim_parse_beacon_for_tim(tpAniSirGlobal mac_ctx, uint8_t* rx_packet_info,
-	tpPESession session);
-eHalStatus limP2PActionCnf(tpAniSirGlobal mac_ctx,
-				uint32_t tx_complete_success);
 
 #endif /* __LIM_UTILS_H */

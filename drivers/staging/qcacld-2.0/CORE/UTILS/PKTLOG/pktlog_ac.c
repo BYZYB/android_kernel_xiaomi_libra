@@ -314,7 +314,7 @@ __pktlog_enable(struct ol_softc *scn, int32_t log_state)
 	if (!scn) {
 		printk("%s: Invalid scn context\n", __func__);
 		ASSERT(0);
-		return A_ERROR;
+		return -1;
 	}
 
 	txrx_pdev = scn->pdev_txrx_handle;
@@ -328,7 +328,7 @@ __pktlog_enable(struct ol_softc *scn, int32_t log_state)
 	if (!pl_dev) {
 		printk("%s: Invalid pktlog context\n", __func__);
 		ASSERT(0);
-		return A_ERROR;
+		return -1;
 	}
 
 	pl_info = pl_dev->pl_info;
@@ -347,7 +347,7 @@ __pktlog_enable(struct ol_softc *scn, int32_t log_state)
 			if (!pl_info->buf) {
 				printk("%s: pktlog buf alloc failed\n", __func__);
 				ASSERT(0);
-				return A_ERROR;
+				return -1;
 			}
 		}
 
@@ -369,13 +369,12 @@ __pktlog_enable(struct ol_softc *scn, int32_t log_state)
 		if (wdi_pktlog_subscribe(txrx_pdev, log_state)) {
 			printk("Unable to subscribe to the WDI %s\n",
 			       __func__);
-			return A_ERROR;
+			return -1;
 		}
 		/* WMI command to enable pktlog on the firmware */
 		if (pktlog_enable_tgt(scn, log_state)) {
-			adf_os_print("Device cannot be enabled, %s\n", __func__);
-			wdi_pktlog_unsubscribe(txrx_pdev, pl_info->log_state);
-			return A_ERROR;
+			printk("Device cannot be enabled, %s\n", __func__);
+			return -1;
 		} else {
 			pl_dev->tgt_pktlog_enabled = true;
 		}
@@ -383,16 +382,17 @@ __pktlog_enable(struct ol_softc *scn, int32_t log_state)
 		pl_dev->pl_funcs->pktlog_disable(scn);
 		pl_dev->tgt_pktlog_enabled = false;
 		if (wdi_pktlog_unsubscribe(txrx_pdev, pl_info->log_state)) {
-			adf_os_print("%s: Cannot unsubscribe pktlog from the WDI\n",
-				__func__);
-			return A_ERROR;
+			printk("Cannot unsubscribe pktlog from the WDI\n");
+			return -1;
 		}
 	}
 
 	pl_info->log_state = log_state;
 	return 0;
-
 }
+
+#define ONE_MEGABYTE (1024 * 1024)
+#define MAX_ALLOWED_PKTLOG_SIZE (16 * ONE_MEGABYTE)
 
 int pktlog_enable(struct ol_softc *scn, int32_t log_state)
 {
@@ -424,8 +424,6 @@ int pktlog_enable(struct ol_softc *scn, int32_t log_state)
 	return error;
 }
 
-#define ONE_MEGABYTE (1024 * 1024)
-#define MAX_ALLOWED_PKTLOG_SIZE (16 * ONE_MEGABYTE)
 
 static int
 __pktlog_setsize(struct ol_softc *scn, int32_t size)
