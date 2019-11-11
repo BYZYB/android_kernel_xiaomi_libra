@@ -158,7 +158,6 @@ VPATH		:= $(srctree)$(if $(KBUILD_EXTMOD),:$(KBUILD_EXTMOD))
 
 export srctree objtree VPATH
 
-
 # SUBARCH tells the usermode build what the underlying arch is.  That is set
 # first, and if a usermode build is happening, the "ARCH=um" on the command
 # line overrides the setting of ARCH below.  If a native build is happening,
@@ -367,12 +366,8 @@ LINUXINCLUDE    := \
 		-Iinclude \
 		$(USERINCLUDE)
 
-KBUILD_CPPFLAGS := -O3 -D__KERNEL__
-KBUILD_CFLAGS   := -O3 -g0 -pipe \
-		   -fno-strict-aliasing -fno-common \
-		   -fno-delete-null-pointer-checks \
-		   -std=gnu89
-KBUILD_CFLAGS	+= -pipe
+KBUILD_CPPFLAGS := -O3 -g0 -pipe -D__KERNEL__
+KBUILD_CFLAGS   := -O3 -g0 -pipe -mcpu=cortex-a57.cortex-a53 -mtune=cortex-a57.cortex-a53 -fno-strict-aliasing -fno-common -fno-delete-null-pointer-checks -std=gnu89
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__

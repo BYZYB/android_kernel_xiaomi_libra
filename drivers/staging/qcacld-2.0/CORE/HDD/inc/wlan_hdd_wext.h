@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2018 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -334,6 +334,8 @@ typedef struct hdd_wext_state_s
    v_BOOL_t isESEConnection;
    eCsrAuthType collectedAuthType; /* Collected from ALL SIOCSIWAUTH Ioctls. Will be negotiatedAuthType - in tCsrProfile */
 #endif
+   /* Wireless statistics */
+   struct iw_statistics iw_stats;
 }hdd_wext_state_t;
 
 typedef struct ccp_freq_chan_map_s{
@@ -423,8 +425,6 @@ extern void *mem_alloc_copy_from_user_helper(const void *wrqu_data, size_t len);
 extern VOS_STATUS wlan_hdd_get_linkspeed_for_peermac(hdd_adapter_t *pAdapter,
                                                      tSirMacAddr macAddress);
 void hdd_clearRoamProfileIe( hdd_adapter_t *pAdapter);
-void hdd_GetClassA_statisticsCB(void *pStats, void *pContext);
-void hdd_GetLink_SpeedCB(tSirLinkSpeedInfo *pLinkSpeed, void *pContext);
 
 VOS_STATUS wlan_hdd_check_ula_done(hdd_adapter_t *pAdapter);
 
@@ -460,7 +460,7 @@ VOS_STATUS iw_set_tdls_params(struct net_device *dev, struct iw_request_info *in
 #endif
 
 #ifdef WLAN_FEATURE_PACKET_FILTERING
-int wlan_hdd_set_mc_addr_list(hdd_adapter_t *pAdapter, v_U8_t set);
+void wlan_hdd_set_mc_addr_list(hdd_adapter_t *pAdapter, v_U8_t set);
 #endif
 void* wlan_hdd_change_country_code_callback(void *pAdapter);
 
@@ -475,7 +475,7 @@ int wlan_hdd_update_phymode(struct net_device *net, tHalHandle hal,
 int process_wma_set_command_twoargs(int sessid, int paramid,
                                     int sval, int ssecval, int vpdev);
 
-void hdd_GetTemperatureCB(int temperature, void *pContext);
-VOS_STATUS wlan_hdd_get_temperature(hdd_adapter_t *pAdapter,
+void hdd_GetTemperatureCB(int temperature, void *cookie);
+VOS_STATUS wlan_hdd_get_temperature(hdd_adapter_t *adapter_ptr,
         union iwreq_data *wrqu, char *extra);
 #endif // __WEXT_IW_H__

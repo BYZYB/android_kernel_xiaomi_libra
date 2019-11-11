@@ -73,6 +73,11 @@ static void limProcessMlmReassocReq(tpAniSirGlobal, tANI_U32 *);
 static void limProcessMlmDisassocReq(tpAniSirGlobal, tANI_U32 *);
 static void limProcessMlmDeauthReq(tpAniSirGlobal, tANI_U32 *);
 static void limProcessMlmSetKeysReq(tpAniSirGlobal, tANI_U32 *);
+
+static void limProcessMlmAddBAReq( tpAniSirGlobal, tANI_U32 * );
+static void limProcessMlmAddBARsp( tpAniSirGlobal, tANI_U32 * );
+static void limProcessMlmDelBAReq( tpAniSirGlobal, tANI_U32 * );
+
 // MLM Timeout event handler templates
 static void limProcessMinChannelTimeout(tpAniSirGlobal);
 static void limProcessMaxChannelTimeout(tpAniSirGlobal);
@@ -159,6 +164,9 @@ limProcessMlmReqMessages(tpAniSirGlobal pMac, tpSirMsgQ Msg)
                                             break;
         case SIR_LIM_DISASSOC_ACK_TIMEOUT:  limProcessDisassocAckTimeout(pMac); break;
         case SIR_LIM_DEAUTH_ACK_TIMEOUT:    limProcessDeauthAckTimeout(pMac); break;
+        case LIM_MLM_ADDBA_REQ:             limProcessMlmAddBAReq( pMac, Msg->bodyptr ); break;
+        case LIM_MLM_ADDBA_RSP:             limProcessMlmAddBARsp( pMac, Msg->bodyptr ); break;
+        case LIM_MLM_DELBA_REQ:             limProcessMlmDelBAReq( pMac, Msg->bodyptr ); break;
         case LIM_MLM_TSPEC_REQ:
         default:
             break;
@@ -950,6 +958,7 @@ limSendHalStartScanReq(tpAniSirGlobal pMac, tANI_U8 channelNum, tLimLimHalScanSt
         SET_LIM_PROCESS_DEFD_MESGS(pMac, false);
 
         MTRACE(macTraceMsgTx(pMac, NO_SESSION, msg.type));
+        limLog(pMac, LOG1, FL("Channel %d"), channelNum);
 
             rc = wdaPostCtrlMsg(pMac, &msg);
         if (rc == eSIR_SUCCESS) {
@@ -1416,6 +1425,88 @@ error:
 
     return;
 }
+/**
+ * limSetOemDataReqModeFailed()
+ *
+ * FUNCTION:
+ *  This function is used as callback to resume link after the suspend fails while
+ *  starting oem data req mode.
+ * LOGIC:
+ *  NA
+ *
+ * ASSUMPTIONS:
+ *  NA
+ *
+ * NOTE:
+ *
+ * @param pMac - Pointer to Global MAC structure
+ * @return None
+ */
+
+void limSetOemDataReqModeFailed(tpAniSirGlobal pMac, eHalStatus status, tANI_U32* data)
+{
+    tpLimMlmOemDataRsp pMlmOemDataRsp;
+
+    pMac->lim.gLimMlmState = pMac->lim.gLimPrevMlmState;
+    MTRACE(macTrace(pMac, TRACE_CODE_MLM_STATE, NO_SESSION, pMac->lim.gLimMlmState));
+
+    pMlmOemDataRsp = vos_mem_malloc(sizeof(tLimMlmOemDataRsp));
+    if ( NULL == pMlmOemDataRsp )
+    {
+        limLog(pMac->hHdd, LOGP, FL("OEM_DATA: memory allocation for pMlmOemDataRsp failed under suspend link failure"));
+        return;
+    }
+
+    if (NULL != pMac->lim.gpLimMlmOemDataReq)
+    {
+        vos_mem_free(pMac->lim.gpLimMlmOemDataReq);
+        pMac->lim.gpLimMlmOemDataReq = NULL;
+    }
+
+    vos_mem_set(pMlmOemDataRsp, sizeof(tLimMlmOemDataRsp), 0);
+
+    limPostSmeMessage(pMac, LIM_MLM_OEM_DATA_CNF, (tANI_U32*)pMlmOemDataRsp);
+
+    return;
+}
+
+/**
+ * limSetOemDataReqMode()
+ *
+ *FUNCTION:
+ * This function is called to setup system into OEM DATA REQ mode
+ *
+ *LOGIC:
+ * NA
+ *
+ *ASSUMPTIONS:
+ * NA
+ *
+ *NOTE:
+ *
+ * @param  pMac - Pointer to Global MAC structure
+ * @return None
+ */
+
+void limSetOemDataReqMode(tpAniSirGlobal pMac, eHalStatus status, tANI_U32* data)
+{
+    if(status != eHAL_STATUS_SUCCESS)
+    {
+        limLog(pMac, LOGE, FL("OEM_DATA: failed in suspend link"));
+        /* If failed to suspend the link, there is no need
+         * to resume link. Return failure.
+         */
+        limSetOemDataReqModeFailed(pMac, status, data);
+    }
+    else
+    {
+        PELOGE(limLog(pMac, LOGE, FL("OEM_DATA: Calling limSendHalOemDataReq"));)
+        limSendHalOemDataReq(pMac);
+    }
+
+    return;
+} /*** end limSendHalOemDataReq() ***/
+
 #endif //FEATURE_OEM_DATA_SUPPORT
 
 static void
@@ -1427,6 +1518,7 @@ mlm_add_sta(
     tpPESession     psessionEntry)  //psessionEntry  may required in future
 {
     tANI_U32 val;
+    int      i;
     tANI_U32 selfStaDot11Mode = 0;
 
     wlan_cfgGetInt(pMac, WNI_CFG_DOT11_MODE, &selfStaDot11Mode);
@@ -1514,6 +1606,13 @@ mlm_add_sta(
      {
          pSta->p2pCapableSta = 1;
      }
+
+    //Disable BA. It will be set as part of ADDBA negotiation.
+    for( i = 0; i < STACFG_MAX_TC; i++ )
+    {
+        pSta->staTCParams[i].txUseBA = eBA_DISABLE;
+        pSta->staTCParams[i].rxUseBA = eBA_DISABLE;
+    }
 
 }
 
@@ -1639,9 +1738,6 @@ limMlmAddBss (
                  pMac->roam.configParam.rx_aggregation_size;
     }
     pAddBssParams->dot11_mode = psessionEntry->dot11mode;
-
-    pAddBssParams->beacon_tx_rate = pMlmStartReq->beacon_tx_rate;
-
     limLog(pMac, LOG2, FL("dot11_mode:%d"), pAddBssParams->dot11_mode);
 
     msgQ.type       = WDA_ADD_BSS_REQ;
@@ -1946,10 +2042,8 @@ static void limProcessMlmOemDataReq(tpAniSirGlobal pMac, tANI_U32 *pMsgBuf)
 
         limPrintMlmState(pMac, LOGW, pMac->lim.gLimMlmState);
 
-        /* Free up incoming buffer */
-        if (data_req->data)
-            vos_mem_free(data_req->data);
-        vos_mem_free(data_req);
+        /// Free up buffer allocated
+        vos_mem_free(pMsgBuf);
 
         /// Return Meas confirm with INVALID_PARAMETERS
         pMlmOemDataRsp = vos_mem_malloc(sizeof(tLimMlmOemDataRsp));
@@ -2730,10 +2824,12 @@ limProcessMlmDisassocReqNtf(tpAniSirGlobal pMac, eHalStatus suspendStatus, tANI_
         mlmDisassocCnf.resultCode = eSIR_SME_INVALID_PARAMETERS;
         goto end;
     }
-    limLog(pMac, LOG1,FL("Process DisAssoc Req on sessionID %d Systemrole %d "
-    "mlmstate %d from: "MAC_ADDRESS_STR), pMlmDisassocReq->sessionId,
-    GET_LIM_SYSTEM_ROLE(psessionEntry), psessionEntry->limMlmState,
-    MAC_ADDR_ARRAY(pMlmDisassocReq->peerMacAddr));
+    limLog(pMac, LOGE, FL("Process DisAssoc Req on sessionID %d Systemrole %d "
+    "reason code: %d mlmstate %d from: "MAC_ADDRESS_STR),
+        pMlmDisassocReq->sessionId,
+        GET_LIM_SYSTEM_ROLE(psessionEntry), pMlmDisassocReq->reasonCode,
+        psessionEntry->limMlmState,
+        MAC_ADDR_ARRAY(pMlmDisassocReq->peerMacAddr));
 
     sirCopyMacAddr(currentBssId,psessionEntry->bssId);
 
@@ -3607,34 +3703,34 @@ tLimMlmRemoveKeyCnf  mlmRemoveKeyCnf;
         return;
     }
 
-  /**
-    * Check if there exists a context for the
-    * peer entity for which keys need to be removed.
-    */
-  pStaDs = dphLookupHashEntry( pMac, pMlmRemoveKeyReq->peerMacAddr, &aid, &psessionEntry->dph.dphHashTable );
-  if ((pStaDs == NULL) ||
-         (pStaDs &&
-         (pStaDs->mlmStaContext.mlmState !=
-                       eLIM_MLM_LINK_ESTABLISHED_STATE)))
-  {
-     /**
-       * Received LIM_MLM_REMOVEKEY_REQ for STA
-       * that does not have context or in some
-       * transit state. Log error.
-       */
-      limLog( pMac, LOGW,
-          FL("Received MLM_REMOVEKEYS_REQ for STA that either has no context or in some transit state, Addr = "));
-      limPrintMacAddr( pMac, pMlmRemoveKeyReq->peerMacAddr, LOGW );
+    /**
+      * Check if there exists a context for the
+      * peer entity for which keys need to be removed.
+      */
+    pStaDs = dphLookupHashEntry( pMac, pMlmRemoveKeyReq->peerMacAddr, &aid, &psessionEntry->dph.dphHashTable );
+    if ((pStaDs == NULL) ||
+           (pStaDs &&
+           (pStaDs->mlmStaContext.mlmState !=
+                         eLIM_MLM_LINK_ESTABLISHED_STATE)))
+    {
+       /**
+         * Received LIM_MLM_REMOVEKEY_REQ for STA
+         * that does not have context or in some
+         * transit state. Log error.
+         */
+        limLog( pMac, LOGW,
+            FL("Received MLM_REMOVEKEYS_REQ for STA that either has no context or in some transit state, Addr = "));
+        limPrintMacAddr( pMac, pMlmRemoveKeyReq->peerMacAddr, LOGW );
 
-      // Prepare and Send LIM_MLM_REMOVEKEY_CNF
-      mlmRemoveKeyCnf.resultCode = eSIR_SME_INVALID_PARAMETERS;
-      mlmRemoveKeyCnf.sessionId = pMlmRemoveKeyReq->sessionId;
+        // Prepare and Send LIM_MLM_REMOVEKEY_CNF
+        mlmRemoveKeyCnf.resultCode = eSIR_SME_INVALID_PARAMETERS;
+        mlmRemoveKeyCnf.sessionId = pMlmRemoveKeyReq->sessionId;
 
 
-      goto end;
-  }
-  else
-    staIdx = pStaDs->staIndex;
+        goto end;
+    }
+    else
+        staIdx = pStaDs->staIndex;
 
 
 
@@ -3682,6 +3778,8 @@ limProcessMinChannelTimeout(tpAniSirGlobal pMac)
     if (pMac->lim.gLimMlmState == eLIM_MLM_WT_PROBE_RESP_STATE &&
         pMac->lim.gLimHalScanState != eLIM_HAL_FINISH_SCAN_WAIT_STATE)
     {
+        PELOG1(limLog(pMac, LOG1, FL("Scanning : min channel timeout occurred"));)
+
         /// Min channel timer timed out
         pMac->lim.limTimers.gLimPeriodicProbeReqTimer.sessionId = 0xff;
         limDeactivateAndChangeTimer(pMac, eLIM_MIN_CHANNEL_TIMER);
@@ -4461,6 +4559,254 @@ limCompleteMlmScan(tpAniSirGlobal pMac, tSirResultCodes retCode)
     limPostSmeMessage(pMac, LIM_MLM_SCAN_CNF, (tANI_U32 *) &mlmScanCnf);
 
 } /*** limCompleteMlmScan() ***/
+
+/**
+ * \brief Setup an A-MPDU/BA session
+ *
+ * \sa limProcessMlmAddBAReq
+ *
+ * \param pMac The global tpAniSirGlobal object
+ *
+ * \param pMsgBuf The MLME ADDBA Req message buffer
+ *
+ * \return none
+ */
+void limProcessMlmAddBAReq( tpAniSirGlobal pMac,
+    tANI_U32 *pMsgBuf )
+{
+tSirRetStatus status = eSIR_SUCCESS;
+tpLimMlmAddBAReq pMlmAddBAReq;
+tpLimMlmAddBACnf pMlmAddBACnf;
+  tpPESession     psessionEntry;
+
+  if(pMsgBuf == NULL)
+  {
+      PELOGE(limLog(pMac, LOGE,FL("Buffer is Pointing to NULL"));)
+           return;
+  }
+
+  pMlmAddBAReq = (tpLimMlmAddBAReq) pMsgBuf;
+  if((psessionEntry = peFindSessionBySessionId(pMac,pMlmAddBAReq->sessionId))== NULL)
+  {
+      PELOGE(limLog(pMac, LOGE,
+               FL("session does not exist for given sessionId"));)
+      vos_mem_free(pMsgBuf);
+      return;
+  }
+
+
+  // Send ADDBA Req over the air
+  status = limSendAddBAReq( pMac, pMlmAddBAReq,psessionEntry);
+
+  //
+  // Respond immediately to LIM, only if MLME has not been
+  // successfully able to send WDA_ADDBA_REQ to HAL.
+  // Else, LIM_MLM_ADDBA_CNF will be sent after receiving
+  // ADDBA Rsp from peer entity
+  //
+  if( eSIR_SUCCESS != status )
+  {
+    // Allocate for LIM_MLM_ADDBA_CNF
+
+    pMlmAddBACnf = vos_mem_malloc(sizeof( tLimMlmAddBACnf ));
+    if ( NULL == pMlmAddBACnf )
+    {
+      limLog( pMac, LOGP,
+          FL("AllocateMemory failed"));
+      vos_mem_free(pMsgBuf);
+      return;
+    }
+    else
+    {
+        vos_mem_set((void *) pMlmAddBACnf, sizeof( tLimMlmAddBACnf ), 0);
+        vos_mem_copy((void *) pMlmAddBACnf->peerMacAddr,
+                     (void *) pMlmAddBAReq->peerMacAddr,
+                     sizeof( tSirMacAddr ));
+
+      pMlmAddBACnf->baDialogToken = pMlmAddBAReq->baDialogToken;
+      pMlmAddBACnf->baTID = pMlmAddBAReq->baTID;
+      pMlmAddBACnf->baPolicy = pMlmAddBAReq->baPolicy;
+      pMlmAddBACnf->baBufferSize = pMlmAddBAReq->baBufferSize;
+      pMlmAddBACnf->baTimeout = pMlmAddBAReq->baTimeout;
+      pMlmAddBACnf->sessionId = pMlmAddBAReq->sessionId;
+
+      // Update the result code
+      pMlmAddBACnf->addBAResultCode = eSIR_MAC_UNSPEC_FAILURE_STATUS;
+
+      limPostSmeMessage( pMac,
+          LIM_MLM_ADDBA_CNF,
+          (tANI_U32 *) pMlmAddBACnf );
+    }
+
+    // Restore MLME state
+    psessionEntry->limMlmState = psessionEntry->limPrevMlmState;
+    MTRACE(macTrace(pMac, TRACE_CODE_MLM_STATE, psessionEntry->peSessionId, psessionEntry->limMlmState));
+
+  }
+
+  // Free the buffer allocated for tLimMlmAddBAReq
+  vos_mem_free(pMsgBuf);
+
+}
+
+/**
+ * \brief Send an ADDBA Rsp to peer STA in response
+ * to an ADDBA Req received earlier
+ *
+ * \sa limProcessMlmAddBARsp
+ *
+ * \param pMac The global tpAniSirGlobal object
+ *
+ * \param pMsgBuf The MLME ADDBA Rsp message buffer
+ *
+ * \return none
+ */
+void limProcessMlmAddBARsp( tpAniSirGlobal pMac,
+    tANI_U32 *pMsgBuf )
+{
+tpLimMlmAddBARsp pMlmAddBARsp;
+   tANI_U16 aid;
+   tpDphHashNode pSta;
+   tpPESession  psessionEntry;
+
+
+    if(pMsgBuf == NULL)
+    {
+           PELOGE(limLog(pMac, LOGE,FL("Buffer is Pointing to NULL"));)
+           return;
+    }
+
+    pMlmAddBARsp = (tpLimMlmAddBARsp) pMsgBuf;
+
+    if(( psessionEntry = peFindSessionBySessionId(pMac,pMlmAddBARsp->sessionId))== NULL)
+    {
+        PELOGE(limLog(pMac, LOGE,
+                  FL("session does not exist for given session ID"));)
+        vos_mem_free(pMsgBuf);
+        return;
+    }
+
+
+  // Send ADDBA Rsp over the air
+  if( eSIR_SUCCESS != limSendAddBARsp( pMac,pMlmAddBARsp,psessionEntry))
+  {
+    limLog( pMac, LOGE,
+    FL("Failed to send ADDBA Rsp to peer "));
+    limPrintMacAddr( pMac, pMlmAddBARsp->peerMacAddr, LOGE );
+    /* Clean the BA context maintained by HAL and TL on failure */
+    pSta = dphLookupHashEntry( pMac, pMlmAddBARsp->peerMacAddr, &aid,
+            &psessionEntry->dph.dphHashTable);
+     if( NULL != pSta )
+    {
+        limPostMsgDelBAInd( pMac, pSta, pMlmAddBARsp->baTID, eBA_RECIPIENT,
+                psessionEntry);
+    }
+  }
+
+  // Time to post a WDA_DELBA_IND to HAL in order
+  // to cleanup the HAL and SoftMAC entries
+
+
+  // Free the buffer allocated for tLimMlmAddBARsp
+  vos_mem_free(pMsgBuf);
+
+}
+
+/**
+ * \brief Setup an A-MPDU/BA session
+ *
+ * \sa limProcessMlmDelBAReq
+ *
+ * \param pMac The global tpAniSirGlobal object
+ *
+ * \param pMsgBuf The MLME DELBA Req message buffer
+ *
+ * \return none
+ */
+void limProcessMlmDelBAReq( tpAniSirGlobal pMac,
+    tANI_U32 *pMsgBuf )
+{
+    tSirRetStatus status = eSIR_SUCCESS;
+    tpLimMlmDelBAReq pMlmDelBAReq;
+    tpLimMlmDelBACnf pMlmDelBACnf;
+    tpPESession  psessionEntry;
+
+
+    if(pMsgBuf == NULL)
+    {
+           PELOGE(limLog(pMac, LOGE,FL("Buffer is Pointing to NULL"));)
+           return;
+    }
+
+  // TODO - Need to validate MLME state
+    pMlmDelBAReq = (tpLimMlmDelBAReq) pMsgBuf;
+
+    if((psessionEntry = peFindSessionBySessionId(pMac,pMlmDelBAReq->sessionId))== NULL)
+    {
+        PELOGE(limLog(pMac, LOGE,FL("session does not exist for given bssId"));)
+        vos_mem_free(pMsgBuf);
+        return;
+    }
+
+  // Send DELBA Ind over the air
+  if( eSIR_SUCCESS !=
+      (status = limSendDelBAInd( pMac, pMlmDelBAReq,psessionEntry)))
+    status = eSIR_SME_HAL_SEND_MESSAGE_FAIL;
+  else
+  {
+    tANI_U16 aid;
+    tpDphHashNode pSta;
+
+    // Time to post a WDA_DELBA_IND to HAL in order
+    // to cleanup the HAL and SoftMAC entries
+    pSta = dphLookupHashEntry( pMac, pMlmDelBAReq->peerMacAddr, &aid , &psessionEntry->dph.dphHashTable);
+    if( NULL != pSta )
+    {
+        status = limPostMsgDelBAInd( pMac,
+         pSta,
+          pMlmDelBAReq->baTID,
+          pMlmDelBAReq->baDirection,psessionEntry);
+
+    }
+  }
+
+  //
+  // Respond immediately to SME with DELBA CNF using
+  // LIM_MLM_DELBA_CNF with appropriate status
+  //
+
+  // Allocate for LIM_MLM_DELBA_CNF
+
+  pMlmDelBACnf = vos_mem_malloc(sizeof( tLimMlmDelBACnf ));
+  if ( NULL == pMlmDelBACnf )
+  {
+    limLog( pMac, LOGP, FL("AllocateMemory failed"));
+    vos_mem_free(pMsgBuf);
+    return;
+  }
+  else
+  {
+    vos_mem_set((void *) pMlmDelBACnf, sizeof( tLimMlmDelBACnf ), 0);
+
+    vos_mem_copy((void *) pMlmDelBACnf,
+                 (void *) pMlmDelBAReq,
+                 sizeof( tLimMlmDelBAReq ));
+
+    // Update DELBA result code
+    pMlmDelBACnf->delBAReasonCode = pMlmDelBAReq->delBAReasonCode;
+
+    /* Update PE session Id*/
+    pMlmDelBACnf->sessionId = pMlmDelBAReq->sessionId;
+
+    limPostSmeMessage( pMac,
+        LIM_MLM_DELBA_CNF,
+        (tANI_U32 *) pMlmDelBACnf );
+  }
+
+  // Free the buffer allocated for tLimMlmDelBAReq
+  vos_mem_free(pMsgBuf);
+
+}
 
 /**
  * @function :  limSMPowerSaveStateInd( )
