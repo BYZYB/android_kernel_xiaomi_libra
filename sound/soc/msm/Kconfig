@@ -168,7 +168,6 @@ config SND_SOC_APQ8074
 	select SND_SOC_MSM_STUB
 	select SND_SOC_MSM_HOSTLESS_PCM
 	select SND_SOC_WCD9320
-	select SND_SOC_MSM_HDMI_CODEC_RX
 	select SND_DYNAMIC_MINORS
 	select AUDIO_OCMEM
 	select DTS_SRS_TM
@@ -358,6 +357,12 @@ config SND_SOC_MSM8994
 	 interfaces with DSP, also it will enable
 	 the machine drivers and the corresponding
 	 DAI-links.
+
+config SND_SOC_MSM8994_HDMI_CODEC_RX
+	bool "HDMI_CODEC_RX support for MSM8994"
+	depends on SND_SOC_MSM8994
+	select SND_SOC_MSM_HDMI_CODEC_RX
+	default n
 
 config SND_SOC_MDM9640
 	tristate "SoC Machine driver for MDM9640 boards"
