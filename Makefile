@@ -366,9 +366,8 @@ LINUXINCLUDE    := \
 		-Iinclude \
 		$(USERINCLUDE)
 
-KBUILD_CPPFLAGS := -Ofast -D__KERNEL__
-KBUILD_CFLAGS   := -Ofast -g0 -pipe -mcpu=cortex-a57.cortex-a53 -mtune=cortex-a57.cortex-a53 \
-		   -fno-strict-aliasing -fno-common -fno-delete-null-pointer-checks -std=gnu89 -pipe
+KBUILD_CPPFLAGS := -Ofast -g0 -pipe -mcpu=cortex-a57.cortex-a53 -mtune=cortex-a57.cortex-a53 -D__KERNEL__
+KBUILD_CFLAGS   := -Ofast -g0 -pipe -mcpu=cortex-a57.cortex-a53 -mtune=cortex-a57.cortex-a53 -fno-strict-aliasing -fno-common -fno-delete-null-pointer-checks -std=gnu89
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
