@@ -148,7 +148,7 @@ struct filename;
  * "sched_set_io_is_busy", "sched_get_cpus_busy", "sched_set_window"
  */
 static inline void sched_set_io_is_busy(int val) {};
-static inline void sched_get_cpus_busy(struct sched_load *busy, const struct cpumask *query_cpus) {};
+static inline void sched_get_cpus_busy(unsigned long *busy, const struct cpumask *query_cpus) {};
 static inline int sched_set_window(u64 window_start, unsigned int window_size)
 {
 	return -EINVAL;
