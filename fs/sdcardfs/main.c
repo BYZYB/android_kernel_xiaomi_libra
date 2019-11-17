@@ -89,7 +89,7 @@ static int parse_options(struct super_block *sb, char *options, int silent,
 
 		switch (token) {
 		case Opt_debug:
-			*debug = 1;
+			*debug = 0;
 			break;
 		case Opt_fsuid:
 			if (match_int(&args[0], &option))
@@ -173,7 +173,7 @@ int parse_options_remount(struct super_block *sb, char *options, int silent,
 
 		switch (token) {
 		case Opt_debug:
-			debug = 1;
+			debug = 0;
 			break;
 		case Opt_gid:
 			if (match_int(&args[0], &option))
