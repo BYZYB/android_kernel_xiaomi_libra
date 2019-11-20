@@ -18,8 +18,6 @@
 
 ccflags-y += -I$(src)			# needed for trace events
 
-ccflags-$(CONFIG_XFS_DEBUG) += -g
-
 obj-$(CONFIG_XFS_FS)		+= xfs.o
 
 # this one should be compiled first, as the tracing macros can easily blow up

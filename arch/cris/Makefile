@@ -49,7 +49,7 @@ KBUILD_CFLAGS += -mlinux -march=$(arch-y) -pipe $(inc)
 KBUILD_CPPFLAGS += $(inc)
 
 ifdef CONFIG_FRAME_POINTER
-KBUILD_CFLAGS := $(subst -fomit-frame-pointer,,$(KBUILD_CFLAGS)) -g
+KBUILD_CFLAGS := $(subst -fomit-frame-pointer,,$(KBUILD_CFLAGS)) -g0
 KBUILD_CFLAGS += -fno-omit-frame-pointer
 endif
 

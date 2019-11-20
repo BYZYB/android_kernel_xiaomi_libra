@@ -27,7 +27,6 @@ AICASM_CC= $(CC)
 endif
 
 ifdef DEBUG
-CFLAGS+= -DDEBUG -g
 YFLAGS+= -t -v
 LFLAGS= -d
 endif

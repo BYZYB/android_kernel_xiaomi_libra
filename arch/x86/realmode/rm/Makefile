@@ -66,7 +66,7 @@ $(obj)/realmode.relocs: $(obj)/realmode.elf FORCE
 
 # How to compile the 16-bit code.  Note we always compile for -march=i386,
 # that way we can complain to the user if the CPU is insufficient.
-KBUILD_CFLAGS	:= $(LINUXINCLUDE) -m32 -g -D_SETUP -D__KERNEL__ -D_WAKEUP \
+KBUILD_CFLAGS	:= $(LINUXINCLUDE) -m32 -g0 -D_SETUP -D__KERNEL__ -D_WAKEUP \
 		   -I$(srctree)/arch/x86/boot \
 		   -DDISABLE_BRANCH_PROFILING \
 		   -Wall -Wstrict-prototypes \

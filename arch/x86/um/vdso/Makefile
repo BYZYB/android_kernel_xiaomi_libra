@@ -38,7 +38,7 @@ $(obj)/%.so: $(obj)/%.so.dbg FORCE
 # optimize sibling calls.
 #
 CFL := $(PROFILING) -mcmodel=small -fPIC -O3 -fasynchronous-unwind-tables -m64 \
-       $(filter -g%,$(KBUILD_CFLAGS)) $(call cc-option, -fno-stack-protector) \
+       -g0 $(call cc-option, -fno-stack-protector) \
        -fno-omit-frame-pointer -foptimize-sibling-calls
 
 $(vobjs): KBUILD_CFLAGS += $(CFL)
