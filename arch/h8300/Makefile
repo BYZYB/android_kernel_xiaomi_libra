@@ -32,7 +32,7 @@ ldflags-$(CONFIG_CPU_H8S)	:= -mh8300self
 
 KBUILD_CFLAGS += $(cflags-y)
 KBUILD_CFLAGS += -mint32 -fno-builtin
-KBUILD_CFLAGS += -g
+KBUILD_CFLAGS += -g0
 KBUILD_CFLAGS += -D__linux__
 KBUILD_CFLAGS += -DUTS_SYSNAME=\"uClinux\"
 KBUILD_AFLAGS += -DPLATFORM=$(PLATFORM) -DMODEL=$(MODEL) $(cflags-y)

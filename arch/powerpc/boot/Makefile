@@ -26,7 +26,7 @@ BOOTCFLAGS    := -Wno-trigraphs \
 BOOTAFLAGS	:= -D__ASSEMBLY__ $(BOOTCFLAGS) -traditional -nostdinc
 
 ifdef CONFIG_DEBUG_INFO
-BOOTCFLAGS	+= -g
+BOOTCFLAGS	+= -g0
 endif
 
 ifeq ($(call cc-option-yn, -fstack-protector),y)

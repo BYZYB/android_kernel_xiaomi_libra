@@ -5,7 +5,7 @@
 
 CC	 = gcc
 OPTFLAGS = -Ofast			# Adjust as desired
-CFLAGS	 = -I.. -I ../../../include -g $(OPTFLAGS)
+CFLAGS	 = -I.. -I ../../../include -g0 $(OPTFLAGS)
 LD	 = ld
 AWK	 = awk -f
 AR	 = ar

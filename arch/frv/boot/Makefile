@@ -36,8 +36,8 @@ targets: $(obj)/Image
 $(obj)/Image: vmlinux FORCE
 	$(OBJCOPY) $(OBJCOPYFLAGS) -S vmlinux $@
 
-#$(obj)/Image:	$(CONFIGURE) $(SYSTEM)
-#	$(OBJCOPY) $(OBJCOPYFLAGS) -g -S $(SYSTEM) $@
+$(obj)/Image:	$(CONFIGURE) $(SYSTEM)
+	$(OBJCOPY) $(OBJCOPYFLAGS) -g0 -S $(SYSTEM) $@
 
 bzImage: zImage
 
