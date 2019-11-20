@@ -1,4 +1,4 @@
-CFLAGS += -iquote../../../../include/uapi -Wall
+CFLAGS += -iquote../../../../include/uapi
 peeksiginfo: peeksiginfo.c
 
 all: peeksiginfo

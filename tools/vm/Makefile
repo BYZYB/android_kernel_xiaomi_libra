@@ -6,7 +6,7 @@ LK_DIR = ../lib/lk
 LIBLK = $(LK_DIR)/liblk.a
 
 CC = $(CROSS_COMPILE)gcc
-CFLAGS = -Wall -Wextra -I../lib/
+CFLAGS = -I../lib/
 LDFLAGS = $(LIBLK)
 
 $(TARGETS): liblk

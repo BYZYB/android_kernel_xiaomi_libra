@@ -116,11 +116,6 @@ cc-supports = ${shell if $(CC) ${1} -S -o /dev/null -x c /dev/null > /dev/null 2
 # use '-Os' optimization if available, else use -Ofast
 OPTIMIZATION := -Ofast
 
-WARNINGS := -Wall -Wchar-subscripts -Wpointer-arith -Wsign-compare
-WARNINGS += $(call cc-supports,-Wno-pointer-sign)
-WARNINGS += $(call cc-supports,-Wdeclaration-after-statement)
-WARNINGS += -Wshadow
-
 CFLAGS += -DVERSION=\"$(VERSION)\" -DPACKAGE=\"$(PACKAGE)\" \
 		-DPACKAGE_BUGREPORT=\"$(PACKAGE_BUGREPORT)\" -D_GNU_SOURCE
 

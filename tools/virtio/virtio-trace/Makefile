@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Ofast -Wall -pthread
+CFLAGS = -Ofast -pthread
 
 all: trace-agent
 

@@ -18,7 +18,7 @@
 
 CC        = $(CROSS_COMPILE)gcc
 INC       = -I$(KBUILD_OUTPUT)/usr/include
-CFLAGS    = -Wall $(INC)
+CFLAGS    = $(INC)
 LDLIBS    = -lrt
 PROGS     = testptp
 
