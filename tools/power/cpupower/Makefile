@@ -116,11 +116,6 @@ cc-supports = ${shell if $(CC) ${1} -S -o /dev/null -x c /dev/null > /dev/null 2
 # use '-Os' optimization if available, else use -O3
 OPTIMIZATION := -O3
 
-WARNINGS := -Wall -Wchar-subscripts -Wpointer-arith -Wsign-compare
-WARNINGS += $(call cc-supports,-Wno-pointer-sign)
-WARNINGS += $(call cc-supports,-Wdeclaration-after-statement)
-WARNINGS += -Wshadow
-
 CFLAGS += -DVERSION=\"$(VERSION)\" -DPACKAGE=\"$(PACKAGE)\" \
 		-DPACKAGE_BUGREPORT=\"$(PACKAGE_BUGREPORT)\" -D_GNU_SOURCE
 
@@ -172,7 +167,7 @@ export QUIET ECHO
 
 # if DEBUG is enabled, then we do not strip or optimize
 ifeq ($(strip $(DEBUG)),true)
-	CFLAGS += -Ofast -g0 -DDEBUG
+	CFLAGS += -O3 -g0 -DDEBUG
 	STRIPCMD = /bin/true -Since_we_are_debugging
 else
 	CFLAGS += $(OPTIMIZATION) -fomit-frame-pointer

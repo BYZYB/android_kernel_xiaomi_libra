@@ -19,7 +19,7 @@ ifdef MOBICORE_CFLAGS
 endif
 #EXTRA_CFLAGS+=-DDEBUG_VERBOSE
 
-ccflags-y += -Wall -D__$(PLATFORM)__
+ccflags-y += -D__$(PLATFORM)__
 # add our module to kernel.
 obj-m += mcDrvModule.o
 

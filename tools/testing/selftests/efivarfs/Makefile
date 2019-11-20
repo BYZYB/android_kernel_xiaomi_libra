@@ -1,5 +1,4 @@
 CC = $(CROSS_COMPILE)gcc
-CFLAGS = -Wall
 
 test_objs = open-unlink create-read
 

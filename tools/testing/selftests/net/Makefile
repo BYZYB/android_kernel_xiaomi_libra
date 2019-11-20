@@ -1,7 +1,7 @@
 # Makefile for net selftests
 
 CC = $(CROSS_COMPILE)gcc
-CFLAGS = -Wall -O3 -g
+CFLAGS = -O3 -g0
 
 CFLAGS += -I../../../../usr/include/
 

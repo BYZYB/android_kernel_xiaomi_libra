@@ -1,6 +1,6 @@
 
-CC =		m68k-cbm-amigados-gcc
-CFLAGS =	-Wall -O3
+CC = m68k-cbm-amigados-gcc
+CFLAGS = -O3
 
 
 All:		dmesg

@@ -4,7 +4,7 @@ CC = gcc
 
 all : bpf_jit_disasm
 
-bpf_jit_disasm : CFLAGS = -Wall -O3
+bpf_jit_disasm : CFLAGS = -O3
 bpf_jit_disasm : LDLIBS = -lopcodes -lbfd -ldl
 bpf_jit_disasm : bpf_jit_disasm.o
 

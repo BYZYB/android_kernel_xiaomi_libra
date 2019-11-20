@@ -3,7 +3,7 @@
 all: unprivileged-remount-test
 
 unprivileged-remount-test: unprivileged-remount-test.c
-	gcc -Wall -O3 unprivileged-remount-test.c -o unprivileged-remount-test
+	gcc -O3 unprivileged-remount-test.c -o unprivileged-remount-test
 
 # Allow specific tests to be selected.
 test_unprivileged_remount: unprivileged-remount-test

@@ -69,7 +69,6 @@ $(obj)/realmode.relocs: $(obj)/realmode.elf FORCE
 KBUILD_CFLAGS	:= $(LINUXINCLUDE) -m32 -g0 -D_SETUP -D__KERNEL__ -D_WAKEUP \
 		   -I$(srctree)/arch/x86/boot \
 		   -DDISABLE_BRANCH_PROFILING \
-		   -Wall -Wstrict-prototypes \
 		   -march=i386 -mregparm=3 \
 		   -include $(srctree)/$(src)/../../boot/code16gcc.h \
 		   -fno-strict-aliasing -fomit-frame-pointer -fno-pic \

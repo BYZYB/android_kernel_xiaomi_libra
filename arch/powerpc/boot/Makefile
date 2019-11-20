@@ -19,7 +19,7 @@
 
 all: $(obj)/zImage
 
-BOOTCFLAGS    := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
+BOOTCFLAGS    := -Wno-trigraphs \
 		 -fno-strict-aliasing -msoft-float -pipe \
 		 -fomit-frame-pointer -fno-builtin -fPIC -nostdinc \
 		 -isystem $(shell $(CROSS32CC) -print-file-name=include)
