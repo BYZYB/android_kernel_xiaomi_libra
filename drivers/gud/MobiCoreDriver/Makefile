@@ -3,7 +3,7 @@
 # add things to "obj-m" here.
 
 ifeq ($(MODE),release)
-    ccflags-y = -Ofast -DNDEBUG
+    ccflags-y = -O3 -DNDEBUG
 else
     ccflags-y = -DDEBUG
 endif # DEBUG/RELEASE

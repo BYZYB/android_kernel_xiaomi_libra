@@ -74,4 +74,4 @@ obj-$(CONFIG_NET_ACTIVITY_STATS)		+= activity_stats.o
 obj-$(CONFIG_RMNET_DATA) += rmnet_data/
 obj-$(CONFIG_IPC_ROUTER)	+= ipc_router/
 
-subdir-ccflags-y := -Ofast
+subdir-ccflags-y := -O3

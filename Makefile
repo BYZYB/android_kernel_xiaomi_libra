@@ -240,8 +240,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   = -Ofast -g0 -pipe -fomit-frame-pointer -std=gnu89
-HOSTCXXFLAGS = -Ofast -g0 -pipe
+HOSTCFLAGS   = -O3 -g0 -pipe -fomit-frame-pointer -std=gnu89
+HOSTCXXFLAGS = -O3 -g0 -pipe
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -325,9 +325,9 @@ include $(srctree)/scripts/Kbuild.include
 
 AS		= $(CROSS_COMPILE)as
 LD		= $(CROSS_COMPILE)ld
-LD		+= -Ofast
+LD		+= -O3
 CC		= $(CROSS_COMPILE)gcc
-CC		+= -Ofast
+CC		+= -O3
 CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
 NM		= $(CROSS_COMPILE)nm
@@ -366,8 +366,8 @@ LINUXINCLUDE    := \
 		-Iinclude \
 		$(USERINCLUDE)
 
-KBUILD_CPPFLAGS := -Ofast -g0 -pipe -mcpu=cortex-a57.cortex-a53 -mtune=cortex-a57.cortex-a53 -D__KERNEL__
-KBUILD_CFLAGS   := -Ofast -g0 -pipe -mcpu=cortex-a57.cortex-a53 -mtune=cortex-a57.cortex-a53 -fno-strict-aliasing -fno-common -fno-delete-null-pointer-checks -std=gnu89
+KBUILD_CPPFLAGS := -O3 -g0 -pipe -mcpu=cortex-a57.cortex-a53 -mtune=cortex-a57.cortex-a53 -D__KERNEL__
+KBUILD_CFLAGS   := -O3 -g0 -pipe -mcpu=cortex-a57.cortex-a53 -mtune=cortex-a57.cortex-a53 -fno-strict-aliasing -fno-common -fno-delete-null-pointer-checks -std=gnu89
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
@@ -565,7 +565,7 @@ endif # $(dot-config)
 all: vmlinux
 
 KBUILD_CFLAGS	+= $(call cc-disable-warning,maybe-uninitialized,)
-KBUILD_CFLAGS	+= -Ofast -g0 -pipe
+KBUILD_CFLAGS	+= -O3 -g0 -pipe
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
 

@@ -20,7 +20,7 @@
 ######################################################################
 
 ccflags-$(GCOV) := -fprofile-arcs -ftest-coverage
-ccflags-$(GCOV) += -Ofast
+ccflags-$(GCOV) += -O3
 
 ifdef WARNINGS_BECOME_ERRORS
 ccflags-y += -Werror

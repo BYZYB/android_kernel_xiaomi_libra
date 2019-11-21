@@ -18,4 +18,4 @@ endif
 
 soundcore-objs  := sound_core.o
 
-subdir-ccflags-y := -Ofast
+subdir-ccflags-y := -O3
