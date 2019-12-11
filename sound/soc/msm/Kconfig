@@ -343,14 +343,13 @@ config SND_SOC_MSM8994
 	select SND_SOC_WCD9330
 	select SND_SOC_ES9018
 	select SND_SOC_TAS2552
-	select SND_SOC_MSM_HDMI_CODEC_RX
 	select QTI_PP
 	select DTS_SRS_TM
 	select SND_SOC_CPE
 	select MSM_ULTRASOUND
 	select DOLBY_DS2
 	select SND_HWDEP
-        select DTS_EAGLE
+	select DTS_EAGLE
 	help
 	 To add support for SoC audio on MSM8994.
 	 This will enable sound soc drivers which
