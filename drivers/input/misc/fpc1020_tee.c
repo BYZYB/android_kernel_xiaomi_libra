@@ -353,10 +353,10 @@ static ssize_t wakeup_enable_set(struct device *dev,
 {
 	struct  fpc1020_data *fpc1020 = dev_get_drvdata(dev);
 
-	if (!strncmp(buf, "enable", strlen("enable"))) {
+	if (!memcmp(buf, "enable", sizeof("enable"))) {
 		fpc1020->wakeup_enabled = true;
 		smp_wmb();
-	} else if (!strncmp(buf, "disable", strlen("disable"))) {
+	} else if (!memcmp(buf, "disable", sizeof("disable"))) {
 		fpc1020->wakeup_enabled = false;
 		smp_wmb();
 	} else
@@ -412,9 +412,10 @@ static irqreturn_t fpc1020_irq_handler(int irq, void *handle)
 
 	smp_rmb();
 
-	if (fpc1020->wakeup_enabled) {
-		wake_lock_timeout(&fpc1020->ttw_wl, msecs_to_jiffies(FPC_TTW_HOLD_TIME));
-	}
+	if (!fpc1020->wakeup_enabled)
+		return IRQ_HANDLED;
+
+	wake_lock_timeout(&fpc1020->ttw_wl, msecs_to_jiffies(FPC_TTW_HOLD_TIME));
 
 	sysfs_notify(&fpc1020->dev->kobj, NULL, dev_attr_irq.attr.name);
 
