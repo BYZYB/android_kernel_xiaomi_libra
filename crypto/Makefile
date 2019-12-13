@@ -32,6 +32,8 @@ crypto_hash-y += shash.o
 obj-$(CONFIG_CRYPTO_HASH2) += crypto_hash.o
 
 obj-$(CONFIG_CRYPTO_PCOMP2) += pcompress.o
+obj-$(CONFIG_CRYPTO_ACOMP2) += acompress.o
+obj-$(CONFIG_CRYPTO_ACOMP2) += scompress.o
 
 cryptomgr-y := algboss.o testmgr.o
 
@@ -103,6 +105,7 @@ obj-$(CONFIG_CRYPTO_GHASH) += ghash-generic.o
 obj-$(CONFIG_CRYPTO_USER_API) += af_alg.o
 obj-$(CONFIG_CRYPTO_USER_API_HASH) += algif_hash.o
 obj-$(CONFIG_CRYPTO_USER_API_SKCIPHER) += algif_skcipher.o
+obj-$(CONFIG_CRYPTO_ZSTD) += zstd.o
 
 #
 # generic algorithms and the async_tx api
