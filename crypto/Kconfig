@@ -86,6 +86,15 @@ config CRYPTO_PCOMP2
 	tristate
 	select CRYPTO_ALGAPI2
 
+config CRYPTO_ACOMP2
+	tristate
+	select CRYPTO_ALGAPI2
+
+config CRYPTO_ACOMP
+	tristate
+	select CRYPTO_ALGAPI
+	select CRYPTO_ACOMP2
+
 config CRYPTO_MANAGER
 	tristate "Cryptographic algorithm manager"
 	select CRYPTO_MANAGER2
@@ -99,6 +108,7 @@ config CRYPTO_MANAGER2
 	select CRYPTO_HASH2
 	select CRYPTO_BLKCIPHER2
 	select CRYPTO_PCOMP2
+	select CRYPTO_ACOMP2
 
 config CRYPTO_USER
 	tristate "Userspace cryptographic algorithm configuration"
@@ -1380,6 +1390,15 @@ config CRYPTO_LZ4HC
 	select LZ4_DECOMPRESS
 	help
 	  This is the LZ4 high compression mode algorithm.
+
+config CRYPTO_ZSTD
+	tristate "Zstd compression algorithm"
+	select CRYPTO_ALGAPI
+	select CRYPTO_ACOMP2
+	select ZSTD_COMPRESS
+	select ZSTD_DECOMPRESS
+	help
+	  This is the zstd algorithm.
 
 comment "Random Number Generation"
 
