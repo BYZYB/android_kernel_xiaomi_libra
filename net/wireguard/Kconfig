@@ -23,6 +23,7 @@ config WIREGUARD
 
 config WIREGUARD_DEBUG
 	bool "Debugging checks and verbose messages"
+	default n
 	depends on WIREGUARD
 	help
 	  This will write log messages for handshake and other events
