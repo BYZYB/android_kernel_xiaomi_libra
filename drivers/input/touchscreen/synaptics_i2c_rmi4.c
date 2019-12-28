@@ -115,11 +115,11 @@ enum device_status {
 #define F12_MAX_X		65536
 #define F12_MAX_Y		65536
 
-static int synaptics_rmi4_i2c_read(struct synaptics_rmi4_data *rmi4_data,
+static inline int synaptics_rmi4_i2c_read(struct synaptics_rmi4_data *rmi4_data,
 		unsigned short addr, unsigned char *data,
 		unsigned short length);
 
-static int synaptics_rmi4_i2c_write(struct synaptics_rmi4_data *rmi4_data,
+static inline int synaptics_rmi4_i2c_write(struct synaptics_rmi4_data *rmi4_data,
 		unsigned short addr, unsigned char *data,
 		unsigned short length);
 
@@ -997,7 +997,7 @@ static int synaptics_rmi4_set_page(struct synaptics_rmi4_data *rmi4_data,
  * starting from an assigned register address of the sensor, via I2C
  * with a retry mechanism.
  */
-static int synaptics_rmi4_i2c_read(struct synaptics_rmi4_data *rmi4_data,
+static inline int synaptics_rmi4_i2c_read(struct synaptics_rmi4_data *rmi4_data,
 		unsigned short addr, unsigned char *data, unsigned short length)
 {
 	int retval;
@@ -1060,7 +1060,7 @@ exit:
  * starting from an assigned register address of the sensor, via I2C with
  * a retry mechanism.
  */
-static int synaptics_rmi4_i2c_write(struct synaptics_rmi4_data *rmi4_data,
+static inline int synaptics_rmi4_i2c_write(struct synaptics_rmi4_data *rmi4_data,
 		unsigned short addr, unsigned char *data, unsigned short length)
 {
 	int retval;
