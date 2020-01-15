@@ -47,7 +47,7 @@
 
 		qcom,initial-pwrlevel = <7>;
 
-		qcom,idle-timeout = <80>; //<HZ/12>
+		qcom,idle-timeout = <64>; //msec
 		qcom,strtstp-sleepwake;
 
 		/*
