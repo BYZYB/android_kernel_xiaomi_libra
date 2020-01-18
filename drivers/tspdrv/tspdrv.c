@@ -42,8 +42,7 @@
 #include <asm/atomic.h>
 #include <tspdrv.h>
 
-
-static int g_nTimerPeriodMs = 5;
+static int g_nTimerPeriodMs = 50;
 
 #ifdef VIBE_RUNTIME_RECORD
 static atomic_t g_bRuntimeRecord;
@@ -213,8 +212,6 @@ asmlinkage void _DbgOutOverkill(const char *fmt,...)
 		va_end(args);
 	}
 }
-
-
 
 static int open(struct inode *inode, struct file *file);
 static int release(struct inode *inode, struct file *file);
