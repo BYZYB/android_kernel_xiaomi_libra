@@ -4865,7 +4865,8 @@ static void kgsl_core_exit(void)
 	if (memobjs_cache)
 		kmem_cache_destroy(memobjs_cache);
 
-	kmem_cache_destroy(kmem_cmdbatch);
+	if (kmem_cmdbatch)
+		kmem_cache_destroy(kmem_cmdbatch);
 
 	kgsl_memfree_exit();
 	unregister_chrdev_region(kgsl_driver.major, KGSL_DEVICE_MAX);
@@ -4952,7 +4953,7 @@ static int __init kgsl_core_init(void)
 	kgsl_events_init();
 
 	/* create the memobjs kmem cache */
-	memobjs_cache = KMEM_CACHE(kgsl_memobj_node, 0);
+	memobjs_cache = KMEM_CACHE(kgsl_memobj_node, SLAB_HWCACHE_ALIGN);
 	if (memobjs_cache == NULL) {
 		KGSL_CORE_ERR("failed to create memobjs_cache");
 		result = -ENOMEM;
@@ -4960,7 +4961,7 @@ static int __init kgsl_core_init(void)
 	}
 
 	kmem_cmdbatch = KMEM_CACHE(kgsl_cmdbatch, SLAB_HWCACHE_ALIGN);
-	if (!kmem_cmdbatch) {
+	if (kmem_cmdbatch == NULL) {
 		result = -ENOMEM;
 		goto err;
 	}
