@@ -902,7 +902,6 @@ config CGROUP_SCHEDTUNE
 config MEMCG
 	bool "Memory Resource Controller for Control Groups"
 	depends on RESOURCE_COUNTERS
-	select MM_OWNER
 	help
 	  Provides a memory resource controller that manages both anonymous
 	  memory and page cache. (See Documentation/cgroups/memory.txt)
@@ -918,9 +917,6 @@ config MEMCG
 	  this, you can set "cgroup_disable=memory" at your boot option to
 	  disable memory resource controller and you can avoid overheads.
 	  (and lose benefits of memory resource controller)
-
-	  This config option also selects MM_OWNER config option, which
-	  could in turn add some fork/exit overhead.
 
 config MEMCG_SWAP
 	bool "Memory Resource Controller Swap Extension"
@@ -1193,9 +1189,6 @@ config SCHED_TUNE
 
 	  Only if you are testing a kernel with energy-aware scheduler support,
 	  you might want to say Y here.
-
-config MM_OWNER
-	bool
 
 config SYSFS_DEPRECATED
 	bool "Enable deprecated sysfs features to support old userspace tools"
