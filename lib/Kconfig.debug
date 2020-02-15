@@ -27,7 +27,7 @@ config DEFAULT_MESSAGE_LOGLEVEL
 
 config ENABLE_WARN_DEPRECATED
 	bool "Enable __deprecated logic"
-	default y
+	default n
 	help
 	  Enable the __deprecated logic in the kernel build.
 	  Disable this to suppress the "warning: 'foo' is deprecated
@@ -35,7 +35,7 @@ config ENABLE_WARN_DEPRECATED
 
 config ENABLE_MUST_CHECK
 	bool "Enable __must_check logic"
-	default y
+	default n
 	help
 	  Enable the __must_check logic in the kernel build.  Disable this to
 	  suppress the "warning: ignoring return value of 'foo', declared with
@@ -100,7 +100,7 @@ config READABLE_ASM
 
 config UNUSED_SYMBOLS
 	bool "Enable unused/obsolete exported symbols"
-	default y if X86
+	default n
 	help
 	  Unused but exported symbols make the kernel needlessly bigger.  For
 	  that reason most of these unused exports will soon be removed.  This
@@ -243,6 +243,7 @@ config DEBUG_SECTION_MISMATCH
 
 config DEBUG_KERNEL
 	bool "Kernel debugging"
+	default n
 	help
 	  Say Y here if you are developing drivers or trying to debug and
 	  identify kernel problems.
@@ -426,7 +427,7 @@ config BOOTPARAM_HUNG_TASK_PANIC_VALUE
 config SCHED_DEBUG
 	bool "Collect scheduler debugging info"
 	depends on DEBUG_KERNEL && PROC_FS
-	default y
+	default n
 	help
 	  If you say Y here, the /proc/sched_debug file will be provided
 	  that can help debug the scheduler. The runtime overhead of this
@@ -435,7 +436,7 @@ config SCHED_DEBUG
 config SYSRQ_SCHED_DEBUG
 	bool "Print scheduling debugging info from sysrq-trigger"
 	depends on SCHED_DEBUG
-	default y
+	default n
 	help
 	  If you say Y here, the "show-task-states(T)" and
 	  "show-blocked-tasks(W)" sysrq-triggers will print additional
@@ -635,7 +636,7 @@ config DEBUG_MODULE_SCAN_OFF
 config DEBUG_PREEMPT
 	bool "Debug preemptible kernel"
 	depends on DEBUG_KERNEL && PREEMPT && TRACE_IRQFLAGS_SUPPORT
-	default y
+	default n
 	help
 	  If you say Y here then the kernel will use a debug variant of the
 	  commonly used smp_processor_id() function and will print warnings
@@ -651,7 +652,7 @@ config DEBUG_RT_MUTEXES
 
 config DEBUG_PI_LIST
 	bool
-	default y
+	default n
 	depends on DEBUG_RT_MUTEXES
 
 config RT_MUTEX_TESTER
@@ -823,7 +824,7 @@ config DEBUG_LOCKING_API_SELFTESTS
 config STACKTRACE
 	bool "Stacktrace"
 	depends on STACKTRACE_SUPPORT
-	default y
+	default n
 
 config DEBUG_STACK_USAGE
 	bool "Stack utilization instrumentation"
@@ -854,7 +855,7 @@ config HAVE_DEBUG_BUGVERBOSE
 config DEBUG_BUGVERBOSE
 	bool "Verbose BUG() reporting (adds 70K)" if DEBUG_KERNEL && EXPERT
 	depends on BUG && (GENERIC_BUG || HAVE_DEBUG_BUGVERBOSE)
-	default y
+	default n
 	help
 	  Say Y here to make BUG() panics output the file name and line number
 	  of the BUG call as well as the EIP and oops trace.  This aids
@@ -1010,7 +1011,7 @@ config FRAME_POINTER
 		(CRIS || M68K || FRV || UML || \
 		 AVR32 || SUPERH || BLACKFIN || MN10300 || METAG) || \
 		ARCH_WANT_FRAME_POINTERS
-	default y if (DEBUG_INFO && UML) || ARCH_WANT_FRAME_POINTERS
+	default n
 	help
 	  If you say Y here the resulting kernel image will be slightly
 	  larger and slower, but it gives very useful debugging information
@@ -1136,7 +1137,7 @@ config RCU_CPU_STALL_TIMEOUT
 config RCU_CPU_STALL_VERBOSE
 	bool "Print additional per-task information for RCU_CPU_STALL_DETECTOR"
 	depends on TREE_PREEMPT_RCU
-	default y
+	default n
 	help
 	  This option causes RCU to printk detailed per-task information
 	  for any tasks that are stalling the current RCU grace period.
