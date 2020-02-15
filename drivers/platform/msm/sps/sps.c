@@ -998,7 +998,6 @@ exit_err:
 		return SPS_ERROR;
 	}
 
-	mutex_init(&sps_debugfs_lock);
 	return 0;
 }
 
