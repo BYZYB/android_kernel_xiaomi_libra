@@ -268,7 +268,7 @@ config PHYS_OFFSET
 	  location of main memory in your system.
 
 config GENERIC_BUG
-	def_bool y
+	def_bool n
 	depends on BUG
 
 config ARM_USER_ACCESSIBLE_TIMER_BASE
