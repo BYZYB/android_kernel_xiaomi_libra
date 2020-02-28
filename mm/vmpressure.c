@@ -264,8 +264,8 @@ static void vmpressure_work_fn(struct work_struct *work)
 	} while ((vmpr = vmpressure_parent(vmpr)));
 }
 
-void vmpressure_memcg(gfp_t gfp, struct mem_cgroup *memcg,
-		unsigned long scanned, unsigned long reclaimed)
+static void vmpressure_memcg(gfp_t gfp, struct mem_cgroup *memcg,
+			    unsigned long scanned, unsigned long reclaimed)
 {
 	struct vmpressure *vmpr = memcg_to_vmpressure(memcg);
 
@@ -330,8 +330,8 @@ void calculate_vmpressure_win(void)
 	vmpressure_win = x;
 }
 
-void vmpressure_global(gfp_t gfp, unsigned long scanned,
-		unsigned long reclaimed)
+static void vmpressure_global(gfp_t gfp, unsigned long scanned,
+			      unsigned long reclaimed)
 {
 	struct vmpressure *vmpr = &global_vmpressure;
 	unsigned long pressure;
@@ -522,7 +522,7 @@ void vmpressure_init(struct vmpressure *vmpr)
 	INIT_WORK(&vmpr->work, vmpressure_work_fn);
 }
 
-int vmpressure_global_init(void)
+static int __init vmpressure_global_init(void)
 {
 	vmpressure_init(&global_vmpressure);
 	return 0;
