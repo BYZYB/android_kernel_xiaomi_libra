@@ -31,6 +31,7 @@
 #include <linux/kthread.h>
 #include <linux/slab.h>
 #include <linux/kernel_stat.h>
+#include <linux/display_state.h>
 #include <asm/cputime.h>
 
 #define CREATE_TRACE_POINTS
@@ -89,6 +90,7 @@ static struct mutex sched_lock;
 static unsigned int default_target_loads[] = {DEFAULT_TARGET_LOAD};
 
 #define DEFAULT_TIMER_RATE (20 * USEC_PER_MSEC)
+#define SCREEN_OFF_TIMER_RATE ((unsigned long)(50 * USEC_PER_MSEC))
 #define DEFAULT_ABOVE_HISPEED_DELAY DEFAULT_TIMER_RATE
 static unsigned int default_above_hispeed_delay[] = {
 	DEFAULT_ABOVE_HISPEED_DELAY };
@@ -114,6 +116,7 @@ struct cpufreq_interactive_tunables {
 	 * The sample rate of the timer used to increase frequency
 	 */
 	unsigned long timer_rate;
+	unsigned long prev_timer_rate;
 	/*
 	 * Wait this long before raising speed above hispeed, by default a
 	 * single timer interval.
@@ -164,14 +167,14 @@ static struct attribute_group *get_sysfs_attr(void);
 static u64 round_to_nw_start(u64 jif,
 			     struct cpufreq_interactive_tunables *tunables)
 {
-	unsigned long step = tunables->timer_rate;
+	unsigned long step = usecs_to_jiffies(tunables->timer_rate);
 	u64 ret;
 
 	if (tunables->use_sched_load || tunables->align_windows) {
 		do_div(jif, step);
 		ret = (jif + 1) * step;
 	} else {
-		ret = jiffies + tunables->timer_rate;
+		ret = jiffies + usecs_to_jiffies(tunables->timer_rate);
 	}
 
 	return ret;
@@ -181,7 +184,7 @@ static inline int set_window_helper(
 			struct cpufreq_interactive_tunables *tunables)
 {
 	return sched_set_window(round_to_nw_start(get_jiffies_64(), tunables),
-			 tunables->timer_rate);
+			 usecs_to_jiffies(tunables->timer_rate));
 }
 
 static void cpufreq_interactive_timer_resched(unsigned long cpu,
@@ -214,7 +217,7 @@ static void cpufreq_interactive_timer_resched(unsigned long cpu,
 
 	if (tunables->timer_slack_val >= 0 &&
 	    ppol->target_freq > ppol->policy->min) {
-		expires += tunables->timer_slack_val;
+		expires += usecs_to_jiffies(tunables->timer_slack_val);
 		del_timer(&ppol->policy_slack_timer);
 		ppol->policy_slack_timer.expires = expires;
 		add_timer(&ppol->policy_slack_timer);
@@ -241,7 +244,7 @@ static void cpufreq_interactive_timer_start(
 	add_timer(&ppol->policy_timer);
 	if (tunables->timer_slack_val >= 0 &&
 	    ppol->target_freq > ppol->policy->min) {
-		expires += tunables->timer_slack_val;
+		expires += usecs_to_jiffies(tunables->timer_slack_val);
 		ppol->policy_slack_timer.expires = expires;
 		add_timer(&ppol->policy_slack_timer);
 	}
@@ -430,6 +433,7 @@ static void cpufreq_interactive_timer(unsigned long data)
 	unsigned long max_cpu;
 	int i, fcpu;
 	struct cpufreq_govinfo govinfo;
+	bool display_on = is_display_on();
 
 	if (!down_read_trylock(&ppol->enable_sem))
 		return;
@@ -446,6 +450,18 @@ static void cpufreq_interactive_timer(unsigned long data)
 	if (tunables->use_sched_load)
 		sched_get_cpus_busy(ppol->cpu_busy_times,
 				    ppol->policy->related_cpus);
+
+	if (display_on
+		&& tunables->timer_rate != tunables->prev_timer_rate)
+		tunables->timer_rate = tunables->prev_timer_rate;
+	else if (!display_on
+		&& tunables->timer_rate != SCREEN_OFF_TIMER_RATE) {
+		tunables->prev_timer_rate = tunables->timer_rate;
+		tunables->timer_rate
+			= max(tunables->timer_rate,
+				SCREEN_OFF_TIMER_RATE);
+	}
+
 	max_cpu = cpumask_first(ppol->policy->cpus);
 	for_each_cpu(i, ppol->policy->cpus) {
 		pcpu = &per_cpu(cpuinfo, i);
@@ -973,7 +989,7 @@ static ssize_t store_min_sample_time(struct cpufreq_interactive_tunables
 static ssize_t show_timer_rate(struct cpufreq_interactive_tunables *tunables,
 		char *buf)
 {
-	return sprintf(buf, "%u\n", jiffies_to_usecs(tunables->timer_rate));
+	return sprintf(buf, "%lu\n", tunables->timer_rate);
 }
 
 static ssize_t store_timer_rate(struct cpufreq_interactive_tunables *tunables,
@@ -992,7 +1008,8 @@ static ssize_t store_timer_rate(struct cpufreq_interactive_tunables *tunables,
 	if (val != val_round)
 		pr_warn("timer_rate not aligned to jiffy. Rounded up to %lu\n",
 			val_round);
-	tunables->timer_rate = usecs_to_jiffies(val_round);
+	tunables->timer_rate = val_round;
+	tunables->prev_timer_rate = val_round;
 
 	if (!tunables->use_sched_load)
 		return count;
@@ -1001,8 +1018,10 @@ static ssize_t store_timer_rate(struct cpufreq_interactive_tunables *tunables,
 		if (!per_cpu(polinfo, cpu))
 			continue;
 		t = per_cpu(polinfo, cpu)->cached_tunables;
-		if (t && t->use_sched_load)
-			t->timer_rate = usecs_to_jiffies(val_round);
+		if (t && t->use_sched_load) {
+			t->timer_rate = val_round;
+			t->prev_timer_rate = val_round;
+		}
 	}
 	set_window_helper(tunables);
 
@@ -1012,7 +1031,7 @@ static ssize_t store_timer_rate(struct cpufreq_interactive_tunables *tunables,
 static ssize_t show_timer_slack(struct cpufreq_interactive_tunables *tunables,
 		char *buf)
 {
-	return sprintf(buf, "%u\n", jiffies_to_usecs(tunables->timer_slack_val));
+	return sprintf(buf, "%d\n", tunables->timer_slack_val);
 }
 
 static ssize_t store_timer_slack(struct cpufreq_interactive_tunables *tunables,
@@ -1025,7 +1044,7 @@ static ssize_t store_timer_slack(struct cpufreq_interactive_tunables *tunables,
 	if (ret < 0)
 		return ret;
 
-	tunables->timer_slack_val = usecs_to_jiffies(val);
+	tunables->timer_slack_val = val;
 	return count;
 }
 
@@ -1435,9 +1454,10 @@ static struct cpufreq_interactive_tunables *alloc_tunable(
 	tunables->target_loads = default_target_loads;
 	tunables->ntarget_loads = ARRAY_SIZE(default_target_loads);
 	tunables->min_sample_time = DEFAULT_MIN_SAMPLE_TIME;
-	tunables->timer_rate = usecs_to_jiffies(DEFAULT_TIMER_RATE);
+	tunables->timer_rate = DEFAULT_TIMER_RATE;
 	tunables->boostpulse_duration_val = DEFAULT_MIN_SAMPLE_TIME;
-	tunables->timer_slack_val = usecs_to_jiffies(DEFAULT_TIMER_SLACK);
+	tunables->prev_timer_rate = DEFAULT_TIMER_RATE;
+	tunables->timer_slack_val = DEFAULT_TIMER_SLACK;
 
 	spin_lock_init(&tunables->target_loads_lock);
 	spin_lock_init(&tunables->above_hispeed_delay_lock);
