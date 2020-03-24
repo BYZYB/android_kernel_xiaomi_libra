@@ -325,9 +325,7 @@ include $(srctree)/scripts/Kbuild.include
 
 AS		= $(CROSS_COMPILE)as
 LD		= $(CROSS_COMPILE)ld
-LD		+= -O3
-CC		= $(CROSS_COMPILE)gcc
-CC		+= -O3
+CC		= $(CROSS_COMPILE)gcc -O3 -g0 -pipe
 CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
 NM		= $(CROSS_COMPILE)nm
@@ -367,7 +365,7 @@ LINUXINCLUDE    := \
 		$(USERINCLUDE)
 
 KBUILD_CPPFLAGS := -O3 -g0 -pipe -D__KERNEL__
-KBUILD_CFLAGS   := -O3 -g0 -pipe -mcpu=cortex-a57.cortex-a53 -mtune=cortex-a57.cortex-a53 -fno-strict-aliasing -fno-common -std=gnu89
+KBUILD_CFLAGS   := -O3 -g0 -pipe -fno-strict-aliasing -fno-common -std=gnu89
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
