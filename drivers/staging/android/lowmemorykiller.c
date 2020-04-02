@@ -46,9 +46,6 @@
 #include <linux/fs.h>
 #include <linux/cpuset.h>
 #include <linux/show_mem_notifier.h>
-#if defined(CONFIG_ZRAM)
-#include <linux/zsmalloc.h>
-#endif
 #include <linux/vmpressure.h>
 #include <linux/vmstat.h>
 
@@ -392,6 +389,7 @@ static unsigned long lowmem_scan(struct shrinker *s, struct shrink_control *sc)
 #else
 	struct task_struct *selected = NULL;
 #endif
+	static const struct sched_param sched_zero_prio;
 	int rem = 0;
 	int tasksize;
 	int i;
@@ -412,9 +410,6 @@ static unsigned long lowmem_scan(struct shrinker *s, struct shrink_control *sc)
 	int other_free;
 	int other_file;
 	unsigned long nr_to_scan = sc->nr_to_scan;
-#if defined(CONFIG_ZRAM)
-	unsigned long total_pool_pages, total_ori_pages;
-#endif
 
 	if (nr_to_scan > 0) {
 		if (mutex_lock_interruptible(&scan_mutex) < 0)
@@ -512,15 +507,6 @@ static unsigned long lowmem_scan(struct shrinker *s, struct shrink_control *sc)
 			continue;
 		}
 		tasksize = get_mm_rss(p->mm);
-#if defined(CONFIG_ZRAM)
-		if (total_pool_pages && total_ori_pages) {
-			lowmem_print(3, "tasksize : %d\n", tasksize);
-			tasksize += (int)total_pool_pages *
-				get_mm_counter(p->mm, MM_SWAPENTS)
-				/ total_ori_pages;
-			lowmem_print(3, "task real size : %d\n", tasksize);
-		}
-#endif
 		task_unlock(p);
 		if (tasksize <= 0)
 			continue;
@@ -680,6 +666,8 @@ static unsigned long lowmem_scan(struct shrinker *s, struct shrink_control *sc)
 		lowmem_deathpending_timeout = jiffies + HZ;
 		send_sig(SIGKILL, selected, 0);
 		set_tsk_thread_flag(selected, TIF_MEMDIE);
+		sched_setscheduler_nocheck(selected, SCHED_RR, &sched_zero_prio);
+		set_cpus_allowed_ptr(selected, cpu_all_mask);
 		rem -= selected_tasksize;
 		rcu_read_unlock();
 		/* give the system time to free up the memory */
@@ -813,4 +801,3 @@ module_init(lowmem_init);
 module_exit(lowmem_exit);
 
 MODULE_LICENSE("GPL");
-
