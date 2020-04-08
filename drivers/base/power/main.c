@@ -572,6 +572,9 @@ static void dpm_resume_noirq(pm_message_t state)
 				suspend_stats.failed_resume_noirq++;
 				dpm_save_failed_step(SUSPEND_RESUME_NOIRQ);
 				dpm_save_failed_dev(dev_name(dev));
+#ifdef CONFIG_PM_SLEEP_TRACE
+				suspend_failed_step_dev(SUSPEND_RESUME_NOIRQ, dev_name(dev));
+#endif
 				pm_dev_err(dev, state, " noirq", error);
 			}
 		}
@@ -690,6 +693,9 @@ static void dpm_resume_early(pm_message_t state)
 				suspend_stats.failed_resume_early++;
 				dpm_save_failed_step(SUSPEND_RESUME_EARLY);
 				dpm_save_failed_dev(dev_name(dev));
+#ifdef CONFIG_PM_SLEEP_TRACE
+				suspend_failed_step_dev(SUSPEND_RESUME_EARLY, dev_name(dev));
+#endif
 				pm_dev_err(dev, state, " early", error);
 			}
 		}
@@ -1098,6 +1104,9 @@ static int dpm_suspend_noirq(pm_message_t state)
 		if (error) {
 			pm_dev_err(dev, state, " noirq", error);
 			dpm_save_failed_dev(dev_name(dev));
+#ifdef CONFIG_PM_SLEEP_TRACE
+			suspend_failed_step_dev(SUSPEND_SUSPEND_NOIRQ, dev_name(dev));
+#endif
 			put_device(dev);
 			break;
 		}
@@ -1239,6 +1248,9 @@ static int dpm_suspend_late(pm_message_t state)
 		if (error) {
 			pm_dev_err(dev, state, " late", error);
 			dpm_save_failed_dev(dev_name(dev));
+#ifdef CONFIG_PM_SLEEP_TRACE
+			suspend_failed_step_dev(SUSPEND_SUSPEND_LATE, dev_name(dev));
+#endif
 			put_device(dev);
 			break;
 		}
