@@ -240,8 +240,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   = -O3 -g0 -pipe -fomit-frame-pointer -std=gnu89
-HOSTCXXFLAGS = -O3 -g0 -pipe
+HOSTCFLAGS   = -O3 -fomit-frame-pointer -std=gnu89
+HOSTCXXFLAGS = -O3
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -325,7 +325,7 @@ include $(srctree)/scripts/Kbuild.include
 
 AS		= $(CROSS_COMPILE)as
 LD		= $(CROSS_COMPILE)ld
-CC		= $(CROSS_COMPILE)gcc -O3 -g0 -pipe
+CC		= $(CROSS_COMPILE)gcc -O3
 CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
 NM		= $(CROSS_COMPILE)nm
@@ -364,8 +364,8 @@ LINUXINCLUDE    := \
 		-Iinclude \
 		$(USERINCLUDE)
 
-KBUILD_CPPFLAGS := -O3 -g0 -pipe -D__KERNEL__
-KBUILD_CFLAGS   := -O3 -g0 -pipe -fno-strict-aliasing -fno-common -std=gnu89
+KBUILD_CPPFLAGS := -O3 -D__KERNEL__
+KBUILD_CFLAGS   := -O3 -fno-strict-aliasing -fno-common -std=gnu89
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__
@@ -570,9 +570,9 @@ KBUILD_CFLAGS	+= $(call cc-option,-fdata-sections,)
 endif
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Os -g0 -pipe
+KBUILD_CFLAGS	+= -Os
 else
-KBUILD_CFLAGS	+= -O3 -g0 -pipe
+KBUILD_CFLAGS	+= -O3
 
 ifdef CONFIG_LTO
 LTO_CFLAGS    := -flto -flto=jobserver -fno-fat-lto-objects \
@@ -639,8 +639,11 @@ endif
 endif
 
 KBUILD_CFLAGS   += $(call cc-option, -fno-var-tracking-assignments)
-KBUILD_CFLAGS	+= -g0
-KBUILD_AFLAGS	+= -g0
+
+ifdef CONFIG_DEBUG_INFO
+KBUILD_CFLAGS	+= -g
+KBUILD_AFLAGS	+= -gdwarf-2
+endif
 
 ifdef CONFIG_DEBUG_INFO_REDUCED
 KBUILD_CFLAGS 	+= $(call cc-option, -femit-struct-debug-baseonly) \
