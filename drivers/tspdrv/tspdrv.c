@@ -42,7 +42,7 @@
 #include <asm/atomic.h>
 #include <tspdrv.h>
 
-static int g_nTimerPeriodMs = 50;
+static int g_nTimerPeriodMs = 5;
 
 #ifdef VIBE_RUNTIME_RECORD
 static atomic_t g_bRuntimeRecord;
@@ -72,11 +72,9 @@ static char g_bIsPlaying = false;
 
 static atomic_t g_nDebugLevel;
 
-
 #define MAX_SPI_BUFFER_SIZE (NUM_ACTUATORS * (VIBE_OUTPUT_SAMPLE_SIZE + SPI_HEADER_SIZE))
 
 static char g_cWriteBuffer[MAX_SPI_BUFFER_SIZE];
-
 
 #if ((LINUX_VERSION_CODE & 0xFFFF00) < KERNEL_VERSION(2,6,0))
 #error Unsupported Kernel version
@@ -89,7 +87,6 @@ static char g_cWriteBuffer[MAX_SPI_BUFFER_SIZE];
 #ifdef IMPLEMENT_AS_CHAR_DRIVER
 static int g_nMajor = 0;
 #endif
-
 
 #include <tspdrvOutputDataHandler.c>
 #ifdef CONFIG_HIGH_RES_TIMERS
@@ -530,8 +527,6 @@ static int ioctl(struct inode *inode, struct file *file, unsigned int cmd, unsig
 			{
 			case VIBE_KP_CFG_UPDATE_RATE_MS:
 				g_nTimerPeriodMs = deviceParam.nDeviceParamValue;
-
-
 
 #ifdef CONFIG_HIGH_RES_TIMERS
 				g_ktTimerPeriod = ktime_set(0, g_nTimerPeriodMs * 1000000);
