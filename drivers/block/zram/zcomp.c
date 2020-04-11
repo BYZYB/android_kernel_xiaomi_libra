@@ -23,22 +23,20 @@ static const char * const backends[] = {
 #if IS_ENABLED(CONFIG_CRYPTO_LZ4)
 	"lz4",
 #endif
+#if IS_ENABLED(CONFIG_CRYPTO_DEFLATE)
+	"deflate",
+#endif
+#if IS_ENABLED(CONFIG_CRYPTO_LZ4HC)
+	"lz4hc",
+#endif
+#if IS_ENABLED(CONFIG_CRYPTO_842)
+	"842",
+#endif
 #if IS_ENABLED(CONFIG_CRYPTO_ZSTD)
 	"zstd",
 #endif
 	NULL
 };
-
-static const char *find_backend(const char *compress)
-{
-	int i = 0;
-	while (backends[i]) {
-		if (sysfs_streq(compress, backends[i]))
-			break;
-		i++;
-	}
-	return backends[i];
-}
 
 static void zcomp_strm_free(struct zcomp_strm *zstrm)
 {
@@ -52,9 +50,9 @@ static void zcomp_strm_free(struct zcomp_strm *zstrm)
  * allocate new zcomp_strm structure with ->tfm initialized by
  * backend, return NULL on error
  */
-static struct zcomp_strm *zcomp_strm_alloc(struct zcomp *comp, gfp_t flags)
+static struct zcomp_strm *zcomp_strm_alloc(struct zcomp *comp)
 {
-	struct zcomp_strm *zstrm = kmalloc(sizeof(*zstrm), flags);
+	struct zcomp_strm *zstrm = kmalloc(sizeof(*zstrm), GFP_KERNEL);
 	if (!zstrm)
 		return NULL;
 
@@ -63,7 +61,7 @@ static struct zcomp_strm *zcomp_strm_alloc(struct zcomp *comp, gfp_t flags)
 	 * allocate 2 pages. 1 for compressed data, plus 1 extra for the
 	 * case when compressed size is larger than the original one
 	 */
-	zstrm->buffer = (void *)__get_free_pages(flags | __GFP_ZERO, 1);
+	zstrm->buffer = (void *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, 1);
 	if (IS_ERR_OR_NULL(zstrm->tfm) || !zstrm->buffer) {
 		zcomp_strm_free(zstrm);
 		zstrm = NULL;
@@ -71,20 +69,53 @@ static struct zcomp_strm *zcomp_strm_alloc(struct zcomp *comp, gfp_t flags)
 	return zstrm;
 }
 
-/* show available compressors */
-ssize_t zcomp_available_show(const char *comp, char *buf)
+bool zcomp_available_algorithm(const char *comp)
 {
-	ssize_t sz = 0;
 	int i = 0;
 
 	while (backends[i]) {
 		if (sysfs_streq(comp, backends[i]))
-			sz += sprintf(buf + sz, "[%s] ", backends[i]);
-		else
-			sz += sprintf(buf + sz, "%s ", backends[i]);
+			return true;
 		i++;
 	}
-	sz += sprintf(buf + sz, "\n");
+
+	/*
+	 * Crypto does not ignore a trailing new line symbol,
+	 * so make sure you don't supply a string containing
+	 * one.
+	 * This also means that we permit zcomp initialisation
+	 * with any compressing algorithm known to crypto api.
+	 */
+	return crypto_has_comp(comp, 0, 0) == 1;
+}
+
+/* show available compressors */
+ssize_t zcomp_available_show(const char *comp, char *buf)
+{
+	bool known_algorithm = false;
+	ssize_t sz = 0;
+	int i = 0;
+
+	for (; backends[i]; i++) {
+		if (!strcmp(comp, backends[i])) {
+			known_algorithm = true;
+			sz += scnprintf(buf + sz, PAGE_SIZE - sz - 2,
+					"[%s] ", backends[i]);
+		} else {
+			sz += scnprintf(buf + sz, PAGE_SIZE - sz - 2,
+					"%s ", backends[i]);
+		}
+	}
+
+	/*
+	 * Out-of-tree module known to crypto api or a missing
+	 * entry in `backends'.
+	 */
+	if (!known_algorithm && crypto_has_comp(comp, 0, 0) == 1)
+		sz += scnprintf(buf + sz, PAGE_SIZE - sz - 2,
+				"[%s] ", comp);
+
+	sz += scnprintf(buf + sz, PAGE_SIZE - sz, "\n");
 	return sz;
 }
 
@@ -141,7 +172,7 @@ static int __zcomp_cpu_notifier(struct zcomp *comp,
 	case CPU_UP_PREPARE:
 		if (WARN_ON(*per_cpu_ptr(comp->stream, cpu)))
 			break;
-		zstrm = zcomp_strm_alloc(comp, GFP_KERNEL);
+		zstrm = zcomp_strm_alloc(comp);
 		if (IS_ERR_OR_NULL(zstrm)) {
 			pr_err("Can't allocate a compression stream\n");
 			return NOTIFY_BAD;
@@ -223,18 +254,16 @@ void zcomp_destroy(struct zcomp *comp)
 struct zcomp *zcomp_create(const char *compress)
 {
 	struct zcomp *comp;
-	const char *backend;
 	int error;
 
-	backend = find_backend(compress);
-	if (!backend)
+	if (!zcomp_available_algorithm(compress))
 		return ERR_PTR(-EINVAL);
 
 	comp = kzalloc(sizeof(struct zcomp), GFP_KERNEL);
 	if (!comp)
 		return ERR_PTR(-ENOMEM);
 
-	comp->name = backend;
+	comp->name = compress;
 	error = zcomp_init(comp);
 	if (error) {
 		kfree(comp);
