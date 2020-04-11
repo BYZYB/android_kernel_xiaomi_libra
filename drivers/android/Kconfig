@@ -19,6 +19,16 @@ config ANDROID_BINDER_IPC
 	  Android process, using Binder to identify, invoke and pass arguments
 	  between said processes.
 
+config ANDROID_BINDER_IPC_SELFTEST
+	bool "Android Binder IPC Driver Selftest"
+	depends on ANDROID_BINDER_IPC
+	---help---
+	  This feature allows binder selftest to run.
+
+	  Binder selftest checks the allocation and free of binder buffers
+	  exhaustively with combinations of various buffer sizes and
+	  alignments.
+
 config ANDROID_BINDER_DEVICES
 	string "Android Binder devices"
 	depends on ANDROID_BINDER_IPC
