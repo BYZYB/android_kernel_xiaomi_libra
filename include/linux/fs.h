@@ -379,7 +379,7 @@ struct address_space_operations {
 
 	/* Unfortunately this kludge is needed for FIBMAP. Don't use it */
 	sector_t (*bmap)(struct address_space *, sector_t);
-	void (*invalidatepage) (struct page *, unsigned long);
+	void (*invalidatepage) (struct page *, unsigned int, unsigned int);
 	int (*releasepage) (struct page *, gfp_t);
 	void (*freepage)(struct page *);
 	ssize_t (*direct_IO)(int, struct kiocb *, const struct iovec *iov,
@@ -699,6 +699,9 @@ enum inode_i_mutex_lock_class
 	I_MUTEX_XATTR,
 	I_MUTEX_QUOTA
 };
+
+void lock_two_nondirectories(struct inode *, struct inode*);
+void unlock_two_nondirectories(struct inode *, struct inode*);
 
 /*
  * NOTE: in a 32bit arch with a preemptable kernel and
@@ -2792,5 +2795,14 @@ static inline void inode_has_no_xattr(struct inode *inode)
 	if (!is_sxid(inode->i_mode) && (inode->i_sb->s_flags & MS_NOSEC))
 		inode->i_flags |= S_NOSEC;
 }
+
+static inline bool dir_relax(struct inode *inode)
+{
+	mutex_unlock(&inode->i_mutex);
+	mutex_lock(&inode->i_mutex);
+	return !IS_DEADDIR(inode);
+}
+
+extern void inode_nohighmem(struct inode *inode);
 
 #endif /* _LINUX_FS_H */

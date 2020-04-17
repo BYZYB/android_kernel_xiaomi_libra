@@ -315,8 +315,7 @@ long sync_meta_pages(struct f2fs_sb_info *sbi, enum page_type type,
 	while (index <= end) {
 		int i, nr_pages;
 		nr_pages = pagevec_lookup_tag(&pvec, mapping, &index,
-				PAGECACHE_TAG_DIRTY,
-				min(end - index, (pgoff_t)PAGEVEC_SIZE-1) + 1);
+				PAGECACHE_TAG_DIRTY);
 		if (unlikely(nr_pages == 0))
 			break;
 

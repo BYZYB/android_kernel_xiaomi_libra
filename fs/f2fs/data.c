@@ -1651,8 +1651,7 @@ retry:
 	while (!done && (index <= end)) {
 		int i;
 
-		nr_pages = pagevec_lookup_tag(&pvec, mapping, &index, tag,
-			      min(end - index, (pgoff_t)PAGEVEC_SIZE - 1) + 1);
+		nr_pages = pagevec_lookup_tag(&pvec, mapping, &index, tag);
 		if (nr_pages == 0)
 			break;
 
@@ -2105,7 +2104,7 @@ static ssize_t f2fs_direct_IO(int rw, struct kiocb *iocb,
 	return err;
 }
 
-void f2fs_invalidate_page(struct page *page, unsigned long offset)
+void f2fs_invalidate_page(struct page *page, unsigned long offset, unsigned int length)
 {
 	struct inode *inode = page->mapping->host;
 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);

@@ -1295,8 +1295,7 @@ static struct page *last_fsync_dnode(struct f2fs_sb_info *sbi, nid_t ino)
 	while (index <= end) {
 		int i, nr_pages;
 		nr_pages = pagevec_lookup_tag(&pvec, NODE_MAPPING(sbi), &index,
-				PAGECACHE_TAG_DIRTY,
-				min(end - index, (pgoff_t)PAGEVEC_SIZE-1) + 1);
+				PAGECACHE_TAG_DIRTY);
 		if (nr_pages == 0)
 			break;
 
@@ -1449,8 +1448,7 @@ retry:
 	while (index <= end) {
 		int i, nr_pages;
 		nr_pages = pagevec_lookup_tag(&pvec, NODE_MAPPING(sbi), &index,
-				PAGECACHE_TAG_DIRTY,
-				min(end - index, (pgoff_t)PAGEVEC_SIZE-1) + 1);
+				PAGECACHE_TAG_DIRTY);
 		if (nr_pages == 0)
 			break;
 
@@ -1564,8 +1562,7 @@ next_step:
 	while (index <= end) {
 		int i, nr_pages;
 		nr_pages = pagevec_lookup_tag(&pvec, NODE_MAPPING(sbi), &index,
-				PAGECACHE_TAG_DIRTY,
-				min(end - index, (pgoff_t)PAGEVEC_SIZE-1) + 1);
+				PAGECACHE_TAG_DIRTY);
 		if (nr_pages == 0)
 			break;
 
@@ -1664,8 +1661,7 @@ int wait_on_node_pages_writeback(struct f2fs_sb_info *sbi, nid_t ino)
 	while (index <= end) {
 		int i, nr_pages;
 		nr_pages = pagevec_lookup_tag(&pvec, NODE_MAPPING(sbi), &index,
-				PAGECACHE_TAG_WRITEBACK,
-				min(end - index, (pgoff_t)PAGEVEC_SIZE-1) + 1);
+				PAGECACHE_TAG_WRITEBACK);
 		if (nr_pages == 0)
 			break;
 
