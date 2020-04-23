@@ -143,17 +143,6 @@ struct filename;
 #define VMACACHE_SIZE (1U << VMACACHE_BITS)
 #define VMACACHE_MASK (VMACACHE_SIZE - 1)
 
-/* 
- * Define undefined symbols
- * "sched_set_io_is_busy", "sched_get_cpus_busy", "sched_set_window"
- */
-static inline void sched_set_io_is_busy(int val) {};
-static inline void sched_get_cpus_busy(struct sched_load *busy, const struct cpumask *query_cpus) {};
-static inline int sched_set_window(u64 window_start, unsigned int window_size)
-{
-	return -EINVAL;
-}
-
 /*
  * These are the constant used to fake the fixed-point load-average
  * counting. Some notes:
