@@ -142,9 +142,10 @@ static int send6(struct wg_device *wg, struct sk_buff *skb,
 			if (cache)
 				dst_cache_reset(cache);
 		}
-		ret = ipv6_stub->ipv6_dst_lookup(sock_net(sock), sock, &dst,
-						 &fl);
-		if (unlikely(ret)) {
+		dst = ipv6_stub->ipv6_dst_lookup_flow(sock_net(sock), sock, &fl,
+						      NULL);
+		if (unlikely(IS_ERR(dst))) {
+			ret = PTR_ERR(dst);
 			net_dbg_ratelimited("%s: No route to %pISpfsc, error %d\n",
 					    wg->dev->name, &endpoint->addr, ret);
 			goto err;
@@ -332,6 +333,7 @@ static int wg_receive(struct sock *sk, struct sk_buff *skb)
 	wg = sk->sk_user_data;
 	if (unlikely(!wg))
 		goto err;
+	skb_mark_not_on_list(skb);
 	wg_packet_receive(wg, skb);
 	return 0;
 
@@ -430,7 +432,6 @@ void wg_socket_reinit(struct wg_device *wg, struct sock *new4,
 		wg->incoming_port = ntohs(inet_sk(new4)->inet_sport);
 	mutex_unlock(&wg->socket_update_lock);
 	synchronize_rcu();
-	synchronize_net();
 	sock_free(old4);
 	sock_free(old6);
 }
