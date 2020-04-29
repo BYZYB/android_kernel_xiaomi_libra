@@ -27,11 +27,9 @@
 
 #ifndef _PKTLOG_AC_H_
 #define _PKTLOG_AC_H_
-
-#include "ol_if_athvar.h"
-
 #ifndef REMOVE_PKT_LOG
 
+#include "ol_if_athvar.h"
 #include <pktlog_ac_api.h>
 #include <pktlog_ac_fmt.h>
 #include "osdep.h"
@@ -149,15 +147,15 @@ static inline void pktlog_init(struct ol_softc *scn)
 {
 	return;
 }
-static inline int pktlog_enable(struct ol_softc *scn, int32_t log_state)
+static int pktlog_enable(struct ol_softc *scn, int32_t log_state)
 {
 	return 0;
 }
-static inline int pktlog_setsize(struct ol_softc *scn, int32_t log_state)
+static int pktlog_setsize(struct ol_softc *scn, int32_t log_state)
 {
 	return 0;
 }
-static inline int pktlog_disable(struct ol_softc *scn)
+static int pktlog_disable(struct ol_softc *scn)
 {
 	return 0;
 }
