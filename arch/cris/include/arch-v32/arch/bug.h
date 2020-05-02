@@ -3,7 +3,6 @@
 
 #include <linux/stringify.h>
 
-#ifdef CONFIG_BUG
 #ifdef CONFIG_DEBUG_BUGVERBOSE
 /*
  * The penalty for the in-band code path will be the size of break 14.
@@ -27,7 +26,6 @@
 #endif
 
 #define HAVE_ARCH_BUG
-#endif
 
 #include <asm-generic/bug.h>
 #endif

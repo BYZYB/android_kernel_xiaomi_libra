@@ -588,11 +588,9 @@ static void decode_LDSTidxI_0(unsigned int opcode)
 
 static void decode_opcode(unsigned int opcode)
 {
-#ifdef CONFIG_BUG
 	if (opcode == BFIN_BUG_OPCODE)
 		pr_cont("BUG");
 	else
-#endif
 	if ((opcode & 0xffffff00) == ProgCtrl_opcode)
 		decode_ProgCtrl_0(opcode);
 	else if ((opcode & 0xfffff000) == BRCC_opcode)

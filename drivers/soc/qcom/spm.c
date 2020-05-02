@@ -260,8 +260,10 @@ void msm_spm_drv_flush_seq_entry(struct msm_spm_driver_data *dev)
 	int i;
 	int num_spm_entry = msm_spm_drv_get_num_spm_entry(dev);
 
-	if (!dev)
+	if (!dev) {
+		__WARN();
 		return;
+	}
 
 	for (i = 0; i < num_spm_entry; i++) {
 		__raw_writel(dev->reg_seq_entry_shadow[i],

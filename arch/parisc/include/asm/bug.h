@@ -8,7 +8,6 @@
  * The offending file and line are encoded in the __bug_table section.
  */
 
-#ifdef CONFIG_BUG
 #define HAVE_ARCH_BUG
 #define HAVE_ARCH_WARN_ON
 
@@ -86,8 +85,6 @@
 	}							\
 	unlikely(__ret_warn_on);				\
 })
-
-#endif
 
 #include <asm-generic/bug.h>
 #endif

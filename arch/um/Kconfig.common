@@ -53,7 +53,6 @@ config GENERIC_CALIBRATE_DELAY
 config GENERIC_BUG
 	bool
 	default y
-	depends on BUG
 
 config HZ
 	int

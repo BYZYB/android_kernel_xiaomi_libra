@@ -3,8 +3,6 @@
 
 #include <linux/kernel.h>
 
-#ifdef CONFIG_BUG
-
 #ifdef CONFIG_DEBUG_BUGVERBOSE
 
 #define __EMIT_BUG(x) do {					\
@@ -64,7 +62,6 @@
 
 #define HAVE_ARCH_BUG
 #define HAVE_ARCH_WARN_ON
-#endif /* CONFIG_BUG */
 
 #include <asm-generic/bug.h>
 

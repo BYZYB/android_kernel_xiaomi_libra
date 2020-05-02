@@ -60,7 +60,6 @@ config ARCH_HAS_ILOG2_U64
 config GENERIC_BUG
 	bool
 	default y
-	depends on BUG
 
 config GENERIC_HWEIGHT
 	bool

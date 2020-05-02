@@ -12,8 +12,6 @@
 #define BUG_OPCODE .long 0x00b00b00  /* For asm */
 #define BUG_ILLEGAL_INSTR "0x00b00b00" /* For BUG macro */
 
-#ifdef CONFIG_BUG
-
 #ifdef __ASSEMBLY__
 #include <asm/asm-offsets.h>
 #ifdef CONFIG_DEBUG_BUGVERBOSE
@@ -122,7 +120,6 @@
 #else /* !__ASSEMBLY__ */
 #define _EMIT_BUG_ENTRY
 #endif
-#endif /* CONFIG_BUG */
 
 #include <asm-generic/bug.h>
 

@@ -188,7 +188,6 @@ asmlinkage notrace void trap_c(struct pt_regs *fp)
 	/* 0x20 - Reserved, Caught by default */
 	/* 0x21 - Undefined Instruction, handled here */
 	case VEC_UNDEF_I:
-#ifdef CONFIG_BUG
 		if (kernel_mode_regs(fp)) {
 			switch (report_bug(fp->pc, fp)) {
 			case BUG_TRAP_TYPE_NONE:
@@ -204,7 +203,6 @@ asmlinkage notrace void trap_c(struct pt_regs *fp)
 				panic("BUG()");
 			}
 		}
-#endif
 #ifdef CONFIG_BFIN_PSEUDODBG_INSNS
 		/*
 		 * Support for the fake instructions, if the instruction fails,
@@ -561,7 +559,6 @@ void panic_cplb_error(int cplb_panic, struct pt_regs *fp)
 	panic("Unrecoverable event");
 }
 
-#ifdef CONFIG_BUG
 int is_valid_bugaddr(unsigned long addr)
 {
 	unsigned int opcode;
@@ -571,7 +568,6 @@ int is_valid_bugaddr(unsigned long addr)
 
 	return opcode == BFIN_BUG_OPCODE;
 }
-#endif
 
 /* stub this out */
 #ifndef CONFIG_DEBUG_VERBOSE

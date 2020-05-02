@@ -475,10 +475,8 @@ init_IRQ(void)
 	set_exception_vector(0x0a, d_mmu_access);
 	set_exception_vector(0x0b, d_mmu_write);
 
-#ifdef CONFIG_BUG
 	/* Break 14 handler, used to implement cheap BUG().  */
 	set_exception_vector(0x1e, breakh_BUG);
-#endif
 
 	/* The system-call trap is reached by "break 13". */
 	set_exception_vector(0x1d, system_call);

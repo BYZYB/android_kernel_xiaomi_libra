@@ -2387,7 +2387,6 @@ struct sk_buff *__skb_gso_segment(struct sk_buff *skb,
 EXPORT_SYMBOL(__skb_gso_segment);
 
 /* Take action when hardware reception checksum errors are detected. */
-#ifdef CONFIG_BUG
 void netdev_rx_csum_fault(struct net_device *dev)
 {
 	if (net_ratelimit()) {
@@ -2396,7 +2395,6 @@ void netdev_rx_csum_fault(struct net_device *dev)
 	}
 }
 EXPORT_SYMBOL(netdev_rx_csum_fault);
-#endif
 
 /* Actually, we should eliminate this check as soon as we know, that:
  * 1. IOMMU is present and allows to map all the memory.

@@ -3,8 +3,6 @@
 
 #include <linux/linkage.h>
 
-#ifdef CONFIG_BUG
-
 #define BUG_INSTR_VALUE 0xe7f001f2
 #define BUG_INSTR_TYPE ".word "
 
@@ -43,7 +41,6 @@ do {								\
 #endif  /* CONFIG_DEBUG_BUGVERBOSE */
 
 #define HAVE_ARCH_BUG
-#endif  /* CONFIG_BUG */
 
 #include <asm-generic/bug.h>
 

@@ -3,7 +3,6 @@
 
 #include <linux/stringify.h>
 
-#ifdef CONFIG_BUG
 #ifdef CONFIG_DEBUG_BUGVERBOSE
 /* The BUG() macro is used for marking obviously incorrect code paths.
  * It will cause a message with the file name and line number to be printed,
@@ -49,13 +48,6 @@ struct bug_frame {
 			      ".section .rodata\n"			\
 			      "0:\t.string \"" __FILE__ "\"\n\t"	\
 			      ".previous")
-#endif
-
-#else
-
-/* This just causes an oops. */
-#define BUG() (*(int *)0 = 0)
-
 #endif
 
 #define HAVE_ARCH_BUG

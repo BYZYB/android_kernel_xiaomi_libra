@@ -1997,6 +1997,8 @@ void secondary_cpu_hs_init(void *base_ptr, int cpu)
 			udelay(PHASE_SETTLING_TIME_US);
 
 			iounmap(l2_saw_base);
+		} else {
+			__WARN();
 		}
 	}
 }

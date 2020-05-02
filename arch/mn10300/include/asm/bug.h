@@ -11,8 +11,6 @@
 #ifndef _ASM_BUG_H
 #define _ASM_BUG_H
 
-#ifdef CONFIG_BUG
-
 /*
  * Tell the user there is some problem.
  */
@@ -30,7 +28,6 @@ do {								\
 } while (1)
 
 #define HAVE_ARCH_BUG
-#endif /* CONFIG_BUG */
 
 #include <asm-generic/bug.h>
 

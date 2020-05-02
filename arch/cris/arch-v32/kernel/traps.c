@@ -128,7 +128,6 @@ void handle_nmi(struct pt_regs *regs)
 }
 
 
-#ifdef CONFIG_BUG
 extern void die_if_kernel(const char *str, struct pt_regs *regs, long err);
 
 /* Copy of the regs at BUG() time.  */
@@ -189,5 +188,4 @@ void
 handle_BUG(struct pt_regs *regs)
 {
 }
-#endif
 #endif

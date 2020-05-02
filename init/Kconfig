@@ -1420,16 +1420,6 @@ config PRINTK
 	  very difficult to diagnose system problems, saying N here is
 	  strongly discouraged.
 
-config BUG
-	bool "BUG() support" if EXPERT
-	default y
-	help
-          Disabling this option eliminates support for BUG and WARN, reducing
-          the size of your kernel image and potentially quietly ignoring
-          numerous fatal conditions. You should only consider disabling this
-          option for embedded systems with no facilities for reporting errors.
-          Just say Y.
-
 config ELF_CORE
 	depends on COREDUMP
 	default y

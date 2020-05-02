@@ -82,7 +82,6 @@ config STACKTRACE_SUPPORT
 
 config GENERIC_BUG
 	def_bool y
-	depends on BUG
 
 menu "Machine selection"
 

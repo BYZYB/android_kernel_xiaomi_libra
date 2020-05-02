@@ -8,8 +8,6 @@
 #ifndef __ASM_AVR32_BUG_H
 #define __ASM_AVR32_BUG_H
 
-#ifdef CONFIG_BUG
-
 /*
  * According to our Chief Architect, this compact opcode is very
  * unlikely to ever be implemented.
@@ -65,8 +63,6 @@
 
 #define HAVE_ARCH_BUG
 #define HAVE_ARCH_WARN_ON
-
-#endif /* CONFIG_BUG */
 
 #include <asm-generic/bug.h>
 

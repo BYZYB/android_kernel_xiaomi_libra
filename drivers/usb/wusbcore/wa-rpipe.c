@@ -417,10 +417,6 @@ static int rpipe_check_aim(const struct wa_rpipe *rpipe, const struct wahc *wa,
 	return result;
 }
 
-#ifndef CONFIG_BUG
-#define CONFIG_BUG 0
-#endif
-
 /*
  * Make sure there is an rpipe allocated for an endpoint
  *
@@ -440,11 +436,9 @@ int rpipe_get_by_ep(struct wahc *wa, struct usb_host_endpoint *ep,
 	mutex_lock(&wa->rpipe_mutex);
 	rpipe = ep->hcpriv;
 	if (rpipe != NULL) {
-		if (CONFIG_BUG == 1) {
-			result = rpipe_check_aim(rpipe, wa, ep, urb, gfp);
-			if (result < 0)
-				goto error;
-		}
+		result = rpipe_check_aim(rpipe, wa, ep, urb, gfp);
+		if (result < 0)
+			goto error;
 		__rpipe_get(rpipe);
 		dev_dbg(dev, "ep 0x%02x: reusing rpipe %u\n",
 			ep->desc.bEndpointAddress,

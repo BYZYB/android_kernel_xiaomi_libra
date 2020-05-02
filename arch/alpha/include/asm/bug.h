@@ -3,7 +3,6 @@
 
 #include <linux/linkage.h>
 
-#ifdef CONFIG_BUG
 #include <asm/pal.h>
 
 /* ??? Would be nice to use .gprel32 here, but we can't be sure that the
@@ -17,7 +16,6 @@
   } while (0)
 
 #define HAVE_ARCH_BUG
-#endif
 
 #include <asm-generic/bug.h>
 
