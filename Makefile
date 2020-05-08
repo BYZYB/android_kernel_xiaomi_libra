@@ -240,8 +240,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   = -O3 -fomit-frame-pointer -std=gnu89
-HOSTCXXFLAGS = -O3
+HOSTCFLAGS   = -fomit-frame-pointer -std=gnu89
+HOSTCXXFLAGS =
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -322,56 +322,77 @@ $(srctree)/scripts/Kbuild.include: ;
 include $(srctree)/scripts/Kbuild.include
 
 # Make variables (CC, etc...)
+AR = $(CROSS_COMPILE)ar
+AS = $(CROSS_COMPILE)as
+AWK = awk
+CC = $(CROSS_COMPILE)gcc
+CHECK = sparse
+CPP = $(CC) -E
+DEPMOD = /sbin/depmod
+GENKSYMS = scripts/genksyms/genksyms
+LD = $(CROSS_COMPILE)ld
+NM = $(CROSS_COMPILE)nm
+OBJCOPY = $(CROSS_COMPILE)objcopy
+OBJDUMP = $(CROSS_COMPILE)objdump
+PERL = perl
+STRIP = $(CROSS_COMPILE)strip
 
-AS		= $(CROSS_COMPILE)as
-LD		= $(CROSS_COMPILE)ld
-CC		= $(CROSS_COMPILE)gcc -O3
-CPP		= $(CC) -E
-AR		= $(CROSS_COMPILE)ar
-NM		= $(CROSS_COMPILE)nm
-STRIP		= $(CROSS_COMPILE)strip
-OBJCOPY		= $(CROSS_COMPILE)objcopy
-OBJDUMP		= $(CROSS_COMPILE)objdump
-AWK		= awk
-GENKSYMS	= scripts/genksyms/genksyms
-INSTALLKERNEL  := installkernel
-DEPMOD		= /sbin/depmod
-PERL		= perl
-CHECK		= sparse
+AFLAGS_KERNEL =
+AFLAGS_MODULE =
+CFLAGS_GCOV = -fprofile-arcs -ftest-coverage
+CFLAGS_KERNEL =
+CFLAGS_MODULE =
+LDFLAGS_MODULE =
 
-CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ $(CF)
-CFLAGS_MODULE   =
-AFLAGS_MODULE   =
-LDFLAGS_MODULE  =
-CFLAGS_KERNEL	=
-AFLAGS_KERNEL	=
-CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
+CHECKFLAGS := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ $(CF)
+INSTALLKERNEL := installkernel
+KBUILD_AFLAGS := -D__ASSEMBLY__
+KBUILD_AFLAGS_KERNEL :=
+KBUILD_AFLAGS_MODULE := -DMODULE
+KBUILD_CFLAGS := -fno-strict-aliasing -fno-common -std=gnu89
+KBUILD_CFLAGS_KERNEL :=
+KBUILD_CFLAGS_MODULE := -DMODULE
+KBUILD_CPPFLAGS := -D__KERNEL__
+KBUILD_LDFLAGS_MODULE := -T $(srctree)/scripts/module-common.lds
 
 # Use USERINCLUDE when you must reference the UAPI directories only.
-USERINCLUDE    := \
+USERINCLUDE := \
 		-I$(srctree)/arch/$(hdr-arch)/include/uapi \
 		-Iarch/$(hdr-arch)/include/generated/uapi \
 		-I$(srctree)/include/uapi \
 		-Iinclude/generated/uapi \
-                -include $(srctree)/include/linux/kconfig.h
+		-include $(srctree)/include/linux/kconfig.h
 
 # Use LINUXINCLUDE when you must reference the include/ directory.
 # Needed to be compatible with the O= option
-LINUXINCLUDE    := \
+LINUXINCLUDE := \
 		-I$(srctree)/arch/$(hdr-arch)/include \
 		-Iarch/$(hdr-arch)/include/generated \
 		$(if $(KBUILD_SRC), -I$(srctree)/include) \
-		-Iinclude \
-		$(USERINCLUDE)
+		-Iinclude $(USERINCLUDE)
 
-KBUILD_CPPFLAGS := -O3 -D__KERNEL__
-KBUILD_CFLAGS   := -O3 -fno-strict-aliasing -fno-common -std=gnu89
-KBUILD_AFLAGS_KERNEL :=
-KBUILD_CFLAGS_KERNEL :=
-KBUILD_AFLAGS   := -D__ASSEMBLY__
-KBUILD_AFLAGS_MODULE  := -DMODULE
-KBUILD_CFLAGS_MODULE  := -DMODULE
-KBUILD_LDFLAGS_MODULE := -T $(srctree)/scripts/module-common.lds
+# Use arch specific optimization
+KBUILD_CFLAGS += \
+		-mcpu=cortex-a57.cortex-a53 \
+		-mtune=cortex-a57.cortex-a53
+
+# Disable not-so-important warnings
+KBUILD_CFLAGS += \
+		-Wno-address-of-packed-member \
+		-Wno-attribute-alias \
+		-Wno-format-overflow \
+		-Wno-format-security \
+		-Wno-format-truncation \
+		-Wno-maybe-uninitialized \
+		-Wno-packed-not-aligned \
+		-Wno-psabi \
+		-Wno-restrict \
+		-Wno-return-void \
+		-Wno-stringop-overflow \
+		-Wno-stringop-truncation \
+		-Wno-trigraphs \
+		-Wno-unused-const-variable \
+		-Wno-zero-length-bounds
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
 KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
@@ -562,30 +583,34 @@ endif # $(dot-config)
 # Defaults to vmlinux, but the arch makefile usually adds further targets
 all: vmlinux
 
-KBUILD_CFLAGS	+= $(call cc-disable-warning,maybe-uninitialized,)
+KBUILD_CFLAGS += $(call cc-disable-warning,maybe-uninitialized,)
 
 ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
-KBUILD_CFLAGS	+= $(call cc-option,-ffunction-sections,)
-KBUILD_CFLAGS	+= $(call cc-option,-fdata-sections,)
+KBUILD_CFLAGS += $(call cc-option,-ffunction-sections,)
+KBUILD_CFLAGS += $(call cc-option,-fdata-sections,)
 endif
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS	+= -Os
+HOSTCFLAGS += -Os
+HOSTCXXFLAGS += -Os
+KBUILD_CFLAGS += -Os
+KBUILD_CPPFLAGS += -Os
 else
-KBUILD_CFLAGS	+= -O3
+HOSTCFLAGS += -O3
+HOSTCXXFLAGS += -O3
+KBUILD_CFLAGS += -O3
+KBUILD_CPPFLAGS += -O3
 
 ifdef CONFIG_LTO
-LTO_CFLAGS    := -flto -flto=jobserver -fno-fat-lto-objects \
-                 -fuse-linker-plugin -fwhole-program
+LTO_CFLAGS := -flto -flto=jobserver -fno-fat-lto-objects -fuse-linker-plugin -fwhole-program
 KBUILD_CFLAGS += $(LTO_CFLAGS)
-LTO_LDFLAGS   := $(LTO_CFLAGS) -Wno-lto-type-mismatch -Wno-psabi
-LDFINAL       := $(CONFIG_SHELL) $(srctree)/scripts/gcc-ld $(LTO_LDFLAGS)
-AR            := $(CROSS_COMPILE)gcc-ar
-NM            := $(CROSS_COMPILE)gcc-nm
-DISABLE_LTO   := -fno-lto
+LTO_LDFLAGS := $(LTO_CFLAGS) -Wno-lto-type-mismatch -Wno-psabi
+LDFINAL := $(CONFIG_SHELL) $(srctree)/scripts/gcc-ld $(LTO_LDFLAGS)
+AR := $(CROSS_COMPILE)gcc-ar
+NM := $(CROSS_COMPILE)gcc-nm
+DISABLE_LTO := -fno-lto
 export DISABLE_LTO LDFINAL
 endif
-
 endif
 
 include $(srctree)/arch/$(SRCARCH)/Makefile
