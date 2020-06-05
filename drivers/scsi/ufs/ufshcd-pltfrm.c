@@ -278,8 +278,7 @@ static void ufshcd_parse_pm_qos(struct ufs_hba *hba, int irq)
 				"qcom,cpu-affinity-mask", &cpu_mask)) {
 				hba->pm_qos.req.type = PM_QOS_REQ_AFFINE_CORES;
 				/* Convert u32 to cpu bit mask */
-				cpumask_bits(&hba->pm_qos.req.cpus_affine)[0] =
-					cpu_mask;
+				atomic_set(&hba->pm_qos.req.cpus_affine, cpu_mask);
 			}
 	}
 
