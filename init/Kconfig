@@ -1611,9 +1611,25 @@ config SLUB_DEBUG
 	  SLUB sysfs support. /sys/slab will not exist and there will be
 	  no support for cache validation etc.
 
+config ASLR
+	bool "Address space layout randomization"
+	default y
+	depends on MMU
+	help
+	  Address space layout randomization (ASLR) is a computer security
+	  technique involved in preventing exploitation of memory corruption
+	  vulnerabilities.
+
+	  ASLR is enabled by default on most devices to prevent memory attacks.
+	  Disable ASLR will prevent the randomize of memory address space,
+	  which means to set /proc/sys/kernel/randomize_va_space as 0.
+
+	  Say Y if unsure.
+
 config COMPAT_BRK
 	bool "Disable heap randomization"
 	default y
+	depends on ASLR
 	help
 	  Randomizing heap placement makes heap exploits harder, but it
 	  also breaks ancient binaries (including anything libc5 based).

@@ -1827,10 +1827,10 @@ unsigned long shrink_slab(struct shrink_control *shrink,
 			  unsigned long nr_pages_scanned,
 			  unsigned long lru_pages);
 
-#ifndef CONFIG_MMU
-#define randomize_va_space 0
-#else
+#ifdef CONFIG_ASLR
 extern int randomize_va_space;
+#else
+#define randomize_va_space 0
 #endif
 
 const char * arch_vma_name(struct vm_area_struct *vma);
