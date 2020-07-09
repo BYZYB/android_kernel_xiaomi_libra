@@ -11,11 +11,11 @@
  *
  * vineetg: Dec 2009
  *    -Hand crafted constant propagation for "constant" copy sizes
- *    -stock kernel shrunk by 33K at -O3
+ *    -stock kernel shrunk by 33K at -Ofast
  *
  * vineetg: Sept 2009
  *    -Added option to (UN)inline copy_(to|from)_user to reduce code sz
- *    -kernel shrunk by 200K even at -O3 (gcc 4.2.1)
+ *    -kernel shrunk by 200K even at -Ofast (gcc 4.2.1)
  *    -Enabled when doing -Os
  *
  * Amit Bhor, Sameer Dhavale: Codito Technologies 2004

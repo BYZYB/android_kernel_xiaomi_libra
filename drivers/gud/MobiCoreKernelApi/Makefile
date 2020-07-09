@@ -1,6 +1,6 @@
 #
 # this makefile is called from the kernel make syste
-ccflags-y += -O3 -DNDEBUG
+ccflags-y += -DNDEBUG
 
 ifdef MOBICORE_CFLAGS
     ccflags-y +=$(MOBICORE_CFLAGS)

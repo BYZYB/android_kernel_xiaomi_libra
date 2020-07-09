@@ -31,7 +31,6 @@ FONTC	= $(srctree)/drivers/video/console/font_acorn_8x8.c
 
 # string library code (-Os is not enforced to keep it much smaller)
 OBJS		+= string.o
-CFLAGS_string.o	:= -O3
 
 ifeq ($(CONFIG_ARM_VIRT_EXT),y)
 OBJS		+= hyp-stub.o

@@ -240,7 +240,7 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC       = gcc
 HOSTCXX      = g++
-HOSTCFLAGS   = -fomit-frame-pointer -std=gnu89
+HOSTCFLAGS   = -fomit-frame-pointer
 HOSTCXXFLAGS =
 
 # Decide whether to build built-in, modular, or both.
@@ -349,7 +349,7 @@ INSTALLKERNEL := installkernel
 KBUILD_AFLAGS := -D__ASSEMBLY__
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_AFLAGS_MODULE := -DMODULE
-KBUILD_CFLAGS := -fno-strict-aliasing -fno-common -std=gnu89
+KBUILD_CFLAGS := -fno-strict-aliasing -fno-common
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_CFLAGS_MODULE := -DMODULE
 KBUILD_CPPFLAGS := -D__KERNEL__
@@ -374,25 +374,32 @@ LINUXINCLUDE := \
 # Use arch specific optimization
 KBUILD_CFLAGS += \
 		-mcpu=cortex-a57.cortex-a53 \
-		-mtune=cortex-a57.cortex-a53
+		-mtune=cortex-a57.cortex-a53 \
+		-fmodulo-sched -fmodulo-sched-allow-regmoves \
+		-fgraphite -fgraphite-identity -floop-strip-mine \
+		-floop-block -fira-loop-pressure -ftree-vectorize \
+		-fshrink-wrap-separate -Wl,-O3,--sort-common,--strip-debug
 
 # Disable not-so-important warnings
 KBUILD_CFLAGS += \
 		-Wno-address-of-packed-member \
 		-Wno-attribute-alias \
+		-Wno-discarded-array-qualifiers \
 		-Wno-format-overflow \
 		-Wno-format-security \
 		-Wno-format-truncation \
+		-Wno-implicit-function-declaration \
+		-Wno-incompatible-pointer-types \
+		-Wno-int-conversion \
 		-Wno-maybe-uninitialized \
 		-Wno-packed-not-aligned \
 		-Wno-psabi \
 		-Wno-restrict \
-		-Wno-return-void \
+		-Wno-shift-overflow \
 		-Wno-stringop-overflow \
 		-Wno-stringop-truncation \
 		-Wno-trigraphs \
-		-Wno-unused-const-variable \
-		-Wno-zero-length-bounds
+		-Wno-unused-const-variable
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
 KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
@@ -593,13 +600,15 @@ endif
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 HOSTCFLAGS += -Os
 HOSTCXXFLAGS += -Os
+KBUILD_AFLAGS += -Os
 KBUILD_CFLAGS += -Os
 KBUILD_CPPFLAGS += -Os
 else
-HOSTCFLAGS += -O3
-HOSTCXXFLAGS += -O3
-KBUILD_CFLAGS += -O3
-KBUILD_CPPFLAGS += -O3
+HOSTCFLAGS += -Ofast
+HOSTCXXFLAGS += -Ofast
+KBUILD_AFLAGS += -Ofast
+KBUILD_CFLAGS += -Ofast
+KBUILD_CPPFLAGS += -Ofast
 
 ifdef CONFIG_LTO
 LTO_CFLAGS := -flto -flto=jobserver -fno-fat-lto-objects -fuse-linker-plugin -fwhole-program
@@ -668,6 +677,9 @@ KBUILD_CFLAGS   += $(call cc-option, -fno-var-tracking-assignments)
 ifdef CONFIG_DEBUG_INFO
 KBUILD_CFLAGS	+= -g
 KBUILD_AFLAGS	+= -gdwarf-2
+else
+KBUILD_CFLAGS	+= -g0
+KBUILD_AFLAGS	+= -g0
 endif
 
 ifdef CONFIG_DEBUG_INFO_REDUCED

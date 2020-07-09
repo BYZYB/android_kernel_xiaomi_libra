@@ -1,6 +1,6 @@
 
 CC = m68k-cbm-amigados-gcc
-CFLAGS = -O3
+CFLAGS = -Ofast
 
 
 All:		dmesg

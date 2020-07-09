@@ -292,7 +292,7 @@ int SetCoreClockPLL(volatile STG4000REG __iomem *pSTGReg, struct pci_dev *pDev)
 	tmp = ((CORE_PLL_MODE_REG_0_7 << 8) | (core_pll & 0x00FF));
 	pci_write_config_word(pDev, CorePllControl, tmp);
 	/* Without some delay between the PCI config writes the clock does
-	   not reliably set when the code is compiled -O3
+	   not reliably set when the code is compiled -Ofast
 	 */
 	OS_DELAY(1000000);
 

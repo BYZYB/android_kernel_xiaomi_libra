@@ -691,7 +691,7 @@ It proved to be fastest to do some table lookups. Performance gain
 introduced by this is about a factor 2 on my system when a repair had to
 be done, and 1% or so if no repair had to be done.
 Code size increased from 330 bytes to 686 bytes for this function.
-(gcc 4.2, -O3)
+(gcc 4.2, -Ofast)
 
 
 Conclusion
@@ -701,7 +701,7 @@ The gain when calculating the ecc is tremendous. Om my development hardware
 a speedup of a factor of 18 for ecc calculation was achieved. On a test on an
 embedded system with a MIPS core a factor 7 was obtained.
 On  a test with a Linksys NSLU2 (ARMv5TE processor) the speedup was a factor
-5 (big endian mode, gcc 4.1.2, -O3)
+5 (big endian mode, gcc 4.1.2, -Ofast)
 For correction not much gain could be obtained (as bitflips are rare). Then
 again there are also much less cycles spent there.
 

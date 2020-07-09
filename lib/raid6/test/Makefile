@@ -4,8 +4,7 @@
 #
 
 CC	 = gcc
-OPTFLAGS = -O3			# Adjust as desired
-CFLAGS	 = -I.. -I ../../../include -g0 $(OPTFLAGS)
+CFLAGS	 = -I.. -I ../../../include
 LD	 = ld
 AWK	 = awk -f
 AR	 = ar
