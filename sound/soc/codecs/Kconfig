@@ -125,16 +125,16 @@ config SND_SOC_ALL_CODECS
 	select SND_SOC_WM9705 if SND_SOC_AC97_BUS
 	select SND_SOC_WM9712 if SND_SOC_AC97_BUS
 	select SND_SOC_WM9713 if SND_SOC_AC97_BUS
-        help
-          Normally ASoC codec drivers are only built if a machine driver which
-          uses them is also built since they are only usable with a machine
-          driver.  Selecting this option will allow these drivers to be built
-          without an explicit machine driver for test and development purposes.
+	help
+	Normally ASoC codec drivers are only built if a machine driver which
+	uses them is also built since they are only usable with a machine
+	driver.  Selecting this option will allow these drivers to be built
+	without an explicit machine driver for test and development purposes.
 
-	  Support for the bus types used to access the codecs to be built must
-	  be selected separately.
+	Support for the bus types used to access the codecs to be built must
+	be selected separately.
 
-          If unsure select "N".
+	If unsure select "N".
 
 config SND_SOC_88PM860X
 	tristate
@@ -565,5 +565,4 @@ config SND_SOC_MSM_HDMI_CODEC_RX
 	bool "HDMI Audio Playback"
 	depends on FB_MSM_MDSS_HDMI_PANEL && (SND_SOC_MSM8974 || SND_SOC_APQ8084 || SND_SOC_MSM8994)
 	help
-	HDMI audio drivers should be built only if the platform
-        supports hdmi panel.
+	HDMI audio drivers should be built only if the platform supports hdmi panel.

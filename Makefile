@@ -161,7 +161,7 @@ export srctree objtree VPATH
 # SUBARCH tells the usermode build what the underlying arch is.  That is set
 # first, and if a usermode build is happening, the "ARCH=um" on the command
 # line overrides the setting of ARCH below.  If a native build is happening,
-# then ARCH is assigned, getting whatever value it gets normally, and 
+# then ARCH is assigned, getting whatever value it gets normally, and
 # SUBARCH is subsequently ignored.
 
 SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
@@ -284,7 +284,7 @@ export KBUILD_CHECKSRC KBUILD_SRC KBUILD_EXTMOD
 #         cmd_cc_o_c       = $(CC) $(c_flags) -c -o $@ $<
 #
 # If $(quiet) is empty, the whole command will be printed.
-# If it is set to "quiet_", only the short version will be printed. 
+# If it is set to "quiet_", only the short version will be printed.
 # If it is set to "silent_", nothing will be printed at all, since
 # the variable $(silent_cmd_cc_o_c) doesn't exist.
 #
@@ -349,7 +349,7 @@ INSTALLKERNEL := installkernel
 KBUILD_AFLAGS := -D__ASSEMBLY__
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_AFLAGS_MODULE := -DMODULE
-KBUILD_CFLAGS := -fno-strict-aliasing -fno-common
+KBUILD_CFLAGS :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_CFLAGS_MODULE := -DMODULE
 KBUILD_CPPFLAGS := -D__KERNEL__
@@ -373,33 +373,18 @@ LINUXINCLUDE := \
 
 # Use arch specific optimization
 KBUILD_CFLAGS += \
+		-fgraphite \
+		-fgraphite-identity \
+		-fira-loop-pressure \
+		-floop-block \
+		-floop-strip-mine \
+		-fmodulo-sched \
+		-fmodulo-sched-allow-regmoves \
+		-fshrink-wrap-separate \
+		-ftree-vectorize \
 		-mcpu=cortex-a57.cortex-a53 \
 		-mtune=cortex-a57.cortex-a53 \
-		-fmodulo-sched -fmodulo-sched-allow-regmoves \
-		-fgraphite -fgraphite-identity -floop-strip-mine \
-		-floop-block -fira-loop-pressure -ftree-vectorize \
-		-fshrink-wrap-separate -Wl,-O3,--sort-common,--strip-debug
-
-# Disable not-so-important warnings
-KBUILD_CFLAGS += \
-		-Wno-address-of-packed-member \
-		-Wno-attribute-alias \
-		-Wno-discarded-array-qualifiers \
-		-Wno-format-overflow \
-		-Wno-format-security \
-		-Wno-format-truncation \
-		-Wno-implicit-function-declaration \
-		-Wno-incompatible-pointer-types \
-		-Wno-int-conversion \
-		-Wno-maybe-uninitialized \
-		-Wno-packed-not-aligned \
-		-Wno-psabi \
-		-Wno-restrict \
-		-Wno-shift-overflow \
-		-Wno-stringop-overflow \
-		-Wno-stringop-truncation \
-		-Wno-trigraphs \
-		-Wno-unused-const-variable
+		-Wl,-O3,--sort-common,--strip-debug
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
 KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
@@ -590,11 +575,9 @@ endif # $(dot-config)
 # Defaults to vmlinux, but the arch makefile usually adds further targets
 all: vmlinux
 
-KBUILD_CFLAGS += $(call cc-disable-warning,maybe-uninitialized,)
-
 ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
-KBUILD_CFLAGS += $(call cc-option,-ffunction-sections,)
-KBUILD_CFLAGS += $(call cc-option,-fdata-sections,)
+KBUILD_CFLAGS += $(call cc-option, -fdata-sections,) \
+                 $(call cc-option, -ffunction-sections,)
 endif
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
@@ -629,9 +612,9 @@ ifdef CONFIG_READABLE_ASM
 # reorder blocks reorders the control in the function
 # ipa clone creates specialized cloned functions
 # partial inlining inlines only parts of functions
-KBUILD_CFLAGS += $(call cc-option,-fno-reorder-blocks,) \
-                 $(call cc-option,-fno-ipa-cp-clone,) \
-                 $(call cc-option,-fno-partial-inlining)
+KBUILD_CFLAGS += $(call cc-option, -fno-ipa-cp-clone,) \
+                 $(call cc-option, -fno-partial-inlining) \
+                 $(call cc-option, -fno-reorder-blocks,)
 endif
 
 # Handle stack protector mode.
@@ -655,12 +638,17 @@ endif
 endif
 KBUILD_CFLAGS += $(stackp-flag)
 
-# This warning generated too much noise in a regular build.
+# These warnings generated too much noise in a regular build.
 # Use make W=1 to enable this warning (see scripts/Makefile.build)
-KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
+KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member) \
+                 $(call cc-disable-warning, attribute-alias) \
+                 $(call cc-disable-warning, discarded-array-qualifiers) \
+                 $(call cc-disable-warning, format-security) \
+                 $(call cc-disable-warning, incompatible-pointer-types) \
+                 $(call cc-disable-warning, shift-overflow)
 
 ifdef CONFIG_FRAME_POINTER
-KBUILD_CFLAGS	+= -fno-omit-frame-pointer -fno-optimize-sibling-calls
+KBUILD_CFLAGS += -fno-omit-frame-pointer -fno-optimize-sibling-calls
 else
 # Some targets (ARM with Thumb2, for example), can't be built with frame
 # pointers.  For those, we don't have FUNCTION_TRACER automatically
@@ -668,31 +656,29 @@ else
 # incompatible with -fomit-frame-pointer with current GCC, so we don't use
 # -fomit-frame-pointer with FUNCTION_TRACER.
 ifndef CONFIG_FUNCTION_TRACER
-KBUILD_CFLAGS	+= -fomit-frame-pointer
+KBUILD_CFLAGS += -fomit-frame-pointer
 endif
 endif
-
-KBUILD_CFLAGS   += $(call cc-option, -fno-var-tracking-assignments)
 
 ifdef CONFIG_DEBUG_INFO
-KBUILD_CFLAGS	+= -g
-KBUILD_AFLAGS	+= -gdwarf-2
+KBUILD_CFLAGS += -g
+KBUILD_AFLAGS += -gdwarf-2
 else
-KBUILD_CFLAGS	+= -g0
-KBUILD_AFLAGS	+= -g0
+KBUILD_CFLAGS += -g0
+KBUILD_AFLAGS += -g0
 endif
 
 ifdef CONFIG_DEBUG_INFO_REDUCED
-KBUILD_CFLAGS 	+= $(call cc-option, -femit-struct-debug-baseonly) \
-		   $(call cc-option,-fno-var-tracking)
+KBUILD_CFLAGS += $(call cc-option, -femit-struct-debug-baseonly) \
+                 $(call cc-option, -fno-var-tracking)
 endif
 
 ifdef CONFIG_FUNCTION_TRACER
 ifdef CONFIG_HAVE_FENTRY
 CC_USING_FENTRY	:= $(call cc-option, -mfentry -DCC_USING_FENTRY)
 endif
-KBUILD_CFLAGS	+= -pg $(CC_USING_FENTRY)
-KBUILD_AFLAGS	+= $(CC_USING_FENTRY)
+KBUILD_CFLAGS += -pg $(CC_USING_FENTRY)
+KBUILD_AFLAGS += $(CC_USING_FENTRY)
 ifdef CONFIG_DYNAMIC_FTRACE
 	ifdef CONFIG_HAVE_C_RECORDMCOUNT
 		BUILD_C_RECORDMCOUNT := y
@@ -708,20 +694,23 @@ endif
 
 # arch Makefile may override CC so keep this after arch Makefile is included
 NOSTDINC_FLAGS += -nostdinc -isystem $(shell $(CC) -print-file-name=include)
-CHECKFLAGS     += $(NOSTDINC_FLAGS)
+CHECKFLAGS += $(NOSTDINC_FLAGS)
 
 # disable pointer signed / unsigned warnings in gcc 4.0
 KBUILD_CFLAGS += $(call cc-disable-warning, pointer-sign)
 
 # disable invalid "can't wrap" optimizations for signed / pointers
-KBUILD_CFLAGS	+= $(call cc-option,-fno-strict-overflow)
+KBUILD_CFLAGS += $(call cc-option, -fno-common) \
+                 $(call cc-option, -fno-strict-aliasing) \
+                 $(call cc-option, -fno-strict-overflow) \
+                 $(call cc-option, -fno-var-tracking-assignments)
 
 # use the deterministic mode of AR if available
 KBUILD_ARFLAGS := $(call ar-option,D)
 
 # check for 'asm goto'
 ifeq ($(shell $(CONFIG_SHELL) $(srctree)/scripts/gcc-goto.sh $(CC)), y)
-	KBUILD_CFLAGS += -DCC_HAVE_ASM_GOTO
+KBUILD_CFLAGS += -DCC_HAVE_ASM_GOTO
 endif
 
 # Add user supplied CPPFLAGS, AFLAGS and CFLAGS as the last assignments
@@ -844,7 +833,7 @@ ifdef CONFIG_BUILD_DOCSRC
 endif
 	+$(call if_changed,link-vmlinux)
 
-# The actual objects are generated when descending, 
+# The actual objects are generated when descending,
 # make sure no implicit rule kicks in
 $(sort $(vmlinux-deps)): $(vmlinux-dirs) ;
 
@@ -1453,7 +1442,7 @@ endif
 	$(build)=$(build-dir) $(@:.ko=.o)
 	$(Q)$(MAKE) -f $(srctree)/scripts/Makefile.modpost
 
-# FIXME Should go into a make.lib or something 
+# FIXME Should go into a make.lib or something
 # ===========================================================================
 
 quiet_cmd_rmdirs = $(if $(wildcard $(rm-dirs)),CLEAN   $(wildcard $(rm-dirs)))
