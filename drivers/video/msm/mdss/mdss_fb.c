@@ -861,7 +861,7 @@ static struct attribute *mdss_fb_attrs[] = {
 	&dev_attr_msm_fb_thermal_level.attr,
 	&dev_attr_msm_fb_panel_status.attr,
 	&dev_attr_msm_fb_dfps_mode.attr,
-	&dev_attr_rgb.attr, 
+	&dev_attr_rgb.attr,
 	NULL,
 };
 
@@ -1712,11 +1712,6 @@ static int mdss_fb_blank_sub(int blank_mode, struct fb_info *info,
 
 	if (mfd->dcm_state == DCM_ENTER)
 		return -EPERM;
-
-#ifdef CONFIG_KALLSYMS
-	pr_debug("%pS mode:%d\n", __builtin_return_address(0),
-		blank_mode);
-#endif
 
 	snprintf(trace_buffer, sizeof(trace_buffer), "fb%d blank %d",
 		mfd->index, blank_mode);
