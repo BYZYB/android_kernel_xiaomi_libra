@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -411,12 +411,6 @@ WLANSAP_Close
         Cleanup SAP control block.
     ------------------------------------------------------------------------*/
     VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_INFO_HIGH, "WLANSAP_Close");
-#ifdef WLAN_FEATURE_MBSSID
-    sapCleanupChannelList(pCtx);
-#else
-    sapCleanupChannelList();
-#endif
-
     WLANSAP_CleanCB(pSapCtx, VOS_TRUE /* empty queues/lists/pkts if any*/);
 
 #ifdef WLAN_FEATURE_MBSSID
@@ -4004,4 +3998,3 @@ VOS_STATUS wlansap_set_tx_leakage_threshold(tHalHandle hal,
 			mac->sap.SapDfsInfo.tx_leakage_threshold);
 	return VOS_STATUS_SUCCESS;
 }
-

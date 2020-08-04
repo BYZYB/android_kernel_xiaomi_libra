@@ -369,10 +369,10 @@ __limHandleBeacon(tpAniSirGlobal pMac, tpSirMsgQ pMsg, tpPESession psessionEntry
     {
         schBeaconProcess(pMac, pRxPacketInfo, psessionEntry);
     }
-    else
+     else
         limProcessBeaconFrame(pMac, pRxPacketInfo, psessionEntry);
 
-    return;
+        return;
 }
 
 
@@ -1203,23 +1203,7 @@ limProcessMessages(tpAniSirGlobal pMac, tpSirMsgQ  limMsg)
     pMac->lim.numTot++;
 #endif
 
-   /*
-    * MTRACE logs not captured for events received from SME
-    * SME enums (eWNI_SME_START_REQ) starts with 0x16xx.
-    * Compare received SME events with SIR_SME_MODULE_ID
-    */
-    if (SIR_SME_MODULE_ID == (tANI_U8)MAC_TRACE_GET_MODULE_ID(limMsg->type)) {
-       MTRACE(macTrace(pMac, TRACE_CODE_RX_SME_MSG, NO_SESSION, limMsg->type));
-    } else {
-       /*
-        * Omitting below message types as these are too frequent and when crash
-        * happens we loose critical trace logs if these are also logged
-        */
-       if (limMsg->type != SIR_CFG_PARAM_UPDATE_IND &&
-          limMsg->type != SIR_BB_XPORT_MGMT_MSG)
-           MTRACE(macTraceMsgRx(pMac, NO_SESSION,
-                 LIM_TRACE_MAKE_RXMSG(limMsg->type, LIM_MSG_PROCESSED));)
-    }
+    MTRACE(macTraceMsgRx(pMac, NO_SESSION, LIM_TRACE_MAKE_RXMSG(limMsg->type, LIM_MSG_PROCESSED));)
 
     switch (limMsg->type)
     {
@@ -1379,10 +1363,7 @@ limProcessMessages(tpAniSirGlobal pMac, tpSirMsgQ  limMsg)
             // These messages are from HDD
             limProcessNormalHddMsg(pMac, limMsg, true);  //need to response to hdd
             break;
-        case eWNI_SME_SEND_DISASSOC_FRAME:
-            /* Need to response to hdd */
-            limProcessNormalHddMsg(pMac, limMsg, true);
-            break;
+
         case eWNI_SME_SCAN_ABORT_IND:
           {
             tSirMbMsg *pMsg = limMsg->bodyptr;
@@ -1452,8 +1433,9 @@ limProcessMessages(tpAniSirGlobal pMac, tpSirMsgQ  limMsg)
         case eWNI_SME_GET_TSM_STATS_REQ:
 #endif /* FEATURE_WLAN_ESE && FEATURE_WLAN_ESE_UPLOAD */
         case eWNI_SME_EXT_CHANGE_CHANNEL:
-        case eWNI_SME_ROAM_RESTART_REQ:
+        case eWNI_SME_ROAM_SCAN_OFFLOAD_REQ:
         case eWNI_SME_REGISTER_MGMT_FRAME_CB:
+        case eWNI_SME_REGISTER_P2P_ACK_CB:
             // These messages are from HDD
             limProcessNormalHddMsg(pMac, limMsg, false);   //no need to response to hdd
             break;
@@ -1625,12 +1607,6 @@ limProcessMessages(tpAniSirGlobal pMac, tpSirMsgQ  limMsg)
             {
                 limProcessChannelSwitchTimeout(pMac);
             }
-            vos_mem_free(limMsg->bodyptr);
-            limMsg->bodyptr = NULL;
-            break;
-
-        case eWNI_SME_MON_INIT_SESSION:
-            lim_mon_init_session(pMac, limMsg->bodyptr);
             vos_mem_free(limMsg->bodyptr);
             limMsg->bodyptr = NULL;
             break;

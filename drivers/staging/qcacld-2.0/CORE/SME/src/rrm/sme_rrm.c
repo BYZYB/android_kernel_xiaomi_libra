@@ -866,12 +866,6 @@ eHalStatus sme_RrmProcessBeaconReportReqInd(tpAniSirGlobal pMac, void *pMsgBuf)
 #if defined WLAN_VOWIFI_DEBUG
    smsLog( pMac, LOGE, "Received Beacon report request ind Channel = %d", pBeaconReq->channelInfo.channelNum );
 #endif
-
-   if (pBeaconReq->channelList.numChannels > SIR_ESE_MAX_MEAS_IE_REQS) {
-         smsLog( pMac, LOGP, "Beacon report request numChannels: %u exceeds "
-                "max num channels", pBeaconReq->channelList.numChannels);
-         return eHAL_STATUS_FAILURE;
-   }
    //section 11.10.8.1 (IEEE Std 802.11k-2008)
    //channel 0 and 255 has special meaning.
    if( (pBeaconReq->channelInfo.channelNum == 0)  ||
@@ -1197,11 +1191,11 @@ eHalStatus sme_RrmProcessNeighborReport(tpAniSirGlobal pMac, void *pMsgBuf)
    tpRrmNeighborReportDesc  pNeighborReportDesc;
    tANI_U8 i = 0;
    VOS_STATUS vosStatus = VOS_STATUS_SUCCESS;
-   tANI_U32 sessionId;
+   tANI_U8 sessionId;
 
    /* Get the session id */
    status = csrRoamGetSessionIdFromBSSID(pMac, (tCsrBssid *)pNeighborRpt->bssId,
-                                         &sessionId);
+                                        (tANI_U32*) &sessionId);
    if (HAL_STATUS_SUCCESS(status)) {
 #ifdef FEATURE_WLAN_ESE
        /* Clear the cache for ESE. */

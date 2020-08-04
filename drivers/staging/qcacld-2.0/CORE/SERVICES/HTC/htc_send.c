@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -33,7 +33,6 @@
 #include <adf_os_mem.h> /* adf_os_mem_alloc */
 #include <vos_getBin.h>
 #include "epping_main.h"
-#include "adf_trace.h"
 
 #define HTC_DATA_RESOURCE_THRS 256
 #define HTC_DATA_MINDESC_PERPACKET 2
@@ -416,8 +415,8 @@ static A_STATUS HTCSendBundledNetbuf(HTC_TARGET *target,
 #endif
 
 #if defined(DEBUG_HL_LOGGING) && defined(CONFIG_HL_SUPPORT)
-    if ((data_len / pEndpoint->TxCreditSize) <= HTC_MAX_MSG_PER_BUNDLE_TX) {
-        target->tx_bundle_stats[(data_len / pEndpoint->TxCreditSize) - 1]++;
+    if ((data_len / pEndpoint->TxCreditSize) < HTC_MAX_MSG_PER_BUNDLE_TX) {
+        target->tx_bundle_stats[data_len / pEndpoint->TxCreditSize]++;
     }
 #endif
 
@@ -645,9 +644,11 @@ static A_STATUS HTCIssuePackets(HTC_TARGET       *target,
 	target->CE_send_cnt++;
 
         if (adf_os_unlikely(A_FAILED(status))) {
+            if (status != A_NO_RESOURCE) {
                 /* TODO : if more than 1 endpoint maps to the same PipeID it is possible
                  * to run out of resources in the HIF layer. Don't emit the error */
                 AR_DEBUG_PRINTF(ATH_DEBUG_ERR, ("HIFSend Failed status:%d \n",status));
+            }
             LOCK_HTC_TX(target);
 	    target->CE_send_cnt--;
             pEndpoint->ul_outstanding_cnt--;
@@ -678,7 +679,7 @@ static A_STATUS HTCIssuePackets(HTC_TARGET       *target,
             ("htc_issue_packets, failed pkt:0x%p status:%d",
             pPacket, status));
 
-    AR_DEBUG_PRINTF(ATH_DEBUG_SEND, ("-HTCIssuePackets \n"));
+    AR_DEBUG_PRINTF(ATH_DEBUG_SEND, ("-HTCIssuePackets\n"));
 
     return status;
 }
@@ -961,7 +962,6 @@ static HTC_SEND_QUEUE_RESULT HTCTrySend(HTC_TARGET       *target,
         if (HTC_QUEUE_EMPTY(pCallersSendQueue)) {
                 /* empty queue */
             OL_ATH_HTC_PKT_ERROR_COUNT_INCR(target,HTC_PKT_Q_EMPTY);
-            AR_DEBUG_PRINTF(ATH_DEBUG_ERR, ("Empty queue\n"));
             result = HTC_SEND_QUEUE_DROP;
             break;
         }
@@ -1057,19 +1057,10 @@ static HTC_SEND_QUEUE_RESULT HTCTrySend(HTC_TARGET       *target,
     LOCK_HTC_TX(target);
 
     if (!HTC_QUEUE_EMPTY(&sendQueue)) {
-        if (target->is_nodrop_pkt) {
-            /*
-            * nodrop pkts have higher priority than normal pkts, insert nodrop pkt
-            * to head for proper start/termination of test.
-            */
-            HTC_PACKET_QUEUE_TRANSFER_TO_HEAD(&pEndpoint->TxQueue,&sendQueue);
-            target->is_nodrop_pkt = FALSE;
-        } else {
             /* transfer packets to tail */
-            HTC_PACKET_QUEUE_TRANSFER_TO_TAIL(&pEndpoint->TxQueue,&sendQueue);
-            A_ASSERT(HTC_QUEUE_EMPTY(&sendQueue));
-            INIT_HTC_PACKET_QUEUE(&sendQueue);
-        }
+        HTC_PACKET_QUEUE_TRANSFER_TO_TAIL(&pEndpoint->TxQueue,&sendQueue);
+        A_ASSERT(HTC_QUEUE_EMPTY(&sendQueue));
+        INIT_HTC_PACKET_QUEUE(&sendQueue);
     }
 
         /* increment tx processing count on entry */
@@ -1133,7 +1124,7 @@ static HTC_SEND_QUEUE_RESULT HTCTrySend(HTC_TARGET       *target,
         UNLOCK_HTC_TX(target);
 
             /* send what we can */
-        result = HTCIssuePackets(target,pEndpoint,&sendQueue);
+        result = HTCIssuePackets(target, pEndpoint, &sendQueue);
         if (result) {
             AR_DEBUG_PRINTF(ATH_DEBUG_ERR,
                ("htc_issue_packets, failed status:%d put it back to head of callers SendQueue",
@@ -1176,7 +1167,7 @@ A_STATUS HTCSendPktsMultiple(HTC_HANDLE HTCHandle, HTC_PACKET_QUEUE *pPktQueue)
     pPacket = HTC_GET_PKT_AT_HEAD(pPktQueue);
     if (NULL == pPacket) {
         OL_ATH_HTC_PKT_ERROR_COUNT_INCR(target,GET_HTC_PKT_Q_FAIL);
-        AR_DEBUG_PRINTF(ATH_DEBUG_ERR, ("-HTCSendPktsMultiple \n"));
+        AR_DEBUG_PRINTF(ATH_DEBUG_SEND, ("-HTCSendPktsMultiple \n"));
         return A_EINVAL;
     }
 
@@ -1184,7 +1175,7 @@ A_STATUS HTCSendPktsMultiple(HTC_HANDLE HTCHandle, HTC_PACKET_QUEUE *pPktQueue)
     pEndpoint = &target->EndPoint[pPacket->Endpoint];
 
     if (!pEndpoint->ServiceID) {
-       AR_DEBUG_PRINTF(ATH_DEBUG_ERR, ("%s: ServiceID is invalid\n",
+       AR_DEBUG_PRINTF(ATH_DEBUG_SEND, ("%s: ServiceID is invalid\n",
                                                  __func__));
        return A_EINVAL;
     }
@@ -1322,11 +1313,6 @@ A_STATUS HTCSendDataPkt(HTC_HANDLE HTCHandle, adf_nbuf_t       netbuf, int Epid,
     HTC_WRITE32(((A_UINT32 *)pHtcHdr) + 1, SM(pEndpoint->SeqNo, HTC_FRAME_HDR_CONTROLBYTES1));
 
     pEndpoint->SeqNo++;
-
-    NBUF_UPDATE_TX_PKT_COUNT(netbuf, NBUF_TX_PKT_HTC);
-    DPTRACE(adf_dp_trace(netbuf, ADF_DP_TRACE_HTC_PACKET_PTR_RECORD,
-                adf_nbuf_data_addr(netbuf),
-                sizeof(adf_nbuf_data(netbuf))));
 
     status = HIFSend_head(target->hif_dev,
             pEndpoint->UL_PipeID,
@@ -1763,12 +1749,6 @@ A_BOOL HTCIsEndpointActive(HTC_HANDLE      HTCHandle,
     return TRUE;
 }
 
-void HTCSetNodropPkt(HTC_HANDLE HTCHandle, A_BOOL isNodropPkt)
-{
-    HTC_TARGET      *target = GET_HTC_TARGET_FROM_HANDLE(HTCHandle);
-    target->is_nodrop_pkt = isNodropPkt;
-}
-
 /* process credit reports and call distribution function */
 void HTCProcessCreditRpt(HTC_TARGET *target, HTC_CREDIT_REPORT *pRpt, int NumEntries, HTC_ENDPOINT_ID FromEndpoint)
 {
@@ -1840,21 +1820,7 @@ void HTCProcessCreditRpt(HTC_TARGET *target, HTC_CREDIT_REPORT *pRpt, int NumEnt
             if (pEndpoint->ServiceID == HTT_DATA_MSG_SVC){
                 HTCSendDataPkt(target, NULL, 0);
             } else {
-#ifdef HIF_SDIO
-                if (WLAN_IS_EPPING_ENABLED(vos_get_conparam())) {
-                    if (((pEndpoint->ServiceID == WMI_DATA_BE_SVC) &&
-                        (pEndpoint->TxCreditFlowEnabled)          &&
-                        (pEndpoint->TxCredits >= HTC_MAX_MSG_PER_BUNDLE_TX + 1)) ||
-                        (target->is_nodrop_pkt)) {
-                        /* Bundle TX for mboxping test */
-                        HTCTrySend(target, pEndpoint, NULL);
-                    }
-                } else {
-#endif
-                    HTCTrySend(target,pEndpoint,NULL);
-#ifdef HIF_SDIO
-                }
-#endif
+                HTCTrySend(target,pEndpoint,NULL);
             }
 #endif
             LOCK_HTC_TX(target);

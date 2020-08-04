@@ -456,7 +456,6 @@ get_eRoamCmdStatus_str(eRoamCmdStatus val)
 #endif
         CASE_RETURN_STR(eCSR_ROAM_FT_START);
         CASE_RETURN_STR(eCSR_ROAM_REMAIN_CHAN_READY);
-        CASE_RETURN_STR(eCSR_ROAM_SEND_ACTION_CNF);
         CASE_RETURN_STR(eCSR_ROAM_SESSION_OPENED);
         CASE_RETURN_STR(eCSR_ROAM_FT_REASSOC_FAILED);
 #ifdef FEATURE_WLAN_LFR
@@ -1008,7 +1007,7 @@ tANI_BOOLEAN csrIsStaSessionConnected( tpAniSirGlobal pMac )
     return( fRc );
 }
 
-tANI_BOOLEAN csrIsP2pOrSapSessionConnected(tpAniSirGlobal pMac)
+tANI_BOOLEAN csrIsP2pSessionConnected( tpAniSirGlobal pMac )
 {
     tANI_U32 i;
     tANI_BOOLEAN fRc = eANI_BOOLEAN_FALSE;
@@ -2226,13 +2225,6 @@ csrIsconcurrentsessionValid(tpAniSirGlobal pMac,tANI_U32 cursessionId,
                      VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
                                FL("**P2P-Client session**"));
                      return eHAL_STATUS_SUCCESS;
-             case VOS_NDI_MODE:
-                     if (bss_persona != VOS_STA_MODE) {
-                         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
-                             FL("***NDI mode can co-exist only with STA ***"));
-                         return eHAL_STATUS_FAILURE;
-                     }
-                     break;
              default :
                      VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
                                FL("**Persona not handled = %d**"),
@@ -3143,7 +3135,7 @@ tANI_BOOLEAN csrLookupPMKID( tpAniSirGlobal pMac, tANI_U32 sessionId, tANI_U8 *p
     {
         for (Index = 0; Index < CSR_MAX_PMKID_ALLOWED; Index++)
         {
-            smsLog(pMac, LOG2, "match PMKID "MAC_ADDRESS_STR " to ",
+            smsLog(pMac, LOG1, "match PMKID "MAC_ADDRESS_STR " to ",
                    MAC_ADDR_ARRAY(pBSSId));
             if( vos_mem_compare(pBSSId, pSession->PmkidCacheInfo[Index].BSSID, sizeof(tCsrBssid)) )
             {
@@ -3160,7 +3152,7 @@ tANI_BOOLEAN csrLookupPMKID( tpAniSirGlobal pMac, tANI_U32 sessionId, tANI_U8 *p
         fRC = TRUE;
     }
     while( 0 );
-    smsLog(pMac, LOG1, "csrLookupPMKID called return match = %d pMac->roam.NumPmkidCache = %d",
+    smsLog(pMac, LOGW, "csrLookupPMKID called return match = %d pMac->roam.NumPmkidCache = %d",
         fRC, pSession->NumPmkidCache);
 
     return fRC;
@@ -5557,9 +5549,6 @@ tSirBssType csrTranslateBsstypeToMacType(eCsrRoamBssType csrtype)
     case eCSR_BSS_TYPE_INFRA_AP:
         ret = eSIR_INFRA_AP_MODE;
         break;
-    case eCSR_BSS_TYPE_NDI:
-        ret = eSIR_NDI_MODE;
-        break;
     case eCSR_BSS_TYPE_ANY:
     default:
         ret = eSIR_AUTO_MODE;
@@ -6019,44 +6008,6 @@ const char * sme_requestTypetoString(const v_U8_t requestType)
         default:
             return "Unknown Scan Request Type";
     }
-}
-
-/**
- * sme_scan_type_to_string() - converts scan type enum to string.
- * @scan_type: scan type enum
- *
- * Return: printable string for scan type
- */
-const char * sme_scan_type_to_string(const uint8_t scan_type)
-{
-	switch (scan_type) {
-	CASE_RETURN_STRING(eSIR_PASSIVE_SCAN);
-	CASE_RETURN_STRING(eSIR_ACTIVE_SCAN);
-	CASE_RETURN_STRING(eSIR_BEACON_TABLE);
-	default:
-		return "Unknown ScanType";
-	}
-}
-
-/**
- * sme_bss_type_to_string() - converts bss type enum to string.
- * @bss_type: bss type enum
- *
- * Return: printable string for bss type
- */
-const char * sme_bss_type_to_string(const uint8_t bss_type)
-{
-	switch (bss_type) {
-	CASE_RETURN_STRING(eSIR_INFRASTRUCTURE_MODE);
-	CASE_RETURN_STRING(eSIR_INFRA_AP_MODE);
-	CASE_RETURN_STRING(eSIR_IBSS_MODE);
-	CASE_RETURN_STRING(eSIR_BTAMP_STA_MODE);
-	CASE_RETURN_STRING(eSIR_BTAMP_AP_MODE);
-	CASE_RETURN_STRING(eSIR_AUTO_MODE);
-	CASE_RETURN_STRING(eSIR_NDI_MODE);
-	default:
-		return "Unknown BssType";
-	}
 }
 
 VOS_STATUS csrAddToChannelListFront(

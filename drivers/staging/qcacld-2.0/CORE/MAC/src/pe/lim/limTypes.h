@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2014, 2016 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -47,7 +47,6 @@
 
 #include "limApi.h"
 #include "limDebug.h"
-#include "limTrace.h"
 #include "limSendSmeRspMessages.h"
 #include "sysGlobal.h"
 #include "dphGlobal.h"
@@ -891,12 +890,10 @@ limPostSmeMessage(tpAniSirGlobal pMac, tANI_U32 msgType, tANI_U32 *pMsgBuf)
     msg.type = (tANI_U16)msgType;
     msg.bodyptr = pMsgBuf;
     msg.bodyval = 0;
-    if (msgType > eWNI_SME_MSG_TYPES_BEGIN) {
-        MTRACE(macTrace(pMac, TRACE_CODE_TX_SME_MSG, NO_SESSION, msg.type));
+    if (msgType > eWNI_SME_MSG_TYPES_BEGIN)
         limProcessSmeReqMessages(pMac, &msg);
-    } else {
+    else
         limProcessMlmRspMessages(pMac, msgType, pMsgBuf);
-    }
 } /*** end limPostSmeMessage() ***/
 
 /**
@@ -937,7 +934,6 @@ limPostMlmMessage(tpAniSirGlobal pMac, tANI_U32 msgType, tANI_U32 *pMsgBuf)
     msg.type = (tANI_U16) msgType;
     msg.bodyptr = pMsgBuf;
     msg.bodyval = 0;
-    MTRACE(macTraceMsgRx(pMac, NO_SESSION, msg.type));
     limProcessMlmReqMessages(pMac, &msg);
 } /*** end limPostMlmMessage() ***/
 
@@ -1095,5 +1091,4 @@ void limProcessRxScanEvent(tpAniSirGlobal mac, void *buf);
 
 int limProcessRemainOnChnlReq(tpAniSirGlobal pMac, tANI_U32 *pMsg);
 void limRemainOnChnRsp(tpAniSirGlobal pMac, eHalStatus status, tANI_U32 *data);
-
 #endif /* __LIM_TYPES_H */

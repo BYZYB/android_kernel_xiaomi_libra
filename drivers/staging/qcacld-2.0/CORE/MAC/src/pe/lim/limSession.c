@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2011-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -203,7 +203,6 @@ void pe_reset_protection_callback(void *ptr)
                     pe_session_entry->beaconParams.fRIFSMode;
         beacon_params.smeSessionId =
                     pe_session_entry->smeSessionId;
-        beacon_params.paramChangeBitmap |= PARAM_llBCOEXIST_CHANGED;
         bcn_prms_changed = true;
     }
 
@@ -296,8 +295,6 @@ tpPESession peCreateSession(tpAniSirGlobal pMac,
 
             /* Copy the BSSID to the session table */
             sirCopyMacAddr(pMac->lim.gpSession[i].bssId, bssid);
-            if (bssType == eSIR_MONITOR_MODE)
-                sirCopyMacAddr(pMac->lim.gpSession[i].selfMacAddr, bssid);
             pMac->lim.gpSession[i].valid = TRUE;
 
             /* Initialize the SME and MLM states to IDLE */
@@ -390,8 +387,6 @@ tpPESession peCreateSession(tpAniSirGlobal pMac,
                limFTOpen(pMac, &pMac->lim.gpSession[i]);
             }
 #endif
-            if (eSIR_MONITOR_MODE == bssType)
-               limFTOpen(pMac, &pMac->lim.gpSession[i]);
 
             if (eSIR_INFRA_AP_MODE == bssType) {
                 pMac->lim.gpSession[i].old_protection_state = 0;

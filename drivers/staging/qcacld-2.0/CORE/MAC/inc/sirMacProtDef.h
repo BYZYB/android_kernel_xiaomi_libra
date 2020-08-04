@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2011-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -149,8 +149,6 @@
 #define SIR_MAC_ACTION_FST            18
 #define SIR_MAC_ACTION_VHT            21
 
-#define SIR_MAC_ACTION_TX             1
-#define SIR_MAC_ACTION_RX             2
 // QoS management action codes
 
 #define SIR_MAC_QOS_ADD_TS_REQ      0
@@ -505,8 +503,6 @@
 #define SIR_MAC_NUM_TARGET_IPV6_NS_OFFLOAD_NA   16
 #define SIR_MAC_IPV6_ADDR_LEN               16
 #define SIR_IPV6_ADDR_VALID                 1
-#define SIR_IPV6_ADDR_UC_TYPE               0
-#define SIR_IPV6_ADDR_AC_TYPE               1
 #endif //WLAN_NS_OFFLOAD
 #define SIR_MAC_ARP_OFFLOAD_SIZE        1
 
@@ -584,18 +580,12 @@
 #define SIR_MAC_MAX_NUMBER_OF_RATES          12
 #define SIR_MAC_MAX_NUM_OF_DEFAULT_KEYS      4
 #define SIR_MAC_KEY_LENGTH                   13   // WEP Maximum key length size
-#define SIR_MAC_AUTH_CHALLENGE_LENGTH        253
-#define SIR_MAC_SAP_AUTH_CHALLENGE_LENGTH    128
+#define SIR_MAC_AUTH_CHALLENGE_LENGTH        128
 #define SIR_MAC_WEP_IV_LENGTH                4
 #define SIR_MAC_WEP_ICV_LENGTH               4
-#define SIR_MAC_CHALLENGE_ID_LEN             2
-
-/* 2 bytes each for auth algo number, transaction number and status code */
-#define SIR_MAC_AUTH_FRAME_INFO_LEN          6
 
 /// MAX key length when ULA is used
 #define SIR_MAC_MAX_KEY_LENGTH               32
-#define SIR_MAC_MAX_KEY_RSC_LEN              16
 
 /// Macro definitions for get/set on FC fields
 #define SIR_MAC_GET_PROT_VERSION(x)      ((((tANI_U16) x) & 0x0300) >> 8)

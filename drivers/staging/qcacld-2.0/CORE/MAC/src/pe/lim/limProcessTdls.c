@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -2340,20 +2340,8 @@ static void limTdlsUpdateHashNodeInfo(tpAniSirGlobal pMac, tDphHashNode *pStaDs,
          * base channel should be less than or equal to channel width of
          * STA-AP link. So take this setting from the psessionEntry.
          */
-        limLog(pMac, LOG1,
-               FL("supportedChannelWidthSet %x htSupportedChannelWidthSet %x"),
-               htCaps->supportedChannelWidthSet,
-               psessionEntry->htSupportedChannelWidthSet);
-
         pStaDs->htSupportedChannelWidthSet =
-            (htCaps->supportedChannelWidthSet <
-              psessionEntry->htSupportedChannelWidthSet) ?
-                 htCaps->supportedChannelWidthSet :
-                 psessionEntry->htSupportedChannelWidthSet;
-
-        limLog(pMac, LOG1, FL("pStaDs->htSupportedChannelWidthSet %x"),
-               pStaDs->htSupportedChannelWidthSet);
-
+            psessionEntry->htSupportedChannelWidthSet;
         pStaDs->htMIMOPSState = htCaps->mimoPowerSave ;
         pStaDs->htMaxAmsduLength =  htCaps->maximalAMSDUsize;
         pStaDs->htAMpduDensity =    htCaps->mpduDensity;
@@ -2806,7 +2794,8 @@ void PopulateDot11fTdlsExtCapability(tpAniSirGlobal pMac,
     p_ext_cap->TDLSProhibited = TDLS_PROHIBITED ;
 
     extCapability->present = 1 ;
-    extCapability->num_bytes = lim_compute_ext_cap_ie_length(extCapability);
+    /* For STA cases we alwasy support 11mc - Allow MAX length */
+    extCapability->num_bytes = DOT11F_IE_EXTCAP_MAX_LEN;
 
     return ;
 }
@@ -2855,9 +2844,7 @@ tSirRetStatus limProcessSmeTdlsMgmtSendReq(tpAniSirGlobal pMac,
                            psessionEntry->limSmeState);
         goto lim_tdls_send_mgmt_error;
     }
-    vos_tdls_tx_rx_mgmt_event(SIR_MAC_ACTION_TDLS,
-              SIR_MAC_ACTION_TX, SIR_MAC_MGMT_ACTION,
-              pSendMgmtReq->reqType, pSendMgmtReq->peerMac);
+
     switch( pSendMgmtReq->reqType )
     {
         case SIR_MAC_TDLS_DIS_REQ:
@@ -3313,6 +3300,7 @@ lim_tdls_link_establish_error:
     return eSIR_SUCCESS;
 }
 
+
 /**
  * lim_check_aid_and_delete_peer - Funtion to check aid and delete peer
  * @p_mac: pointer to mac context
@@ -3371,6 +3359,7 @@ skip:
 /* Delete all the TDLS peer connected before leaving the BSS */
 tSirRetStatus limDeleteTDLSPeers(tpAniSirGlobal pMac, tpPESession psessionEntry)
 {
+
     if (NULL == psessionEntry)
     {
         limLog(pMac, LOGE, FL("NULL psessionEntry"));

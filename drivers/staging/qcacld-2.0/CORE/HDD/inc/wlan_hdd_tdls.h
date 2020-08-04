@@ -150,29 +150,6 @@ typedef enum eTDLSLinkStatus {
     eTDLS_LINK_TEARING,
 } tTDLSLinkStatus;
 
-/**
- * enum tdls_teardown_reason - Reason for TDLS teardown
- * @eTDLS_TEARDOWN_EXT_CTRL: Reason ext ctrl.
- * @eTDLS_TEARDOWN_CONCURRENCY: Reason concurrency.
- * @eTDLS_TEARDOWN_RSSI_THRESHOLD: Reason rssi threashold.
- * @eTDLS_TEARDOWN_TXRX_THRESHOLD: Reason txrx threashold.
- * @eTDLS_TEARDOWN_BTCOEX: Reason BTCOEX.
- * @eTDLS_TEARDOWN_SCAN: Reason scan.
- * @eTDLS_TEARDOWN_BSS_DISCONNECT: Reason bss disconnected.
- *
- * Reason to indicate in diag event of tdls teardown.
- */
-
-enum tdls_teardown_reason {
-	eTDLS_TEARDOWN_EXT_CTRL,
-	eTDLS_TEARDOWN_CONCURRENCY,
-	eTDLS_TEARDOWN_RSSI_THRESHOLD,
-	eTDLS_TEARDOWN_TXRX_THRESHOLD,
-	eTDLS_TEARDOWN_BTCOEX,
-	eTDLS_TEARDOWN_SCAN,
-	eTDLS_TEARDOWN_BSS_DISCONNECT,
-	eTDLS_TEARDOWN_ANTENNA_SWITCH,
-};
 
 typedef enum {
     eTDLS_LINK_SUCCESS,                /* Success */
@@ -411,35 +388,6 @@ int wlan_hdd_tdls_set_extctrl_param(hdd_adapter_t *pAdapter,
                                     uint32_t max_latency,
                                     uint32_t op_class,
                                     uint32_t min_bandwidth);
-#ifdef FEATURE_WLAN_DIAG_SUPPORT
-void hdd_send_wlan_tdls_teardown_event(uint32_t reason,
-					uint8_t *peer_mac);
-void hdd_wlan_tdls_enable_link_event(const uint8_t *peer_mac,
-					uint8_t is_off_chan_supported,
-					uint8_t is_off_chan_configured,
-					uint8_t is_off_chan_established);
-void hdd_wlan_block_scan_by_tdls_event(void);
-#else
-static inline
-void hdd_send_wlan_tdls_teardown_event(uint32_t reason,
-					uint8_t *peer_mac)
-{
-	return;
-}
-static inline
-void hdd_wlan_tdls_enable_link_event(const uint8_t *peer_mac,
-					uint8_t is_off_chan_supported,
-					uint8_t is_off_chan_configured,
-					uint8_t is_off_chan_established)
-{
-	return;
-}
-static inline
-void hdd_wlan_block_scan_by_tdls_event(void)
-{
-	return;
-}
-#endif /* FEATURE_WLAN_DIAG_SUPPORT */
 
 int wlan_hdd_tdls_set_force_peer(hdd_adapter_t *pAdapter, const u8 *mac,
                                  tANI_BOOLEAN forcePeer);
@@ -495,15 +443,15 @@ wlan_hdd_tdls_disable_offchan_and_teardown_links(hdd_context_t *pHddCtx)
 static inline void wlan_hdd_tdls_exit(hdd_adapter_t *pAdapter)
 {
 }
-static inline void
-wlan_hdd_tdls_implicit_send_discovery_request(void *pHddTdlsCtx)
-{
-}
 static inline int wlan_hdd_tdls_antenna_switch(hdd_context_t *hdd_ctx,
 						      hdd_adapter_t *adapter,
 						      uint32_t mode)
 {
 	return 0;
+}
+static inline void
+wlan_hdd_tdls_implicit_send_discovery_request(void *pHddTdlsCtx)
+{
 }
 #endif
 

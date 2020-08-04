@@ -416,7 +416,7 @@ limDeletePreAuthNode(tpAniSirGlobal pMac, tSirMacAddr macAddr)
 
 
         PELOG1(limLog(pMac, LOG1, FL("=====> limDeletePreAuthNode : first node to delete"));)
-        PELOG1(limLog(pMac, LOG1, FL("Release data entry: %p id %d peer "),
+        PELOG1(limLog(pMac, LOG1, FL("Release data entry: %x id %d peer "),
                         pTempNode, pTempNode->authNodeIdx);
         limPrintMacAddr(pMac, macAddr, LOG1);)
         limReleasePreAuthNode(pMac, pTempNode);
@@ -437,7 +437,7 @@ limDeletePreAuthNode(tpAniSirGlobal pMac, tSirMacAddr macAddr)
             pPrevNode->next = pTempNode->next;
 
             PELOG1(limLog(pMac, LOG1, FL("=====> limDeletePreAuthNode : subsequent node to delete"));
-            limLog(pMac, LOG1, FL("Release data entry: %p id %d peer "),
+            limLog(pMac, LOG1, FL("Release data entry: %x id %d peer "),
                          pTempNode, pTempNode->authNodeIdx);
             limPrintMacAddr(pMac, macAddr, LOG1);)
             limReleasePreAuthNode(pMac, pTempNode);
@@ -534,6 +534,8 @@ limRestoreFromAuthState(tpAniSirGlobal pMac, tSirResultCodes resultCode, tANI_U1
                       (tANI_U32 *) &mlmAuthCnf);
 } /*** end limRestoreFromAuthState() ***/
 
+
+
 /**
  * limLookUpKeyMappings()
  *
@@ -593,10 +595,7 @@ limEncryptAuthFrame(tpAniSirGlobal pMac, tANI_U8 keyId, tANI_U8 *pKey, tANI_U8 *
                     tANI_U8 *pEncrBody, tANI_U32 keyLength)
 {
     tANI_U8  seed[LIM_SEED_LENGTH], icv[SIR_MAC_WEP_ICV_LENGTH];
-    tANI_U16 framelen;
 
-    framelen = ((tpSirMacAuthFrameBody)pPlainText)->length +
-                 SIR_MAC_AUTH_FRAME_INFO_LEN + SIR_MAC_CHALLENGE_ID_LEN;
     keyLength += 3;
 
     // Bytes 0-2 of seed is IV
@@ -607,15 +606,15 @@ limEncryptAuthFrame(tpAniSirGlobal pMac, tANI_U8 keyId, tANI_U8 *pKey, tANI_U8 *
     vos_mem_copy((tANI_U8 *) &seed[3], pKey, keyLength - 3);
 
     // Compute CRC-32 and place them in last 4 bytes of plain text
-    limComputeCrc32(icv, pPlainText, framelen);
+    limComputeCrc32(icv, pPlainText, sizeof(tSirMacAuthFrameBody));
 
-    vos_mem_copy( pPlainText + framelen,
+    vos_mem_copy( pPlainText + sizeof(tSirMacAuthFrameBody),
                   icv, SIR_MAC_WEP_ICV_LENGTH);
 
     // Run RC4 on plain text with the seed
     limRC4(pEncrBody + SIR_MAC_WEP_IV_LENGTH,
            (tANI_U8 *) pPlainText, seed, keyLength,
-           framelen + SIR_MAC_WEP_IV_LENGTH);
+           LIM_ENCR_AUTH_BODY_LEN - SIR_MAC_WEP_IV_LENGTH);
 
     // Prepare IV
     pEncrBody[0] = seed[0];
@@ -648,7 +647,7 @@ limEncryptAuthFrame(tpAniSirGlobal pMac, tANI_U8 keyId, tANI_U8 *pKey, tANI_U8 *
  */
 
 void
-limComputeCrc32(tANI_U8 *pDest, tANI_U8 * pSrc, tANI_U16 len)
+limComputeCrc32(tANI_U8 *pDest, tANI_U8 * pSrc, tANI_U8 len)
 {
     tANI_U32 crc;
     int i;
@@ -735,7 +734,7 @@ limRC4(tANI_U8 *pDest, tANI_U8 *pSrc, tANI_U8 *seed, tANI_U32 keyLength, tANI_U1
     {
         tANI_U8 i   = ctx.i;
         tANI_U8 j   = ctx.j;
-        tANI_U16 len = frameLen;
+        tANI_U8 len = (tANI_U8) frameLen;
 
         while (len-- > 0)
         {
@@ -817,7 +816,7 @@ limDecryptAuthFrame(tpAniSirGlobal pMac, tANI_U8 *pKey, tANI_U8 *pEncrBody,
     // Compute CRC-32 and place them in last 4 bytes of encrypted body
     limComputeCrc32(icv,
                     (tANI_U8 *) pPlainBody,
-                    (frameLen - SIR_MAC_WEP_ICV_LENGTH));
+                    (tANI_U8) (frameLen - SIR_MAC_WEP_ICV_LENGTH));
 
     // Compare RX_ICV with computed ICV
     for (i = 0; i < SIR_MAC_WEP_ICV_LENGTH; i++)

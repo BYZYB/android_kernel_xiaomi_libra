@@ -2629,7 +2629,7 @@ ProcSetReqInternal(tpAniSirGlobal pMac, tANI_U16 length, tANI_U32 *pParam, tANI_
     tANI_U32    value, result;
     tANI_U32    param_list[WNI_CFG_SET_CNF_NUM];
 
-    PELOG1(cfgLog(pMac, LOG1, FL("Rcvd cfg set request %d bytes"), length);)
+    PELOG1(cfgLog(pMac, LOGl, FL("Rcvd cfg set request %d bytes"), length);)
 
     if (!pMac->cfg.gCfgStatus)
     {
@@ -2692,8 +2692,7 @@ ProcSetReqInternal(tpAniSirGlobal pMac, tANI_U16 length, tANI_U32 *pParam, tANI_
                 // Process string parameter
                 else
                 {
-                    if ((valueLenRoundedUp4 > length) ||
-                        (valueLen > CFG_MAX_STR_LEN))
+                    if (valueLenRoundedUp4 > length)
                     {
                        PELOGE(cfgLog(pMac, LOGE, FL("Invalid string length %d"
                               "in set param %d (tot %d)"), valueLen,

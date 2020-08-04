@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -39,7 +39,6 @@
 #include "aniGlobal.h"
 #include "csrLinkList.h"
 #include "smsDebug.h"
-#include "sme_Trace.h"
 #include "pmcApi.h"
 #include "pmc.h"
 #include "cfgApi.h"
@@ -1144,7 +1143,7 @@ static void pmcProcessResponse( tpAniSirGlobal pMac, tSirSmeRsp *pMsg )
     {
         pCommand = GET_BASE_ADDR(pEntry, tSmeCmd, Link);
 
-        pmcLog(pMac, LOG2, FL("process message = 0x%x"), pMsg->messageType);
+        pmcLog(pMac, LOG2, FL("process message = %d"), pMsg->messageType);
 
     /* Process each different type of message. */
     switch (pMsg->messageType)
@@ -2455,8 +2454,6 @@ eHalStatus pmcSetHostOffload (tHalHandle hHal, tpSirHostOffloadReq pRequest,
     msg.type = WDA_SET_HOST_OFFLOAD;
     msg.reserved = 0;
     msg.bodyptr = pRequestBuf;
-    MTRACE(vos_trace(VOS_MODULE_ID_SME, TRACE_CODE_SME_TX_WDA_MSG, sessionId,
-                                                           msg.type));
     if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
     {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to post WDA_SET_HOST_OFFLOAD message to WDA", __func__);
@@ -2511,8 +2508,6 @@ eHalStatus pmcSetKeepAlive (tHalHandle hHal, tpSirKeepAliveReq pRequest, tANI_U8
     msg.type = WDA_SET_KEEP_ALIVE;
     msg.reserved = 0;
     msg.bodyptr = pRequestBuf;
-    MTRACE(vos_trace(VOS_MODULE_ID_SME, TRACE_CODE_SME_TX_WDA_MSG, sessionId,
-                                                            msg.type));
     if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
     {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: "
@@ -2565,8 +2560,6 @@ eHalStatus pmcSetNSOffload (tHalHandle hHal, tpSirHostOffloadReq pRequest,
     msg.type = WDA_SET_NS_OFFLOAD;
     msg.reserved = 0;
     msg.bodyptr = pRequestBuf;
-    MTRACE(vos_trace(VOS_MODULE_ID_SME, TRACE_CODE_SME_TX_WDA_MSG, sessionId,
-                                                             msg.type));
     if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
     {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to post SIR_HAL_SET_HOST_OFFLOAD message to HAL", __func__);
@@ -2854,17 +2847,14 @@ eHalStatus pmcSetPreferredNetworkList
         return eHAL_STATUS_FAILURE;
     }
 
-    pRequestBuf = vos_mem_malloc(sizeof(tSirPNOScanReq) +
-                  (pRequest->num_vendor_oui) *
-                  (sizeof(struct vendor_oui)));
+    pRequestBuf = vos_mem_malloc(sizeof(tSirPNOScanReq));
     if (NULL == pRequestBuf)
     {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to allocate memory for PNO request", __func__);
         return eHAL_STATUS_FAILED_ALLOC;
     }
 
-    vos_mem_copy(pRequestBuf, pRequest, sizeof(tSirPNOScanReq) +
-                 (pRequest->num_vendor_oui) * (sizeof(struct vendor_oui)));
+    vos_mem_copy(pRequestBuf, pRequest, sizeof(tSirPNOScanReq));
 
     /*Must translate the mode first*/
     ucDot11Mode = (tANI_U8) csrTranslateToWNICfgDot11Mode(pMac,
@@ -2986,6 +2976,8 @@ eHalStatus pmcUpdateScanParams(tHalHandle hHal, tCsrConfig *pRequest, tCsrChanne
     vos_msg_t msg;
     int i;
 
+    VOS_TRACE( VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO, "%s started", __func__);
+
     pRequestBuf = vos_mem_malloc(sizeof(tSirUpdateScanParams));
     if (NULL == pRequestBuf)
     {
@@ -3004,6 +2996,9 @@ eHalStatus pmcUpdateScanParams(tHalHandle hHal, tCsrConfig *pRequest, tCsrChanne
 
     for (i=0; i < pRequestBuf->ucChannelCount; i++)
     {
+        VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_INFO,
+                  "%s: Channel List %d: %d", __FUNCTION__, i, pChannelList->channelList[i] );
+
         pRequestBuf->aChannels[i] = pChannelList->channelList[i];
     }
     pRequestBuf->usPassiveMinChTime = pRequest->nPassiveMinChnTime;
@@ -3015,8 +3010,6 @@ eHalStatus pmcUpdateScanParams(tHalHandle hHal, tCsrConfig *pRequest, tCsrChanne
     msg.type = WDA_UPDATE_SCAN_PARAMS_REQ;
     msg.reserved = 0;
     msg.bodyptr = pRequestBuf;
-    MTRACE(vos_trace(VOS_MODULE_ID_SME, TRACE_CODE_SME_TX_WDA_MSG, NO_SESSION,
-                                                              msg.type));
     if (!VOS_IS_STATUS_SUCCESS(vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)))
     {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to post WDA_UPDATE_SCAN_PARAMS message to WDA", __func__);
@@ -3055,8 +3048,7 @@ eHalStatus pmcSetPowerParams(tHalHandle hHal,   tSirSetPowerParamsReq*  pwParams
     msg.type = WDA_SET_POWER_PARAMS_REQ;
     msg.reserved = 0;
     msg.bodyptr = pRequestBuf;
-    MTRACE(vos_trace(VOS_MODULE_ID_SME, TRACE_CODE_SME_TX_WDA_MSG, NO_SESSION,
-                                                           msg.type));
+
     if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
     {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to post WDA_SET_POWER_PARAMS_REQ message to WDA", __func__);
@@ -3119,8 +3111,7 @@ eHalStatus pmcGetFilterMatchCount
 
     pMac->pmc.FilterMatchCountCB = callbackRoutine;
     pMac->pmc.FilterMatchCountCBContext = callbackContext;
-    MTRACE(vos_trace(VOS_MODULE_ID_SME, TRACE_CODE_SME_TX_WDA_MSG, sessionId,
-                                                           msg.type));
+
     if(VOS_STATUS_SUCCESS != vos_mq_post_message(VOS_MODULE_ID_WDA, &msg))
     {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR,
@@ -3178,8 +3169,6 @@ eHalStatus pmcSetGTKOffload (tHalHandle hHal, tpSirGtkOffloadParams pGtkOffload,
     msg.type = WDA_GTK_OFFLOAD_REQ;
     msg.reserved = 0;
     msg.bodyptr = pRequestBuf;
-    MTRACE(vos_trace(VOS_MODULE_ID_SME, TRACE_CODE_SME_TX_WDA_MSG, sessionId,
-                                                             msg.type));
     if (!VOS_IS_STATUS_SUCCESS(vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)))
     {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to post "
@@ -3244,8 +3233,7 @@ eHalStatus pmcGetGTKOffload(tHalHandle hHal, GTKOffloadGetInfoCallback callbackR
 
     pMac->pmc.GtkOffloadGetInfoCB = callbackRoutine;
     pMac->pmc.GtkOffloadGetInfoCBContext = callbackContext;
-    MTRACE(vos_trace(VOS_MODULE_ID_SME, TRACE_CODE_SME_TX_WDA_MSG, sessionId,
-                                                              msg.type));
+
     if (!VOS_IS_STATUS_SUCCESS(vos_mq_post_message(VOS_MODULE_ID_WDA, &msg)))
     {
         VOS_TRACE(VOS_MODULE_ID_SME, VOS_TRACE_LEVEL_ERROR, "%s: Not able to post WDA_GTK_OFFLOAD_GETINFO_REQ message to WDA",
@@ -3561,8 +3549,6 @@ eHalStatus PmcOffloadEnableStaModePowerSave(tHalHandle hHal,
     if(!pmc->configStaPsEnabled)
     {
         eHalStatus status;
-
-        pmc->configStaPsEnabled = TRUE;
         status = pmcOffloadEnableStaPsHandler(pMac, sessionId);
 
         if((eHAL_STATUS_SUCCESS == status) ||
@@ -3572,6 +3558,7 @@ eHalStatus PmcOffloadEnableStaModePowerSave(tHalHandle hHal,
             smsLog(pMac, LOG2,
                    FL("Successful Queued Enabling Sta Mode Ps Request"));
 
+            pmc->configStaPsEnabled = TRUE;
             return eHAL_STATUS_SUCCESS;
         }
         else
@@ -3604,7 +3591,6 @@ eHalStatus PmcOffloadDisableStaModePowerSave(tHalHandle hHal,
     eHalStatus status = eHAL_STATUS_SUCCESS;
 
     if (pmc->configStaPsEnabled) {
-        pmc->configDefStaPsEnabled = FALSE;
         status = pmcOffloadDisableStaPsHandler(pMac, sessionId);
     } else {
         /*
@@ -4117,13 +4103,6 @@ eHalStatus PmcOffloadEnableDeferredStaModePowerSave(tHalHandle hHal,
     tpPsOffloadPerSessionInfo pmc = &pMac->pmcOffloadInfo.pmc[sessionId];
     eHalStatus status = eHAL_STATUS_FAILURE;
     tANI_U32 timer_value;
-
-    if (!pmc->configStaPsEnabled)
-    {
-        smsLog(pMac, LOGE,
-               FL("STA Mode Config PowerSave is not enabled"));
-        return status;
-    }
 
     if (!pMac->pmcOffloadInfo.staPsEnabled)
     {

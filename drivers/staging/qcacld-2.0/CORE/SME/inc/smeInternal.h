@@ -219,6 +219,9 @@ typedef struct tagSmeStruct
     ocb_callback dcc_update_ndl_callback;
     void *dcc_stats_event_context;
     ocb_callback dcc_stats_event_callback;
+#ifdef WLAN_FEATURE_MEMDUMP
+    void (*fw_dump_callback)(void *context, struct fw_dump_rsp *rsp);
+#endif
     void (*set_thermal_level_cb)(void *hdd_context, uint8_t level);
 
     void (*rssi_threshold_breached_cb)(void *, struct rssi_breach_event *);
@@ -226,9 +229,6 @@ typedef struct tagSmeStruct
 			      struct sir_lost_link_info *lost_link_info);
     void (*smps_force_mode_cb)(void *context,
 			struct sir_smps_force_mode_event *smps_force_mode_info);
-    void (*pbpf_get_offload_cb)(void *context, struct sir_bpf_get_offload *);
-    void *mib_stats_context;
-    void (*csr_mib_stats_callback) (struct mib_stats_metrics*, void*);
 } tSmeStruct, *tpSmeStruct;
 
 

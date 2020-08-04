@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, 2014, 2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2011, 2014 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -38,7 +38,6 @@
 
 #include <ol_ctrl_api.h>  /* ol_pdev_handle */
 #include <ol_txrx_api.h>  /* ol_txrx_pdev_handle */
-#include <ol_htt_api.h>
 
 #define DEBUG_DMA_DONE
 
@@ -242,7 +241,6 @@ struct htt_pdev_t {
         int is_high_latency;
         int is_full_reorder_offload;
         int default_tx_comp_req;
-        uint8_t is_first_wakeup_packet;
     } cfg;
     struct {
         u_int8_t major;
@@ -360,7 +358,6 @@ struct htt_pdev_t {
         void *pdev, A_STATUS status, adf_nbuf_t msdu, u_int16_t msdu_id);
 
     HTT_TX_MUTEX_TYPE htt_tx_mutex;
-    HTT_TX_MUTEX_TYPE credit_mutex;
 
     struct {
         int htc_err_cnt;
@@ -381,9 +378,6 @@ struct htt_pdev_t {
     struct rx_buf_debug *rx_buff_list;
     int rx_buff_index;
 #endif
-
-    /* callback function for packetdump */
-    tp_rx_pkt_dump_cb rx_pkt_dump_cb;
 
     int num_pages;
     int num_desc_per_page;

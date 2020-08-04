@@ -482,6 +482,7 @@ static const REG_DMN_PAIR_MAPPING ahCmnRegDomainPairs[] = {
 
 static const COUNTRY_CODE_TO_ENUM_RD ahCmnAllCountries[] = {
     {CTRY_DEBUG,       NO_ENUMRD,     "DB", "DEBUG",          YES, YES, YES, YES, YES, YES, YES, YES, 7000 },
+    {CTRY_DEFAULT,     DEF_REGDMN,    "NA", "NO_COUNTRY_SET", YES, YES, YES, YES, YES, YES, YES, YES, 7000 },
     {CTRY_ALBANIA,     ETSI1_WORLD,   "AL", "ALBANIA",        YES,  NO, YES, YES, YES,  NO,  NO, NO, 7000 },
     {CTRY_ALGERIA,     APL13_WORLD,   "DZ", "ALGERIA",        YES,  NO, YES, YES, YES,  NO,  NO, NO, 7000 },
     {CTRY_ARGENTINA,   FCC3_WORLD,    "AR", "ARGENTINA",      YES,  NO,  NO, YES, YES, YES, YES, YES, 7000 },
@@ -1869,8 +1870,6 @@ typedef struct _regdm_supp_op_classes {
 
 u_int16_t regdm_get_opclass_from_channel(u_int8_t *country, u_int8_t channel,
 	u_int8_t offset);
-u_int16_t regdm_get_chanwidth_from_opclass(u_int8_t *country, u_int8_t channel,
-	u_int8_t opclass);
 u_int16_t regdm_set_curr_opclasses(u_int8_t num_classes, u_int8_t *class);
 u_int16_t regdm_get_curr_opclasses(u_int8_t *num_classes, u_int8_t *class);
 

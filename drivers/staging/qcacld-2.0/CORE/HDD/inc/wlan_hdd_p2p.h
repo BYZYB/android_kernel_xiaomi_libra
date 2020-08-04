@@ -134,6 +134,7 @@ void __hdd_indicate_mgmt_frame(hdd_adapter_t *pAdapter,
 
 void hdd_remainChanReadyHandler( hdd_adapter_t *pAdapter );
 void hdd_sendActionCnf( hdd_adapter_t *pAdapter, tANI_BOOLEAN actionSendSuccess );
+void hdd_send_action_cnf_cb(uint32_t session_id, bool status);
 int wlan_hdd_check_remain_on_channel(hdd_adapter_t *pAdapter);
 void wlan_hdd_cancel_existing_remain_on_channel(hdd_adapter_t *pAdapter);
 
@@ -183,12 +184,8 @@ struct net_device* wlan_hdd_add_virtual_intf(
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,6,0)) || defined(WITH_BACKPORTS)
 int wlan_hdd_del_virtual_intf( struct wiphy *wiphy, struct wireless_dev *wdev );
-int __wlan_hdd_del_virtual_intf(struct wiphy *wiphy,
-                                        struct wireless_dev *wdev);
 #else
 int wlan_hdd_del_virtual_intf( struct wiphy *wiphy, struct net_device *dev );
-int __wlan_hdd_del_virtual_intf(struct wiphy *wiphy,
-                                        struct net_device *dev);
 #endif
 
 void wlan_hdd_cleanup_remain_on_channel_ctx(hdd_adapter_t *pAdapter);

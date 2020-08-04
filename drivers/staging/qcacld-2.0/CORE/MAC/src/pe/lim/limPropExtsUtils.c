@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2011-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -120,11 +120,12 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
             pMac->lim.htCapabilityPresentInBeacon = 0;
 
 #ifdef WLAN_FEATURE_11AC
-        limLog(pMac, LOG1,
-            FL("Beacon : VHTCaps.present: %d SU Beamformer: %d, IS_BSS_VHT_CAPABLE: %d"),
+        VOS_TRACE(VOS_MODULE_ID_PE, VOS_TRACE_LEVEL_INFO_MED,
+            "***beacon.VHTCaps.present*****=%d BSS_VHT_CAPABLE:%d",
             pBeaconStruct->VHTCaps.present,
-            pBeaconStruct->VHTCaps.suBeamFormerCap,
             IS_BSS_VHT_CAPABLE(pBeaconStruct->VHTCaps));
+        VOS_TRACE(VOS_MODULE_ID_PE, VOS_TRACE_LEVEL_INFO_MED,
+           "***beacon.SU Beamformer Capable*****=%d",pBeaconStruct->VHTCaps.suBeamFormerCap);
 
         if (IS_BSS_VHT_CAPABLE(pBeaconStruct->VHTCaps) && pBeaconStruct->VHTOperation.present)
         {
@@ -224,9 +225,6 @@ limExtractApCapability(tpAniSirGlobal pMac, tANI_U8 *pIE, tANI_U16 ieLen,
         if (pBeaconStruct->countryInfoPresent)
            psessionEntry->countryInfoPresent = TRUE;
     }
-    /* Check if Extended caps are present in probe resp or not */
-    if (pBeaconStruct->ExtCap.present)
-        psessionEntry->is_ext_caps_present = true;
     vos_mem_free(pBeaconStruct);
     return;
 } /****** end limExtractApCapability() ******/

@@ -1028,13 +1028,7 @@ tANI_U8 limWriteDeferredMsgQ(tpAniSirGlobal pMac, tpSirMsgQ limMsg)
     {
         if(!(pMac->lim.deferredMsgCnt & 0xF))
         {
-            limLog(pMac, LOGE,
-               FL("Deferred Message Queue is full. Msg:%d Messages Failed:%d"),
-               limMsg->type, ++pMac->lim.deferredMsgCnt);
-            vos_flush_logs(WLAN_LOG_TYPE_NON_FATAL,
-                           WLAN_LOG_INDICATOR_HOST_DRIVER,
-                           WLAN_LOG_REASON_QUEUE_FULL,
-                           DUMP_VOS_TRACE);
+            PELOGE(limLog(pMac, LOGE, FL("Deferred Message Queue is full. Msg:%d Messages Failed:%d"), limMsg->type, ++pMac->lim.deferredMsgCnt);)
         }
         else
         {
@@ -2765,8 +2759,8 @@ void limSwitchChannelCback(tpAniSirGlobal pMac, eHalStatus status,
    mmhMsg.bodyptr = pSirSmeSwitchChInd;
    mmhMsg.bodyval = 0;
 
-   MTRACE(macTrace(pMac, TRACE_CODE_TX_SME_MSG, psessionEntry->peSessionId,
-                                                            mmhMsg.type));
+   MTRACE(macTraceMsgTx(pMac, psessionEntry->peSessionId, mmhMsg.type));
+
    SysProcessMmhMsg(pMac, &mmhMsg);
 }
 
@@ -3733,18 +3727,18 @@ limEnableHtProtectionFrom11g(tpAniSirGlobal pMac, tANI_U8 enable,
         }
     } else {
         //normal protection config check
-        if (LIM_IS_AP_ROLE(psessionEntry) &&
+       if (LIM_IS_AP_ROLE(psessionEntry) &&
            !psessionEntry->cfgProtection.fromllg) {
             // protection disabled.
             PELOG3(limLog(pMac, LOG3, FL("protection from 11g is disabled"));)
             return eSIR_SUCCESS;
-        } else if(!LIM_IS_AP_ROLE(psessionEntry)) {
-            if (!pMac->lim.cfgProtection.fromllg) {
+       } else if(!LIM_IS_AP_ROLE(psessionEntry)) {
+           if (!pMac->lim.cfgProtection.fromllg) {
                 // protection disabled.
                 PELOG3(limLog(pMac, LOG3, FL("protection from 11g is disabled"));)
                 return eSIR_SUCCESS;
-            }
-        }
+           }
+       }
     }
 
     if (enable) {
@@ -4078,23 +4072,23 @@ limEnableHT20Protection(tpAniSirGlobal pMac, tANI_U8 enable,
     if(!psessionEntry->htCapability)
         return eSIR_SUCCESS; // this protection  is only for HT stations.
 
-    //overlapping protection configuration check.
-    if(overlap) {
-    } else {
-        //normal protection config check
-        if (LIM_IS_AP_ROLE(psessionEntry) &&
-            !psessionEntry->cfgProtection.ht20) {
-            // protection disabled.
-            PELOG3(limLog(pMac, LOG3, FL("protection from HT20 is disabled"));)
-            return eSIR_SUCCESS;
-        } else if (!LIM_IS_AP_ROLE(psessionEntry)) {
-            if (!pMac->lim.cfgProtection.ht20) {
+        //overlapping protection configuration check.
+        if(overlap) {
+        } else {
+            //normal protection config check
+            if (LIM_IS_AP_ROLE(psessionEntry) &&
+                !psessionEntry->cfgProtection.ht20) {
                 // protection disabled.
                 PELOG3(limLog(pMac, LOG3, FL("protection from HT20 is disabled"));)
                 return eSIR_SUCCESS;
+            } else if (!LIM_IS_AP_ROLE(psessionEntry)) {
+                if (!pMac->lim.cfgProtection.ht20) {
+                    // protection disabled.
+                    PELOG3(limLog(pMac, LOG3, FL("protection from HT20 is disabled"));)
+                    return eSIR_SUCCESS;
+                }
             }
         }
-    }
 
     if (enable) {
         //If we are AP and HT capable, we need to set the HT OP mode
@@ -4282,24 +4276,24 @@ limEnableHTNonGfProtection(tpAniSirGlobal pMac, tANI_U8 enable,
     if(!psessionEntry->htCapability)
         return eSIR_SUCCESS; // this protection  is only for HT stations.
 
-    //overlapping protection configuration check.
-    if(overlap) {
-    } else {
-        //normal protection config check
-        if (LIM_IS_AP_ROLE(psessionEntry) &&
-            !psessionEntry->cfgProtection.nonGf) {
-            // protection disabled.
-            PELOG3(limLog(pMac, LOG3, FL("protection from NonGf is disabled"));)
-            return eSIR_SUCCESS;
-        } else if(!LIM_IS_AP_ROLE(psessionEntry)) {
+        //overlapping protection configuration check.
+        if(overlap) {
+        } else {
             //normal protection config check
-            if (!pMac->lim.cfgProtection.nonGf) {
+            if (LIM_IS_AP_ROLE(psessionEntry) &&
+                !psessionEntry->cfgProtection.nonGf) {
                 // protection disabled.
                 PELOG3(limLog(pMac, LOG3, FL("protection from NonGf is disabled"));)
                 return eSIR_SUCCESS;
+            } else if(!LIM_IS_AP_ROLE(psessionEntry)) {
+                //normal protection config check
+                if (!pMac->lim.cfgProtection.nonGf) {
+                    // protection disabled.
+                    PELOG3(limLog(pMac, LOG3, FL("protection from NonGf is disabled"));)
+                    return eSIR_SUCCESS;
+                }
             }
         }
-    }
 
     if (LIM_IS_AP_ROLE(psessionEntry)) {
         if ((enable) && (false == psessionEntry->beaconParams.llnNonGFCoexist))
@@ -4347,24 +4341,24 @@ limEnableHTLsigTxopProtection(tpAniSirGlobal pMac, tANI_U8 enable,
     if(!psessionEntry->htCapability)
         return eSIR_SUCCESS; // this protection  is only for HT stations.
 
-    //overlapping protection configuration check.
-    if(overlap) {
-    } else {
-        //normal protection config check
-        if (LIM_IS_AP_ROLE(psessionEntry) &&
-            !psessionEntry->cfgProtection.lsigTxop) {
-            // protection disabled.
-            PELOG3(limLog(pMac, LOG3, FL(" protection from LsigTxop not supported is disabled"));)
-            return eSIR_SUCCESS;
-        } else if(!LIM_IS_AP_ROLE(psessionEntry)) {
+        //overlapping protection configuration check.
+        if(overlap) {
+        } else {
             //normal protection config check
-            if(!pMac->lim.cfgProtection.lsigTxop) {
+            if (LIM_IS_AP_ROLE(psessionEntry) &&
+               !psessionEntry->cfgProtection.lsigTxop) {
                 // protection disabled.
                 PELOG3(limLog(pMac, LOG3, FL(" protection from LsigTxop not supported is disabled"));)
                 return eSIR_SUCCESS;
+            } else if(!LIM_IS_AP_ROLE(psessionEntry)) {
+                //normal protection config check
+                if(!pMac->lim.cfgProtection.lsigTxop) {
+                    // protection disabled.
+                    PELOG3(limLog(pMac, LOG3, FL(" protection from LsigTxop not supported is disabled"));)
+                    return eSIR_SUCCESS;
+                }
             }
         }
-    }
 
     if (LIM_IS_AP_ROLE(psessionEntry)) {
         if ((enable) && (false == psessionEntry->beaconParams.fLsigTXOPProtectionFullSupport))
@@ -4412,24 +4406,25 @@ limEnableHtRifsProtection(tpAniSirGlobal pMac, tANI_U8 enable,
     if(!psessionEntry->htCapability)
         return eSIR_SUCCESS; // this protection  is only for HT stations.
 
-    //overlapping protection configuration check.
-    if(overlap) {
-    } else {
-        //normal protection config check
-        if (LIM_IS_AP_ROLE(psessionEntry) &&
-           !psessionEntry->cfgProtection.rifs) {
-            // protection disabled.
-            PELOG3(limLog(pMac, LOG3, FL(" protection from Rifs is disabled"));)
-            return eSIR_SUCCESS;
-        } else if (!LIM_IS_AP_ROLE(psessionEntry)) {
-           //normal protection config check
-           if(!pMac->lim.cfgProtection.rifs) {
-              // protection disabled.
-              PELOG3(limLog(pMac, LOG3, FL(" protection from Rifs is disabled"));)
-              return eSIR_SUCCESS;
-           }
+
+        //overlapping protection configuration check.
+        if(overlap) {
+        } else {
+             //normal protection config check
+            if (LIM_IS_AP_ROLE(psessionEntry) &&
+               !psessionEntry->cfgProtection.rifs) {
+                // protection disabled.
+                PELOG3(limLog(pMac, LOG3, FL(" protection from Rifs is disabled"));)
+                return eSIR_SUCCESS;
+            } else if (!LIM_IS_AP_ROLE(psessionEntry)) {
+               //normal protection config check
+               if(!pMac->lim.cfgProtection.rifs) {
+                  // protection disabled.
+                  PELOG3(limLog(pMac, LOG3, FL(" protection from Rifs is disabled"));)
+                  return eSIR_SUCCESS;
+               }
+            }
         }
-    }
 
     if (LIM_IS_AP_ROLE(psessionEntry)) {
         // Disabling the RIFS Protection means Enable the RIFS mode of operation in the BSS
@@ -5222,6 +5217,28 @@ void limDelAllBASessions(tpAniSirGlobal pMac)
         {
             limDeleteBASessions(pMac, pSessionEntry, BA_BOTH_DIRECTIONS);
         }
+    }
+}
+
+/** -------------------------------------------------------------
+\fn     limDelAllBASessionsBtc
+\brief  Deletes all the existing BA recipient sessions in 2.4GHz
+        band.
+\param  tpAniSirGlobal pMac
+\return None
+-------------------------------------------------------------*/
+
+void limDelPerBssBASessionsBtc(tpAniSirGlobal pMac)
+{
+    tANI_U8 sessionId;
+    tpPESession pSessionEntry;
+    pSessionEntry = peFindSessionByBssid(pMac,pMac->btc.btcBssfordisableaggr,
+                                                                &sessionId);
+    if (pSessionEntry)
+    {
+        PELOGW(limLog(pMac, LOGW,
+        "Deleting the BA for session %d as host got BTC event", sessionId);)
+        limDeleteBASessions(pMac, pSessionEntry, BA_RECIPIENT);
     }
 }
 
@@ -6916,7 +6933,7 @@ void limProcessAddStaSelfRsp(tpAniSirGlobal pMac,tpSirMsgQ limMsgQ)
    mmhMsg.type = eWNI_SME_ADD_STA_SELF_RSP;
    mmhMsg.bodyptr = pRsp;
    mmhMsg.bodyval = 0;
-   MTRACE(macTrace(pMac, TRACE_CODE_TX_SME_MSG, NO_SESSION, mmhMsg.type));
+   MTRACE(macTraceMsgTx(pMac, NO_SESSION, mmhMsg.type));
    limSysProcessMmhMsgApi(pMac, &mmhMsg,  ePROT);
 
 }
@@ -6952,7 +6969,6 @@ const char * lim_BssTypetoString(const v_U8_t bssType)
         CASE_RETURN_STRING( eSIR_BTAMP_STA_MODE );
         CASE_RETURN_STRING( eSIR_BTAMP_AP_MODE );
         CASE_RETURN_STRING( eSIR_AUTO_MODE );
-        CASE_RETURN_STRING(eSIR_NDI_MODE);
         default:
             return "Unknown BssType";
     }
@@ -7009,7 +7025,7 @@ void limProcessDelStaSelfRsp(tpAniSirGlobal pMac,tpSirMsgQ limMsgQ)
    mmhMsg.type = eWNI_SME_DEL_STA_SELF_RSP;
    mmhMsg.bodyptr = pRsp;
    mmhMsg.bodyval = 0;
-   MTRACE(macTrace(pMac, TRACE_CODE_TX_SME_MSG, NO_SESSION, mmhMsg.type));
+   MTRACE(macTraceMsgTx(pMac, NO_SESSION, mmhMsg.type));
    limSysProcessMmhMsgApi(pMac, &mmhMsg,  ePROT);
 
 }
@@ -8349,6 +8365,11 @@ void lim_set_stads_rtt_cap(tpDphHashNode sta_ds, struct s_ext_cap *ext_cap)
 	sta_ds->timingMeasCap |= (ext_cap->fine_time_meas_responder)?
 				  RTT_FINE_TIME_MEAS_RESPONDER_CAPABILITY :
 				  RTT_INVALID;
+
+	PELOG1(limLog(pMac, LOG1,
+	       FL("ExtCap present, timingMeas: %d Initiator: %d Responder: %d"),
+	       ext_cap->timingMeas, ext_cap->fine_time_meas_initiator,
+	       ext_cap->fine_time_meas_responder);)
 }
 
 /**
@@ -8418,7 +8439,7 @@ eHalStatus lim_send_ext_cap_ie(tpAniSirGlobal mac_ctx,
 	if (merge && NULL != extra_extcap && extra_extcap->num_bytes > 0) {
 		if (extra_extcap->num_bytes > ext_cap_data.num_bytes)
 			num_bytes = extra_extcap->num_bytes;
-		lim_merge_extcap_struct(&ext_cap_data, extra_extcap, true);
+		lim_merge_extcap_struct(&ext_cap_data, extra_extcap);
 	}
 
 	/* Allocate memory for the WMI request, and copy the parameter */
@@ -8436,7 +8457,7 @@ eHalStatus lim_send_ext_cap_ie(tpAniSirGlobal mac_ctx,
 			DOT11F_EID_EXTCAP, num_bytes);
 	temp = ext_cap_data.bytes;
 	for (i=0; i < num_bytes; i++, temp++)
-		limLog(mac_ctx, LOG2, FL("%d byte is %02x"), i+1, *temp);
+		limLog(mac_ctx, LOG1, FL("%d byte is %02x"), i+1, *temp);
 
 	vdev_ie->data = (uint8_t *)vdev_ie + sizeof(*vdev_ie);
 	vos_mem_copy(vdev_ie->data, ext_cap_data.bytes, num_bytes);
@@ -8555,10 +8576,10 @@ void lim_update_extcap_struct(tpAniSirGlobal mac_ctx,
 	}
 
 	vos_mem_set((uint8_t *)&out[0], DOT11F_IE_EXTCAP_MAX_LEN, 0);
-	vos_mem_copy(&out[0], &buf[2], buf[1]);
+	vos_mem_copy(&out[0], &buf[2], DOT11F_IE_EXTCAP_MAX_LEN);
 
 	if (DOT11F_PARSE_SUCCESS != dot11fUnpackIeExtCap(mac_ctx, &out[0],
-                                        buf[1], dst))
+					DOT11F_IE_EXTCAP_MAX_LEN, dst))
 		limLog(mac_ctx, LOGE, FL("dot11fUnpackIeExtCap Parse Error "));
 }
 
@@ -8600,43 +8621,24 @@ tSirRetStatus lim_strip_extcap_update_struct(tpAniSirGlobal mac_ctx,
  * lim_merge_extcap_struct() - merge extended capabilities info
  * @dst: destination extended capabilities
  * @src: source extended capabilities
- * @add: true if add the capabilites, false if strip the capabilites.
  *
- * This function is used to take @src info and add/strip it to/from
- * @dst extended capabilities info.
+ * This function is used to take @src info and merge it with @dst
+ * extended capabilities info.
  *
  * Return: None
  */
 void lim_merge_extcap_struct(tDot11fIEExtCap *dst,
-			     tDot11fIEExtCap *src,
-			     bool add)
+			     tDot11fIEExtCap *src)
 {
 	uint8_t *tempdst = (uint8_t *)dst->bytes;
 	uint8_t *tempsrc = (uint8_t *)src->bytes;
 	uint8_t structlen = member_size(tDot11fIEExtCap, bytes);
 
-	/* Return if @src not present */
-	if (!src->present)
-		return;
-
-	/* Return if strip the capabilites from @dst which not present */
-	if (!dst->present && !add)
-		return;
-
-	/* Merge the capabilites info in other cases */
-	while (tempdst && tempsrc && structlen--) {
-		if (add)
-			*tempdst |= *tempsrc;
-		else
-			*tempdst &= *tempsrc;
+	while(tempdst && tempsrc && structlen--) {
+		*tempdst |= *tempsrc;
 		tempdst++;
 		tempsrc++;
 	}
-	dst->num_bytes = lim_compute_ext_cap_ie_length(dst);
-        if (dst->num_bytes == 0)
-		dst->present = 0;
-	else
-		dst->present = 1;
 }
 
 /**
@@ -8671,23 +8673,24 @@ lim_get_80Mhz_center_channel(uint8_t primary_channel)
 }
 
 /**
- * lim_compute_ext_cap_ie_length - compute the length of ext cap ie
- * based on the bits set
+ * lim_is_ext_cap_ie_present - checks if ext ie is present
  * @ext_cap: extended IEs structure
  *
- * Return: length of the ext cap ie, 0 means should not present
+ * Return: true if ext IEs are present else false
  */
-tANI_U8 lim_compute_ext_cap_ie_length (tDot11fIEExtCap *ext_cap) {
-	tANI_U8 i = DOT11F_IE_EXTCAP_MAX_LEN;
+bool lim_is_ext_cap_ie_present (struct s_ext_cap *ext_cap)
+{
+	int i, size;
+	uint8_t *tmp_buf;
 
-	while (i) {
-		if (ext_cap->bytes[i-1]) {
-			break;
-		}
-		i --;
-	}
+	tmp_buf = (uint8_t *) ext_cap;
+	size = sizeof(*ext_cap);
 
-	return i;
+	for (i = 0; i < size; i++)
+		if (tmp_buf[i])
+			return true;
+
+	return false;
 }
 
 /**

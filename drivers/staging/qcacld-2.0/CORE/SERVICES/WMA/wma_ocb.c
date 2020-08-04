@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -55,7 +55,6 @@ int wma_ocb_set_config_resp(tp_wma_handle wma_handle, uint8_t status)
 	 */
 	if (status == VOS_STATUS_SUCCESS) {
 		if (vdev && req) {
-			/* Save the channel info in the vdev */
 			if (vdev->ocb_channel_info)
 				vos_mem_free(vdev->ocb_channel_info);
 			vdev->ocb_channel_count =
@@ -79,14 +78,6 @@ int wma_ocb_set_config_resp(tp_wma_handle wma_handle, uint8_t status)
 				}
 			} else {
 				vdev->ocb_channel_info = 0;
-			}
-
-			/* Default TX parameter */
-			if (!ol_txrx_set_ocb_def_tx_param(vdev,
-				req->def_tx_param, req->def_tx_param_size)) {
-				/* Setting the default param failed */
-				WMA_LOGE(FL("Invalid default TX parameters"));
-				status = VOS_STATUS_E_INVAL;
 			}
 		}
 	}
@@ -806,13 +797,6 @@ int wma_dcc_get_stats_resp_event_handler(void *handle, uint8_t *event_buf,
 	fix_param = param_tlvs->fixed_param;
 
 	/* Allocate and populate the response */
-	if (fix_param->num_channels > ((WMA_SVC_MSG_MAX_SIZE -
-	    sizeof(*fix_param)) / sizeof(wmi_dcc_ndl_stats_per_channel))) {
-		WMA_LOGE("%s: too many channels:%d", __func__,
-			fix_param->num_channels);
-		VOS_ASSERT(0);
-		return -EINVAL;
-	}
 	response = vos_mem_malloc(sizeof(*response) + fix_param->num_channels *
 		sizeof(wmi_dcc_ndl_stats_per_channel));
 	if (response == NULL)
@@ -1058,13 +1042,6 @@ int wma_dcc_stats_event_handler(void *handle, uint8_t *event_buf,
 	param_tlvs = (WMI_DCC_STATS_EVENTID_param_tlvs *)event_buf;
 	fix_param = param_tlvs->fixed_param;
 	/* Allocate and populate the response */
-	if (fix_param->num_channels > ((WMA_SVC_MSG_MAX_SIZE -
-	    sizeof(*fix_param)) / sizeof(wmi_dcc_ndl_stats_per_channel))) {
-		WMA_LOGE("%s: too many channels:%d", __func__,
-			fix_param->num_channels);
-		VOS_ASSERT(0);
-		return -EINVAL;
-	}
 	response = vos_mem_malloc(sizeof(*response) +
 	    fix_param->num_channels * sizeof(wmi_dcc_ndl_stats_per_channel));
 	if (response == NULL)

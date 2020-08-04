@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016, 2019 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2016 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -1225,12 +1225,6 @@ PopulateDot11fExtCap(tpAniSirGlobal   pMac,
     }
 #endif
     p_ext_cap->extChanSwitch = 1;
-
-    if (pDot11f->present)
-    {
-        /* Need to compute the num_bytes based on bits set */
-        pDot11f->num_bytes = lim_compute_ext_cap_ie_length(pDot11f);
-    }
 
     return eSIR_SUCCESS;
 }
@@ -3150,8 +3144,6 @@ sirFillBeaconMandatoryIEforEseBcnReport(tpAniSirGlobal   pMac,
         limLog(pMac, LOGE, FL("Failed to allocate memory"));
         return eSIR_FAILURE;
     }
-    vos_mem_zero(pBies, sizeof(tDot11fBeaconIEs));
-
     // delegate to the framesc-generated code,
     status = dot11fUnpackBeaconIEs( pMac, pPayload, nPayload, pBies );
 
@@ -3456,8 +3448,6 @@ sirParseBeaconIE(tpAniSirGlobal        pMac,
         limLog(pMac, LOGE, FL("Failed to allocate memory"));
         return eSIR_FAILURE;
     }
-    vos_mem_zero(pBies, sizeof(tDot11fBeaconIEs));
-
     // delegate to the framesc-generated code,
     status = dot11fUnpackBeaconIEs( pMac, pPayload, nPayload, pBies );
 
@@ -3691,11 +3681,6 @@ sirParseBeaconIE(tpAniSirGlobal        pMac,
     pBeaconStruct->Vendor1IEPresent = pBies->Vendor1IE.present;
     pBeaconStruct->Vendor2IEPresent = pBies->Vendor2IE.present;
     pBeaconStruct->Vendor3IEPresent = pBies->Vendor3IE.present;
-    if (pBies->ExtCap.present) {
-        pBeaconStruct->ExtCap.present = 1;
-        vos_mem_copy( &pBeaconStruct->ExtCap, &pBies->ExtCap,
-                sizeof(tDot11fIEExtCap));
-    }
 
     vos_mem_free(pBies);
     return eSIR_SUCCESS;
@@ -4190,7 +4175,7 @@ sirConvertAddtsReq2Struct(tpAniSirGlobal    pMac,
         if ( addts.num_WMMTCLAS )
         {
             j = (tANI_U8)(pAddTs->numTclas + addts.num_WMMTCLAS);
-            if ( SIR_MAC_TCLASIE_MAXNUM < j ) j = SIR_MAC_TCLASIE_MAXNUM;
+            if ( SIR_MAC_TCLASIE_MAXNUM > j ) j = SIR_MAC_TCLASIE_MAXNUM;
 
             for ( i = pAddTs->numTclas; i < j; ++i )
             {
@@ -4372,7 +4357,7 @@ sirConvertAddtsRsp2Struct(tpAniSirGlobal    pMac,
         if ( addts.num_WMMTCLAS )
         {
             j = (tANI_U8)(pAddTs->numTclas + addts.num_WMMTCLAS);
-            if ( SIR_MAC_TCLASIE_MAXNUM < j ) j = SIR_MAC_TCLASIE_MAXNUM;
+            if ( SIR_MAC_TCLASIE_MAXNUM > j ) j = SIR_MAC_TCLASIE_MAXNUM;
 
             for ( i = pAddTs->numTclas; i < j; ++i )
             {
@@ -4528,10 +4513,10 @@ sirConvertQosMapConfigureFrame2Struct(tpAniSirGlobal    pMac,
     tDot11fQosMapConfigure mapConfigure;
     tANI_U32 status;
     status = dot11fUnpackQosMapConfigure(pMac, pFrame, nFrame, &mapConfigure);
-    if ( DOT11F_FAILED( status ) || !mapConfigure.QosMapSet.present )
+    if ( DOT11F_FAILED( status ) )
     {
         dot11fLog(pMac, LOGE,
-                  FL("Failed to parse or QosMapSet not present(0x%08x, %d bytes):"),
+                  FL("Failed to parse Qos Map Config frame(0x%08x, %d bytes):"),
                   status, nFrame);
         PELOG2(sirDumpBuf(pMac, SIR_DBG_MODULE_ID, LOG2, pFrame, nFrame);)
         return eSIR_FAILURE;

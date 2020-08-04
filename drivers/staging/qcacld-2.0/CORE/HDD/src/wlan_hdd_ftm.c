@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2016 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -103,12 +103,8 @@ typedef struct qcmbr_queue_s {
     unsigned char utf_buf[MAX_UTF_LENGTH + 4];
     struct list_head list;
 } qcmbr_queue_t;
-
 LIST_HEAD(qcmbr_queue_head);
 DEFINE_SPINLOCK(qcmbr_queue_lock);
-
-/* FLAG to distinguish QCMBR rsp from CFG80211 test mode */
-static boolean rsp_to_qcmbr = false;
 #endif
 #endif
 
@@ -955,8 +951,7 @@ static int wlan_hdd_qcmbr_command(hdd_adapter_t *pAdapter, qcmbr_data_t *pqcmbr_
             pqcmbr_data->copy_to_user = 0;
             if (pqcmbr_data->length) {
                 if (wlan_hdd_ftm_testmode_cmd(pqcmbr_data->buf,
-                                              pqcmbr_data->length,
-                                              TRUE)
+                                              pqcmbr_data->length)
                         != VOS_STATUS_SUCCESS) {
                     ret = -EBUSY;
                 } else {
@@ -968,17 +963,16 @@ static int wlan_hdd_qcmbr_command(hdd_adapter_t *pAdapter, qcmbr_data_t *pqcmbr_
 
         case ATH_XIOCTL_UNIFIED_UTF_RSP: {
             pqcmbr_data->copy_to_user = 1;
-
-            spin_lock_bh(&qcmbr_queue_lock);
             if (!list_empty(&qcmbr_queue_head)) {
+                spin_lock_bh(&qcmbr_queue_lock);
                 qcmbr_buf = list_first_entry(&qcmbr_queue_head,
                                              qcmbr_queue_t, list);
                 list_del(&qcmbr_buf->list);
+                spin_unlock_bh(&qcmbr_queue_lock);
                 ret = 0;
             } else {
                 ret = -1;
             }
-            spin_unlock_bh(&qcmbr_queue_lock);
 
             if (!ret) {
                 memcpy(pqcmbr_data->buf, qcmbr_buf->utf_buf,
@@ -1011,7 +1005,7 @@ static int wlan_hdd_qcmbr_compat_ioctl(hdd_adapter_t *pAdapter,
     }
 
     ret = wlan_hdd_qcmbr_command(pAdapter, qcmbr_data);
-    if ((ret == 0) && qcmbr_data->copy_to_user) {
+    if (qcmbr_data->copy_to_user) {
         ret = copy_to_user(ifr->ifr_data, qcmbr_data->buf,
                            (MAX_UTF_LENGTH + 4));
     }
@@ -1043,7 +1037,7 @@ static int wlan_hdd_qcmbr_ioctl(hdd_adapter_t *pAdapter, struct ifreq *ifr)
     }
 
     ret = wlan_hdd_qcmbr_command(pAdapter, qcmbr_data);
-    if ((ret == 0) && qcmbr_data->copy_to_user) {
+    if (qcmbr_data->copy_to_user) {
         ret = copy_to_user(ifr->ifr_data, qcmbr_data->buf,
                            (MAX_UTF_LENGTH + 4));
     }
@@ -1072,9 +1066,6 @@ static void WLANQCMBR_McProcessMsg(v_VOID_t *message)
     u_int32_t data_len;
 
     data_len = *((u_int32_t *)message) + sizeof(u_int32_t);
-    if (data_len > MAX_UTF_LENGTH + 4)
-        return;
-
     qcmbr_buf = kzalloc(sizeof(qcmbr_queue_t), GFP_KERNEL);
     if (qcmbr_buf != NULL) {
         memcpy(qcmbr_buf->utf_buf, message, data_len);
@@ -1097,17 +1088,11 @@ VOS_STATUS WLANFTM_McProcessMsg (v_VOID_t *message)
     data = (u_int32_t *)message + 1;
 
 #if defined(LINUX_QCMBR)
-    if (TRUE == rsp_to_qcmbr) {
-        WLANQCMBR_McProcessMsg(message);
-    } else {
-#endif
-
+    WLANQCMBR_McProcessMsg(message);
+#else
 #ifdef CONFIG_NL80211_TESTMODE
-        wlan_hdd_testmode_rx_event(data, (size_t)data_len);
+    wlan_hdd_testmode_rx_event(data, (size_t)data_len);
 #endif
-
-#if defined(LINUX_QCMBR)
-    }
 #endif
 
     vos_mem_free(message);
@@ -1115,16 +1100,12 @@ VOS_STATUS WLANFTM_McProcessMsg (v_VOID_t *message)
     return VOS_STATUS_SUCCESS;
 }
 
-VOS_STATUS wlan_hdd_ftm_testmode_cmd(void *data, int len, boolean from_qcmbr)
+VOS_STATUS wlan_hdd_ftm_testmode_cmd(void *data, int len)
 {
     struct ar6k_testmode_cmd_data *cmd_data;
 
     cmd_data = (struct ar6k_testmode_cmd_data *)
                vos_mem_malloc(sizeof(*cmd_data));
-
-#if defined(LINUX_QCMBR)
-    rsp_to_qcmbr = from_qcmbr;
-#endif
 
     if (!cmd_data) {
         VOS_TRACE(VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_ERROR,
