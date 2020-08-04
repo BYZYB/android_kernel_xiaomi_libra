@@ -197,7 +197,7 @@ static int __pci_bus_find_cap_start(struct pci_bus *bus,
 }
 
 /**
- * pci_find_capability - query for devices' capabilities 
+ * pci_find_capability - query for devices' capabilities
  * @dev: PCI device to query
  * @cap: capability code
  *
@@ -206,12 +206,12 @@ static int __pci_bus_find_cap_start(struct pci_bus *bus,
  * device's PCI configuration space or 0 in case the device does not
  * support it.  Possible values for @cap:
  *
- *  %PCI_CAP_ID_PM           Power Management 
- *  %PCI_CAP_ID_AGP          Accelerated Graphics Port 
- *  %PCI_CAP_ID_VPD          Vital Product Data 
- *  %PCI_CAP_ID_SLOTID       Slot Identification 
+ *  %PCI_CAP_ID_PM           Power Management
+ *  %PCI_CAP_ID_AGP          Accelerated Graphics Port
+ *  %PCI_CAP_ID_VPD          Vital Product Data
+ *  %PCI_CAP_ID_SLOTID       Slot Identification
  *  %PCI_CAP_ID_MSI          Message Signalled Interrupts
- *  %PCI_CAP_ID_CHSWP        CompactPCI HotSwap 
+ *  %PCI_CAP_ID_CHSWP        CompactPCI HotSwap
  *  %PCI_CAP_ID_PCIX         PCI-X
  *  %PCI_CAP_ID_EXP          PCI Express
  */
@@ -227,13 +227,13 @@ int pci_find_capability(struct pci_dev *dev, int cap)
 }
 
 /**
- * pci_bus_find_capability - query for devices' capabilities 
+ * pci_bus_find_capability - query for devices' capabilities
  * @bus:   the PCI bus to query
  * @devfn: PCI device to query
  * @cap:   capability code
  *
  * Like pci_find_capability() but works for pci devices that do not have a
- * pci_dev structure set up yet. 
+ * pci_dev structure set up yet.
  *
  * Returns the address of the requested capability structure within the
  * device's PCI configuration space or 0 in case the device does not
@@ -514,7 +514,7 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
 		return -EINVAL;
 
 	/* Validate current state:
-	 * Can enter D0 from any state, but if we can only go deeper 
+	 * Can enter D0 from any state, but if we can only go deeper
 	 * to sleep if we're already in a low power state
 	 */
 	if (state != PCI_D0 && dev->current_state <= PCI_D3cold
@@ -566,7 +566,7 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
 
 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
 	dev->current_state = (pmcsr & PCI_PM_CTRL_STATE_MASK);
-	if (dev->current_state != state && printk_ratelimit())
+	if (dev->current_state != state)
 		dev_info(&dev->dev, "Refused to change power state, "
 			"currently in D%d\n", dev->current_state);
 
@@ -997,7 +997,7 @@ static void pci_restore_config_space(struct pci_dev *pdev)
 	}
 }
 
-/** 
+/**
  * pci_restore_state - Restore the saved state of a PCI device
  * @dev: - PCI device that we're dealing with
  */
@@ -2544,7 +2544,7 @@ static int __pci_request_region(struct pci_dev *pdev, int bar, const char *res_n
 
 	if (pci_resource_len(pdev, bar) == 0)
 		return 0;
-		
+
 	if (pci_resource_flags(pdev, bar) & IORESOURCE_IO) {
 		if (!request_region(pci_resource_start(pdev, bar),
 			    pci_resource_len(pdev, bar), res_name))
@@ -2877,7 +2877,7 @@ pci_set_mwi(struct pci_dev *dev)
 		cmd |= PCI_COMMAND_INVALIDATE;
 		pci_write_config_word(dev, PCI_COMMAND, cmd);
 	}
-	
+
 	return 0;
 }
 
@@ -3573,7 +3573,7 @@ int pcie_set_mps(struct pci_dev *dev, int mps)
 		return -EINVAL;
 
 	v = ffs(mps) - 8;
-	if (v > dev->pcie_mpss) 
+	if (v > dev->pcie_mpss)
 		return -EINVAL;
 	v <<= 5;
 
