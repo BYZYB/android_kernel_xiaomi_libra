@@ -1008,7 +1008,7 @@ spmi_pmic_arb_get_property(struct platform_device *pdev, char *pname, u32 *prop)
 	int ret = of_property_read_u32(pdev->dev.of_node, pname, prop);
 
 	if (ret)
-		dev_err(&pdev->dev, "missing property: %s\n", pname);
+		dev_dbg(&pdev->dev, "missing property: %s\n", pname);
 	else
 		pr_debug("%s = 0x%x\n", pname, *prop);
 
@@ -1104,7 +1104,7 @@ static int pmic_arb_version_specific_init(struct spmi_pmic_arb_dev *pmic_arb,
 	version = readl_relaxed(pmic_arb->base + PMIC_ARB_VERSION);
 
 	if (version < PMIC_ARB_V2_MIN) {
-		dev_err(&pdev->dev, "PMIC Arb Version-1 0x%x\n", version);
+		dev_dbg(&pdev->dev, "PMIC Arb Version-1 0x%x\n", version);
 		pmic_arb->rdbase	 = pmic_arb->base;
 		pmic_arb->wrbase	 = pmic_arb->base;
 		pmic_arb->dbg.rdbase_phy = pmic_arb->dbg.base_phy;
