@@ -5,9 +5,6 @@
 # Rewritten to use lists instead of if-statements.
 #
 
-#common clk code
-obj-y				+= clk/
-
 obj-y				+= irqchip/
 obj-y				+= bus/
 
@@ -140,6 +137,8 @@ obj-$(CONFIG_VHOST_RING)	+= vhost/
 obj-$(CONFIG_VLYNQ)		+= vlynq/
 obj-$(CONFIG_STAGING)		+= staging/
 obj-y				+= platform/
+#common clk code
+obj-y				+= clk/
 
 obj-$(CONFIG_MAILBOX)		+= mailbox/
 obj-$(CONFIG_HWSPINLOCK)	+= hwspinlock/
