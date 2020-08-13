@@ -2831,8 +2831,8 @@
 	qcom,msm-thermal {
 		compatible = "qcom,msm-thermal";
 		qcom,sensor-id = <7>;
-		qcom,poll-ms = <5000>;
-		qcom,limit-temp = <60>;
+		qcom,poll-ms = <2500>;
+		qcom,limit-temp = <55>;
 		qcom,temp-hysteresis = <10>;
 		qcom,therm-reset-temp = <115>;
 		qcom,disable-ocr;
@@ -2841,18 +2841,18 @@
 		qcom,disable-cx-phase-ctrl;
 		qcom,freq-step = <1>;
 		qcom,freq-control-mask = <0x3f>;
-		qcom,core-limit-temp = <80>;
+		qcom,core-limit-temp = <65>;
 		qcom,core-temp-hysteresis = <10>;
 		qcom,core-control-mask = <0x3e>;
-		qcom,hotplug-temp = <105>;
-		qcom,hotplug-temp-hysteresis = <40>;
+		qcom,hotplug-temp = <65>;
+		qcom,hotplug-temp-hysteresis = <10>;
 		qcom,cpu-sensors = "tsens_tz_sensor7", "tsens_tz_sensor7",
 				   "tsens_tz_sensor9", "tsens_tz_sensor10",
 				   "tsens_tz_sensor13", "tsens_tz_sensor14";
-		qcom,freq-mitigation-temp = <100>;
-		qcom,freq-mitigation-temp-hysteresis = <20>;
+		qcom,freq-mitigation-temp = <70>;
+		qcom,freq-mitigation-temp-hysteresis = <10>;
 		qcom,freq-mitigation-value = <768000>;
-		qcom,freq-mitigation-control-mask = <0x30>;
+		qcom,freq-mitigation-control-mask = <0x3c>;
 		qcom,online-hotplug-core;
 		qcom,synchronous-cluster-id = <0 1>;
 		qcom,vdd-restriction-temp = <5>;
