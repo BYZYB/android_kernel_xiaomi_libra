@@ -1138,6 +1138,7 @@ fail:
 
 static int __init setup_slub_debug(char *str)
 {
+#if 0
 	slub_debug = DEBUG_DEFAULT_FLAGS;
 	if (*str++ != '=' || !*str)
 		/*
@@ -1201,6 +1202,7 @@ check_slabs:
 	if (*str == ',')
 		slub_debug_slabs = str + 1;
 out:
+#endif
 	return 1;
 }
 
