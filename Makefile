@@ -660,6 +660,7 @@ KBUILD_CFLAGS += $(stackp-flag)
 
 ifeq ($(cc-name),clang)
 KBUILD_CFLAGS += -Wno-address-of-packed-member \
+                 -Wno-deprecated-declarations \
                  -Wno-format-invalid-specifier \
                  -Wno-gnu
 KBUILD_CPPFLAGS += -Qunused-arguments
