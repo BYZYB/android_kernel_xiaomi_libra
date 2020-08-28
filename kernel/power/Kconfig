@@ -319,14 +319,6 @@ config PM_SYNC_BEFORE_SUSPEND
 	depends on SUSPEND
 	default y
 
-config QUICK_WAKEUP
-	bool "Quick wakeup"
-	depends on SUSPEND
-	default y
-	---help---
-	  Allow kernel driver to do periodic jobs without resuming the full system
-	  This option can increase battery life on android powered smartphone.
-
 config QUICK_THAW_FINGERPRINTD
 	bool "Quickly resume fingerprintd"
 	depends on SUSPEND
