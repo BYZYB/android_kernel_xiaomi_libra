@@ -83,7 +83,12 @@ modpost_link()
 			${KBUILD_VMLINUX_LIBS}				\
 			--end-group"
 	fi
-	${LDFINAL} ${LDFLAGS} -r -o ${1} ${objects}
+
+	if [ -n "${CONFIG_LTO_GCC}" ]; then
+		${LDFINAL} ${LDFLAGS} -r -o ${1} ${objects}
+	else
+		${LD} ${LDFLAGS} -r -o ${1} ${objects}
+	fi
 }
 
 # Link of vmlinux
@@ -112,8 +117,13 @@ vmlinux_link()
 				${1}"
 		fi
 
-		${LDFINAL} ${LDFLAGS} ${LDFLAGS_vmlinux} -o ${2}	\
-			-T ${lds} ${objects}
+		if [ -n "${CONFIG_LTO_GCC}" ]; then
+			${LDFINAL} ${LDFLAGS} ${LDFLAGS_vmlinux} -o ${2}	\
+				-T ${lds} ${objects}
+		else
+			${LD} ${LDFLAGS} ${LDFLAGS_vmlinux} -o ${2}	\
+				-T ${lds} ${objects}
+		fi
 	else
 		if [ -n "${CONFIG_THIN_ARCHIVES}" ]; then
 			objects="-Wl,--whole-archive			\
@@ -290,7 +300,12 @@ if [ -n "${CONFIG_KALLSYMS}" ]; then
 	fi
 fi
 
-info LDFINAL vmlinux
+if [ -n "${CONFIG_LTO_GCC}" ]; then
+	info LDFINAL vmlinux
+else
+	info LD vmlinux
+fi
+
 vmlinux_link "${kallsymso}" vmlinux
 
 if [ -n "${CONFIG_BUILDTIME_EXTABLE_SORT}" ]; then

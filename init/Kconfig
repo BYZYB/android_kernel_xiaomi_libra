@@ -1310,9 +1310,37 @@ config LD_DEAD_CODE_DATA_ELIMINATION
 	  own risk.
 
 config LTO
-	bool "Enable Link Time Optimization"
-	default n
+	def_bool n
+
+config ARCH_SUPPORTS_LTO_GCC
+	bool
+	help
+	  An architecture should select this option it supports:
+	  - compiling with gcc,
+	  - compiling inline assembly with ar.
+
+choice
+	prompt "Link-Time Optimization (LTO) (EXPERIMENTAL)"
+	default LTO_NONE
+	help
+	  This option turns on Link-Time Optimization (LTO).
+
+config LTO_NONE
+	bool "None"
+
+config LTO_GCC
+	bool "Use gcc Link Time Optimization (LTO) (EXPERIMENTAL)"
+	depends on ARCH_SUPPORTS_LTO_GCC
+	select LTO
 	select THIN_ARCHIVES
+	help
+          This option enables gcc's Link Time Optimization (LTO), which allows
+          the compiler to optimize the kernel globally at link time.
+
+          If you select this option, you must compile the kernel with gcc >= 9.0
+          (make CC=gcc).
+
+endchoice
 
 config SYSCTL
 	bool
