@@ -639,9 +639,9 @@ config STM32_FW_UPDATER
 
 config FORCE_FAST_CHARGE
 	bool "Force faster charging rate for USB"
-	default n
+	default y
 	help
-	  This allows users to override default charging rate for USB.
+	  This allows users to enable fast charging (500mA -> 900mA) for USB.
 
 source "drivers/misc/c2port/Kconfig"
 source "drivers/misc/eeprom/Kconfig"

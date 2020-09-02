@@ -39,11 +39,6 @@
 #include <linux/msm_bcl.h>
 #include <linux/ktime.h>
 
-/* Forced fast charge */
-#ifdef CONFIG_FORCE_FAST_CHARGE
-#include <linux/fastchg.h>
-#endif
-
 /* Mask/Bit helpers */
 #define _SMB_MASK(BITS, POS) \
 	((unsigned char)(((1 << (BITS)) - 1) << (POS)))
@@ -1419,6 +1414,18 @@ static int smbchg_set_usb_current_max(struct smbchg_chip *chip,
 					USBIN_LIMITED_MODE | USB51_100MA);
 		chip->usb_max_current_ma = 150;
 	}
+
+#ifdef CONFIG_FORCE_FAST_CHARGE
+	if (current_ma == CURRENT_500_MA || current_ma == CURRENT_900_MA) {
+		rc = smbchg_sec_masked_write(chip,
+					chip->usb_chgpth_base + CHGPTH_CFG,
+					CFG_USB_2_3_SEL_BIT, CFG_USB_3);
+		rc |= smbchg_masked_write(chip, chip->usb_chgpth_base + CMD_IL,
+					USBIN_MODE_CHG_BIT | USB51_MODE_BIT,
+					USBIN_LIMITED_MODE | USB51_500MA);
+		chip->usb_max_current_ma = 900;
+	}
+#else
 	if (current_ma == CURRENT_500_MA) {
 		rc = smbchg_sec_masked_write(chip,
 					chip->usb_chgpth_base + CHGPTH_CFG,
@@ -1428,11 +1435,8 @@ static int smbchg_set_usb_current_max(struct smbchg_chip *chip,
 					USBIN_LIMITED_MODE | USB51_500MA);
 		chip->usb_max_current_ma = 500;
 	}
-#ifdef CONFIG_FORCE_FAST_CHARGE
-	if ((force_fast_charge > 0 && current_ma == CURRENT_500_MA) || current_ma == CURRENT_900_MA) {
-#else
+
 	if (current_ma == CURRENT_900_MA) {
-#endif
 		rc = smbchg_sec_masked_write(chip,
 					chip->usb_chgpth_base + CHGPTH_CFG,
 					CFG_USB_2_3_SEL_BIT, CFG_USB_3);
@@ -1441,6 +1445,7 @@ static int smbchg_set_usb_current_max(struct smbchg_chip *chip,
 					USBIN_LIMITED_MODE | USB51_500MA);
 		chip->usb_max_current_ma = 900;
 	}
+#endif
 
 	rc = smbchg_set_high_usb_chg_current(chip, current_ma);
 	if (rc < 0)
