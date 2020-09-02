@@ -267,7 +267,7 @@
 		qcom,mode = <1>;		/* Digital out*/
 		qcom,output-type = <0>;
 		qcom,pull = <0>;
-		qcom,vin-sel = <2>;		/* Logical 1 voltage value 1.8V$
+		qcom,vin-sel = <2>;		/* Logical 1 voltage value 1.8V$ */
 		qcom,out-strength = <3>;
 		qcom,src-sel = <0>;
 		qcom,master-en = <1>;		/* Enable GPIO */
