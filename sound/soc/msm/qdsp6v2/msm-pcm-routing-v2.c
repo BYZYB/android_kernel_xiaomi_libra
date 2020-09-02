@@ -4324,7 +4324,7 @@ static const char * const tert_mi2s_rx_vi_fb_tx_mux_text[] = {
                 "ZERO", "TERT_MI2S_TX"
 };
 
-static const int const tert_mi2s_rx_vi_fb_tx_value[] = {
+static const int tert_mi2s_rx_vi_fb_tx_value[] = {
                 MSM_BACKEND_DAI_MAX, MSM_BACKEND_DAI_TERTIARY_MI2S_TX
 };
 
