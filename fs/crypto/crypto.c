@@ -25,7 +25,6 @@
 #include <linux/scatterlist.h>
 #include <linux/ratelimit.h>
 #include <linux/dcache.h>
-#include <linux/fscrypto.h>
 #include <crypto/aes.h>
 #include "fscrypt_private.h"
 
