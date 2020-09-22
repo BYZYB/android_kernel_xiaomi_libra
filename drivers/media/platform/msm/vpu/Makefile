@@ -1,5 +1,3 @@
-GCC_VERSION      := $(shell $(CONFIG_SHELL) $(srctree)/scripts/gcc-version.sh $(CROSS_COMPILE)gcc)
-
 obj-$(CONFIG_MSM_VPU) := 	\
 		vpu_v4l2.o \
 		vpu_ioctl.o \
