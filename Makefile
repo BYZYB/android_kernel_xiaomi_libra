@@ -330,7 +330,7 @@ CHECK = sparse
 CPP = $(CC) -E
 DEPMOD = /sbin/depmod
 GENKSYMS = scripts/genksyms/genksyms
-LD = $(CROSS_COMPILE)ld.gold
+LD = $(CROSS_COMPILE)ld
 NM = $(CROSS_COMPILE)nm
 OBJCOPY = $(CROSS_COMPILE)objcopy
 OBJDUMP = $(CROSS_COMPILE)objdump
@@ -377,15 +377,13 @@ KBUILD_CFLAGS += \
 		-fgraphite \
 		-fgraphite-identity \
 		-fira-loop-pressure \
-		-floop-block \
-		-floop-strip-mine \
+		-floop-nest-optimize \
 		-fmodulo-sched \
 		-fmodulo-sched-allow-regmoves \
-		-fshrink-wrap-separate \
 		-ftree-vectorize \
 		-mcpu=cortex-a57.cortex-a53 \
 		-mtune=cortex-a57.cortex-a53 \
-		-Wl,-O3,--sort-common,--strip-debug
+		-Wl,-O3,-S,--sort-common
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
 KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
