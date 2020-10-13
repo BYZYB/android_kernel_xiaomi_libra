@@ -17,7 +17,7 @@
 #include "sched.h"
 
 #define THROTTLE_DOWN_NSEC	50000000 /* 50ms default */
-#define THROTTLE_UP_NSEC	500000 /* 500us default */
+#define THROTTLE_UP_NSEC	1000000 /* 1ms default */
 
 struct static_key __read_mostly __sched_freq = STATIC_KEY_INIT_FALSE;
 static bool __read_mostly cpufreq_driver_slow;
@@ -32,12 +32,6 @@ DEFINE_PER_CPU(struct sched_capacity_reqs, cpu_sched_capacity_reqs);
 /**
  * gov_data - per-policy data internal to the governor
  * @up_throttle: next throttling period expiry if increasing OPP
- * @down_throttle: next throttling period expiry if decreasing OPP
- * @up_throttle_nsec: throttle period length in nanoseconds if increasing OPP
- * @down_throttle_nsec: throttle period length in nanoseconds if decreasing OPP
- * @task: worker thread for dvfs transition that may block/sleep
- * @irq_work: callback used to wake up worker thread
- * @requested_freq: last frequency requested by the sched governor
  * @down_throttle: next throttling period expiry if decreasing OPP
  * @up_throttle_nsec: throttle period length in nanoseconds if increasing OPP
  * @down_throttle_nsec: throttle period length in nanoseconds if decreasing OPP
@@ -71,7 +65,8 @@ static struct mutex gov_list_lock;
 /* irq_work: callback used to wake up worker thread */
 static struct irq_work irq_work;
 
-static void cpufreq_sched_try_driver_target(struct cpufreq_policy *policy, unsigned int freq)
+static void cpufreq_sched_try_driver_target(struct cpufreq_policy *policy,
+					    unsigned int freq)
 {
 	struct gov_data *gd = policy->governor_data;
 
@@ -188,7 +183,8 @@ static void update_fdomain_capacity_request(int cpu)
 	if (IS_ERR_OR_NULL(policy))
 		return;
 
-	if (policy->governor != &cpufreq_gov_sched || !policy->governor_data)
+	if (policy->governor != &cpufreq_gov_sched ||
+	    !policy->governor_data)
 		goto out;
 
 	gd = policy->governor_data;
