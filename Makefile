@@ -102,10 +102,6 @@ ifeq ("$(origin O)", "command line")
   KBUILD_OUTPUT := $(O)
 endif
 
-ifeq ("$(origin W)", "command line")
-  export KBUILD_ENABLE_EXTRA_GCC_CHECKS := $(W)
-endif
-
 # That's our default target when none is given on the command line
 PHONY := _all
 _all:
@@ -313,7 +309,6 @@ endif
 
 export quiet Q KBUILD_VERBOSE
 
-
 # Look for make include files relative to root of kernel src
 MAKEFLAGS += --include-dir=$(srctree)
 
@@ -331,6 +326,7 @@ CPP = $(CC) -E
 DEPMOD = /sbin/depmod
 GENKSYMS = scripts/genksyms/genksyms
 LD = $(CROSS_COMPILE)ld
+LDGOLD = $(CROSS_COMPILE)ld.gold
 NM = $(CROSS_COMPILE)nm
 OBJCOPY = $(CROSS_COMPILE)objcopy
 OBJDUMP = $(CROSS_COMPILE)objdump
@@ -345,6 +341,7 @@ CFLAGS_MODULE =
 LDFLAGS_MODULE =
 
 CHECKFLAGS := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ $(CF)
+CLANG_FLAGS :=
 INSTALLKERNEL := installkernel
 KBUILD_AFLAGS := -D__ASSEMBLY__
 KBUILD_AFLAGS_KERNEL :=
@@ -372,6 +369,7 @@ LINUXINCLUDE := \
 		-Iinclude $(USERINCLUDE)
 
 # Use arch specific optimization
+ifeq ($(cc-name),gcc)
 KBUILD_CFLAGS += \
 		-fdiagnostics-color \
 		-fgraphite \
@@ -384,6 +382,13 @@ KBUILD_CFLAGS += \
 		-mcpu=cortex-a57.cortex-a53 \
 		-mtune=cortex-a57.cortex-a53 \
 		-Wl,-O3,-S,--sort-common
+else
+KBUILD_CFLAGS += \
+		-fdiagnostics-color \
+		-mcpu=cortex-a53 \
+		-mtune=cortex-a53 \
+		-Wl,-O3,-S,--sort-common
+endif
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
 KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
@@ -574,6 +579,41 @@ endif # $(dot-config)
 # Defaults to vmlinux, but the arch makefile usually adds further targets
 all: vmlinux
 
+ifeq ($(cc-name),clang)
+ifneq ($(CROSS_COMPILE),)
+CLANG_TRIPLE ?= $(CROSS_COMPILE)
+CLANG_FLAGS := --target=$(notdir $(CLANG_TRIPLE:%-=%))
+ifeq ($(shell $(srctree)/scripts/clang-android.sh $(CC) $(CLANG_FLAGS)), y)
+$(error "Clang with Android --target detected. Did you specify CLANG_TRIPLE?")
+endif
+GCC_TOOLCHAIN_DIR := $(dir $(shell which $(CROSS_COMPILE)elfedit))
+CLANG_FLAGS += --prefix=$(GCC_TOOLCHAIN_DIR)$(notdir $(CROSS_COMPILE))
+GCC_TOOLCHAIN := $(realpath $(GCC_TOOLCHAIN_DIR)/..)
+endif
+ifneq ($(GCC_TOOLCHAIN),)
+CLANG_FLAGS += --gcc-toolchain=$(GCC_TOOLCHAIN)
+endif
+CLANG_FLAGS += -no-integrated-as \
+               -Werror=unknown-warning-option
+KBUILD_AFLAGS += $(CLANG_FLAGS)
+KBUILD_CFLAGS += $(CLANG_FLAGS)
+export CLANG_FLAGS
+endif
+
+# Make toolchain changes before including arch/$(SRCARCH)/Makefile to ensure
+# ar/cc/ld-* macros return correct values.
+ifdef CONFIG_LTO_CLANG
+# use GNU gold with LLVMgold for LTO linking, and LD for vmlinux_link
+LDFINAL_vmlinux := $(LD)
+LD := $(LDGOLD)
+LDFLAGS += -plugin LLVMgold.so
+# use llvm-ar for building symbol tables from IR files, and llvm-dis instead
+# of objdump for processing symbol versions and exports
+LLVM_AR := llvm-ar
+LLVM_NM := llvm-nm
+export LLVM_AR LLVM_NM
+endif
+
 ifdef CONFIG_LD_DEAD_CODE_DATA_ELIMINATION
 KBUILD_CFLAGS += $(call cc-option, -fdata-sections,) \
                  $(call cc-option, -ffunction-sections,)
@@ -593,7 +633,7 @@ KBUILD_CFLAGS += -Ofast
 KBUILD_CPPFLAGS += -Ofast
 endif
 
-ifdef CONFIG_LTO
+ifdef CONFIG_LTO_GCC
 LTO_CFLAGS := -flto -flto=jobserver -fno-fat-lto-objects -fuse-linker-plugin -fwhole-program
 KBUILD_CFLAGS += $(LTO_CFLAGS) --param=max-inline-insns-auto=1000
 LTO_LDFLAGS := $(LTO_CFLAGS) -Wno-lto-type-mismatch -Wno-psabi -Wno-stringop-overflow -flinker-output=nolto-rel
@@ -641,14 +681,38 @@ endif
 endif
 KBUILD_CFLAGS += $(stackp-flag)
 
+ifeq ($(cc-name),clang)
+KBUILD_CFLAGS += -Wno-address-of-packed-member \
+                 -Wno-deprecated-declarations \
+                 -Wno-format-invalid-specifier \
+                 -Wno-gnu
+KBUILD_CPPFLAGS += -Qunused-arguments
+# Quiet clang warning: comparison of unsigned expression < 0 is always false
+KBUILD_CFLAGS += -Wno-tautological-compare
+ifdef CONFIG_MODULES
+# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
+# source of a reference will be _MergedGlobals and not on of the whitelisted names.
+# See modpost pattern 2
+KBUILD_CFLAGS += -mno-global-merge
+endif
+# clang's -Wpointer-to-int-cast warns when casting to enums, which does not match GCC.
+# Disable that part of the warning because it is very noisy across the kernel and does
+# not point out any real bugs.
+KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast) \
+                 $(call cc-disable-warning, pointer-to-int-cast)
+else
 # These warnings generated too much noise in a regular build.
-# Use make W=1 to enable this warning (see scripts/Makefile.build)
+# Use make W=1 to enable them (see scripts/Makefile.extrawarn)
 KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member) \
                  $(call cc-disable-warning, attribute-alias) \
                  $(call cc-disable-warning, discarded-array-qualifiers) \
                  $(call cc-disable-warning, format-security) \
                  $(call cc-disable-warning, incompatible-pointer-types) \
-                 $(call cc-disable-warning, shift-overflow)
+                 $(call cc-disable-warning, shift-overflow) \
+                 $(call cc-disable-warning, unused-but-set-variable)
+endif
+
+KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
 
 ifdef CONFIG_FRAME_POINTER
 KBUILD_CFLAGS += -fno-omit-frame-pointer -fno-optimize-sibling-calls
@@ -695,6 +759,34 @@ ifdef CONFIG_DEBUG_SECTION_MISMATCH
 KBUILD_CFLAGS += $(call cc-option, -fno-inline-functions-called-once)
 endif
 
+ifdef CONFIG_LTO_CLANG
+ifdef CONFIG_THINLTO
+lto-clang-flags := -flto=thin
+ifeq ($(ld-name),lld)
+LDFLAGS += --thinlto-cache-dir=.thinlto-cache
+endif
+else
+lto-clang-flags := -flto
+endif
+lto-clang-flags += -fvisibility=default $(call cc-option, -fsplit-lto-unit)
+
+# allow disabling only clang LTO where needed
+DISABLE_LTO_CLANG := -fno-lto
+export DISABLE_LTO_CLANG
+endif
+
+ifdef CONFIG_LTO
+lto-flags := $(lto-clang-flags)
+KBUILD_CFLAGS += $(lto-flags)
+
+DISABLE_LTO := $(DISABLE_LTO_CLANG)
+export DISABLE_LTO
+
+# LDFINAL_vmlinux and LDFLAGS_FINAL_vmlinux can be set to override
+# the linker and flags for vmlinux_link.
+export LDFINAL_vmlinux LDFLAGS_FINAL_vmlinux
+endif
+
 # arch Makefile may override CC so keep this after arch Makefile is included
 NOSTDINC_FLAGS += -nostdinc -isystem $(shell $(CC) -print-file-name=include)
 CHECKFLAGS += $(NOSTDINC_FLAGS)
@@ -708,6 +800,15 @@ KBUILD_CFLAGS += $(call cc-option, -fno-common) \
                  $(call cc-option, -fno-strict-overflow) \
                  $(call cc-option, -fno-var-tracking-assignments)
 
+# clang sets -fmerge-all-constants by default as optimization, but this
+# is non-conforming behavior for C and in fact breaks the kernel, so we
+# need to disable it here generally.
+KBUILD_CFLAGS	+= $(call cc-option,-fno-merge-all-constants)
+
+# for gcc -fno-merge-all-constants disables everything, but it is fine
+# to have actual conforming behavior enabled.
+KBUILD_CFLAGS	+= $(call cc-option,-fmerge-constants)
+
 # use the deterministic mode of AR if available
 KBUILD_ARFLAGS := $(call ar-option,D)
 
@@ -715,6 +816,8 @@ KBUILD_ARFLAGS := $(call ar-option,D)
 ifeq ($(shell $(CONFIG_SHELL) $(srctree)/scripts/gcc-goto.sh $(CC)), y)
 KBUILD_CFLAGS += -DCC_HAVE_ASM_GOTO
 endif
+
+include $(srctree)/scripts/Makefile.extrawarn
 
 # Add user supplied CPPFLAGS, AFLAGS and CFLAGS as the last assignments
 KBUILD_CPPFLAGS += $(KCPPFLAGS)
@@ -734,9 +837,6 @@ endif
 ifeq ($(CONFIG_STRIP_ASM_SYMS),y)
 LDFLAGS_vmlinux	+= $(call ld-option, -X,)
 endif
-
-LDFLAGS_vmlinux += $(call ld-option, --fix-cortex-a53-843419)
-LDFLAGS_MODULE += $(call ld-option, --fix-cortex-a53-843419)
 
 # Default kernel image to build when no specific target is given.
 # KBUILD_IMAGE may be overruled on the command line or
@@ -1163,6 +1263,8 @@ help:
 	@echo  '                    (default: $$(INSTALL_MOD_PATH)/lib/firmware)'
 	@echo  '  dir/            - Build all files in dir and below'
 	@echo  '  dir/file.[oisS] - Build specified target only'
+	@echo  '  dir/file.ll     - Build the LLVM assembly file'
+	@echo  '                    (requires compiler support for LLVM assembly generation)'
 	@echo  '  dir/file.lst    - Build specified mixed source/assembly target only'
 	@echo  '                    (requires a recent binutils and recent build (System.map))'
 	@echo  '  dir/file.ko     - Build module including final link'
@@ -1329,7 +1431,9 @@ clean: $(clean-dirs)
 		-o -name '.*.d' -o -name '.*.tmp' -o -name '*.mod.c' \
 		-o -name '*.symtypes' -o -name 'modules.order' \
 		-o -name modules.builtin -o -name '.tmp_*.o.*' \
-		-o -name '*.gcno' \) -type f -print | xargs rm -f
+		-o -name '*.ll' \
+		-o -name '*.gcno' \
+		-o -name '*.*.symversions' \) -type f -print | xargs rm -f
 
 # Generate tags for editors
 # ---------------------------------------------------------------------------
@@ -1428,6 +1532,8 @@ endif
 %.o: %.S prepare scripts FORCE
 	$(Q)$(MAKE) $(build)=$(build-dir) $(target-dir)$(notdir $@)
 %.symtypes: %.c prepare scripts FORCE
+	$(Q)$(MAKE) $(build)=$(build-dir) $(target-dir)$(notdir $@)
+%.ll: %.c prepare scripts FORCE
 	$(Q)$(MAKE) $(build)=$(build-dir) $(target-dir)$(notdir $@)
 
 # Modules
