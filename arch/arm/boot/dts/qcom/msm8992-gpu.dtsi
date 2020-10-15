@@ -11,22 +11,22 @@
  */
 
 &soc {
-        msm_bus: qcom,kgsl-busmon{
-                label = "kgsl-busmon";
-                compatible = "qcom,kgsl-busmon";
-        };
+		msm_bus: qcom,kgsl-busmon{
+				label = "kgsl-busmon";
+				compatible = "qcom,kgsl-busmon";
+		};
 
-        gpubw: qcom,gpubw {
-                compatible = "qcom,devbw";
-                governor = "bw_vbif";
-                qcom,src-dst-ports = <26 512>;
-                /*
-                * active-only flag is used while registering the bus
-                * governor.It helps release the bus vote when the CPU
-                * subsystem is inactive.
-                */
-                qcom,active-only;
-                qcom,bw-tbl =
+		gpubw: qcom,gpubw {
+				compatible = "qcom,devbw";
+				governor = "bw_vbif";
+				qcom,src-dst-ports = <26 512>;
+				/*
+				* active-only flag is used while registering the bus
+				* governor.It helps release the bus vote when the CPU
+				* subsystem is inactive.
+				*/
+				qcom,active-only;
+				qcom,bw-tbl =
 			<     0 /*  off     */ >,
 			<   762 /*  100 MHz */ >,
 			<  1144 /*  150 MHz */ >,
@@ -38,7 +38,7 @@
 			<  5928 /*  777 MHz */ >,
 			<  7102 /*  931 MHz */ >,
 			<  7904 /* 1036 MHz */ >;
-        };
+		};
 
 	msm_gpu: qcom,kgsl-3d0@fdb00000 {
 		label = "kgsl-3d0";
@@ -54,11 +54,6 @@
 		qcom,initial-pwrlevel = <7>;
 
 		qcom,idle-timeout = <64>; //msec
-		/*
-		 * Timeout to enter deeper power saving state
-		 * from NAP.
-		 */
-		qcom,deep-nap-timeout = <20>; //msec
 		qcom,strtstp-sleepwake;
 
 		/*
