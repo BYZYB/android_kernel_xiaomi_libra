@@ -4271,25 +4271,30 @@ static char* get_next_line(char* str)
  * This function trims any leading and trailing white spaces
  */
 static char *i_trim(char *str)
-
 {
-   char *ptr;
+   if(*str == '\0')
+      return str;
 
-   if(*str == '\0') return str;
+   char *ptr = str;
 
    /* Find the first non white-space*/
-   for (ptr = str; i_isspace(*ptr); ptr++);
-      if (*ptr == '\0')
-         return str;
+   while (i_isspace(*ptr))
+      ptr++;
+
+   if (*ptr == '\0')
+      return str;
 
    /* This is the new start of the string*/
    str = ptr;
 
    /* Find the last non white-space */
    ptr += strlen(ptr) - 1;
-   for (; ptr != str && i_isspace(*ptr); ptr--);
-      /* Null terminate the following character */
-      ptr[1] = '\0';
+
+   while (ptr != str && i_isspace(*ptr))
+      ptr--;
+
+   /* Null terminate the following character */
+   ptr[1] = '\0';
 
    return str;
 }
@@ -7234,4 +7239,3 @@ VOS_STATUS hdd_update_nss(hdd_context_t *hdd_ctx, uint8_t nss)
 
 	return (status == FALSE) ? VOS_STATUS_E_FAILURE : VOS_STATUS_SUCCESS;
 }
-
