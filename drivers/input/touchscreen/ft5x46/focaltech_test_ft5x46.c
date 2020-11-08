@@ -1,5 +1,5 @@
 /************************************************************************
-* Copyright (C) 2012-2015, Focaltech Systems (R)ㄛAll Rights Reserved.
+* Copyright (C) 2012-2015, Focaltech Systems (R) All Rights Reserved.
 * Copyright (C) 2018 XiaoMi, Inc.
 *
 * File Name: Test_FT5X46.c
@@ -599,9 +599,9 @@ unsigned char FT5X46_TestItem_WeakShortTest(struct i2c_client *client)
 		if ((iMin_CG > fGShortResistance[i]) || (iDsen - iDoffset < 0)) {
 			iCount++;
 			if (i+1 <= iMaxTx)
-				FTS_TEST_PRINT("Tx%02d: %02d (k次),	", i+1, fGShortResistance[i]);
+				FTS_TEST_PRINT("Tx%02d: %02d (k times),	", i+1, fGShortResistance[i]);
 			else
-				FTS_TEST_PRINT("Rx%02d: %02d (k次),	", i+1 - iMaxTx, fGShortResistance[i]);
+				FTS_TEST_PRINT("Rx%02d: %02d (k times),	", i+1 - iMaxTx, fGShortResistance[i]);
 			if (iCount % 10 == 0)
 				FTS_TEST_PRINT("\n");
 		}
@@ -664,9 +664,9 @@ unsigned char FT5X46_TestItem_WeakShortTest(struct i2c_client *client)
 		if (fMShortResistance[i] <= 0  || fMShortResistance[i] < iMin_CC) {
 			iCount++;
 			if (i+1 <= iMaxTx)
-				FTS_TEST_PRINT("Tx%02d: %02d(k次),	", i+1, fMShortResistance[i]);
+				FTS_TEST_PRINT("Tx%02d: %02d(k times),	", i+1, fMShortResistance[i]);
 			else
-				FTS_TEST_PRINT("Rx%02d: %02d(k次),	", i+1 - iMaxTx, fMShortResistance[i]);
+				FTS_TEST_PRINT("Rx%02d: %02d(k times),	", i+1 - iMaxTx, fMShortResistance[i]);
 			if (iCount % 10 == 0)
 				FTS_TEST_PRINT("\n");
 		}

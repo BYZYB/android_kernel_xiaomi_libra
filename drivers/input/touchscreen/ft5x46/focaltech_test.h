@@ -94,9 +94,7 @@ unsigned char EnterWork(void);
 unsigned char EnterFactory(void);
 void *fts_malloc(size_t size);
 void fts_free(void *p);
-#define FOCAL_TEST_DEBUG_EN	1
 
-#if (FOCAL_TEST_DEBUG_EN)
 #define FTS_TEST_DBG(fmt, args...) \
 	pr_debug("[FTS] %s. line: %d.  "fmt"\n",\
 			__func__, __LINE__, ##args)
@@ -104,10 +102,5 @@ void fts_free(void *p);
 #define FTS_TEST_ERR(fmt, args...) \
 	pr_err("[FTS] %s. line: %d.  "fmt"\n", \
 			__func__, __LINE__, ##args)
-#else
-#define FTS_TEST_DBG(fmt, args...) do {} while (0)
-#define FTS_TEST_PRINT(fmt, args...) do {} while (0)
-#endif
-
 
 #endif
