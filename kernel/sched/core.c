@@ -3456,6 +3456,8 @@ EXPORT_SYMBOL(default_wake_function);
 
 #ifdef CONFIG_RT_MUTEXES
 
+extern struct task_struct *rt_mutex_get_top_task(struct task_struct *task);
+
 /*
  * rt_mutex_setprio - set the current priority of a task
  * @p: task
