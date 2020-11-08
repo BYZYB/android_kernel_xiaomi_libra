@@ -6633,6 +6633,8 @@ static void thermal_update_mit_threshold(
 	}
 }
 
+extern unsigned long copy_from_user(void *to, const void __user *from, unsigned long n);
+
 static ssize_t thermal_config_debugfs_write(struct file *file,
 			const char __user *buffer, size_t count, loff_t *ppos)
 {
