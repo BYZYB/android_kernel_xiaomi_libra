@@ -322,8 +322,7 @@ static void record_obj(unsigned long handle, unsigned long obj)
 #ifdef CONFIG_ZPOOL
 
 static void *zs_zpool_create(const char *name, gfp_t gfp,
-			     const struct zpool_ops *zpool_ops,
-			     struct zpool *zpool)
+			     const struct zpool_ops *zpool_ops)
 {
 	/*
 	 * Ignore global gfp flags: zs_malloc() may be invoked from
