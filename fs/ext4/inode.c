@@ -3114,7 +3114,7 @@ static int ext4_get_block_write_nolock(struct inode *inode, sector_t iblock,
 }
 
 static void ext4_end_io_dio(struct kiocb *iocb, loff_t offset,
-			    ssize_t size, void *private)
+				ssize_t size, void *private, int ret, bool is_async)
 {
         ext4_io_end_t *io_end = iocb->private;
 
