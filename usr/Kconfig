@@ -90,6 +90,15 @@ config RD_LZO
 	  Support loading of a LZO encoded initial ramdisk or cpio buffer
 	  If unsure, say N.
 
+config RD_LZ4
+	bool "Support initial ramdisk/ramfs compressed using LZ4"
+	default !EXPERT
+	depends on BLK_DEV_INITRD
+	select DECOMPRESS_LZ4
+	help
+	  Support loading of a LZ4 encoded initial ramdisk or cpio buffer
+	  If unsure, say N.
+
 choice
 	prompt "Built-in initramfs compression mode" if INITRAMFS_SOURCE!=""
 	help
@@ -161,8 +170,17 @@ config INITRAMFS_COMPRESSION_LZO
 	bool "LZO"
 	depends on RD_LZO
 	help
-	  Its compression ratio is the poorest among the choices. The kernel
-	  size is about 10% bigger than gzip; however its speed
-	  (both compression and decompression) is the fastest.
+	  Its compression ratio is the second poorest amongst the choices. The
+	  kernel size is about 10% bigger than gzip. Despite that, its
+	  decompression speed is the second fastest and its compression speed
+	  is quite fast too.
+
+config INITRAMFS_COMPRESSION_LZ4
+	bool "LZ4"
+	depends on RD_LZ4
+	help
+	  Its compression ratio is the poorest amongst the choices. The kernel
+	  size is about 15% bigger than gzip; however its decompression speed
+	  is the fastest.
 
 endchoice
