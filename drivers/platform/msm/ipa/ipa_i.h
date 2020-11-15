@@ -1388,8 +1388,6 @@ int ipa_init_hw(void);
 struct ipa_rt_tbl *__ipa_find_rt_tbl(enum ipa_ip_type ip, const char *name);
 int ipa_set_single_ndp_per_mbim(bool);
 int ipa_set_hw_timer_fix_for_mbim_aggr(bool);
-void ipa_debugfs_init(void);
-void ipa_debugfs_remove(void);
 
 void ipa_dump_buff_internal(void *base, dma_addr_t phy_base, u32 size);
 #ifdef IPA_DEBUG
@@ -1421,18 +1419,51 @@ int __ipa_del_rt_rule(u32 rule_hdl);
 int __ipa_del_hdr(u32 hdr_hdl, bool by_user);
 int __ipa_release_hdr(u32 hdr_hdl);
 int __ipa_release_hdr_proc_ctx(u32 proc_ctx_hdl);
-int _ipa_read_gen_reg_v1_1(char *buff, int max_len);
-int _ipa_read_gen_reg_v2_0(char *buff, int max_len);
-int _ipa_read_ep_reg_v1_1(char *buf, int max_len, int pipe);
-int _ipa_read_ep_reg_v2_0(char *buf, int max_len, int pipe);
-void _ipa_write_dbg_cnt_v1_1(int option);
-void _ipa_write_dbg_cnt_v2_0(int option);
-int _ipa_read_dbg_cnt_v1_1(char *buf, int max_len);
-int _ipa_read_dbg_cnt_v2_0(char *buf, int max_len);
 void _ipa_enable_clks_v1_1(void);
 void _ipa_enable_clks_v2_0(void);
 void _ipa_disable_clks_v1_1(void);
 void _ipa_disable_clks_v2_0(void);
+#ifdef CONFIG_DEBUG_FS
+int _ipa_read_dbg_cnt_v1_1(char *buf, int max_len);
+int _ipa_read_dbg_cnt_v2_0(char *buf, int max_len);
+int _ipa_read_ep_reg_v1_1(char *buf, int max_len, int pipe);
+int _ipa_read_ep_reg_v2_0(char *buf, int max_len, int pipe);
+int _ipa_read_gen_reg_v1_1(char *buff, int max_len);
+int _ipa_read_gen_reg_v2_0(char *buff, int max_len);
+void _ipa_write_dbg_cnt_v1_1(int option);
+void _ipa_write_dbg_cnt_v2_0(int option);
+void ipa_debugfs_init(void);
+void ipa_debugfs_remove(void);
+#else /* !CONFIG_DEBUG_FS */
+static inline int _ipa_read_dbg_cnt_v1_1(char *buf, int max_len)
+{
+	return 0;
+}
+static inline int _ipa_read_dbg_cnt_v2_0(char *buf, int max_len)
+{
+	return 0;
+}
+static inline int _ipa_read_ep_reg_v1_1(char *buf, int max_len, int pipe)
+{
+	return 0;
+}
+static inline int _ipa_read_ep_reg_v2_0(char *buf, int max_len, int pipe)
+{
+	return 0;
+}
+static inline int _ipa_read_gen_reg_v1_1(char *buff, int max_len)
+{
+	return 0;
+}
+static inline int _ipa_read_gen_reg_v2_0(char *buff, int max_len)
+{
+	return 0;
+}
+static inline void _ipa_write_dbg_cnt_v1_1(int option) {}
+static inline void _ipa_write_dbg_cnt_v2_0(int option) {}
+static inline void ipa_debugfs_init(void) {}
+static inline void ipa_debugfs_remove(void) {}
+#endif /* !CONFIG_DEBUG_FS */
 
 static inline u32 ipa_read_reg(void *base, u32 offset)
 {

@@ -78,9 +78,7 @@ static inline int mdss_mdp_debugfs_init(struct mdss_data_type *mdata)
 {
 	return 0;
 }
-static inline void mdss_mdp_hw_rev_debug_caps_init(struct mdss_data_type *mdata)
-{
-}
+static inline void mdss_mdp_hw_rev_debug_caps_init(struct mdss_data_type *mdata) {}
 #endif
 
 #endif /* MDSS_MDP_DEBUG_H */
