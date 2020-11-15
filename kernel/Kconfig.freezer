@@ -1,5 +1,6 @@
 config FREEZER
 	def_bool PM_SLEEP || CGROUP_FREEZER
+
 config FROZEN_APP
 	bool "Provide framework APP frozen interface"
 	depends on CGROUP_FREEZER
