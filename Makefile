@@ -341,7 +341,7 @@ CFLAGS_MODULE =
 LDFLAGS_MODULE =
 
 CHECKFLAGS := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ $(CF)
-CLANG_FLAGS :=
+CLANG_FLAGS := -no-integrated-as
 INSTALLKERNEL := installkernel
 KBUILD_AFLAGS := -D__ASSEMBLY__
 KBUILD_AFLAGS_KERNEL :=
@@ -369,7 +369,12 @@ LINUXINCLUDE := \
 		-Iinclude $(USERINCLUDE)
 
 # Use arch specific optimization
-ifeq ($(cc-name),gcc)
+ifeq ($(cc-name),clang)
+KBUILD_CFLAGS += \
+		-fdiagnostics-color \
+		-mcpu=cortex-a53 \
+		-mtune=cortex-a53
+else
 KBUILD_CFLAGS += \
 		-fdiagnostics-color \
 		-fgraphite \
@@ -380,14 +385,7 @@ KBUILD_CFLAGS += \
 		-fmodulo-sched-allow-regmoves \
 		-ftree-vectorize \
 		-mcpu=cortex-a57.cortex-a53 \
-		-mtune=cortex-a57.cortex-a53 \
-		-Wl,-O3,-S,--sort-common
-else
-KBUILD_CFLAGS += \
-		-fdiagnostics-color \
-		-mcpu=cortex-a53 \
-		-mtune=cortex-a53 \
-		-Wl,-O3,-S,--sort-common
+		-mtune=cortex-a57.cortex-a53
 endif
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
@@ -582,7 +580,7 @@ all: vmlinux
 ifeq ($(cc-name),clang)
 ifneq ($(CROSS_COMPILE),)
 CLANG_TRIPLE ?= $(CROSS_COMPILE)
-CLANG_FLAGS := --target=$(notdir $(CLANG_TRIPLE:%-=%))
+CLANG_FLAGS += --target=$(notdir $(CLANG_TRIPLE:%-=%))
 ifeq ($(shell $(srctree)/scripts/clang-android.sh $(CC) $(CLANG_FLAGS)), y)
 $(error "Clang with Android --target detected. Did you specify CLANG_TRIPLE?")
 endif
@@ -593,8 +591,9 @@ endif
 ifneq ($(GCC_TOOLCHAIN),)
 CLANG_FLAGS += --gcc-toolchain=$(GCC_TOOLCHAIN)
 endif
-CLANG_FLAGS += -no-integrated-as \
-               -Werror=unknown-warning-option
+ifdef CONFIG_MODULES
+KBUILD_CFLAGS += -mno-global-merge
+endif
 KBUILD_AFLAGS += $(CLANG_FLAGS)
 KBUILD_CFLAGS += $(CLANG_FLAGS)
 export CLANG_FLAGS
@@ -681,39 +680,28 @@ endif
 endif
 KBUILD_CFLAGS += $(stackp-flag)
 
-ifeq ($(cc-name),clang)
-KBUILD_CFLAGS += -Wno-address-of-packed-member \
-                 -Wno-deprecated-declarations \
-                 -Wno-asm-operand-widths \
-                 -Wno-format-invalid-specifier \
-                 -Wno-gnu
-KBUILD_CPPFLAGS += -Qunused-arguments
-# Quiet clang warning: comparison of unsigned expression < 0 is always false
-KBUILD_CFLAGS += -Wno-tautological-compare
-ifdef CONFIG_MODULES
-# CLANG uses a _MergedGlobals as optimization, but this breaks modpost, as the
-# source of a reference will be _MergedGlobals and not on of the whitelisted names.
-# See modpost pattern 2
-KBUILD_CFLAGS += -mno-global-merge
-endif
-# clang's -Wpointer-to-int-cast warns when casting to enums, which does not match GCC.
-# Disable that part of the warning because it is very noisy across the kernel and does
-# not point out any real bugs.
-KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast) \
-                 $(call cc-disable-warning, pointer-to-int-cast)
-else
 # These warnings generated too much noise in a regular build.
 # Use make W=1 to enable them (see scripts/Makefile.extrawarn)
+ifeq ($(cc-name),clang)
+KBUILD_CFLAGS += -Wno-address-of-packed-member \
+                 -Wno-asm-operand-widths \
+                 -Wno-deprecated-declarations \
+                 -Wno-format-invalid-specifier \
+                 -Wno-gnu \
+                 -Wno-pointer-to-enum-cast \
+                 -Wno-pointer-to-int-cast \
+                 -Wno-tautological-compare \
+                 -Wno-unused-const-variable
+else
 KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member) \
                  $(call cc-disable-warning, attribute-alias) \
                  $(call cc-disable-warning, discarded-array-qualifiers) \
                  $(call cc-disable-warning, format-security) \
                  $(call cc-disable-warning, incompatible-pointer-types) \
                  $(call cc-disable-warning, shift-overflow) \
-                 $(call cc-disable-warning, unused-but-set-variable)
+                 $(call cc-disable-warning, unused-but-set-variable) \
+                 $(call cc-disable-warning, unused-const-variable)
 endif
-
-KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
 
 ifdef CONFIG_FRAME_POINTER
 KBUILD_CFLAGS += -fno-omit-frame-pointer -fno-optimize-sibling-calls
@@ -731,9 +719,6 @@ endif
 ifdef CONFIG_DEBUG_INFO
 KBUILD_CFLAGS += -g
 KBUILD_AFLAGS += -gdwarf-2
-else
-KBUILD_CFLAGS += -g0
-KBUILD_AFLAGS += -g0
 endif
 
 ifdef CONFIG_DEBUG_INFO_REDUCED
