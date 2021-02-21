@@ -1611,7 +1611,7 @@ static int sdhci_disable(struct mmc_host *mmc)
 	sdhci_set_pmqos_req_type(host, false);
 
 	pm_qos_update_request(&host->pm_qos_req_dma,
-					PM_QOS_DEFAULT_VALUE);
+			PM_QOS_DEFAULT_VALUE);
 
 platform_bus_vote:
 	if (host->ops->platform_bus_voting)
