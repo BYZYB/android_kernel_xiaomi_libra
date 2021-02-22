@@ -866,7 +866,7 @@ static uint32_t register_client_adhoc(struct msm_bus_scale_pdata *pdata)
 					sizeof(struct device *), GFP_KERNEL);
 	if (IS_ERR_OR_NULL(client->src_devs)) {
 		MSM_BUS_ERR("%s: Error allocating pathnode ptr!", __func__);
-		goto exit_register_client;
+		goto exit_src_dev_malloc_fail;
 	}
 	client->curr = -1;
 
@@ -885,7 +885,7 @@ static uint32_t register_client_adhoc(struct msm_bus_scale_pdata *pdata)
 		if (IS_ERR_OR_NULL(dev)) {
 			MSM_BUS_ERR("%s:Failed to find path.src %d dest %d",
 				__func__, src, dest);
-			goto exit_register_client;
+			goto exit_invalid_data;
 		}
 		client->src_devs[i] = dev;
 
@@ -906,6 +906,8 @@ static uint32_t register_client_adhoc(struct msm_bus_scale_pdata *pdata)
 	rt_mutex_unlock(&msm_bus_adhoc_lock);
 	return handle;
 exit_invalid_data:
+	kfree(client->src_devs);
+exit_src_dev_malloc_fail:
 	kfree(lnode);
 exit_lnode_malloc_fail:
 	kfree(client);
