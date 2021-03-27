@@ -637,12 +637,6 @@ config STM32_FW_UPDATER
 	  To compile this driver as a module, choose M here: the
 	  module will be called stm32fwu.
 
-config FORCE_FAST_CHARGE
-	bool "Force faster charging rate for USB"
-	default y
-	help
-	  This allows users to enable fast charging (500mA -> 900mA) for USB.
-
 source "drivers/misc/c2port/Kconfig"
 source "drivers/misc/eeprom/Kconfig"
 source "drivers/misc/cb710/Kconfig"
