@@ -105,7 +105,6 @@ config INPUT_MOUSEDEV_PSAUX
 
 	  If unsure, say Y.
 
-
 config INPUT_MOUSEDEV_SCREEN_X
 	int "Horizontal screen resolution"
 	depends on INPUT_MOUSEDEV
@@ -225,4 +224,3 @@ source "drivers/input/gameport/Kconfig"
 endmenu
 
 endmenu
-
