@@ -144,7 +144,7 @@ static int mdss_livedisplay_update_pcc(struct mdss_livedisplay_ctx *mlc)
 
 	WARN_ON(!mutex_is_locked(&mlc->lock));
 
-	pr_info("%s: r=%d g=%d b=%d\n", __func__, mlc->r, mlc->g, mlc->b);
+	pr_debug("%s: r=%d g=%d b=%d\n", __func__, mlc->r, mlc->g, mlc->b);
 
 	memset(&pcc_cfg, 0, sizeof(struct mdp_pcc_cfg_data));
 
@@ -224,7 +224,7 @@ static void mdss_livedisplay_worker(struct work_struct *work)
 
 		len += mlc->cabc_cmds_len;
 
-		pr_info("%s cabc=%d sre=%d aco=%d cmd=%d\n", __func__,
+		pr_debug("%s cabc=%d sre=%d aco=%d cmd=%d\n", __func__,
 				mlc->cabc_level, mlc->sre_level, mlc->aco_enabled,
 				cabc_value);
 	}
