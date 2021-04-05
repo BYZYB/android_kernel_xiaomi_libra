@@ -630,6 +630,7 @@ HOSTCXXFLAGS += -Ofast
 KBUILD_AFLAGS += -Ofast
 KBUILD_CFLAGS += -Ofast
 KBUILD_CPPFLAGS += -Ofast
+LDFLAGS += -O3
 endif
 
 ifdef CONFIG_LTO_GCC
@@ -639,8 +640,7 @@ LTO_LDFLAGS := $(LTO_CFLAGS) -Wno-lto-type-mismatch -Wno-psabi -Wno-stringop-ove
 LDFINAL := $(CONFIG_SHELL) $(srctree)/scripts/gcc-ld $(LTO_LDFLAGS)
 AR := $(CROSS_COMPILE)gcc-ar
 NM := $(CROSS_COMPILE)gcc-nm
-DISABLE_LTO := -fno-lto
-export DISABLE_LTO LDFINAL
+export LDFINAL
 endif
 
 ifdef CONFIG_CC_WERROR
@@ -755,17 +755,14 @@ else
 lto-clang-flags := -flto
 endif
 lto-clang-flags += -fvisibility=default $(call cc-option, -fsplit-lto-unit)
-
-# allow disabling only clang LTO where needed
-DISABLE_LTO_CLANG := -fno-lto
-export DISABLE_LTO_CLANG
 endif
 
 ifdef CONFIG_LTO
 lto-flags := $(lto-clang-flags)
 KBUILD_CFLAGS += $(lto-flags)
 
-DISABLE_LTO := $(DISABLE_LTO_CLANG)
+# Allow to disable LTO when needed
+DISABLE_LTO := -fno-lto
 export DISABLE_LTO
 
 # LDFINAL_vmlinux and LDFLAGS_FINAL_vmlinux can be set to override
