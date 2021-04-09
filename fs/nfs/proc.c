@@ -6,7 +6,7 @@
  *  OS-independent nfs remote procedure call functions
  *
  *  Tuned by Alan Cox <A.Cox@swansea.ac.uk> for >3K buffers
- *  so at last we can have decent(ish) throughput off a 
+ *  so at last we can have decent(ish) throughput off a
  *  Sun server.
  *
  *  Coding optimized and cleaned up by Florian La Roche.
@@ -119,7 +119,7 @@ nfs_proc_setattr(struct dentry *dentry, struct nfs_fattr *fattr,
 		 struct iattr *sattr)
 {
 	struct inode *inode = dentry->d_inode;
-	struct nfs_sattrargs	arg = { 
+	struct nfs_sattrargs	arg = {
 		.fh	= NFS_FH(inode),
 		.sattr	= sattr
 	};
@@ -296,7 +296,7 @@ out:
 	dprintk("NFS reply mknod: %d\n", status);
 	return status;
 }
-  
+
 static int
 nfs_proc_remove(struct inode *dir, struct qstr *name)
 {
@@ -304,7 +304,7 @@ nfs_proc_remove(struct inode *dir, struct qstr *name)
 		.fh = NFS_FH(dir),
 		.name = *name,
 	};
-	struct rpc_message msg = { 
+	struct rpc_message msg = {
 		.rpc_proc = &nfs_procedures[NFSPROC_REMOVE],
 		.rpc_argp = &arg,
 	};

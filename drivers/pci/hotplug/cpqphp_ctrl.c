@@ -1231,7 +1231,7 @@ static u8 set_controller_speed(struct controller *ctrl, u8 adapter_speed, u8 hp_
 
 	/* Only if mode change...*/
 	if (((bus->cur_bus_speed == PCI_SPEED_66MHz) && (adapter_speed == PCI_SPEED_66MHz_PCIX)) ||
-		((bus->cur_bus_speed == PCI_SPEED_66MHz_PCIX) && (adapter_speed == PCI_SPEED_66MHz))) 
+		((bus->cur_bus_speed == PCI_SPEED_66MHz_PCIX) && (adapter_speed == PCI_SPEED_66MHz)))
 			set_SOGO(ctrl);
 
 	wait_for_ctrl_irq(ctrl);
@@ -1828,7 +1828,7 @@ static void interrupt_event_handler(struct controller *ctrl)
 
 				if (ctrl->event_queue[loop].event_type == INT_BUTTON_PRESS) {
 					dbg("button pressed\n");
-				} else if (ctrl->event_queue[loop].event_type == 
+				} else if (ctrl->event_queue[loop].event_type ==
 					   INT_BUTTON_CANCEL) {
 					dbg("button cancel\n");
 					del_timer(&p_slot->task_event);

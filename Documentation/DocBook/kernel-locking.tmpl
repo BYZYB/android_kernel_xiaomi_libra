@@ -5,7 +5,7 @@
 <book id="LKLockingGuide">
  <bookinfo>
   <title>Unreliable Guide To Locking</title>
-  
+
   <authorgroup>
    <author>
     <firstname>Rusty</firstname>
@@ -31,21 +31,21 @@
      version 2 of the License, or (at your option) any later
      version.
    </para>
-      
+
    <para>
      This program is distributed in the hope that it will be
      useful, but WITHOUT ANY WARRANTY; without even the implied
      warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
      See the GNU General Public License for more details.
    </para>
-      
+
    <para>
      You should have received a copy of the GNU General Public
      License along with this program; if not, write to the Free
      Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
      MA 02111-1307 USA
    </para>
-      
+
    <para>
      For more details see the file COPYING in the source
      distribution of Linux.
@@ -223,10 +223,10 @@
 
    <para>
      There are two main types of kernel locks.  The fundamental type
-     is the spinlock 
+     is the spinlock
      (<filename class="headerfile">include/asm/spinlock.h</filename>),
-     which is a very simple single-holder lock: if you can't get the 
-     spinlock, you keep trying (spinning) until you can.  Spinlocks are 
+     which is a very simple single-holder lock: if you can't get the
+     spinlock, you keep trying (spinning) until you can.  Spinlocks are
      very small and fast, and can be used anywhere.
    </para>
    <para>
@@ -244,7 +244,7 @@
      <xref linkend="deadlock"/>.
    </para>
    </sect1>
- 
+
    <sect1 id="uniprocessor">
     <title>Locks and Uniprocessor Kernels</title>
 
@@ -271,7 +271,7 @@
 
     <para>
       Mutexes still exist, because they are required for
-      synchronization between <firstterm linkend="gloss-usercontext">user 
+      synchronization between <firstterm linkend="gloss-usercontext">user
       contexts</firstterm>, as we will see below.
     </para>
    </sect1>
@@ -285,20 +285,20 @@
        (<filename>include/linux/mutex.h</filename>) to protect it.  This
        is the most trivial case: you initialize the mutex.  Then you can
        call <function>mutex_lock_interruptible()</function> to grab the mutex,
-       and <function>mutex_unlock()</function> to release it.  There is also a 
-       <function>mutex_lock()</function>, which should be avoided, because it 
+       and <function>mutex_unlock()</function> to release it.  There is also a
+       <function>mutex_lock()</function>, which should be avoided, because it
        will not return if a signal is received.
      </para>
 
      <para>
-       Example: <filename>net/netfilter/nf_sockopt.c</filename> allows 
-       registration of new <function>setsockopt()</function> and 
+       Example: <filename>net/netfilter/nf_sockopt.c</filename> allows
+       registration of new <function>setsockopt()</function> and
        <function>getsockopt()</function> calls, with
-       <function>nf_register_sockopt()</function>.  Registration and 
-       de-registration are only done on module load and unload (and boot 
-       time, where there is no concurrency), and the list of registrations 
+       <function>nf_register_sockopt()</function>.  Registration and
+       de-registration are only done on module load and unload (and boot
+       time, where there is no concurrency), and the list of registrations
        is only consulted for an unknown <function>setsockopt()</function>
-       or <function>getsockopt()</function> system call.  The 
+       or <function>getsockopt()</function> system call.  The
        <varname>nf_sockopt_mutex</varname> is perfect to protect this,
        especially since the setsockopt and getsockopt calls may well
        sleep.
@@ -310,10 +310,10 @@
 
     <para>
       If a <firstterm linkend="gloss-softirq">softirq</firstterm> shares
-      data with user context, you have two problems.  Firstly, the current 
+      data with user context, you have two problems.  Firstly, the current
       user context can be interrupted by a softirq, and secondly, the
       critical region could be entered from another CPU.  This is where
-      <function>spin_lock_bh()</function> 
+      <function>spin_lock_bh()</function>
       (<filename class="headerfile">include/linux/spinlock.h</filename>) is
       used.  It disables softirqs on that CPU, then grabs the lock.
       <function>spin_unlock_bh()</function> does the reverse.  (The
@@ -330,7 +330,7 @@
 
     <para>
       This works perfectly for <firstterm linkend="gloss-up"><acronym>UP
-      </acronym></firstterm> as well: the spin lock vanishes, and this macro 
+      </acronym></firstterm> as well: the spin lock vanishes, and this macro
       simply becomes <function>local_bh_disable()</function>
       (<filename class="headerfile">include/linux/interrupt.h</filename>), which
       protects you from the softirq being run.
@@ -381,7 +381,7 @@
        If another tasklet/timer wants
        to share data with your tasklet or timer , you will both need to use
        <function>spin_lock()</function> and
-       <function>spin_unlock()</function> calls.  
+       <function>spin_unlock()</function> calls.
        <function>spin_lock_bh()</function> is
        unnecessary here, as you are already in a tasklet, and
        none will be run on the same CPU.
@@ -409,7 +409,7 @@
      </para>
 
      <para>
-       You'll need to use <function>spin_lock()</function> and 
+       You'll need to use <function>spin_lock()</function> and
        <function>spin_unlock()</function> for shared data.
      </para>
     </sect2>
@@ -444,8 +444,8 @@
       two concerns.  Firstly, the softirq processing can be
       interrupted by a hardware interrupt, and secondly, the
       critical region could be entered by a hardware interrupt on
-      another CPU.  This is where <function>spin_lock_irq()</function> is 
-      used.  It is defined to disable interrupts on that cpu, then grab 
+      another CPU.  This is where <function>spin_lock_irq()</function> is
+      used.  It is defined to disable interrupts on that cpu, then grab
       the lock. <function>spin_unlock_irq()</function> does the reverse.
     </para>
 
@@ -467,7 +467,7 @@
     </para>
 
     <para>
-      <function>spin_lock_irqsave()</function> 
+      <function>spin_lock_irqsave()</function>
       (<filename>include/linux/spinlock.h</filename>) is a variant
       which saves whether interrupts were on or off in a flags word,
       which is passed to <function>spin_unlock_irqrestore()</function>.  This
@@ -1310,7 +1310,7 @@ as Alan Cox says, <quote>Lock data, not code</quote>.
     <para>
       For a slightly more complex case, imagine you have a region
       shared by a softirq and user context.  If you use a
-      <function>spin_lock()</function> call to protect it, it is 
+      <function>spin_lock()</function> call to protect it, it is
       possible that the user context will be interrupted by the softirq
       while it holds the lock, and the softirq will then spin
       forever trying to get the same lock.
@@ -1319,15 +1319,15 @@ as Alan Cox says, <quote>Lock data, not code</quote>.
     <para>
       Both of these are called deadlock, and as shown above, it can
       occur even with a single CPU (although not on UP compiles,
-      since spinlocks vanish on kernel compiles with 
-      <symbol>CONFIG_SMP</symbol>=n. You'll still get data corruption 
+      since spinlocks vanish on kernel compiles with
+      <symbol>CONFIG_SMP</symbol>=n. You'll still get data corruption
       in the second example).
     </para>
 
     <para>
       This complete lockup is easy to diagnose: on SMP boxes the
       watchdog timer or compiling with <symbol>DEBUG_SPINLOCK</symbol> set
-      (<filename>include/linux/spinlock.h</filename>) will show this up 
+      (<filename>include/linux/spinlock.h</filename>) will show this up
       immediately when it happens.
     </para>
 
@@ -1877,7 +1877,7 @@ machines due to caching.
     <itemizedlist>
      <listitem>
       <para>
-        Accesses to 
+        Accesses to
         <firstterm linkend="gloss-userspace">userspace</firstterm>:
       </para>
       <itemizedlist>
@@ -1967,7 +1967,7 @@ machines due to caching.
    <itemizedlist>
     <listitem>
      <para>
-       <filename>Documentation/spinlocks.txt</filename>: 
+       <filename>Documentation/spinlocks.txt</filename>:
        Linus Torvalds' spinlocking tutorial in the kernel sources.
      </para>
     </listitem>
@@ -2032,9 +2032,9 @@ machines due to caching.
       <para>
         Bottom Half: for historical reasons, functions with
         '_bh' in them often now refer to any software interrupt, e.g.
-        <function>spin_lock_bh()</function> blocks any software interrupt 
-        on the current CPU.  Bottom halves are deprecated, and will 
-        eventually be replaced by tasklets.  Only one bottom half will be 
+        <function>spin_lock_bh()</function> blocks any software interrupt
+        on the current CPU.  Bottom halves are deprecated, and will
+        eventually be replaced by tasklets.  Only one bottom half will be
         running at any time.
      </para>
     </glossdef>
@@ -2044,7 +2044,7 @@ machines due to caching.
     <glossterm>Hardware Interrupt / Hardware IRQ</glossterm>
     <glossdef>
      <para>
-       Hardware interrupt request.  <function>in_irq()</function> returns 
+       Hardware interrupt request.  <function>in_irq()</function> returns
        <returnvalue>true</returnvalue> in a hardware interrupt handler.
      </para>
     </glossdef>
@@ -2055,7 +2055,7 @@ machines due to caching.
     <glossdef>
      <para>
        Not user context: processing a hardware irq or software irq.
-       Indicated by the <function>in_interrupt()</function> macro 
+       Indicated by the <function>in_interrupt()</function> macro
        returning <returnvalue>true</returnvalue>.
      </para>
     </glossdef>
@@ -2139,7 +2139,7 @@ machines due to caching.
        A process executing its own code outside the kernel.
      </para>
     </glossdef>
-   </glossentry>      
+   </glossentry>
 
   </glossary>
 </book>

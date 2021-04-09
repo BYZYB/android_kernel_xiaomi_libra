@@ -57,7 +57,7 @@ struct quicc32_pram {
     unsigned long   zistate;		/* Zero Insertion machine state */
     unsigned long   tcrc;		/* Temp Transmit CRC */
     unsigned short  intmask;		/* Channel's interrupt mask flags */
-    unsigned short  bdflags;		
+    unsigned short  bdflags;
     unsigned short  rbase;		/* Rx Buffer Descriptors Base Address */
     unsigned short  mflr;		/* Max Frame Length Register */
     unsigned long   rstate;		/* Rx Internal State */
@@ -97,7 +97,7 @@ struct hdlc_pram {
     unsigned long   ttemp;          /* Tx temp */
     unsigned long   rcrc;           /* temp receive CRC */
     unsigned long   tcrc;           /* temp transmit CRC */
-   
+
     /*
      * HDLC specific parameter RAM
      */
@@ -157,7 +157,7 @@ struct uart_pram {
     unsigned long   ttemp;          /* Tx temp */
     unsigned long   rcrc;           /* temp receive CRC */
     unsigned long   tcrc;           /* temp transmit CRC */
-   
+
     /*
      * UART specific parameter RAM
      */
@@ -165,13 +165,13 @@ struct uart_pram {
     unsigned short  max_idl;        /* maximum idle characters */
     unsigned short  idlc;           /* rx idle counter (internal) */
     unsigned short  brkcr;          /* break count register */
-                   
+
     unsigned short  parec;          /* Rx parity error counter */
     unsigned short  frmer;          /* Rx framing error counter */
     unsigned short  nosec;          /* Rx noise counter */
     unsigned short  brkec;          /* Rx break character counter */
     unsigned short  brkln;          /* Reaceive break length */
-                   
+
     unsigned short  uaddr1;         /* address character 1 */
     unsigned short  uaddr2;         /* address character 2 */
     unsigned short  rtemp;          /* temp storage */
@@ -209,7 +209,7 @@ struct bisync_pram {
     unsigned long   ttemp;          /* Tx temp */
     unsigned long   rcrc;           /* temp receive CRC */
     unsigned long   tcrc;           /* temp transmit CRC */
-   
+
     /*
      * BISYNC specific parameter RAM
      */
@@ -331,7 +331,7 @@ struct ethernet_pram {
     unsigned long   ttemp;          /* Tx temp */
     unsigned long   rcrc;           /* temp receive CRC */
     unsigned long   tcrc;           /* temp transmit CRC */
-   
+
     /*
      * ETHERNET specific parameter RAM
      */
@@ -408,7 +408,7 @@ struct transparent_pram {
     unsigned long   ttemp;          /* Tx temp */
     unsigned long   rcrc;           /* temp receive CRC */
     unsigned long   tcrc;           /* temp transmit CRC */
-   
+
     /*
      * TRANSPARENT specific parameter RAM
      */

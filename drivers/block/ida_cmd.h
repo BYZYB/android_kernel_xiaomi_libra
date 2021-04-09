@@ -96,7 +96,7 @@ typedef struct cmdlist {
 	struct request *rq;
 	int type;
 } cmdlist_t;
-	
+
 #define ID_CTLR		0x11
 typedef struct {
 	__u8	nr_drvs;
@@ -300,7 +300,7 @@ typedef struct {
 } label_log_drv_t;
 
 #define SS_TO_VOL		0x58
-	
+
 #define SET_SURF_DELAY		0x60
 typedef struct {
 	__u16	delay;
@@ -311,7 +311,7 @@ typedef struct {
 typedef struct {
 	__u16	delay;
 } overhead_delay_t;
- 
+
 #define SET_MP_DELAY
 typedef struct {
 	__u16	delay;
@@ -335,7 +335,7 @@ typedef struct {
 	__u8	sense_qual;
 	__u32	residual;
 	__u8	reserved[4];
-	__u8	cdb[12];	
+	__u8	cdb[12];
 } scsi_param_t;
 
 #define RESUME_BACKGROUND_ACTIVITY	0x99
@@ -344,6 +344,6 @@ typedef struct {
 #define COLLECT_BUFFER			0xd2
 #define READ_FLASH_ROM			0xf6
 #define WRITE_FLASH_ROM			0xf7
-#pragma pack()	
+#pragma pack()
 
 #endif /* ARRAYCMD_H */

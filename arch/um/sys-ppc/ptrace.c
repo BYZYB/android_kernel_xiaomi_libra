@@ -1,7 +1,7 @@
 #include <linux/sched.h>
 #include "asm/ptrace.h"
 
-int putreg(struct task_struct *child, unsigned long regno, 
+int putreg(struct task_struct *child, unsigned long regno,
 		  unsigned long value)
 {
 	child->thread.process_regs.regs[regno >> 2] = value;

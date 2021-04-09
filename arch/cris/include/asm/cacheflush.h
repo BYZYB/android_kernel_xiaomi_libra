@@ -4,7 +4,7 @@
 /* Keep includes the same across arches.  */
 #include <linux/mm.h>
 
-/* The cache doesn't need to be flushed when TLB entries change because 
+/* The cache doesn't need to be flushed when TLB entries change because
  * the cache is mapped to physical memory, not virtual memory
  */
 #define flush_cache_all()			do { } while (0)

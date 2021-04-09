@@ -95,7 +95,7 @@ MIX_ENT(SOUND_MIXER_IGAIN,	0x3f, 7, 2, 0x40, 7, 2),
 MIX_ENT(SOUND_MIXER_OGAIN,	0x41, 7, 2, 0x42, 7, 2)
 };
 
-static mixer_tab als007_mix = 
+static mixer_tab als007_mix =
 {
 MIX_ENT(SOUND_MIXER_VOLUME,	0x62, 7, 4, 0x62, 3, 4),
 MIX_ENT(SOUND_MIXER_BASS,	0x00, 0, 0, 0x00, 0, 0),
@@ -334,7 +334,7 @@ static int smw_mixer_set(sb_devc * devc, int dev, int left, int right)
 			val = (((devc->levels[SOUND_MIXER_TREBLE] >> 8) & 0xff) * 16 / (unsigned) 100) << 4;
 			val |= (((devc->levels[SOUND_MIXER_BASS] >> 8) & 0xff) * 16 / (unsigned) 100) & 0x0f;
 			sb_setmixer(devc, 0x0e, val);
-		
+
 			break;
 
 		default:
@@ -459,9 +459,9 @@ static int set_recmask(sb_devc * devc, int mask)
 			if (!devmask)
 				devmask = SOUND_MASK_MIC;
 
-			if (devc->submodel == SUBMDL_ALS007) 
+			if (devc->submodel == SUBMDL_ALS007)
 			{
-				switch (devmask) 
+				switch (devmask)
 				{
 					case SOUND_MASK_LINE:
 						sb_setmixer(devc, ALS007_RECORD_SRC, ALS007_LINE);
@@ -507,7 +507,7 @@ static int set_outmask(sb_devc * devc, int mask)
 	switch (devc->model)
 	{
 		case MDL_SB16:
-			if (devc->submodel == SUBMDL_ALS007) 
+			if (devc->submodel == SUBMDL_ALS007)
 				break;
 			else
 			{
@@ -542,14 +542,14 @@ static int sb_mixer_ioctl(int dev, unsigned int cmd, void __user *arg)
 	 *					      or mode==2 put 3DSE state to mode.
 	 */
 	if (devc->model == MDL_SB16) {
-		if (cmd == SOUND_MIXER_AGC) 
+		if (cmd == SOUND_MIXER_AGC)
 		{
 			if (get_user(val, p))
 				return -EFAULT;
 			sb_setmixer(devc, 0x43, (~val) & 0x01);
 			return 0;
 		}
-		if (cmd == SOUND_MIXER_3DSE) 
+		if (cmd == SOUND_MIXER_3DSE)
 		{
 			/* I put here 15, but I don't know the exact version.
 			   At least my 4.13 havn't 3DSE, 4.16 has it. */
@@ -569,13 +569,13 @@ static int sb_mixer_ioctl(int dev, unsigned int cmd, void __user *arg)
 			return 0;
 		}
 	}
-	if (((cmd >> 8) & 0xff) == 'M') 
+	if (((cmd >> 8) & 0xff) == 'M')
 	{
-		if (_SIOC_DIR(cmd) & _SIOC_WRITE) 
+		if (_SIOC_DIR(cmd) & _SIOC_WRITE)
 		{
 			if (get_user(val, p))
 				return -EFAULT;
-			switch (cmd & 0xff) 
+			switch (cmd & 0xff)
 			{
 				case SOUND_MIXER_RECSRC:
 					ret = set_recmask(devc, val);
@@ -589,20 +589,20 @@ static int sb_mixer_ioctl(int dev, unsigned int cmd, void __user *arg)
 					ret = sb_mixer_set(devc, cmd & 0xff, val);
 			}
 		}
-		else switch (cmd & 0xff) 
+		else switch (cmd & 0xff)
 		{
 			case SOUND_MIXER_RECSRC:
 				ret = devc->recmask;
 				break;
-				  
+
 			case SOUND_MIXER_OUTSRC:
 				ret = devc->outmask;
 				break;
-				  
+
 			case SOUND_MIXER_DEVMASK:
 				ret = devc->supported_devices;
 				break;
-				  
+
 			case SOUND_MIXER_STEREODEVS:
 				ret = devc->supported_devices;
 				/* The ESS seems to have stereo mic controls */
@@ -611,24 +611,24 @@ static int sb_mixer_ioctl(int dev, unsigned int cmd, void __user *arg)
 				else if (devc->model != MDL_JAZZ && devc->model != MDL_SMW)
 					ret &= ~(SOUND_MASK_MIC | SOUND_MASK_SPEAKER | SOUND_MASK_IMIX);
 				break;
-				  
+
 			case SOUND_MIXER_RECMASK:
 				ret = devc->supported_rec_devices;
 				break;
-				  
+
 			case SOUND_MIXER_OUTMASK:
 				ret = devc->supported_out_devices;
 				break;
-				  
+
 			case SOUND_MIXER_CAPS:
 				ret = devc->mixer_caps;
 				break;
-				    
+
 			default:
 				ret = sb_mixer_get(devc, cmd & 0xff);
 				break;
 		}
-		return put_user(ret, p); 
+		return put_user(ret, p);
 	} else
 		return -EINVAL;
 }
@@ -753,7 +753,7 @@ int sb_mixer_init(sb_devc * devc, struct module *owner)
 
 	if (owner)
 			 mixer_devs[m]->owner = owner;
-	
+
 	devc->my_mixerdev = m;
 	sb_mixer_reset(devc);
 	return 1;

@@ -35,11 +35,6 @@ cflags-$(CONFIG_ARC_HAS_SWAPE)		+= -mswape
 cflags-$(CONFIG_ARC_HAS_RTSC)		+= -mrtsc
 cflags-$(CONFIG_ARC_DW2_UNWIND)		+= -fasynchronous-unwind-tables
 
-ifndef CONFIG_CC_OPTIMIZE_FOR_SIZE
-# Generic build system uses -O2, we want -Ofast
-cflags-y  += -Ofast
-endif
-
 # small data is default for elf32 tool-chain. If not usable, disable it
 # This also allows repurposing GP as scratch reg to gcc reg allocator
 disable_small_data := y
@@ -120,7 +115,7 @@ archclean:
 	$(Q)$(MAKE) $(clean)=$(boot)
 
 # Hacks to enable final link due to absence of link-time branch relexation
-# and gcc choosing optimal(shorter) branches at -Ofast
+# and gcc choosing optimal(shorter) branches at -O3 or higher
 #
 # vineetg Feb 2010: -mlong-calls switched off for overall kernel build
 # However lib/decompress_inflate.o (.init.text) calls

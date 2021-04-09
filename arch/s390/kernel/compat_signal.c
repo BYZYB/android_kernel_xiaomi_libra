@@ -1,7 +1,7 @@
 /*
  *    Copyright IBM Corp. 2000, 2006
  *    Author(s): Denis Joseph Barrow (djbarrow@de.ibm.com,barrow_dj@yahoo.com)
- *               Gerhard Tonn (ton@de.ibm.com)                  
+ *               Gerhard Tonn (ton@de.ibm.com)
  *
  *  Copyright (C) 1991, 1992  Linus Torvalds
  *
@@ -30,7 +30,7 @@
 #include "compat_ptrace.h"
 #include "entry.h"
 
-typedef struct 
+typedef struct
 {
 	__u8 callee_used_stack[__SIGNAL_FRAMESIZE32];
 	struct sigcontext32 sc;
@@ -40,7 +40,7 @@ typedef struct
 	__u8 retcode[S390_SYSCALL_SIZE];
 } sigframe32;
 
-typedef struct 
+typedef struct
 {
 	__u8 callee_used_stack[__SIGNAL_FRAMESIZE32];
 	__u8 retcode[S390_SYSCALL_SIZE];
@@ -57,7 +57,7 @@ int copy_siginfo_to_user32(compat_siginfo_t __user *to, const siginfo_t *from)
 	   this code is fixed accordingly.
 	   It should never copy any pad contained in the structure
 	   to avoid security leaks, but must copy the generic
-	   3 ints plus the relevant union member.  
+	   3 ints plus the relevant union member.
 	   This routine must convert siginfo from 64bit to 32bit as well
 	   at the same time.  */
 	err = __put_user(from->si_signo, &to->si_signo);
@@ -265,12 +265,12 @@ asmlinkage long sys32_rt_sigreturn(void)
 	if (restore_sigregs_gprs_high(regs, frame->gprs_high))
 		goto badframe;
 	if (compat_restore_altstack(&frame->uc.uc_stack))
-		goto badframe; 
+		goto badframe;
 	return regs->gprs[2];
 badframe:
 	force_sig(SIGSEGV, current);
 	return 0;
-}	
+}
 
 /*
  * Set up a signal frame.
@@ -432,7 +432,7 @@ give_sigsegv:
 
 /*
  * OK, we're invoking a handler
- */	
+ */
 
 void handle_signal32(unsigned long sig, struct k_sigaction *ka,
 		    siginfo_t *info, sigset_t *oldset, struct pt_regs *regs)

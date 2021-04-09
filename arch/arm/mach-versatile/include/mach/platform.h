@@ -35,21 +35,21 @@
 #define VERSATILE_FLASH_BASE           0x34000000
 #define VERSATILE_FLASH_SIZE           SZ_64M
 
-/* 
+/*
  *  SDRAM
  */
 #define VERSATILE_SDRAM_BASE           0x00000000
 
-/* 
+/*
  *  Logic expansion modules
- * 
+ *
  */
 
 
 /* ------------------------------------------------------------------------
  *  Versatile Registers
  * ------------------------------------------------------------------------
- * 
+ *
  */
 #define VERSATILE_SYS_ID_OFFSET               0x00
 #define VERSATILE_SYS_SW_OFFSET               0x04
@@ -130,7 +130,7 @@
 #define VERSATILE_SYS_TEST_OSC3               (VERSATILE_SYS_BASE + VERSATILE_SYS_TEST_OSC3_OFFSET)
 #define VERSATILE_SYS_TEST_OSC4               (VERSATILE_SYS_BASE + VERSATILE_SYS_TEST_OSC4_OFFSET)
 
-/* 
+/*
  * Values for VERSATILE_SYS_RESET_CTRL
  */
 #define VERSATILE_SYS_CTRL_RESET_CONFIGCLR    0x01
@@ -148,7 +148,7 @@
  * ------------------------------------------------------------------------
  */
 
-/* 
+/*
  * VERSATILE_IDFIELD
  *
  * 31:24 = manufacturer (0x41 = ARM)
@@ -160,7 +160,7 @@
 
 /*
  * VERSATILE_SYS_LOCK
- *     control access to SYS_OSCx, SYS_CFGDATAx, SYS_RESETCTL, 
+ *     control access to SYS_OSCx, SYS_CFGDATAx, SYS_RESETCTL,
  *     SYS_CLD, SYS_BOOTCS
  */
 #define VERSATILE_SYS_LOCK_LOCKED    (1 << 16)
@@ -173,7 +173,7 @@
 
 /*
  * VERSATILE_INTREG
- *     - used to acknowledge and control MMCI and UART interrupts 
+ *     - used to acknowledge and control MMCI and UART interrupts
  */
 #define VERSATILE_INTREG_WPROT        0x00    /* MMC protection status (no interrupt generated) */
 #define VERSATILE_INTREG_RI0          0x01    /* Ring indicator UART0 is asserted,              */
@@ -257,7 +257,7 @@
 #define ERASE_UNIT_PAGES    32
 #define START_PAGE          0x80
 
-/* 
+/*
  *  LED settings, bits [7:0]
  */
 #define VERSATILE_SYS_LED0             (1 << 0)
@@ -273,7 +273,7 @@
 
 #define LED_BANK                  VERSATILE_SYS_LED
 
-/* 
+/*
  * Control registers
  */
 #define VERSATILE_IDFIELD_OFFSET	0x0	/* Versatile build information */
@@ -285,17 +285,17 @@
 /* ------------------------------------------------------------------------
  *  Versatile Interrupt Controller - control registers
  * ------------------------------------------------------------------------
- * 
- *  Offsets from interrupt controller base 
- * 
+ *
+ *  Offsets from interrupt controller base
+ *
  *  System Controller interrupt controller base is
- * 
+ *
  * 	VERSATILE_IC_BASE
- * 
+ *
  *  Core Module interrupt controller base is
- * 
- * 	VERSATILE_SYS_IC 
- * 
+ *
+ * 	VERSATILE_SYS_IC
+ *
  */
 /* VIC definitions in include/asm-arm/hardware/vic.h */
 

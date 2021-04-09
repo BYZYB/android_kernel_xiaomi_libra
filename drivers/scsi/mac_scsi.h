@@ -67,7 +67,7 @@
 
 #define NCR5380_pread 	macscsi_pread
 #define NCR5380_pwrite 	macscsi_pwrite
-	
+
 #define NCR5380_intr macscsi_intr
 #define NCR5380_queue_command macscsi_queue_command
 #define NCR5380_abort macscsi_abort

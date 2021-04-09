@@ -64,7 +64,7 @@ static int ncp_symlink_readpage(struct file *file, struct page *page)
 		goto failEIO;
 
 	if (NCP_FINFO(inode)->flags & NCPI_KLUDGE_SYMLINK) {
-		if (length<NCP_MIN_SYMLINK_SIZE || 
+		if (length<NCP_MIN_SYMLINK_SIZE ||
 		    ((__le32 *)rawlink)[0]!=NCP_SYMLINK_MAGIC0 ||
 		    ((__le32 *)rawlink)[1]!=NCP_SYMLINK_MAGIC1)
 		    	goto failEIO;
@@ -100,9 +100,9 @@ fail:
 const struct address_space_operations ncp_symlink_aops = {
 	.readpage	= ncp_symlink_readpage,
 };
-	
+
 /* ----- create a new symbolic link -------------------------------------- */
- 
+
 int ncp_symlink(struct inode *dir, struct dentry *dentry, const char *symname) {
 	struct inode *inode;
 	char *rawlink;
@@ -124,7 +124,7 @@ int ncp_symlink(struct inode *dir, struct dentry *dentry, const char *symname) {
 #endif
 	/* EPERM is returned by VFS if symlink procedure does not exist */
 		return -EPERM;
-  
+
 	rawlink = kmalloc(NCP_MAX_SYMLINK_SIZE, GFP_KERNEL);
 	if (!rawlink)
 		return -ENOMEM;
@@ -139,7 +139,7 @@ int ncp_symlink(struct inode *dir, struct dentry *dentry, const char *symname) {
 		mode = S_IFLNK | S_IRWXUGO;
 		attr = 0;
 		hdr = 0;
-	}			
+	}
 
 	length = strlen(symname);
 	/* map to/from server charset, do not touch upper/lower case as
@@ -161,7 +161,7 @@ int ncp_symlink(struct inode *dir, struct dentry *dentry, const char *symname) {
 	if (ncp_make_open(inode, O_WRONLY))
 		goto failfree;
 
-	if (ncp_write_kernel(NCP_SERVER(inode), NCP_FINFO(inode)->file_handle, 
+	if (ncp_write_kernel(NCP_SERVER(inode), NCP_FINFO(inode)->file_handle,
 			     0, outlen, rawlink, &i) || i!=outlen) {
 		goto fail;
 	}

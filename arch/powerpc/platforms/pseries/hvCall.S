@@ -12,7 +12,7 @@
 #include <asm/ppc_asm.h>
 #include <asm/asm-offsets.h>
 #include <asm/ptrace.h>
-	
+
 #ifdef CONFIG_TRACEPOINTS
 
 	.section	".toc","aw"

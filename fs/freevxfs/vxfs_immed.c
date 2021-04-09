@@ -106,7 +106,7 @@ vxfs_immed_readpage(struct file *fp, struct page *pp)
 	kaddr = kmap(pp);
 	memcpy(kaddr, vip->vii_immed.vi_immed + offset, PAGE_CACHE_SIZE);
 	kunmap(pp);
-	
+
 	flush_dcache_page(pp);
 	SetPageUptodate(pp);
         unlock_page(pp);

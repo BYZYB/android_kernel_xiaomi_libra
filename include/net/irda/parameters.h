@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      parameters.h
  * Version:       1.0
  * Description:   A more general way to handle (pi,pl,pv) parameters
@@ -8,27 +8,27 @@
  * Created at:    Mon Jun  7 08:47:28 1999
  * Modified at:   Sun Jan 30 14:05:14 2000
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
- * 
+ *
  *     Copyright (c) 1999-2000 Dag Brattli, All Rights Reserved.
- *     
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *     GNU General Public License for more details.
- * 
- *     You should have received a copy of the GNU General Public License 
- *     along with this program; if not, write to the Free Software 
- *     Foundation, Inc., 59 Temple Place, Suite 330, Boston, 
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program; if not, write to the Free Software
+ *     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *     MA 02111-1307 USA
  *
  *     Michel Dänzer <daenzer@debian.org>, 10/2001
  *     - simplify irda_pv_t to avoid endianness issues
- *     
+ *
  ********************************************************************/
 
 #ifndef IRDA_PARAMS_H
@@ -49,7 +49,7 @@ typedef enum {
 } PV_TYPE;
 
 /* Bit 7 of type field */
-#define PV_BIG_ENDIAN    0x80 
+#define PV_BIG_ENDIAN    0x80
 #define PV_LITTLE_ENDIAN 0x00
 #define PV_MASK          0x7f   /* To mask away endian bit */
 
@@ -91,9 +91,9 @@ typedef struct {
 
 int irda_param_pack(__u8 *buf, char *fmt, ...);
 
-int irda_param_insert(void *self, __u8 pi, __u8 *buf, int len, 
+int irda_param_insert(void *self, __u8 pi, __u8 *buf, int len,
 		      pi_param_info_t *info);
-int irda_param_extract_all(void *self, __u8 *buf, int len, 
+int irda_param_extract_all(void *self, __u8 *buf, int len,
 			   pi_param_info_t *info);
 
 #define irda_param_insert_byte(buf,pi,pv) irda_param_pack(buf,"bbb",pi,1,pv)

@@ -219,7 +219,7 @@ static unsigned long __init mrst_calibrate_tsc(void)
 	lapic_timer_frequency = fsb * 1000 / HZ;
 	/* mark tsc clocksource as reliable */
 	set_cpu_cap(&boot_cpu_data, X86_FEATURE_TSC_RELIABLE);
-	
+
 	if (fast_calibrate)
 		return fast_calibrate;
 

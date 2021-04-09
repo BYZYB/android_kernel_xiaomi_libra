@@ -605,7 +605,7 @@ void __init maple_pci_init(void)
 	if (ht && maple_add_bridge(ht) != 0)
 		of_node_put(ht);
 
-	/* Setup the linkage between OF nodes and PHBs */ 
+	/* Setup the linkage between OF nodes and PHBs */
 	pci_devs_phb_init();
 
 	/* Fixup the PCI<->OF mapping for U3 AGP due to bus renumbering. We

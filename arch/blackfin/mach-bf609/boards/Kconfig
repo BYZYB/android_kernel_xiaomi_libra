@@ -8,5 +8,5 @@ config BFIN609_EZKIT
 	bool "BF609-EZKIT"
 	help
 	  BFIN609-EZKIT board support.
-	  
+
 endchoice

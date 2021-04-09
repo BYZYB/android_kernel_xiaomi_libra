@@ -33,7 +33,7 @@ int mgag200_framebuffer_init(struct drm_device *dev,
 			     struct drm_gem_object *obj)
 {
 	int ret;
-	
+
 	drm_helper_mode_fill_fb_struct(&gfb->base, mode_cmd);
 	gfb->obj = obj;
 	ret = drm_framebuffer_init(dev, &gfb->base, &mga_fb_funcs);

@@ -151,7 +151,7 @@ This code showed a number of signs of having been developed behind
 corporate doors.  But one large problem in particular was that it was not
 designed to work on multiprocessor systems.  Before this networking stack
 (now called mac80211) could be merged, a locking scheme needed to be
-retrofitted onto it.  
+retrofitted onto it.
 
 Once upon a time, Linux kernel code could be developed without thinking
 about the concurrency issues presented by multiprocessor systems.  Now,
@@ -250,7 +250,7 @@ testing purposes.  In particular, you should turn on:
 There are quite a few other debugging options, some of which will be
 discussed below.  Some of them have a significant performance impact and
 should not be used all of the time.  But some time spent learning the
-available options will likely be paid back many times over in short order. 
+available options will likely be paid back many times over in short order.
 
 One of the heavier debugging tools is the locking checker, or "lockdep."
 This tool will track the acquisition and release of every lock (spinlock or
@@ -263,7 +263,7 @@ occasion, deadlock.  This kind of problem can be painful (for both
 developers and users) in a deployed system; lockdep allows them to be found
 in an automated manner ahead of time.  Code with any sort of non-trivial
 locking should be run with lockdep enabled before being submitted for
-inclusion. 
+inclusion.
 
 As a diligent kernel programmer, you will, beyond doubt, check the return
 status of any operation (such as a memory allocation) which can fail.  The
@@ -300,7 +300,7 @@ Documentation/coccinelle.txt for more information.
 Other kinds of portability errors are best found by compiling your code for
 other architectures.  If you do not happen to have an S/390 system or a
 Blackfin development board handy, you can still perform the compilation
-step.  A large set of cross compilers for x86 systems can be found at 
+step.  A large set of cross compilers for x86 systems can be found at
 
 	http://www.kernel.org/pub/tools/crosstool/
 

@@ -164,7 +164,7 @@
  */
 
 #define _UFCR	_SA1101(0x00120000)   /* Update FIFO Control Reg. */
-#define _UFSR	_SA1101(0x00120400)   /* Update FIFO Status Reg. */	
+#define _UFSR	_SA1101(0x00120400)   /* Update FIFO Status Reg. */
 #define _UFLVLR	_SA1101(0x00120800)   /* Update FIFO level reg. */
 #define _UFDR	_SA1101(0x00120c00)   /* Update FIFO data reg. */
 
@@ -172,7 +172,7 @@
 
 #define UFCR 	(*((volatile Word *) SA1101_p2v (_UFCR)))
 #define UFSR	(*((volatile Word *) SA1101_p2v (_UFSR)))
-#define UFLVLR	(*((volatile Word *) SA1101_p2v (_UFLVLR))) 
+#define UFLVLR	(*((volatile Word *) SA1101_p2v (_UFLVLR)))
 #define UFDR	(*((volatile Word *) SA1101_p2v (_UFDR)))
 
 
@@ -253,9 +253,9 @@
  */
 
 /*
- * The control registers are defined as offsets from a base address 
+ * The control registers are defined as offsets from a base address
  */
- 
+
 #define _IEEE( x ) _SA1101( (x) + __PARALLEL_PORT )
 
 #define _IEEE_Config	    _IEEE( 0x0000 )
@@ -275,7 +275,7 @@
 #define _IEEE_TestCtrlIn    _IEEE( 0x3000 )
 #define _IEEE_TestCtrlInEn  _IEEE( 0x3400 )
 #define _IEEE_TestDataStat  _IEEE( 0x3800 )
- 
+
 
 #if LANGUAGE == C
 #define IEEE_Config	    (*((volatile Word *) SA1101_p2v (_IEEE_Config)))
@@ -485,7 +485,7 @@
  *    USNFR
  *    USTCSR
  *    USSR
- *    
+ *
  */
 
 #define _USB( x )	_SA1101( ( x ) + __USB_CONTROL )
@@ -641,7 +641,7 @@
  *    KBDTEST2		Test register 2
  *    KBDTEST3		Test register 3
  *    KBDTEST4		Test register 4
- *    MSECR	
+ *    MSECR
  *    MSESTAT
  *    MSEDATA
  *    MSECLKDIV
@@ -650,7 +650,7 @@
  *    MSETEST2
  *    MSETEST3
  *    MSETEST4
- *     
+ *
  */
 
 #define _KBD( x )	_SA1101( ( x ) + __TRACK_INTERFACE )
@@ -721,7 +721,7 @@
 #define MSESTAT_RXF		 0x20
 #define MSESTAT_RXB		 0x10
 #define MSESTAT_ENA		 0x08
-#define MSESTAT_RXP		 0x04	
+#define MSESTAT_RXP		 0x04
 #define MSESTAT_MSD		 0x02
 #define MSESTAT_MSC		 0x01
 
@@ -840,7 +840,7 @@
  *
  */
 
-#define _KEYPAD( x )	_SA1101( ( x ) + __KEYPAD_INTERFACE ) 
+#define _KEYPAD( x )	_SA1101( ( x ) + __KEYPAD_INTERFACE )
 
 #define _PXDWR	   _KEYPAD( 0x0000 )
 #define _PXDRR	   _KEYPAD( 0x0000 )

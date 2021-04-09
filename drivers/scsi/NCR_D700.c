@@ -4,7 +4,7 @@
  *
  * Copyright (C) 2001 by James.Bottomley@HansenPartnership.com
 **-----------------------------------------------------------------------------
-**  
+**
 **  This program is free software; you can redistribute it and/or modify
 **  it under the terms of the GNU General Public License as published by
 **  the Free Software Foundation; either version 2 of the License, or
@@ -34,7 +34,7 @@
  * */
 
 
-/* CHANGELOG 
+/* CHANGELOG
  *
  * Version 2.2
  *
@@ -84,7 +84,7 @@
  * 2. Disconnection and reselection
  *
  * Testing:
- * 
+ *
  *  I've only really tested this with the 700-66 chip, but have done
  * soak tests in multi-device environments to verify that
  * disconnections and reselections are being processed correctly.
@@ -194,7 +194,7 @@ NCR_D700_probe_one(struct NCR_D700_private *p, int siop, int irq,
 		ret = -ENODEV;
 		goto region_failed;
 	}
-		
+
 	/* Fill in the three required pieces of hostdata */
 	hostdata->base = ioport_map(region, 64);
 	hostdata->differential = (((1<<siop) & differential) != 0);

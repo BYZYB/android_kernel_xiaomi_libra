@@ -2055,7 +2055,7 @@ static int sanity_check_raw_super(struct f2fs_sb_info *sbi,
                  le32_to_cpu(raw_super->segment_count));
         return 1;
     }
-    
+
     /* check CP/SIT/NAT/SSA/MAIN_AREA area boundary */
 	if (sanity_check_area_boundary(sbi, bh))
 		return 1;

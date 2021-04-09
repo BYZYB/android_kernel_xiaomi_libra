@@ -1,4 +1,4 @@
-/* 
+/*
  *  Copyright (C) 1997	Wu Ching Chen
  *  2.1.x update (C) 1998  Krzysztof G. Baranowski
  *  2.5.x update (C) 2002  Red Hat
@@ -64,16 +64,16 @@ static irqreturn_t atp870u_intr_handle(int irq, void *dev_id)
 		tmport = dev->ioport[c] + 0x1f;
 		j = inb(tmport);
 		if ((j & 0x80) != 0)
-		{			
+		{
 	   		goto ch_sel;
 		}
 		dev->in_int[c] = 0;
 	}
 	return IRQ_NONE;
 ch_sel:
-#ifdef ED_DBGP	
+#ifdef ED_DBGP
 	printk("atp870u_intr_handle enter\n");
-#endif	
+#endif
 	dev->in_int[c] = 1;
 	cmdp = inb(dev->ioport[c] + 0x10);
 	workport = dev->ioport[c];
@@ -82,7 +82,7 @@ ch_sel:
 			tmport1 = workport + 0x16;
 			if ((inb(tmport1) & 0x80) == 0)
 				outb((inb(tmport1) | 0x80), tmport1);
-		}		
+		}
 		tmpcip = dev->pciport[c];
 		if ((inb(tmpcip) & 0x08) != 0)
 		{
@@ -100,9 +100,9 @@ stop_dma:
 		tmpcip = dev->pciport[c];
 		outb(0x00, tmpcip);
 		tmport -= 0x08;
-		
+
 		i = inb(tmport);
-		
+
 		if (dev->dev_id == ATP885_DEVID) {
 			tmpcip += 2;
 			outb(0x06, tmpcip);
@@ -129,11 +129,11 @@ stop_dma:
 		     }
 		     dev->last_cmd[c] |= 0x40;
 		}
-		if (dev->dev_id == ATP885_DEVID) 
+		if (dev->dev_id == ATP885_DEVID)
 			dev->r1f[c][target_id] |= j;
 #ifdef ED_DBGP
 		printk("atp870u_intr_handle status = %x\n",i);
-#endif	
+#endif
 		if (i == 0x85) {
 			if ((dev->last_cmd[c] & 0xf0) != 0x40) {
 			   dev->last_cmd[c] = 0xff;
@@ -148,33 +148,33 @@ stop_dma:
 				{
 			   		k = dev->id[c][target_id].last_len;
 			   		k -= adrcnt;
-			   		dev->id[c][target_id].tran_len = k;			   
-			   	dev->id[c][target_id].last_len = adrcnt;			   
+			   		dev->id[c][target_id].tran_len = k;
+			   	dev->id[c][target_id].last_len = adrcnt;
 				}
 #ifdef ED_DBGP
 				printk("tmport = %x dev->id[c][target_id].last_len = %d dev->id[c][target_id].tran_len = %d\n",tmport,dev->id[c][target_id].last_len,dev->id[c][target_id].tran_len);
-#endif		
+#endif
 			}
 
 			/*
 			 *      Flip wide
-			 */			
+			 */
 			if (dev->wide_id[c] != 0) {
 				tmport = workport + 0x1b;
 				outb(0x01, tmport);
 				while ((inb(tmport) & 0x01) != 0x01) {
 					outb(0x01, tmport);
 				}
-			}		
+			}
 			/*
 			 *	Issue more commands
 			 */
-			spin_lock_irqsave(dev->host->host_lock, flags);			 			 
+			spin_lock_irqsave(dev->host->host_lock, flags);
 			if (((dev->quhd[c] != dev->quend[c]) || (dev->last_cmd[c] != 0xff)) &&
 			    (dev->in_snd[c] == 0)) {
 #ifdef ED_DBGP
 				printk("Call sent_s870\n");
-#endif				
+#endif
 				send_s870(dev,c);
 			}
 			spin_unlock_irqrestore(dev->host->host_lock, flags);
@@ -184,7 +184,7 @@ stop_dma:
 			dev->in_int[c] = 0;
 #ifdef ED_DBGP
 				printk("Status 0x85 return\n");
-#endif				
+#endif
 			goto handled;
 		}
 
@@ -217,17 +217,17 @@ stop_dma:
 
 		if (dev->dev_id == ATP885_DEVID) {
 			if ((i == 0x4c) || (i == 0x4d) || (i == 0x8c) || (i == 0x8d)) {
-		   		if ((i == 0x4c) || (i == 0x8c)) 
+		   		if ((i == 0x4c) || (i == 0x8c))
 		      			i=0x48;
-		   		else 
+		   		else
 		      			i=0x49;
-		   	}	
-			
+		   	}
+
 		}
 		if ((i == 0x80) || (i == 0x8f)) {
 #ifdef ED_DBGP
 			printk(KERN_DEBUG "Device reselect\n");
-#endif			
+#endif
 			lun = 0;
 			tmport -= 0x07;
 			if (cmdp == 0x44 || i==0x80) {
@@ -240,7 +240,7 @@ stop_dma:
 				if (cmdp == 0x41) {
 #ifdef ED_DBGP
 					printk("cmdp = 0x41\n");
-#endif						
+#endif
 					tmport += 0x02;
 					adrcnt = 0;
 					((unsigned char *) &adrcnt)[2] = inb(tmport++);
@@ -257,7 +257,7 @@ stop_dma:
 				} else {
 #ifdef ED_DBGP
 					printk("cmdp != 0x41\n");
-#endif						
+#endif
 					outb(0x46, tmport);
 					dev->id[c][target_id].dirct = 0x00;
 					tmport += 0x02;
@@ -280,9 +280,9 @@ stop_dma:
 			} else {
 				tmport = workport + 0x10;
 				outb(0x45, tmport);
-				tmport += 0x06;				
+				tmport += 0x06;
 			}
-			
+
 			target_id = inb(tmport);
 			/*
 			 *	Remap wide identifiers
@@ -297,13 +297,13 @@ stop_dma:
 				outb(0x45, tmport);
 			}
 			workreq = dev->id[c][target_id].curr_req;
-#ifdef ED_DBGP			
+#ifdef ED_DBGP
 			scmd_printk(KERN_DEBUG, workreq, "CDB");
 			for (l = 0; l < workreq->cmd_len; l++)
 				printk(KERN_DEBUG " %x",workreq->cmnd[l]);
 			printk("\n");
-#endif	
-			
+#endif
+
 			tmport = workport + 0x0f;
 			outb(lun, tmport);
 			tmport += 0x02;
@@ -314,9 +314,9 @@ stop_dma:
 			outb(((unsigned char *) &k)[2], tmport++);
 			outb(((unsigned char *) &k)[1], tmport++);
 			outb(((unsigned char *) &k)[0], tmport++);
-#ifdef ED_DBGP			
+#ifdef ED_DBGP
 			printk("k %x, k[0] 0x%x k[1] 0x%x k[2] 0x%x\n", k, inb(tmport-1), inb(tmport-2), inb(tmport-3));
-#endif			
+#endif
 			/* Remap wide */
 			j = target_id;
 			if (target_id > 7) {
@@ -326,16 +326,16 @@ stop_dma:
 			j |= dev->id[c][target_id].dirct;
 			outb(j, tmport++);
 			outb(0x80,tmport);
-			
-			/* enable 32 bit fifo transfer */	
+
+			/* enable 32 bit fifo transfer */
 			if (dev->dev_id == ATP885_DEVID) {
 				tmpcip = dev->pciport[c] + 1;
 				i=inb(tmpcip) & 0xf3;
-				//j=workreq->cmnd[0];	    		    	
+				//j=workreq->cmnd[0];
 				if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) || (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a)) {
 				   i |= 0x0c;
 				}
-				outb(i,tmpcip);		    		    		
+				outb(i,tmpcip);
 			} else if ((dev->dev_id == ATP880_DEVID1) ||
 	    		    	   (dev->dev_id == ATP880_DEVID2) ) {
 				tmport = workport - 0x05;
@@ -344,14 +344,14 @@ stop_dma:
 				} else {
 					outb((unsigned char) (inb(tmport) & 0x3f), tmport);
 				}
-			} else {				
+			} else {
 				tmport = workport + 0x3a;
 				if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) || (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a)) {
 					outb((unsigned char) ((inb(tmport) & 0xf3) | 0x08), tmport);
 				} else {
 					outb((unsigned char) (inb(tmport) & 0xf3), tmport);
-				}														
-			}	
+				}
+			}
 			tmport = workport + 0x1b;
 			j = 0;
 			id = 1;
@@ -372,12 +372,12 @@ stop_dma:
 				dev->in_int[c] = 0;
 #ifdef ED_DBGP
 				printk("dev->id[c][target_id].last_len = 0\n");
-#endif					
+#endif
 				goto handled;
 			}
 #ifdef ED_DBGP
 			printk("target_id = %d adrcnt = %d\n",target_id,adrcnt);
-#endif			
+#endif
 			prd = dev->id[c][target_id].prd_pos;
 			while (adrcnt != 0) {
 				id = ((unsigned short int *)prd)[2];
@@ -399,7 +399,7 @@ stop_dma:
 					if (adrcnt == 0) {
 						dev->id[c][target_id].prd_pos = prd;
 					}
-				}				
+				}
 			}
 			tmpcip = dev->pciport[c] + 0x04;
 			outl(dev->id[c][target_id].prdaddr, tmpcip);
@@ -424,7 +424,7 @@ stop_dma:
 				dev->in_int[c] = 0;
 #ifdef ED_DBGP
 				printk("status 0x80 return dirct != 0\n");
-#endif				
+#endif
 				goto handled;
 			}
 			outb(0x08, tmport);
@@ -432,7 +432,7 @@ stop_dma:
 			dev->in_int[c] = 0;
 #ifdef ED_DBGP
 			printk("status 0x80 return dirct = 0\n");
-#endif			
+#endif
 			goto handled;
 		}
 
@@ -464,7 +464,7 @@ stop_dma:
 			}
 			workreq->result = errstus;
 go_42:
-			if (dev->dev_id == ATP885_DEVID) {		
+			if (dev->dev_id == ATP885_DEVID) {
 				j = inb(dev->baseport + 0x29) | 0x01;
 				outb(j, dev->baseport + 0x29);
 			}
@@ -477,7 +477,7 @@ go_42:
 			(*workreq->scsi_done) (workreq);
 #ifdef ED_DBGP
 			   printk("workreq->scsi_done\n");
-#endif	
+#endif
 			/*
 			 *	Clear it off the queue
 			 */
@@ -492,8 +492,8 @@ go_42:
 				outb(0x01, tmport);
 				while ((inb(tmport) & 0x01) != 0x01) {
 					outb(0x01, tmport);
-				}       
-			} 
+				}
+			}
 			/*
 			 *	If there is stuff to send and nothing going then send it
 			 */
@@ -502,7 +502,7 @@ go_42:
 			    (dev->in_snd[c] == 0)) {
 #ifdef ED_DBGP
 			   printk("Call sent_s870(scsi_done)\n");
-#endif				   
+#endif
 			   send_s870(dev,c);
 			}
 			spin_unlock_irqrestore(dev->host->host_lock, flags);
@@ -535,7 +535,7 @@ go_42:
 				tmport += 0x04;
 			} else {
 				dev->id[c][target_id].dirct = 0x00;
-				tmport += 0x08;				
+				tmport += 0x08;
 			}
 			outb(0x08, tmport);
 			outb(0x09, tmpcip);
@@ -551,7 +551,7 @@ go_42:
 			tmpcip = tmpcip - 2;
 			tmport = workport + 0x10;
 			outb(0x41, tmport);
-			if (dev->dev_id == ATP885_DEVID) {		
+			if (dev->dev_id == ATP885_DEVID) {
 				tmport += 2;
 				k = dev->id[c][target_id].last_len;
 				outb((unsigned char) (((unsigned char *) (&k))[2]), tmport++);
@@ -590,11 +590,11 @@ go_42:
 		dev->in_int[c] = 0;
 		goto handled;
 	}
-	
+
 handled:
 #ifdef ED_DBGP
 	printk("atp870u_intr_handle exit\n");
-#endif			
+#endif
 	return IRQ_HANDLED;
 }
 /**
@@ -608,7 +608,7 @@ static int atp870u_queuecommand_lck(struct scsi_cmnd *req_p,
 			 void (*done) (struct scsi_cmnd *))
 {
 	unsigned char c;
-	unsigned int tmport,m;	
+	unsigned int tmport,m;
 	struct atp_unit *dev;
 	struct Scsi_Host *host;
 
@@ -618,17 +618,17 @@ static int atp870u_queuecommand_lck(struct scsi_cmnd *req_p,
 	if (scmd_channel(req_p) > 1) {
 		req_p->result = 0x00040000;
 		done(req_p);
-#ifdef ED_DBGP		
-		printk("atp870u_queuecommand : req_p->device->channel > 1\n");	
-#endif			
+#ifdef ED_DBGP
+		printk("atp870u_queuecommand : req_p->device->channel > 1\n");
+#endif
 		return 0;
 	}
 
 	host = req_p->device->host;
 	dev = (struct atp_unit *)&host->hostdata;
-		
 
-		
+
+
 	m = 1;
 	m = m << scmd_id(req_p);
 
@@ -645,14 +645,14 @@ static int atp870u_queuecommand_lck(struct scsi_cmnd *req_p,
 	if (done) {
 		req_p->scsi_done = done;
 	} else {
-#ifdef ED_DBGP		
+#ifdef ED_DBGP
 		printk( "atp870u_queuecommand: done can't be NULL\n");
-#endif		
+#endif
 		req_p->result = 0;
 		done(req_p);
 		return 0;
 	}
-	
+
 	/*
 	 *	Count new command
 	 */
@@ -660,7 +660,7 @@ static int atp870u_queuecommand_lck(struct scsi_cmnd *req_p,
 	if (dev->quend[c] >= qcnt) {
 		dev->quend[c] = 0;
 	}
-	
+
 	/*
 	 *	Check queue state
 	 */
@@ -668,28 +668,28 @@ static int atp870u_queuecommand_lck(struct scsi_cmnd *req_p,
 		if (dev->quend[c] == 0) {
 			dev->quend[c] = qcnt;
 		}
-#ifdef ED_DBGP		
+#ifdef ED_DBGP
 		printk("atp870u_queuecommand : dev->quhd[c] == dev->quend[c]\n");
-#endif		
+#endif
 		dev->quend[c]--;
 		req_p->result = 0x00020000;
-		done(req_p);	
+		done(req_p);
 		return 0;
 	}
 	dev->quereq[c][dev->quend[c]] = req_p;
 	tmport = dev->ioport[c] + 0x1c;
-#ifdef ED_DBGP	
+#ifdef ED_DBGP
 	printk("dev->ioport[c] = %x inb(tmport) = %x dev->in_int[%d] = %d dev->in_snd[%d] = %d\n",dev->ioport[c],inb(tmport),c,dev->in_int[c],c,dev->in_snd[c]);
 #endif
 	if ((inb(tmport) == 0) && (dev->in_int[c] == 0) && (dev->in_snd[c] == 0)) {
 #ifdef ED_DBGP
 		printk("Call sent_s870(atp870u_queuecommand)\n");
-#endif		
+#endif
 		send_s870(dev,c);
 	}
-#ifdef ED_DBGP	
+#ifdef ED_DBGP
 	printk("atp870u_queuecommand : exit\n");
-#endif	
+#endif
 	return 0;
 }
 
@@ -700,7 +700,7 @@ static DEF_SCSI_QCMD(atp870u_queuecommand)
  *	@host: host
  *
  *	On entry there is work queued to be done. We move some of that work to the
- *	controller itself. 
+ *	controller itself.
  *
  *	Caller holds the host lock.
  */
@@ -717,7 +717,7 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
 	unsigned long  sg_count;
 
 	if (dev->in_snd[c] != 0) {
-#ifdef ED_DBGP		
+#ifdef ED_DBGP
 		printk("cmnd in_snd\n");
 #endif
 		return;
@@ -732,7 +732,7 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
 		if (workreq != NULL) {	/* check NULL pointer */
 		   goto cmd_subp;
 		}
-		dev->last_cmd[c] = 0xff;	
+		dev->last_cmd[c] = 0xff;
 		if (dev->quhd[c] == dev->quend[c]) {
 		   	dev->in_snd[c] = 0;
 		   	return ;
@@ -753,7 +753,7 @@ static void send_s870(struct atp_unit *dev,unsigned char c)
 		dev->id[c][scmd_id(workreq)].curr_req = workreq;
 		dev->last_cmd[c] = scmd_id(workreq);
 		goto cmd_subp;
-	}	
+	}
 	dev->quhd[c] = j;
 	dev->working[c]--;
 	dev->in_snd[c] = 0;
@@ -783,7 +783,7 @@ oktosend:
 		printk(" %x",workreq->cmnd[i]);
 	}
 	printk("\n");
-#endif	
+#endif
 	l = scsi_bufflen(workreq);
 
 	if (dev->dev_id == ATP885_DEVID) {
@@ -791,7 +791,7 @@ oktosend:
 		outb(j, dev->baseport + 0x29);
 		dev->r1f[c][scmd_id(workreq)] = 0;
 	}
-	
+
 	if (workreq->cmnd[0] == READ_CAPACITY) {
 		if (l > 8)
 			l = 8;
@@ -829,8 +829,8 @@ oktosend:
 	if (dev->dev_id == ATP885_DEVID) {
 		outb(0x7f, tmport++);
 	} else {
-		outb(0xcf, tmport++); 	
-	}	
+		outb(0xcf, tmport++);
+	}
 	for (i = 0; i < workreq->cmd_len; i++) {
 		outb(workreq->cmnd[i], tmport++);
 	}
@@ -840,8 +840,8 @@ oktosend:
 	/*
 	 *	Write the target
 	 */
-	outb(dev->id[c][target_id].devsp, tmport++);	 
-#ifdef ED_DBGP	
+	outb(dev->id[c][target_id].devsp, tmport++);
+#ifdef ED_DBGP
 	printk("dev->id[%d][%d].devsp = %2x\n",c,target_id,dev->id[c][target_id].devsp);
 #endif
 
@@ -852,12 +852,12 @@ oktosend:
 	outb((unsigned char) (((unsigned char *) (&l))[2]), tmport++);
 	outb((unsigned char) (((unsigned char *) (&l))[1]), tmport++);
 	outb((unsigned char) (((unsigned char *) (&l))[0]), tmport++);
-	j = target_id;	
+	j = target_id;
 	dev->id[c][j].last_len = l;
 	dev->id[c][j].tran_len = 0;
-#ifdef ED_DBGP	
+#ifdef ED_DBGP
 	printk("dev->id[%2d][%2d].last_len = %d\n",c,j,dev->id[c][j].last_len);
-#endif	
+#endif
 	/*
 	 *	Flip the wide bits
 	 */
@@ -880,8 +880,8 @@ oktosend:
 		if (inb(tmport) == 0) {
 			tmport = workport + 0x18;
 #ifdef ED_DBGP
-			printk("change SCSI_CMD_REG 0x08\n");	
-#endif				
+			printk("change SCSI_CMD_REG 0x08\n");
+#endif
 			outb(0x08, tmport);
 		} else {
 			dev->last_cmd[c] |= 0x40;
@@ -904,9 +904,9 @@ oktosend:
 		scsi_for_each_sg(workreq, sgpnt, sg_count, j) {
 			bttl = sg_dma_address(sgpnt);
 			l=sg_dma_len(sgpnt);
-#ifdef ED_DBGP		
+#ifdef ED_DBGP
 			printk("1. bttl %x, l %x\n",bttl, l);
-#endif			
+#endif
 			while (l > 0x10000) {
 				(((u16 *) (prd))[i + 3]) = 0x0000;
 				(((u16 *) (prd))[i + 2]) = 0x0000;
@@ -918,18 +918,18 @@ oktosend:
 			(((u32 *) (prd))[i >> 1]) = cpu_to_le32(bttl);
 			(((u16 *) (prd))[i + 2]) = cpu_to_le16(l);
 			(((u16 *) (prd))[i + 3]) = 0;
-			i += 0x04;			
+			i += 0x04;
 		}
-		(((u16 *) (prd))[i - 1]) = cpu_to_le16(0x8000);	
-#ifdef ED_DBGP		
+		(((u16 *) (prd))[i - 1]) = cpu_to_le16(0x8000);
+#ifdef ED_DBGP
 		printk("prd %4x %4x %4x %4x\n",(((unsigned short int *)prd)[0]),(((unsigned short int *)prd)[1]),(((unsigned short int *)prd)[2]),(((unsigned short int *)prd)[3]));
 		printk("2. bttl %x, l %x\n",bttl, l);
-#endif			
+#endif
 	}
 	tmpcip += 4;
-#ifdef ED_DBGP		
+#ifdef ED_DBGP
 	printk("send_s870: prdaddr_2 0x%8x tmpcip %x target_id %d\n", dev->id[c][target_id].prdaddr,tmpcip,target_id);
-#endif	
+#endif
 	dev->id[c][target_id].prdaddr = dev->id[c][target_id].prd_bus;
 	outl(dev->id[c][target_id].prdaddr, tmpcip);
 	tmpcip = tmpcip - 2;
@@ -943,25 +943,25 @@ oktosend:
 	   		j |= 0x0c;
 		}
 		outb(j,tmpcip);
-		tmpcip--;	    	
+		tmpcip--;
 	} else if ((dev->dev_id == ATP880_DEVID1) ||
 	    	   (dev->dev_id == ATP880_DEVID2)) {
-		tmpcip =tmpcip -2;	
+		tmpcip =tmpcip -2;
 		tmport = workport - 0x05;
 		if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) || (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a)) {
 			outb((unsigned char) ((inb(tmport) & 0x3f) | 0xc0), tmport);
 		} else {
 			outb((unsigned char) (inb(tmport) & 0x3f), tmport);
-		}		
-	} else {		
+		}
+	} else {
 		tmpcip =tmpcip -2;
 		tmport = workport + 0x3a;
 		if ((workreq->cmnd[0] == 0x08) || (workreq->cmnd[0] == 0x28) || (workreq->cmnd[0] == 0x0a) || (workreq->cmnd[0] == 0x2a)) {
 			outb((inb(tmport) & 0xf3) | 0x08, tmport);
 		} else {
 			outb(inb(tmport) & 0xf3, tmport);
-		}		
-	}	
+		}
+	}
 	tmport = workport + 0x1c;
 
 	if(workreq->sc_data_direction == DMA_TO_DEVICE) {
@@ -970,22 +970,22 @@ oktosend:
 			tmport = workport + 0x18;
 			outb(0x08, tmport);
 			outb(0x01, tmpcip);
-#ifdef ED_DBGP		
+#ifdef ED_DBGP
 		printk( "start DMA(to target)\n");
-#endif				
+#endif
 		} else {
 			dev->last_cmd[c] |= 0x40;
 		}
 		dev->in_snd[c] = 0;
 		return;
 	}
-	if (inb(tmport) == 0) {		
+	if (inb(tmport) == 0) {
 		tmport = workport + 0x18;
 		outb(0x08, tmport);
 		outb(0x09, tmpcip);
-#ifdef ED_DBGP		
+#ifdef ED_DBGP
 		printk( "start DMA(to host)\n");
-#endif			
+#endif
 	} else {
 		dev->last_cmd[c] |= 0x40;
 	}
@@ -1300,7 +1300,7 @@ static void is870(struct atp_unit *dev, unsigned int wkport)
 	static unsigned char synu[6] = { 0x80, 1, 3, 1, 0x0c, 0x0e };
 	static unsigned char synw[6] = { 0x80, 1, 3, 1, 0x0c, 0x07 };
 	static unsigned char wide[6] = { 0x80, 1, 2, 3, 1, 0 };
-	
+
 	tmport = wkport + 0x3a;
 	outb((unsigned char) (inb(tmport) | 0x10), tmport);
 
@@ -1399,14 +1399,14 @@ sel_ok:
 
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		tmport -= 0x08;
 		if (inb(tmport) != 0x11 && inb(tmport) != 0x8e)
 			continue;
 
 		while (inb(tmport) != 0x8e)
 			cpu_relax();
-			
+
 		tmport = wkport + 0x1b;
 		if (dev->chip_ver == 4)
 			outb(0x00, tmport);
@@ -1443,7 +1443,7 @@ rd_inq_data:
 
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		tmport -= 0x08;
 		if (inb(tmport) != 0x16) {
 			goto sel_ok;
@@ -1485,14 +1485,14 @@ inq_ok:
 
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		tmport -= 0x08;
 		if (inb(tmport) != 0x11 && inb(tmport) != 0x8e)
 			continue;
 
 		while (inb(tmport) != 0x8e)
 			cpu_relax();
-			
+
 try_wide:
 		j = 0;
 		tmport = wkport + 0x14;
@@ -1509,10 +1509,10 @@ try_wide:
 			}
 		}
 		tmport -= 0x08;
-		
+
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		j = inb(tmport) & 0x0f;
 		if (j == 0x0f) {
 			goto widep_in;
@@ -1585,7 +1585,7 @@ widep_cmd:
 		tmport += 0x04;
 		outb(0x08, tmport);
 		tmport += 0x07;
-		
+
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
 
@@ -1644,14 +1644,14 @@ set_sync:
 
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		tmport -= 0x08;
 		if (inb(tmport) != 0x11 && inb(tmport) != 0x8e)
 			continue;
 
 		while (inb(tmport) != 0x8e)
 			cpu_relax();
-			
+
 try_sync:
 		j = 0;
 		tmport = wkport + 0x14;
@@ -1676,10 +1676,10 @@ try_sync:
 			}
 		}
 		tmport -= 0x08;
-		
+
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		j = inb(tmport) & 0x0f;
 		if (j == 0x0f) {
 			goto phase_ins;
@@ -1740,7 +1740,7 @@ phase_ins1:
 
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		j = inb(tmport);
 		if (j == 0x85) {
 			goto tar_dcons;
@@ -1765,10 +1765,10 @@ tar_dcons:
 		tmport += 0x04;
 		outb(0x08, tmport);
 		tmport += 0x07;
-		
+
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		tmport -= 0x08;
 		j = inb(tmport);
 		if (j != 0x16) {
@@ -1877,7 +1877,7 @@ static void is880(struct atp_unit *dev, unsigned int wkport)
 
 		while (inb(tmport) != 0x8e)
 			cpu_relax();
-			
+
 		dev->active_id[0] |= m;
 
 		tmport = wkport + 0x50;
@@ -1889,7 +1889,7 @@ phase_cmd:
 		tmport = wkport + 0x58;
 		outb(0x08, tmport);
 		tmport += 0x07;
-		
+
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
 
@@ -1918,17 +1918,17 @@ sel_ok:
 		tmport += 0x03;
 		outb(inqd[8], tmport);
 		tmport += 0x07;
-		
+
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		tmport -= 0x08;
 		if (inb(tmport) != 0x11 && inb(tmport) != 0x8e)
 			continue;
 
 		while (inb(tmport) != 0x8e)
 			cpu_relax();
-			
+
 		tmport = wkport + 0x5b;
 		outb(0x00, tmport);
 		tmport = wkport + 0x58;
@@ -1962,7 +1962,7 @@ rd_inq_data:
 		tmport += 0x07;
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		tmport -= 0x08;
 		if (inb(tmport) != 0x16)
 			goto sel_ok;
@@ -2037,7 +2037,7 @@ try_u3:
 
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		j = inb(tmport) & 0x0f;
 		if (j == 0x0f) {
 			goto u3p_in;
@@ -2110,10 +2110,10 @@ u3p_cmd:
 		tmport += 0x04;
 		outb(0x08, tmport);
 		tmport += 0x07;
-		
+
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		tmport -= 0x08;
 		j = inb(tmport);
 		if (j != 0x16) {
@@ -2161,14 +2161,14 @@ chg_wide:
 
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		tmport -= 0x08;
 		if (inb(tmport) != 0x11 && inb(tmport) != 0x8e)
 			continue;
 
 		while (inb(tmport) != 0x8e)
 			cpu_relax();
-			
+
 try_wide:
 		j = 0;
 		tmport = wkport + 0x54;
@@ -2187,7 +2187,7 @@ try_wide:
 		tmport -= 0x08;
 		while ((inb(tmport) & 0x80) == 0x00)
 			cpu_relax();
-			
+
 		j = inb(tmport) & 0x0f;
 		if (j == 0x0f) {
 			goto widep_in;
@@ -2537,9 +2537,9 @@ static int atp870u_init_tables(struct Scsi_Host *host)
 			atp_dev->id[c][k].prdaddr = atp_dev->id[c][k].prd_bus;
 			atp_dev->id[c][k].devsp=0x20;
 			atp_dev->id[c][k].devtype = 0x7f;
-			atp_dev->id[c][k].curr_req = NULL;			   
+			atp_dev->id[c][k].curr_req = NULL;
 	   	}
-	   			
+
 	   	atp_dev->active_id[c] = 0;
 	   	atp_dev->wide_id[c] = 0;
 	   	atp_dev->host_id[c] = 0x07;
@@ -2548,14 +2548,14 @@ static int atp870u_init_tables(struct Scsi_Host *host)
 	   	atp_dev->last_cmd[c] = 0xff;
 	   	atp_dev->in_snd[c] = 0;
 	   	atp_dev->in_int[c] = 0;
-	   	
+
 	   	for (k = 0; k < qcnt; k++) {
 	   		  atp_dev->quereq[c][k] = NULL;
-	   	}	   		   
+	   	}
 	   	for (k = 0; k < 16; k++) {
 			   atp_dev->id[c][k].curr_req = NULL;
 			   atp_dev->sp[c][k] = 0x04;
-	   	}		   
+	   	}
 	}
 	return 0;
 }
@@ -2599,9 +2599,9 @@ static int atp870u_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
 	switch (ent->device) {
 	case PCI_DEVICE_ID_ARTOP_AEC7612UW:
 	case PCI_DEVICE_ID_ARTOP_AEC7612SUW:
-	case ATP880_DEVID1:	
-	case ATP880_DEVID2:	
-	case ATP885_DEVID:	
+	case ATP880_DEVID1:
+	case ATP880_DEVID2:
+	case ATP885_DEVID:
 		atpdev->chip_ver = 0x04;
 	default:
 		break;
@@ -2681,7 +2681,7 @@ flash_ok_880:
 	 	}
 		atpdev->async[0] = ~(atpdev->async[0]);
 		outb(atpdev->global_map[0], base_io + 0x35);
- 
+
 		shpnt = scsi_host_alloc(&atp870u_template, sizeof(struct atp_unit));
 		if (!shpnt)
 			goto err_nomem;
@@ -2739,11 +2739,11 @@ flash_ok_880:
 		shpnt->unique_id = base_io;
 		shpnt->io_port = base_io;
 		shpnt->n_io_port = 0x60;	/* Number of bytes of I/O space used */
-		shpnt->irq = pdev->irq;			
-	} else if (ent->device == ATP885_DEVID) {	
+		shpnt->irq = pdev->irq;
+	} else if (ent->device == ATP885_DEVID) {
 			printk(KERN_INFO "   ACARD AEC-67162 PCI Ultra3 LVD Host Adapter:  IO:%x, IRQ:%d.\n"
 			       , base_io, pdev->irq);
-        	
+
 		atpdev->pdev = pdev;
 		atpdev->dev_id  = ent->device;
 		atpdev->baseport = base_io;
@@ -2751,33 +2751,33 @@ flash_ok_880:
 		atpdev->ioport[1] = base_io + 0xc0;
 		atpdev->pciport[0] = base_io + 0x40;
 		atpdev->pciport[1] = base_io + 0x50;
-				
+
 		shpnt = scsi_host_alloc(&atp870u_template, sizeof(struct atp_unit));
 		if (!shpnt)
 			goto err_nomem;
-        	
+
 		p = (struct atp_unit *)&shpnt->hostdata;
-        	
+
 		atpdev->host = shpnt;
 		atpdev->pdev = pdev;
 		pci_set_drvdata(pdev, p);
 		memcpy(p, atpdev, sizeof(struct atp_unit));
 		if (atp870u_init_tables(shpnt) < 0)
 			goto unregister;
-			
-#ifdef ED_DBGP		
+
+#ifdef ED_DBGP
 	printk("request_irq() shpnt %p hostdata %p\n", shpnt, p);
-#endif	        
+#endif
 		if (request_irq(pdev->irq, atp870u_intr_handle, IRQF_SHARED, "atp870u", shpnt)) {
 				printk(KERN_ERR "Unable to allocate IRQ for Acard controller.\n");
 			goto free_tables;
 		}
-		
-		spin_lock_irqsave(shpnt->host_lock, flags);        					
-        			
+
+		spin_lock_irqsave(shpnt->host_lock, flags);
+
 		c=inb(base_io + 0x29);
 		outb((c | 0x04),base_io + 0x29);
-        	
+
 		n=0x1f80;
 next_fblk_885:
 		if (n >= 0x2000) {
@@ -2803,7 +2803,7 @@ next_fblk_885:
 flash_ok_885:
 #ifdef ED_DBGP
 		printk( "Flash Read OK\n");
-#endif	
+#endif
 		c=inb(base_io + 0x29);
 		outb((c & 0xfb),base_io + 0x29);
 		for (c=0;c < 2;c++) {
@@ -2859,7 +2859,7 @@ flash_ok_885:
 
 		while ((inb(tmport) & 0x80) == 0)
 			cpu_relax();
-	
+
 		tmport -= 0x08;
 		inb(tmport);
 		tmport = base_io + 0x81;
@@ -2904,7 +2904,7 @@ flash_ok_885:
 		outb(k, base_io + 0x29);
 #ifdef ED_DBGP
 		//printk("atp885: atp_host[0] 0x%p\n", atp_host[0]);
-#endif		
+#endif
 		shpnt->max_id = 16;
 		shpnt->max_lun = (p->global_map[0] & 0x07) + 1;
 		shpnt->max_channel = 1;
@@ -2913,7 +2913,7 @@ flash_ok_885:
 		shpnt->io_port = base_io;
 		shpnt->n_io_port = 0xff;	/* Number of bytes of I/O space used */
 		shpnt->irq = pdev->irq;
-				
+
 	} else {
 		error = pci_read_config_byte(pdev, 0x49, &host_id);
 
@@ -2942,7 +2942,7 @@ flash_ok_885:
 			goto err_nomem;
 
 		p = (struct atp_unit *)&shpnt->hostdata;
-		
+
 		atpdev->host = shpnt;
 		atpdev->pdev = pdev;
 		pci_set_drvdata(pdev, p);
@@ -2960,7 +2960,7 @@ flash_ok_885:
 			tmport = base_io + 0x3e;
 			outb(0x00, tmport);
 		}
- 
+
 		tmport = base_io + 0x3a;
 		k = (inb(tmport) & 0xf3) | 0x10;
 		outb(k, tmport);
@@ -2992,14 +2992,14 @@ flash_ok_885:
 		outb((inb(tmport) | 0x20), tmport);
 		if (atpdev->chip_ver == 4)
 			shpnt->max_id = 16;
-		else		
+		else
 			shpnt->max_id = 8;
 		shpnt->this_id = host_id;
 		shpnt->unique_id = base_io;
 		shpnt->io_port = base_io;
 		shpnt->n_io_port = 0x40;	/* Number of bytes of I/O space used */
-		shpnt->irq = pdev->irq;		
-	} 
+		shpnt->irq = pdev->irq;
+	}
 		spin_unlock_irqrestore(shpnt->host_lock, flags);
 		if(ent->device==ATP885_DEVID) {
 			if(!request_region(base_io, 0xff, "atp870u")) /* Register the IO ports that we use */
@@ -3010,14 +3010,14 @@ flash_ok_885:
 		} else {
 			if(!request_region(base_io, 0x40, "atp870u")) /* Register the IO ports that we use */
 				goto request_io_fail;
-		}				
+		}
 		count++;
 		if (scsi_add_host(shpnt, &pdev->dev))
 			goto scsi_add_fail;
 		scsi_scan_host(shpnt);
-#ifdef ED_DBGP			
+#ifdef ED_DBGP
 		printk("atp870u_prob : exit\n");
-#endif		
+#endif
 		return 0;
 
 scsi_add_fail:
@@ -3038,7 +3038,7 @@ free_tables:
 unregister:
 	printk("atp870u_prob:unregister\n");
 	scsi_host_put(shpnt);
-	return -1;		
+	return -1;
 err_eio:
 	kfree(atpdev);
 	return -EIO;
@@ -3056,7 +3056,7 @@ static int atp870u_abort(struct scsi_cmnd * SCpnt)
 	unsigned char  j, k, c;
 	struct scsi_cmnd *workrequ;
 	unsigned int tmport;
-	struct atp_unit *dev;	
+	struct atp_unit *dev;
 	struct Scsi_Host *host;
 	host = SCpnt->device->host;
 
@@ -3131,11 +3131,11 @@ static int atp870u_biosparam(struct scsi_device *disk, struct block_device *dev,
 }
 
 static void atp870u_remove (struct pci_dev *pdev)
-{	
+{
 	struct atp_unit *devext = pci_get_drvdata(pdev);
 	struct Scsi_Host *pshost = devext->host;
-	
-	
+
+
 	scsi_remove_host(pshost);
 	printk(KERN_INFO "free_irq : %d\n",pshost->irq);
 	free_irq(pshost->irq, pshost);
@@ -3145,7 +3145,7 @@ static void atp870u_remove (struct pci_dev *pdev)
 	printk(KERN_INFO "scsi_host_put : %p\n",pshost);
 	scsi_host_put(pshost);
 	printk(KERN_INFO "pci_set_drvdata : %p\n",pdev);
-	pci_set_drvdata(pdev, NULL);	
+	pci_set_drvdata(pdev, NULL);
 }
 MODULE_LICENSE("GPL");
 
@@ -3191,15 +3191,15 @@ static struct pci_driver atp870u_driver = {
 
 static int __init atp870u_init(void)
 {
-#ifdef ED_DBGP	
+#ifdef ED_DBGP
 	printk("atp870u_init: Entry\n");
-#endif	
+#endif
 	return pci_register_driver(&atp870u_driver);
 }
 
 static void __exit atp870u_exit(void)
 {
-#ifdef ED_DBGP	
+#ifdef ED_DBGP
 	printk("atp870u_exit: Entry\n");
 #endif
 	pci_unregister_driver(&atp870u_driver);
@@ -3259,7 +3259,7 @@ static void is885(struct atp_unit *dev, unsigned int wkport,unsigned char c)
 		outb(0, tmport);
 		tmport += 0x02;
 		outb(dev->id[c][i].devsp, tmport++);
-		
+
 		outb(0, tmport++);
 		outb(satn[6], tmport++);
 		outb(satn[7], tmport++);
@@ -3525,7 +3525,7 @@ u3p_cmd:
 			m = m << i;
 			dev->wide_id[c] |= m;
 			dev->id[c][i].devsp = 0xce;
-#ifdef ED_DBGP		   
+#ifdef ED_DBGP
 			printk("dev->id[%2d][%2d].devsp = %2x\n",c,i,dev->id[c][i].devsp);
 #endif
 			continue;
@@ -3887,7 +3887,7 @@ tar_dcons:
 		j = 0x60;
 	      set_syn_ok:
 		dev->id[c][i].devsp = (dev->id[c][i].devsp & 0x0f) | j;
-#ifdef ED_DBGP		
+#ifdef ED_DBGP
 		printk("dev->id[%2d][%2d].devsp = %2x\n",c,i,dev->id[c][i].devsp);
 #endif
 	}

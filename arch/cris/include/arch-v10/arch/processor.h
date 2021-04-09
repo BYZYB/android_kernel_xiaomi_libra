@@ -48,7 +48,7 @@ struct thread_struct {
 })
 
 /* give the thread a program location
- * set user-mode (The 'U' flag (User mode flag) is CCR/DCCR bit 8) 
+ * set user-mode (The 'U' flag (User mode flag) is CCR/DCCR bit 8)
  * switch user-stackpointer
  */
 

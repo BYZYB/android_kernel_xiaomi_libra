@@ -48,7 +48,7 @@ nlm4_decode_cookie(__be32 *p, struct nlm_cookie *c)
 	unsigned int	len;
 
 	len = ntohl(*p++);
-	
+
 	if(len==0)
 	{
 		c->len=4;
@@ -60,7 +60,7 @@ nlm4_decode_cookie(__be32 *p, struct nlm_cookie *c)
 		memcpy(c->data, p, len);
 		p+=XDR_QUADLEN(len);
 	}
-	else 
+	else
 	{
 		dprintk("lockd: bad cookie size %d (only cookies under "
 			"%d bytes are supported.)\n",
@@ -162,7 +162,7 @@ nlm4_encode_testres(__be32 *p, struct nlm_res *resp)
 			len = 0;
 		else
 			len = loff_t_to_s64(fl->fl_end - fl->fl_start + 1);
-		
+
 		p = xdr_encode_hyper(p, start);
 		p = xdr_encode_hyper(p, len);
 		dprintk("xdr: encode_testres (status %u pid %d type %d start %Ld end %Ld)\n",

@@ -468,7 +468,7 @@ SYSCALL_DEFINE2(64_munmap, unsigned long, addr, size_t, len)
 
 	return vm_munmap(addr, len);
 }
-                
+
 SYSCALL_DEFINE5(64_mremap, unsigned long, addr,	unsigned long, old_len,
 		unsigned long, new_len, unsigned long, flags,
 		unsigned long, new_addr)
@@ -482,13 +482,13 @@ SYSCALL_DEFINE5(64_mremap, unsigned long, addr,	unsigned long, old_len,
 asmlinkage unsigned long c_sys_nis_syscall(struct pt_regs *regs)
 {
 	static int count;
-	
+
 	/* Don't make the system unusable, if someone goes stuck */
 	if (count++ > 5)
 		return -ENOSYS;
 
 	printk ("Unimplemented SPARC system call %ld\n",regs->u_regs[1]);
-#ifdef DEBUG_UNIMP_SYSCALL	
+#ifdef DEBUG_UNIMP_SYSCALL
 	show_regs (regs);
 #endif
 
@@ -529,7 +529,7 @@ SYSCALL_DEFINE2(getdomainname, char __user *, name, int, len)
 		return -EINVAL;
 
  	down_read(&uts_sem);
- 	
+
 	nlen = strlen(utsname()->domainname) + 1;
 	err = -EINVAL;
 	if (nlen > len)

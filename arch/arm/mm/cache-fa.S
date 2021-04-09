@@ -11,7 +11,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  *
- *  Processors: FA520 FA526 FA626	
+ *  Processors: FA520 FA526 FA626
  */
 #include <linux/linkage.h>
 #include <linux/init.h>
@@ -31,8 +31,8 @@
 #ifdef CONFIG_ARCH_GEMINI
 #define CACHE_DSIZE	8192
 #else
-#define CACHE_DSIZE	16384 
-#endif 
+#define CACHE_DSIZE	16384
+#endif
 
 /* FIXME: put optimal value here. Current one is just estimation */
 #define CACHE_DLIMIT	(CACHE_DSIZE * 2)
@@ -197,7 +197,7 @@ fa_dma_clean_range:
 	add	r0, r0, #CACHE_DLINESIZE
 	cmp	r0, r1
 	blo	1b
-	mov	r0, #0	
+	mov	r0, #0
 	mcr	p15, 0, r0, c7, c10, 4		@ drain write buffer
 	mov	pc, lr
 
@@ -212,7 +212,7 @@ ENTRY(fa_dma_flush_range)
 	add	r0, r0, #CACHE_DLINESIZE
 	cmp	r0, r1
 	blo	1b
-	mov	r0, #0	
+	mov	r0, #0
 	mcr	p15, 0, r0, c7, c10, 4		@ drain write buffer
 	mov	pc, lr
 

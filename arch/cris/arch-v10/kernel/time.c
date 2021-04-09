@@ -34,7 +34,7 @@ unsigned long get_ns_in_jiffie(void)
 
 	local_irq_save(flags);
 	timer_count = *R_TIMER0_DATA;
-	presc_count = *R_TIM_PRESC_STATUS;  
+	presc_count = *R_TIM_PRESC_STATUS;
 	/* presc_count might be wrapped */
 	t1 = *R_TIMER0_DATA;
 
@@ -50,7 +50,7 @@ unsigned long get_ns_in_jiffie(void)
 		presc_count =  PRESCALE_VALUE - presc_count - PRESCALE_VALUE/2;
 	}
 
-	ns = ( (TIMER0_DIV - timer_count) * ((1000000000/HZ)/TIMER0_DIV )) + 
+	ns = ( (TIMER0_DIV - timer_count) * ((1000000000/HZ)/TIMER0_DIV )) +
 	     ( (presc_count) * (1000000000/PRESCALE_FREQ));
 	return ns;
 }
@@ -80,7 +80,7 @@ static u32 cris_v10_gettimeoffset(void)
  * by the R_WATCHDOG register. The R_WATCHDOG register contains an enable bit
  * and a 3-bit key value. The effect of writing to the R_WATCHDOG register is
  * described in the table below:
- * 
+ *
  *   Watchdog    Value written:
  *   state:      To enable:  To key:      Operation:
  *   --------    ----------  -------      ----------
@@ -89,9 +89,9 @@ static u32 cris_v10_gettimeoffset(void)
  *   started         0       ~key         Stop watchdog
  *   started         1       ~key         Restart watchdog with key = ~key.
  *   started         X       new_key_val  Change key to new_key_val.
- * 
+ *
  * Note: '~' is the bitwise NOT operator.
- * 
+ *
  */
 
 /* right now, starting the watchdog is the same as resetting it */
@@ -123,14 +123,14 @@ reset_watchdog(void)
 
 /* stop the watchdog - we still need the correct key */
 
-void 
+void
 stop_watchdog(void)
 {
 #if defined(CONFIG_ETRAX_WATCHDOG) && !defined(CONFIG_SVINTO_SIM)
 	watchdog_key ^= 0x7; /* invert key, which is 3 bits */
 	*R_WATCHDOG = IO_FIELD(R_WATCHDOG, key, watchdog_key) |
 		IO_STATE(R_WATCHDOG, enable, stop);
-#endif	
+#endif
 }
 
 
@@ -160,20 +160,20 @@ timer_interrupt(int irq, void *dev_id)
 		IO_STATE( R_TIMER_CTRL, tm0, run) |
 		IO_STATE( R_TIMER_CTRL, clksel0, c6250kHz);
 #else
-	*R_TIMER_CTRL = r_timer_ctrl_shadow | 
+	*R_TIMER_CTRL = r_timer_ctrl_shadow |
 		IO_STATE(R_TIMER_CTRL, i0, clr);
 #endif
 
 	/* reset watchdog otherwise it resets us! */
 	reset_watchdog();
-	
+
 	/* Update statistics. */
 	update_process_times(user_mode(regs));
 
 	/* call the real timer interrupt handler */
 
 	xtime_update(1);
-	
+
         cris_do_profile(regs); /* Save profiling information */
         return IRQ_HANDLED;
 }
@@ -190,14 +190,14 @@ static struct irqaction irq2  = {
 
 void __init
 time_init(void)
-{	
+{
 	arch_gettimeoffset = cris_v10_gettimeoffset;
 
-	/* probe for the RTC and read it if it exists 
-	 * Before the RTC can be probed the loops_per_usec variable needs 
-	 * to be initialized to make usleep work. A better value for 
-	 * loops_per_usec is calculated by the kernel later once the 
-	 * clock has started.  
+	/* probe for the RTC and read it if it exists
+	 * Before the RTC can be probed the loops_per_usec variable needs
+	 * to be initialized to make usleep work. A better value for
+	 * loops_per_usec is calculated by the kernel later once the
+	 * clock has started.
 	 */
 	loops_per_usec = 50;
 
@@ -208,7 +208,7 @@ time_init(void)
 	 * Remember that linux/timex.h contains #defines that rely on the
 	 * timer settings below (hz and divide factor) !!!
 	 */
-	
+
 #ifdef USE_CASCADE_TIMERS
 	*R_TIMER_CTRL =
 		IO_FIELD( R_TIMER_CTRL, timerdiv1, 0) |
@@ -219,8 +219,8 @@ time_init(void)
 		IO_STATE( R_TIMER_CTRL, i0, nop) |
 		IO_STATE( R_TIMER_CTRL, tm0, stop_ld) |
 		IO_STATE( R_TIMER_CTRL, clksel0, c6250kHz);
-	
-	*R_TIMER_CTRL = r_timer_ctrl_shadow = 
+
+	*R_TIMER_CTRL = r_timer_ctrl_shadow =
 		IO_FIELD( R_TIMER_CTRL, timerdiv1, 0) |
 		IO_FIELD( R_TIMER_CTRL, timerdiv0, 0) |
 		IO_STATE( R_TIMER_CTRL, i1, nop) |
@@ -230,18 +230,18 @@ time_init(void)
 		IO_STATE( R_TIMER_CTRL, tm0, run) |
 		IO_STATE( R_TIMER_CTRL, clksel0, c6250kHz);
 #else
-	*R_TIMER_CTRL = 
-		IO_FIELD(R_TIMER_CTRL, timerdiv1, 192)      | 
+	*R_TIMER_CTRL =
+		IO_FIELD(R_TIMER_CTRL, timerdiv1, 192)      |
 		IO_FIELD(R_TIMER_CTRL, timerdiv0, TIMER0_DIV)      |
-		IO_STATE(R_TIMER_CTRL, i1,        nop)      | 
+		IO_STATE(R_TIMER_CTRL, i1,        nop)      |
 		IO_STATE(R_TIMER_CTRL, tm1,       stop_ld)  |
 		IO_STATE(R_TIMER_CTRL, clksel1,   c19k2Hz)  |
 		IO_STATE(R_TIMER_CTRL, i0,        nop)      |
 		IO_STATE(R_TIMER_CTRL, tm0,       stop_ld)  |
 		IO_STATE(R_TIMER_CTRL, clksel0,   flexible);
-	
+
 	*R_TIMER_CTRL = r_timer_ctrl_shadow =
-		IO_FIELD(R_TIMER_CTRL, timerdiv1, 192)      | 
+		IO_FIELD(R_TIMER_CTRL, timerdiv1, 192)      |
 		IO_FIELD(R_TIMER_CTRL, timerdiv0, TIMER0_DIV)      |
 		IO_STATE(R_TIMER_CTRL, i1,        nop)      |
 		IO_STATE(R_TIMER_CTRL, tm1,       run)      |
@@ -255,9 +255,9 @@ time_init(void)
 
 	*R_IRQ_MASK0_SET =
 		IO_STATE(R_IRQ_MASK0_SET, timer0, set); /* unmask the timer irq */
-	
+
 	/* now actually register the timer irq handler that calls timer_interrupt() */
-	
+
 	setup_irq(2, &irq2); /* irq 2 is the timer0 irq in etrax */
 
 	/* enable watchdog if we should use one */

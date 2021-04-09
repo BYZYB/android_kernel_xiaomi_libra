@@ -43,12 +43,12 @@
 
 /* Every cache item has a common header that is used
  * for expiring and refreshing entries.
- * 
+ *
  */
 struct cache_head {
 	struct cache_head * next;
 	time_t		expiry_time;	/* After time time, don't use the data */
-	time_t		last_refresh;   /* If CACHE_PENDING, this is when upcall 
+	time_t		last_refresh;   /* If CACHE_PENDING, this is when upcall
 					 * was sent, else this is when update was received
 					 */
 	struct kref	ref;

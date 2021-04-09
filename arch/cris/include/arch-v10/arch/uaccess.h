@@ -1,4 +1,4 @@
-/* 
+/*
  * Authors:    Bjorn Wesen (bjornw@axis.com)
  *	       Hans-Peter Nilsson (hp@axis.com)
  *
@@ -102,7 +102,7 @@ __do_strncpy_from_user(char *dst, const char *src, long count)
 	 *  This code is deduced from:
 	 *
 	 *	char tmp2;
-	 *	long tmp1, tmp3	
+	 *	long tmp1, tmp3
 	 *	tmp1 = count;
 	 *	while ((*dst++ = (tmp2 = *src++)) != 0
 	 *	       && --tmp1)

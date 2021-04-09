@@ -468,7 +468,7 @@ static int locomo_remove_child(struct device *dev, void *data)
 {
 	device_unregister(dev);
 	return 0;
-} 
+}
 
 static void __locomo_remove(struct locomo *lchip)
 {

@@ -1,5 +1,5 @@
 /*!**************************************************************************
-*!                                                            
+*!
 *! MACROS:
 *!   IO_MASK(reg,field)
 *!   IO_STATE(reg,field,state)
@@ -130,7 +130,7 @@ IO_MASK( R_DRAM_TIMING, REF )
 
 IO_MASK( R_EXT_DMA_0_STAT, TFR_COUNT ) >> IO_BITNR( R_EXT_DMA_0_STAT, TFR_COUNT )
 
-IO_RD(R_EXT_DMA_0_STAT) & IO_MASK( R_EXT_DMA_0_STAT, S ) 
+IO_RD(R_EXT_DMA_0_STAT) & IO_MASK( R_EXT_DMA_0_STAT, S )
    == IO_STATE( R_EXT_DMA_0_STAT, S, STARTED )
 #endif
 

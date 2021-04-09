@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2001 Chris Emerson (cemerson@chiark.greenend.org.uk)
  * Licensed under the GPL
  */

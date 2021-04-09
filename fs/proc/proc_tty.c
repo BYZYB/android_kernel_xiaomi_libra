@@ -143,7 +143,7 @@ static const struct file_operations proc_tty_drivers_operations = {
 void proc_tty_register_driver(struct tty_driver *driver)
 {
 	struct proc_dir_entry *ent;
-		
+
 	if (!driver->driver_name || driver->proc_entry ||
 	    !driver->ops->proc_fops)
 		return;
@@ -163,9 +163,9 @@ void proc_tty_unregister_driver(struct tty_driver *driver)
 	ent = driver->proc_entry;
 	if (!ent)
 		return;
-		
+
 	remove_proc_entry(driver->driver_name, proc_tty_driver);
-	
+
 	driver->proc_entry = NULL;
 }
 

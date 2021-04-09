@@ -42,7 +42,7 @@ struct nf_conntrack_l3proto {
 			   const struct nf_conntrack_tuple *);
 
 	/*
-	 * Called before tracking. 
+	 * Called before tracking.
 	 *	*dataoff: offset of protocol header (TCP, UDP,...) in skb
 	 *	*protonum: protocol number
 	 */

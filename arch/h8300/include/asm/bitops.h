@@ -80,7 +80,7 @@ H8300_GEN_BITOP(change_bit,"bnot")
 
 static __inline__ int test_bit(int nr, const unsigned long* addr)
 {
-	return (*((volatile unsigned char *)addr + 
+	return (*((volatile unsigned char *)addr +
                ((nr >> 3) ^ 3)) & (1UL << (nr & 7))) != 0;
 }
 

@@ -460,7 +460,7 @@ static int qt202x_phy_get_module_info(struct efx_nic *efx,
 static int qt202x_phy_get_module_eeprom(struct efx_nic *efx,
 					struct ethtool_eeprom *ee, u8 *data)
 {
-	int mmd, reg_base, rc, i;		
+	int mmd, reg_base, rc, i;
 
 	if (efx->phy_type == PHY_TYPE_QT2025C) {
 		mmd = MDIO_MMD_PCS;

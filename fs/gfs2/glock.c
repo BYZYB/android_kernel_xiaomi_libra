@@ -314,7 +314,7 @@ static inline void do_error(struct gfs2_glock *gl, const int ret)
 /**
  * do_promote - promote as many requests as possible on the current queue
  * @gl: The glock
- * 
+ *
  * Returns: 1 if there is a blocked holder at the head of the list, or 2
  *          if a type specific operation is underway.
  */
@@ -955,7 +955,7 @@ void gfs2_print_dbg(struct seq_file *seq, const char *fmt, ...)
  * Eventually we should move the recursive locking trap to a
  * debugging option or something like that. This is the fast
  * path and needs to have the minimum number of distractions.
- * 
+ *
  */
 
 static inline void add_to_queue(struct gfs2_holder *gh)

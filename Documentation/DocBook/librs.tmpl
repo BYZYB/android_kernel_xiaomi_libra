@@ -5,7 +5,7 @@
 <book id="Reed-Solomon-Library-Guide">
  <bookinfo>
   <title>Reed-Solomon Library Programming Interface</title>
-  
+
   <authorgroup>
    <author>
     <firstname>Thomas</firstname>
@@ -29,21 +29,21 @@
      it and/or modify it under the terms of the GNU General Public
      License version 2 as published by the Free Software Foundation.
    </para>
-      
+
    <para>
      This program is distributed in the hope that it will be
      useful, but WITHOUT ANY WARRANTY; without even the implied
      warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
      See the GNU General Public License for more details.
    </para>
-      
+
    <para>
      You should have received a copy of the GNU General Public
      License along with this program; if not, write to the Free
      Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
      MA 02111-1307 USA
    </para>
-      
+
    <para>
      For more details see the file COPYING in the source
      distribution of Linux.
@@ -61,18 +61,18 @@
   </para>
   <para>
   	Reed-Solomon codes are used in communication and storage
-	applications to ensure data integrity. 
+	applications to ensure data integrity.
   </para>
   <para>
   	This documentation is provided for developers who want to utilize
 	the functions provided by the library.
   </para>
   </chapter>
-  
+
   <chapter id="bugs">
      <title>Known Bugs And Assumptions</title>
   <para>
-	None.	
+	None.
   </para>
   </chapter>
 
@@ -90,7 +90,7 @@
 			with the given polynomial. It either uses an existing
 			matching decoder or creates a new one. On creation all
 			the lookup tables for fast en/decoding are created.
-			The function may take a while, so make sure not to 
+			The function may take a while, so make sure not to
 			call it in critical code paths.
 		</para>
 		<programlisting>
@@ -110,7 +110,7 @@ rs_decoder = init_rs (10, 0x409, 0, 1, 6);
 		<title>Encoding</title>
 		<para>
 			The encoder calculates the Reed-Solomon code over
-			the given data length and stores the result in 
+			the given data length and stores the result in
 			the parity buffer. Note that the parity buffer must
 			be initialized before calling the encoder.
 		</para>
@@ -166,7 +166,7 @@ encode_rs8 (rs_decoder, data8, 512, par, 0);
 			it is necessary it should be not a big deal to implement
 			such functionality.
 		</para>
-		
+
 		<sect2>
 		<title>
 			Decoding with syndrome calculation, direct data correction
@@ -244,7 +244,7 @@ free_rs(rs_decoder);
 	</sect1>
 
   </chapter>
-	
+
   <chapter id="structs">
      <title>Structures</title>
      <para>
@@ -262,7 +262,7 @@ free_rs(rs_decoder);
      </para>
 !Elib/reed_solomon/reed_solomon.c
   </chapter>
-  
+
   <chapter id="credits">
      <title>Credits</title>
 	<para>

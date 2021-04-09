@@ -83,7 +83,7 @@ static void     enter_uart_mode(uart401_devc * devc);
 static void uart401_input_loop(uart401_devc * devc)
 {
 	int work_limit=30000;
-	
+
 	while (input_avail(devc) && --work_limit)
 	{
 		unsigned char   c = uart401_read(devc);
@@ -124,7 +124,7 @@ uart401_open(int dev, int mode,
 		return -EBUSY;
 
 	/* Flush the UART */
-	
+
 	while (input_avail(devc))
 		uart401_read(devc);
 
@@ -156,7 +156,7 @@ static int uart401_out(int dev, unsigned char midi_byte)
 	 * Test for input since pending input seems to block the output.
 	 */
 
-	spin_lock_irqsave(&devc->lock,flags);	
+	spin_lock_irqsave(&devc->lock,flags);
 	if (input_avail(devc))
 		uart401_input_loop(devc);
 
@@ -224,7 +224,7 @@ static void enter_uart_mode(uart401_devc * devc)
 	int ok, timeout;
 	unsigned long flags;
 
-	spin_lock_irqsave(&devc->lock,flags);	
+	spin_lock_irqsave(&devc->lock,flags);
 	for (timeout = 30000; timeout > 0 && !output_ready(devc); timeout--);
 
 	devc->input_byte = 0;
@@ -323,7 +323,7 @@ int probe_uart401(struct address_info *hw_config, struct module *owner)
 	devc->share_irq = 0;
 	spin_lock_init(&devc->lock);
 
-	spin_lock_irqsave(&devc->lock,flags);	
+	spin_lock_irqsave(&devc->lock,flags);
 	ok = reset_uart401(devc);
 	spin_unlock_irqrestore(&devc->lock,flags);
 
@@ -362,7 +362,7 @@ int probe_uart401(struct address_info *hw_config, struct module *owner)
 
 	if (owner)
 		midi_devs[devc->my_dev]->owner = owner;
-	
+
 	midi_devs[devc->my_dev]->devc = devc;
 	midi_devs[devc->my_dev]->converter = kmemdup(&std_midi_synth,
 						     sizeof(struct synth_operations),
@@ -401,13 +401,13 @@ void unload_uart401(struct address_info *hw_config)
 {
 	uart401_devc *devc;
 	int n=hw_config->slots[4];
-	
+
 	/* Not set up */
 	if(n==-1 || midi_devs[n]==NULL)
 		return;
-		
+
 	/* Not allocated (erm ??) */
-	
+
 	devc = midi_devs[hw_config->slots[4]]->devc;
 	if (devc == NULL)
 		return;
@@ -471,12 +471,12 @@ static int __init setup_uart401(char *str)
 {
 	/* io, irq */
 	int ints[3];
-	
+
 	str = get_options(str, ARRAY_SIZE(ints), ints);
 
 	io = ints[1];
 	irq = ints[2];
-	
+
 	return 1;
 }
 

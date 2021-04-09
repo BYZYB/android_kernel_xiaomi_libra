@@ -268,7 +268,7 @@ struct k_sigaction {
 	__sigrestore_t ka_restorer;
 #endif
 };
- 
+
 #ifdef CONFIG_OLD_SIGACTION
 struct old_sigaction {
 	__sighandler_t sa_handler;

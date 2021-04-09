@@ -566,7 +566,7 @@ memmove:
 	s8i	a6, a5,  0
 	retw
 
-
+
 /*
  * Local Variables:
  * mode:fundamental

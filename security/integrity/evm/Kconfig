@@ -21,6 +21,6 @@ config EVM_HMAC_VERSION
 	  1 - original version
 	  2 - add per filesystem unique identifier (UUID) (default)
 
-	  WARNING: changing the HMAC calculation method or adding 
+	  WARNING: changing the HMAC calculation method or adding
 	  additional info to the calculation, requires existing EVM
-	  labeled file systems to be relabeled.  
+	  labeled file systems to be relabeled.

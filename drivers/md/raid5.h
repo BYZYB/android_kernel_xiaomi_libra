@@ -155,7 +155,7 @@
  */
 
 /*
- * Operations state - intermediate states that are visible outside of 
+ * Operations state - intermediate states that are visible outside of
  *   STRIPE_ACTIVE.
  * In general _idle indicates nothing is running, _run indicates a data
  * processing operation is active, and _result means the data processing result

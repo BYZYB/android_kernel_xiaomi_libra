@@ -118,7 +118,7 @@ static int snd_emu8000_delete_device(struct snd_seq_device *dev)
 
 static int __init alsa_emu8000_init(void)
 {
-	
+
 	static struct snd_seq_dev_ops ops = {
 		snd_emu8000_new_device,
 		snd_emu8000_delete_device,

@@ -1,7 +1,7 @@
 #ifndef _PARISC_MSGBUF_H
 #define _PARISC_MSGBUF_H
 
-/* 
+/*
  * The msqid64_ds structure for parisc architecture, copied from sparc.
  * Note extra padding because this structure is passed back and forth
  * between kernel and user space.

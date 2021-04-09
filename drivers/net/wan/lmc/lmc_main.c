@@ -182,13 +182,13 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
 		break;
 	    }
 
-            
+
 	    if (new_type == old_type)
 	    {
 		ret = 0 ;
 		break;				/* no change */
             }
-            
+
 	    spin_lock_irqsave(&sc->lmc_lock, flags);
             lmc_proto_close(sc);
 
@@ -420,8 +420,8 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
                         }
                     }
 		    spin_unlock_irqrestore(&sc->lmc_lock, flags);
-                    
-                    
+
+
 
                     ret = 0x0;
 
@@ -478,7 +478,7 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
 		    spin_unlock_irqrestore(&sc->lmc_lock, flags);
 
                     ret = 0x0;
-                    
+
 
                     break;
 
@@ -500,7 +500,7 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
                             ret = -ENOMEM;
                             break;
                     }
-                    
+
                     if(copy_from_user(data, xc.data, xc.len))
                     {
                     	kfree(data);
@@ -555,7 +555,7 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
                     sc->lmc_gpio |= LMC_GEP_DATA;
                     sc->lmc_gpio |= LMC_GEP_CLK;
                     LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
-                    
+
                     lmc_gpio_mkoutput(sc, LMC_GEP_DATA | LMC_GEP_CLK | LMC_GEP_MODE );
 
                     /*
@@ -583,7 +583,7 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
                         sc->lmc_gpio |= LMC_GEP_MODE;
                         LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
                         udelay(1);
-                        
+
                         sc->lmc_gpio |= LMC_GEP_CLK; /* Put the clack back to one */
                         sc->lmc_gpio |= LMC_GEP_MODE;
                         LMC_CSR_WRITE(sc, csr_gp, sc->lmc_gpio);
@@ -600,7 +600,7 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
                     }
 
                     lmc_gpio_mkinput(sc, 0xff);
-                    
+
                     sc->lmc_miireg16 |= LMC_MII16_FIFO_RESET;
                     lmc_mii_writereg(sc, 0, 16, sc->lmc_miireg16);
 
@@ -609,9 +609,9 @@ int lmc_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd) /*fold00*/
 		    spin_unlock_irqrestore(&sc->lmc_lock, flags);
 
                     kfree(data);
-                    
+
                     ret = 0;
-                    
+
                     break;
                 }
             default: /*fold02*/
@@ -898,7 +898,7 @@ static int lmc_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
      *
      * Check either the subvendor or the subdevice, some systems reverse
      * the setting in the bois, seems to be version and arch dependent?
-     * Fix the error, exchange the two values 
+     * Fix the error, exchange the two values
      */
     if ((subdevice = pdev->subsystem_device) == PCI_VENDOR_ID_LMC)
 	    subdevice = pdev->subsystem_vendor;
@@ -1292,11 +1292,11 @@ static irqreturn_t lmc_interrupt (int irq, void *dev_instance) /*fold00*/
             lmc_running_reset (dev);
             break;
         }
-        
+
         if (csr & TULIP_STS_RXINTR){
             lmc_trace(dev, "rx interrupt");
             lmc_rx (dev);
-            
+
         }
         if (csr & (TULIP_STS_TXINTR | TULIP_STS_TXNOBUF | TULIP_STS_TXSTOPPED)) {
 
@@ -1402,10 +1402,10 @@ static irqreturn_t lmc_interrupt (int irq, void *dev_instance) /*fold00*/
 
         }
 
-        
+
         if(max_work-- <= 0)
             break;
-        
+
         /*
          * Get current csr status to make sure
          * we've cleared all interrupts
@@ -1582,7 +1582,7 @@ static int lmc_rx(struct net_device *dev)
          * We ran out of memory at some point
          * just allocate an skb buff and continue.
          */
-        
+
         if (!skb) {
             nsb = dev_alloc_skb (LMC_PKT_BUF_SZ + 2);
             if (nsb) {
@@ -1593,7 +1593,7 @@ static int lmc_rx(struct net_device *dev)
             sc->failed_recv_alloc = 1;
             goto skip_packet;
         }
-        
+
 	sc->lmc_device->stats.rx_packets++;
 	sc->lmc_device->stats.rx_bytes += len;
 
@@ -1605,7 +1605,7 @@ static int lmc_rx(struct net_device *dev)
          * 44.210mbits/sec and we're going to copy
          * them into a new buffer??
          */
-        
+
         if(len > (LMC_MTU - (LMC_MTU>>2))){ /* len > LMC_MTU * 0.75 */
             /*
              * If it's a large packet don't copy it just hand it up
@@ -1653,7 +1653,7 @@ static int lmc_rx(struct net_device *dev)
                 goto give_it_anyways;
             }
             skb_copy_from_linear_data(skb, skb_put(nsb, len), len);
-            
+
             nsb->protocol = lmc_proto_type(sc, nsb);
             skb_reset_mac_header(nsb);
             /* skb_reset_network_header(nsb); */
@@ -1929,7 +1929,7 @@ void lmc_led_on(lmc_softc_t * const sc, u32 led) /*fold00*/
         lmc_trace(sc->lmc_device, "lmc_led_on aon out");
         return;
     }
-    
+
     sc->lmc_miireg16 &= ~led;
     lmc_mii_writereg(sc, 0, 16, sc->lmc_miireg16);
     lmc_trace(sc->lmc_device, "lmc_led_on out");
@@ -1942,7 +1942,7 @@ void lmc_led_off(lmc_softc_t * const sc, u32 led) /*fold00*/
         lmc_trace(sc->lmc_device, "lmc_led_off aoff out");
         return;
     }
-    
+
     sc->lmc_miireg16 |= led;
     lmc_mii_writereg(sc, 0, 16, sc->lmc_miireg16);
     lmc_trace(sc->lmc_device, "lmc_led_off out");

@@ -800,7 +800,7 @@ ssize_t proc_projid_map_write(struct file *file, const char __user *buf, size_t 
 			 &ns->projid_map, &ns->parent->projid_map);
 }
 
-static bool new_idmap_permitted(const struct file *file, 
+static bool new_idmap_permitted(const struct file *file,
 				struct user_namespace *ns, int cap_setid,
 				struct uid_gid_map *new_map)
 {

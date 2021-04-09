@@ -114,7 +114,7 @@ int acpiphp_register_attention(struct acpiphp_attention_info *info)
  * @info: must match the pointer used to register
  *
  * Description: This is used to un-register a hardware specific acpi
- * driver that manipulates the attention LED.  The pointer to the 
+ * driver that manipulates the attention LED.  The pointer to the
  * info struct must be the same as the one used to set it.
  */
 int acpiphp_unregister_attention(struct acpiphp_attention_info *info)
@@ -181,7 +181,7 @@ static int disable_slot(struct hotplug_slot *hotplug_slot)
 	int retval = -ENODEV;
 
 	dbg("%s - physical_slot = %s\n", __func__, hotplug_slot_name(hotplug_slot));
- 
+
 	if (attention_info && try_module_get(attention_info->owner)) {
 		retval = attention_info->set_attn(hotplug_slot, status);
 		module_put(attention_info->owner);
@@ -189,7 +189,7 @@ static int disable_slot(struct hotplug_slot *hotplug_slot)
 		attention_info = NULL;
 	return retval;
  }
- 
+
 
 /**
  * get_power_status - get power status of a slot

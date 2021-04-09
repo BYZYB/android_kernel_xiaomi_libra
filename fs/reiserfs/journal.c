@@ -3096,7 +3096,7 @@ struct reiserfs_transaction_handle *reiserfs_persistent_transaction(struct
 		th = current->journal_info;
 		th->t_refcount++;
 		BUG_ON(th->t_refcount < 2);
-		
+
 		return th;
 	}
 	th = kmalloc(sizeof(struct reiserfs_transaction_handle), GFP_NOFS);
@@ -3594,7 +3594,7 @@ static int check_journal_end(struct reiserfs_transaction_handle *th,
 				}
 			}
 			BUG_ON(journal->j_trans_id == trans_id);
-			
+
 			if (commit_now
 			    && journal_list_still_alive(sb, trans_id)
 			    && wait_on_commit) {
@@ -3691,7 +3691,7 @@ int journal_mark_freed(struct reiserfs_transaction_handle *th,
 				set_bit(BLOCK_FREED, &cn->state);
 				if (cn->bh) {
 					if (!cleaned) {
-						/* remove_from_transaction will brelse the buffer if it was 
+						/* remove_from_transaction will brelse the buffer if it was
 						 ** in the current trans
 						 */
 						clear_buffer_journal_dirty(cn->

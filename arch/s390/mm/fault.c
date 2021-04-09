@@ -298,7 +298,7 @@ static inline int do_exception(struct pt_regs *regs, int access)
 
 	/*
 	 * Verify that the fault happened in user space, that
-	 * we are not in an interrupt and that there is a 
+	 * we are not in an interrupt and that there is a
 	 * user context.
 	 */
 	fault = VM_FAULT_BADCONTEXT;
@@ -495,7 +495,7 @@ int __handle_fault(unsigned long uaddr, unsigned long pgm_int_code, int write)
 	return fault ? -EFAULT : 0;
 }
 
-#ifdef CONFIG_PFAULT 
+#ifdef CONFIG_PFAULT
 /*
  * 'pfault' pseudo page faults routines.
  */
@@ -575,9 +575,9 @@ static void pfault_interrupt(struct ext_code ext_code,
 
 	/*
 	 * Get the external interruption subcode & pfault
-	 * initial/completion signal bit. VM stores this 
+	 * initial/completion signal bit. VM stores this
 	 * in the 'cpu address' field associated with the
-         * external interrupt. 
+         * external interrupt.
 	 */
 	subcode = ext_code.subcode;
 	if ((subcode & 0xff00) != __SUBCODE_MASK)

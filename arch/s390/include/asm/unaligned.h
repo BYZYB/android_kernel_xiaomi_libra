@@ -2,7 +2,7 @@
 #define _ASM_S390_UNALIGNED_H
 
 /*
- * The S390 can do unaligned accesses itself. 
+ * The S390 can do unaligned accesses itself.
  */
 #include <linux/unaligned/access_ok.h>
 #include <linux/unaligned/generic.h>

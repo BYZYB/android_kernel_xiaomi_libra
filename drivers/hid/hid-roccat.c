@@ -366,7 +366,7 @@ void roccat_disconnect(int minor)
 	mutex_lock(&devices_lock);
 	devices[minor] = NULL;
 	mutex_unlock(&devices_lock);
-	
+
 	if (device->open) {
 		hid_hw_close(device->hid);
 		wake_up_interruptible(&device->wait);

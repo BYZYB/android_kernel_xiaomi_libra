@@ -79,7 +79,7 @@ ENTRY(div_Xsig)
 	movl	%esp,%ebp
 #ifndef NON_REENTRANT_FPU
 	subl	$28,%esp
-#endif /* NON_REENTRANT_FPU */ 
+#endif /* NON_REENTRANT_FPU */
 
 	pushl	%esi
 	pushl	%edi
@@ -164,7 +164,7 @@ LFirst_div_done:
 
 #ifdef PARANOID
 	jb	L_bugged_1
-#endif /* PARANOID */ 
+#endif /* PARANOID */
 
 	/* need to subtract another once of the denom */
 	incl	FPU_result_3	/* Correct the answer */
@@ -177,7 +177,7 @@ LFirst_div_done:
 #ifdef PARANOID
 	sbbl	$0,FPU_accum_3
 	jne	L_bugged_1	/* Must check for non-zero result here */
-#endif /* PARANOID */ 
+#endif /* PARANOID */
 
 /*----------------------------------------------------------------------*/
 /* Half of the main problem is done, there is just a reduced numerator
@@ -207,7 +207,7 @@ LPrevent_2nd_overflow:
 
 #ifdef PARANOID
 	je	L_bugged_2	/* Can't bump the result to 1.0 */
-#endif /* PARANOID */ 
+#endif /* PARANOID */
 
 LDo_2nd_div:
 	cmpl	$0,%ecx		/* augmented denom msw */
@@ -248,7 +248,7 @@ LSecond_div_done:
 #ifdef PARANOID
 	cmpl	$1,FPU_accum_2
 	jne	L_bugged_2
-#endif /* PARANOID */ 
+#endif /* PARANOID */
 
 	/* need to subtract another once of the denom */
 	movl	XsigL(%ebx),%eax
@@ -260,14 +260,14 @@ LSecond_div_done:
 #ifdef PARANOID
 	jc	L_bugged_2
 	jne	L_bugged_2
-#endif /* PARANOID */ 
+#endif /* PARANOID */
 
 	addl	$1,FPU_result_2	/* Correct the answer */
 	adcl	$0,FPU_result_3
 
 #ifdef PARANOID
 	jc	L_bugged_2	/* Must check for non-zero result here */
-#endif /* PARANOID */ 
+#endif /* PARANOID */
 
 /*----------------------------------------------------------------------*/
 /* The division is essentially finished here, we just need to perform
@@ -362,4 +362,4 @@ L_bugged_2:
 	call	EXCEPTION
 	pop	%ebx
 	jmp	L_exit
-#endif /* PARANOID */ 
+#endif /* PARANOID */

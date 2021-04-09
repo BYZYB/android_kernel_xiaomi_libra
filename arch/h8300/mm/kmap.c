@@ -1,6 +1,6 @@
 /*
  *  linux/arch/h8300/mm/kmap.c
- *  
+ *
  *  Based on
  *  linux/arch/m68knommu/mm/kmap.c
  *

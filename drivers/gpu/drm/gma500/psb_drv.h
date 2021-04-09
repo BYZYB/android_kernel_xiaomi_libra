@@ -455,7 +455,7 @@ struct drm_psb_private {
 	struct drm_device *dev;
 	const struct psb_ops *ops;
 	const struct psb_offset *regmap;
-	
+
 	struct child_device_config *child_dev;
 	int child_dev_num;
 
@@ -575,7 +575,7 @@ struct drm_psb_private {
 
 	/* Oaktrail HDMI state */
 	struct oaktrail_hdmi_dev *hdmi_priv;
-	
+
 	/*
 	 * Register state
 	 */
@@ -661,7 +661,7 @@ struct drm_psb_private {
 /*
  *	Operations for each board type
  */
- 
+
 struct psb_ops {
 	const char *name;
 	unsigned int accel_2d:1;

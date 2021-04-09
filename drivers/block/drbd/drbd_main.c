@@ -2220,7 +2220,7 @@ static void do_retry(struct work_struct *ws)
 		unsigned long start_time = req->start_time;
 		bool expected;
 
-		expected = 
+		expected =
 			expect(atomic_read(&req->completion_ref) == 0) &&
 			expect(req->rq_state & RQ_POSTPONED) &&
 			expect((req->rq_state & RQ_LOCAL_PENDING) == 0 ||

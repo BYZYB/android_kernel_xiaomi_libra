@@ -133,7 +133,7 @@ asmlinkage int sys_sigreturn(void)
 		goto badframe;
 
 	set_current_blocked(&set);
-	
+
 	if (restore_sigcontext(&frame->sc, &er0))
 		goto badframe;
 	return er0;
@@ -156,7 +156,7 @@ asmlinkage int sys_rt_sigreturn(void)
 		goto badframe;
 
 	set_current_blocked(&set);
-	
+
 	if (restore_sigcontext(&frame->uc.uc_mcontext, &er0))
 		goto badframe;
 

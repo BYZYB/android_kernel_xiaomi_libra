@@ -399,7 +399,7 @@ static const struct snd_soc_dapm_route audio_map[] = {
 };
 
 static const struct snd_soc_dapm_route audio_map_in1_se[] = {
-	{ "IN1B PGA", NULL, "IN1-" },	
+	{ "IN1B PGA", NULL, "IN1-" },
 
 	{ "SPKMIX", "IN1B Switch", "IN1B PGA" },
 	{ "MIXOUTL", "IN1B Switch", "IN1B PGA" },
@@ -407,11 +407,11 @@ static const struct snd_soc_dapm_route audio_map_in1_se[] = {
 };
 
 static const struct snd_soc_dapm_route audio_map_in1_diff[] = {
-	{ "IN1A PGA", NULL, "IN1-" },	
+	{ "IN1A PGA", NULL, "IN1-" },
 };
 
 static const struct snd_soc_dapm_route audio_map_in2_se[] = {
-	{ "IN2B PGA", NULL, "IN2-" },	
+	{ "IN2B PGA", NULL, "IN2-" },
 
 	{ "SPKMIX", "IN2B Switch", "IN2B PGA" },
 	{ "MIXOUTL", "IN2B Switch", "IN2B PGA" },
@@ -419,7 +419,7 @@ static const struct snd_soc_dapm_route audio_map_in2_se[] = {
 };
 
 static const struct snd_soc_dapm_route audio_map_in2_diff[] = {
-	{ "IN2A PGA", NULL, "IN2-" },	
+	{ "IN2A PGA", NULL, "IN2-" },
 };
 
 static int wm9090_add_controls(struct snd_soc_codec *codec)

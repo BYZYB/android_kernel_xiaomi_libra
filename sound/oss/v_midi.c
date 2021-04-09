@@ -163,7 +163,7 @@ static struct midi_operations v_midi_operations2 =
  *	We kmalloc just one of these - it makes life simpler and the code
  *	cleaner and the memory handling far more efficient
  */
- 
+
 struct vmidi_memory
 {
 	/* Must be first */
@@ -183,7 +183,7 @@ static void __init attach_v_midi (struct address_info *hw_config)
 		printk(KERN_ERR "v_midi: Too many midi devices detected\n");
 		return;
 	}
-	
+
 	m = kmalloc(sizeof(struct vmidi_memory), GFP_KERNEL);
 	if (m == NULL)
 	{
@@ -191,11 +191,11 @@ static void __init attach_v_midi (struct address_info *hw_config)
 		sound_unload_mididev(midi1);
 		return;
 	}
-	
+
 	midi_mem = m;
-	
+
 	midi_devs[midi1] = &m->m_ops[0];
-	
+
 
 	midi2 = sound_alloc_mididev();
 	if (midi2 == -1)

@@ -1092,7 +1092,7 @@ static void mxser_close(struct tty_struct *tty, struct file *filp)
 	clear_bit(ASYNCB_INITIALIZED, &port->flags);
 	mutex_unlock(&port->mutex);
 	/* Right now the tty_port set is done outside of the close_end helper
-	   as we don't yet have everyone using refcounts */	
+	   as we don't yet have everyone using refcounts */
 	tty_port_close_end(port, tty);
 	tty_port_tty_set(port, NULL);
 }
@@ -1521,7 +1521,7 @@ static int mxser_ioctl_special(unsigned int cmd, void __user *argp)
 				mutex_lock(&port->mutex);
 				if (!ip->ioaddr)
 					goto copy;
-				
+
 				tty = tty_port_tty_get(port);
 
 				if (!tty)

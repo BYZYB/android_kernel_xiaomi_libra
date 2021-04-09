@@ -598,7 +598,7 @@ err_remove_sysfs:
 err_clear_processor:
 	/*
 	 * processor_device_array is not cleared to allow checks for buggy BIOS
-	 */ 
+	 */
 	per_cpu(processors, pr->id) = NULL;
 err_free_cpumask:
 	free_cpumask_var(pr->throttling.shared_cpu_map);

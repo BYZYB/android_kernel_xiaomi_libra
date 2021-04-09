@@ -15,8 +15,8 @@
 #ifndef UART_SB105X_H
 #define UART_SB105X_H
 
-/* 
- * option register 
+/*
+ * option register
  */
 
 /* Device Information Register */
@@ -127,7 +127,7 @@
 
 #define SB105X_LCR		3	/* Out: Line Control Register */
 /*
- *  * Note: if the word length is 5 bits (SB105X_LCR_WLEN5), then setting 
+ *  * Note: if the word length is 5 bits (SB105X_LCR_WLEN5), then setting
  *  * SB105X_LCR_STOP will select 1.5 stop bits, not 2 stop bits.
  */
 #define SB105X_LCR_DLAB   	0x80  /* Divisor Latch Enable */
@@ -292,4 +292,4 @@
 
 #define SB105X_PUT_PSR(port,v)	outb((v),(port)->iobase + SB105X_PSR )
 
-#endif 
+#endif

@@ -92,7 +92,7 @@
 	nop
 	nop
 	.endif
-	
+
 	# disable the dcache
 	and	~CHCTR_DCEN,d0
 	movhu	d0,(a0)

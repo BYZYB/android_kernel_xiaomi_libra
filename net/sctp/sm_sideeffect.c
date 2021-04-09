@@ -416,7 +416,7 @@ void sctp_generate_proto_unreach_event(unsigned long data)
 	struct sctp_association *asoc = transport->asoc;
 	struct sock *sk = asoc->base.sk;
 	struct net *net = sock_net(sk);
-	
+
 	sctp_bh_lock_sock(sk);
 	if (sock_owned_by_user(sk)) {
 		SCTP_DEBUG_PRINTK("%s:Sock is busy.\n", __func__);

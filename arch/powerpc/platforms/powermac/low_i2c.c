@@ -213,7 +213,7 @@ static u8 kw_i2c_wait_interrupt(struct pmac_i2c_host_kw *host)
 {
 	int i, j;
 	u8 isr;
-	
+
 	for (i = 0; i < 1000; i++) {
 		isr = kw_read_reg(reg_isr) & KW_I2C_IRQ_MASK;
 		if (isr != 0)
@@ -274,7 +274,7 @@ static void kw_i2c_handle_interrupt(struct pmac_i2c_host_kw *host, u8 isr)
 	if (isr & KW_I2C_IRQ_ADDR) {
 		ack = kw_read_reg(reg_status);
 		if (host->state != state_addr) {
-			WRONG_STATE("KW_I2C_IRQ_ADDR"); 
+			WRONG_STATE("KW_I2C_IRQ_ADDR");
 			kw_i2c_do_stop(host, -EIO);
 		}
 		if ((ack & KW_I2C_STAT_LAST_AAK) == 0) {
@@ -319,7 +319,7 @@ static void kw_i2c_handle_interrupt(struct pmac_i2c_host_kw *host, u8 isr)
 			} else
 				kw_i2c_do_stop(host, 0);
 		} else {
-			WRONG_STATE("KW_I2C_IRQ_DATA"); 
+			WRONG_STATE("KW_I2C_IRQ_DATA");
 			if (host->state != state_stop)
 				kw_i2c_do_stop(host, -EIO);
 		}
@@ -533,7 +533,7 @@ static struct pmac_i2c_host_kw *__init kw_i2c_host_init(struct device_node *np)
 	case 25:
 		host->speed = KW_I2C_MODE_25KHZ;
 		break;
-	}	
+	}
 	host->irq = irq_of_parse_and_map(np, 0);
 	if (host->irq == NO_IRQ)
 		printk(KERN_WARNING

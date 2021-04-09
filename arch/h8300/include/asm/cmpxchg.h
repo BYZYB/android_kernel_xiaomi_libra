@@ -34,7 +34,7 @@ static inline unsigned long __xchg(unsigned long x, volatile void * ptr, int siz
     : "=&r" (tmp) : "r" (x), "m" (*__xg(ptr)) : "memory");
     break;
   default:
-    tmp = 0;	  
+    tmp = 0;
   }
   local_irq_restore(flags);
   return tmp;

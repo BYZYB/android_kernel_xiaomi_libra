@@ -197,7 +197,7 @@ struct nfsd4_lockt {
 	struct nfsd4_lock_denied  	lt_denied;
 };
 
- 
+
 struct nfsd4_locku {
 	u32             lu_type;
 	u32             lu_seqid;
@@ -270,7 +270,7 @@ struct nfsd4_read {
 	u32		rd_length;          /* request */
 	int		rd_vlen;
 	struct file     *rd_filp;
-	
+
 	struct svc_rqst *rd_rqstp;          /* response */
 	struct svc_fh * rd_fhp;             /* response */
 };

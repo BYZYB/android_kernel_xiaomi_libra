@@ -153,7 +153,7 @@ static __be32 *read_buf(struct nfsd4_compoundargs *argp, u32 nbytes)
 		p = argp->tmpp = kmalloc(nbytes, GFP_KERNEL);
 		if (!p)
 			return NULL;
-		
+
 	}
 	/*
 	 * The following memcpy is safe because read_buf is always
@@ -665,7 +665,7 @@ static __be32
 nfsd4_decode_lockt(struct nfsd4_compoundargs *argp, struct nfsd4_lockt *lockt)
 {
 	DECODE_HEAD;
-		        
+
 	READ_BUF(32);
 	READ32(lockt->lt_type);
 	if((lockt->lt_type < NFS4_READ_LT) || (lockt->lt_type > NFS4_WRITEW_LT))
@@ -916,13 +916,13 @@ static __be32
 nfsd4_decode_open_confirm(struct nfsd4_compoundargs *argp, struct nfsd4_open_confirm *open_conf)
 {
 	DECODE_HEAD;
-		    
+
 	status = nfsd4_decode_stateid(argp, &open_conf->oc_req_stateid);
 	if (status)
 		return status;
 	READ_BUF(4);
 	READ32(open_conf->oc_seqid);
-						        
+
 	DECODE_TAIL;
 }
 
@@ -930,7 +930,7 @@ static __be32
 nfsd4_decode_open_downgrade(struct nfsd4_compoundargs *argp, struct nfsd4_open_downgrade *open_down)
 {
 	DECODE_HEAD;
-		    
+
 	status = nfsd4_decode_stateid(argp, &open_down->od_stateid);
 	if (status)
 		return status;
@@ -2880,7 +2880,7 @@ nfsd4_encode_read(struct nfsd4_compoundres *resp, __be32 nfserr,
 	u32 eof;
 	int v;
 	struct page *page;
-	unsigned long maxcount; 
+	unsigned long maxcount;
 	long len;
 	__be32 *p;
 
@@ -3043,7 +3043,7 @@ nfsd4_encode_readdir(struct nfsd4_compoundres *resp, __be32 nfserr, struct nfsd4
 			      &readdir->common, nfsd4_encode_dirent);
 	if (nfserr == nfs_ok &&
 	    readdir->common.err == nfserr_toosmall &&
-	    readdir->buffer == page) 
+	    readdir->buffer == page)
 		nfserr = nfserr_toosmall;
 	if (nfserr)
 		goto err_no_verf;
@@ -3566,9 +3566,9 @@ status:
 	*statp = op->status;
 }
 
-/* 
- * Encode the reply stored in the stateowner reply cache 
- * 
+/*
+ * Encode the reply stored in the stateowner reply cache
+ *
  * XDR note: do not encode rp->rp_buflen: the buffer contains the
  * previously sent already encoded operation.
  *
@@ -3647,7 +3647,7 @@ nfs4svc_encode_compoundres(struct svc_rqst *rqstp, __be32 *p, struct nfsd4_compo
 	p += XDR_QUADLEN(resp->taglen);
 	*p++ = htonl(resp->opcnt);
 
-	if (rqstp->rq_res.page_len) 
+	if (rqstp->rq_res.page_len)
 		iov = &rqstp->rq_res.tail[0];
 	else
 		iov = &rqstp->rq_res.head[0];

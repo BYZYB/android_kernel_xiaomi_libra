@@ -387,7 +387,7 @@ static void wm8996_set_retune_mobile(struct snd_soc_codec *codec, int block)
 		wm8996->rx_rate[iface]);
 
 	/* The EQ will be disabled while reconfiguring it, remember the
-	 * current configuration. 
+	 * current configuration.
 	 */
 	save = snd_soc_read(codec, base);
 	save &= WM8996_DSP1RX_EQ_ENA;
@@ -2575,14 +2575,14 @@ static void wm8996_retune_mobile_pdata(struct snd_soc_codec *codec)
 
 		/* Expand the array... */
 		t = krealloc(wm8996->retune_mobile_texts,
-			     sizeof(char *) * 
+			     sizeof(char *) *
 			     (wm8996->num_retune_mobile_texts + 1),
 			     GFP_KERNEL);
 		if (t == NULL)
 			continue;
 
 		/* ...store the new entry... */
-		t[wm8996->num_retune_mobile_texts] = 
+		t[wm8996->num_retune_mobile_texts] =
 			pdata->retune_mobile_cfgs[i].name;
 
 		/* ...and remember the new version. */

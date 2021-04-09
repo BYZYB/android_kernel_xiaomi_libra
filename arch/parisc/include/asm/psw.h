@@ -49,7 +49,7 @@
 #ifdef CONFIG_64BIT
 #  define USER_PSW_HI_MASK	PSW_HI_CB
 #  define WIDE_PSW		PSW_W
-#else 
+#else
 #  define WIDE_PSW		0
 #endif
 

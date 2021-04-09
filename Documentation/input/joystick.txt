@@ -81,7 +81,7 @@ mknod input/event1 c 13 65
 mknod input/event2 c 13 66
 mknod input/event3 c 13 67
 
-2.4 Modules needed 
+2.4 Modules needed
 ~~~~~~~~~~~~~~~~~~
   For all joystick drivers to function, you'll need the userland interface
 module in kernel, either loaded or compiled in:
@@ -102,7 +102,7 @@ discipline module loaded and the inputattach utility started:
 usually you'll have an analog joystick:
 
 	modprobe analog
-	
+
   For automatic module loading, something like this might work - tailor to
 your needs:
 
@@ -246,10 +246,10 @@ module. All currently supported joysticks:
 * Microsoft SideWinder 3D Pro
 * Microsoft SideWinder Force Feedback Pro
 * Microsoft SideWinder Force Feedback Wheel
-* Microsoft SideWinder FreeStyle Pro 
+* Microsoft SideWinder FreeStyle Pro
 * Microsoft SideWinder GamePad (up to four, chained)
-* Microsoft SideWinder Precision Pro 
-* Microsoft SideWinder Precision Pro USB 
+* Microsoft SideWinder Precision Pro
+* Microsoft SideWinder Precision Pro USB
 
   are autodetected, and thus no module parameters are needed.
 
@@ -261,7 +261,7 @@ joystick will also re-center itself, taking the position it was in during
 this time as a new center position. Use it if you want, but think first.
 
   The SideWinder Standard is not a digital joystick, and thus is supported
-by the analog driver described above. 
+by the analog driver described above.
 
 3.3 Logitech ADI devices
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -354,13 +354,13 @@ the:
 
   Up to two of these can be used on a single gameport, using an Y-cable.
 
-3.8 Genius Digital joysticks 
+3.8 Genius Digital joysticks
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   The Genius digitally communicating joysticks are supported by the gf2k.c
 module. This includes:
 
-* Genius Flight2000 F-23 joystick 
-* Genius Flight2000 F-31 joystick 
+* Genius Flight2000 F-23 joystick
+* Genius Flight2000 F-31 joystick
 * Genius G-09D gamepad
 
   Other Genius digital joysticks are not supported yet, but support can be
@@ -372,9 +372,9 @@ added fairly easily.
 interact.c module. This includes:
 
 * InterAct HammerHead/FX gamepad
-* InterAct ProPad8 gamepad 
+* InterAct ProPad8 gamepad
 
-  Other InterAct digital joysticks are not supported yet, but support can be 
+  Other InterAct digital joysticks are not supported yet, but support can be
 added fairly easily.
 
 3.10 PDPI Lightning 4 gamecards
@@ -464,7 +464,7 @@ recentering of the spaceorb, moving the zero point to the position in which
 the ball is at the moment of pressing the button. So, think first before
 you bind it to some other function.
 
-SpaceTec SpaceBall 2003 FLX and 3003 FLX are not supported yet. 
+SpaceTec SpaceBall 2003 FLX and 3003 FLX are not supported yet.
 
 3.19 Logitech SWIFT devices
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -499,7 +499,7 @@ models, the additional buttons on the 'Plus' versions are not supported yet.
 command. After that the Magellan will be detected, initialized, will beep,
 and the /dev/input/jsX device should become usable.
 
-3.21 I-Force devices 
+3.21 I-Force devices
 ~~~~~~~~~~~~~~~~~~~~
   All I-Force devices are supported by the iforce module. This includes:
 
@@ -507,7 +507,7 @@ and the /dev/input/jsX device should become usable.
 * AVB Top Shot Pegasus
 * AVB Top Shot Force Feedback Racing Wheel
 * Logitech WingMan Force
-* Logitech WingMan Force Wheel 
+* Logitech WingMan Force Wheel
 * Guillemot Race Leader Force Feedback
 * Guillemot Force Feedback Racing Wheel
 * Thrustmaster Motor Sport GT
@@ -528,7 +528,7 @@ isn't needed.
 module, rather by hid. Force feedback is not supported for those devices.
 Logitech gamepads are also hid devices.
 
-3.22 Gravis Stinger gamepad 
+3.22 Gravis Stinger gamepad
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
   The Gravis Stinger serial port gamepad, designed for use with laptop
 computers, is supported by the stinger.c module. To use it, attach the

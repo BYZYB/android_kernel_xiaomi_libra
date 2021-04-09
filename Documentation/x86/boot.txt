@@ -72,7 +72,7 @@ zImage kernels, typically looks like:
 09A000	+------------------------+
 	|  Command line		 |
 	|  Stack/heap		 |	For use by the kernel real-mode code.
-098000	+------------------------+	
+098000	+------------------------+
 	|  Kernel setup		 |	The kernel real-mode code.
 090200	+------------------------+
 	|  Kernel boot sector	 |	The kernel legacy boot sector.
@@ -84,7 +84,7 @@ zImage kernels, typically looks like:
 	|  Reserved for MBR/BIOS |
 000800	+------------------------+
 	|  Typically used by MBR |
-000600	+------------------------+ 
+000600	+------------------------+
 	|  BIOS use only	 |
 000000	+------------------------+
 
@@ -124,7 +124,7 @@ memory layout like the following is suggested:
 	|  Command line		 |	(Can also be below the X+10000 mark)
 X+10000	+------------------------+
 	|  Stack/heap		 |	For use by the kernel real-mode code.
-X+08000	+------------------------+	
+X+08000	+------------------------+
 	|  Kernel setup		 |	The kernel real-mode code.
 	|  Kernel boot sector	 |	The kernel legacy boot sector.
 X       +------------------------+
@@ -133,7 +133,7 @@ X       +------------------------+
 	|  Reserved for MBR/BIOS |
 000800	+------------------------+
 	|  Typically used by MBR |
-000600	+------------------------+ 
+000600	+------------------------+
 	|  BIOS use only	 |
 000000	+------------------------+
 
@@ -437,7 +437,7 @@ Protocol:	2.00-2.01
   itself.
 
   The unit is bytes starting with the beginning of the boot sector.
-  
+
   This field is can be ignored when the protocol is 2.02 or higher, or
   if the real-mode code is loaded at 0x90000.
 
@@ -659,7 +659,7 @@ Protocol:	2.08+
   (magic numbers 1F 8B or 1F 9E), bzip2 (magic number 42 5A), LZMA
   (magic number 5D 00), and XZ (magic number FD 37).  The uncompressed
   payload is currently always ELF (magic number 7F 45 4C 46).
-  
+
 Field name:	payload_length
 Type:		read
 Offset/size:	0x24c/4
@@ -770,7 +770,7 @@ command line is entered using the following protocol:
 	At offset 0x0022 (word), "cmd_line_offset", enter the offset
 	of the kernel command line (relative to the start of the
 	real-mode kernel).
-	
+
 	The kernel command line *must* be within the memory region
 	covered by setup_move_size, so you may need to adjust this
 	field.

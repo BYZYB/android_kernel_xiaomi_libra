@@ -326,7 +326,7 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
 
 	DBG("smp_prepare_cpus\n");
 
-	/* 
+	/*
 	 * setup_cpu may need to be called on the boot cpu. We havent
 	 * spun any cpus up but lets be paranoid.
 	 */
@@ -690,7 +690,7 @@ void __init smp_cpus_done(unsigned int max_cpus)
 	alloc_cpumask_var(&old_mask, GFP_NOWAIT);
 	cpumask_copy(old_mask, tsk_cpus_allowed(current));
 	set_cpus_allowed_ptr(current, cpumask_of(boot_cpuid));
-	
+
 	if (smp_ops && smp_ops->setup_cpu)
 		smp_ops->setup_cpu(boot_cpuid);
 

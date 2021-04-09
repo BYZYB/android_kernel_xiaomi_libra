@@ -12,17 +12,17 @@ Again:   2005-Sep-19
 
 1.1. Basic concept or 'What is an URB?'
 
-The basic idea of the new driver is message passing, the message itself is 
-called USB Request Block, or URB for short. 
+The basic idea of the new driver is message passing, the message itself is
+called USB Request Block, or URB for short.
 
-- An URB consists of all relevant information to execute any USB transaction 
-  and deliver the data and status back. 
+- An URB consists of all relevant information to execute any USB transaction
+  and deliver the data and status back.
 
-- Execution of an URB is inherently an asynchronous operation, i.e. the 
+- Execution of an URB is inherently an asynchronous operation, i.e. the
   usb_submit_urb(urb) call returns immediately after it has successfully
   queued the requested action.
 
-- Transfers for one URB can be canceled with usb_unlink_urb(urb) at any time. 
+- Transfers for one URB can be canceled with usb_unlink_urb(urb) at any time.
 
 - Each URB has a completion handler, which is called after the action
   has been successfully completed or canceled. The URB also contains a
@@ -102,18 +102,18 @@ deallocated when it is no longer in use.
 
 1.4. What has to be filled in?
 
-Depending on the type of transaction, there are some inline functions 
+Depending on the type of transaction, there are some inline functions
 defined in <linux/usb.h> to simplify the initialization, such as
 fill_control_urb() and fill_bulk_urb().  In general, they need the usb
 device pointer, the pipe (usual format from usb.h), the transfer buffer,
-the desired transfer length, the completion  handler, and its context. 
+the desired transfer length, the completion  handler, and its context.
 Take a look at the some existing drivers to see how they're used.
 
 Flags:
 For ISO there are two startup behaviors: Specified start_frame or ASAP.
 For ASAP set URB_ISO_ASAP in transfer_flags.
 
-If short packets should NOT be tolerated, set URB_SHORT_NOT_OK in 
+If short packets should NOT be tolerated, set URB_SHORT_NOT_OK in
 transfer_flags.
 
 
@@ -201,7 +201,7 @@ I.e., it gets the URB that caused the completion call, plus the
 register values at the time of the corresponding interrupt (if any).
 In the completion handler, you should have a look at urb->status to
 detect any USB errors. Since the context parameter is included in the URB,
-you can pass information to the completion handler. 
+you can pass information to the completion handler.
 
 Note that even when an error (or unlink) is reported, data may have been
 transferred.  That's because USB transfers are packetized; it might take
@@ -232,10 +232,10 @@ ISO_ASAP scheduling is used, urb->start_frame is also updated.
 
 For each entry you have to specify the data offset for this frame (base is
 transfer_buffer), and the length you want to write/expect to read.
-After completion, actual_length contains the actual transferred length and 
+After completion, actual_length contains the actual transferred length and
 status contains the resulting status for the ISO transfer for this frame.
 It is allowed to specify a varying length from frame to frame (e.g. for
-audio synchronisation/adaptive transfer rates). You can also use the length 
+audio synchronisation/adaptive transfer rates). You can also use the length
 0 to omit one or more frames (striping).
 
 For scheduling you can choose your own start frame or ISO_ASAP. As explained

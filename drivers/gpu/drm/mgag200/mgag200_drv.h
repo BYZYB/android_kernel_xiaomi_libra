@@ -1,6 +1,6 @@
 /*
  * Copyright 2010 Matt Turner.
- * Copyright 2012 Red Hat 
+ * Copyright 2012 Red Hat
  *
  * This file is subject to the terms and conditions of the GNU General
  * Public License version 2. See the file COPYING in the main

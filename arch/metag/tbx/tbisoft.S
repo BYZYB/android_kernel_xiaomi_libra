@@ -35,7 +35,7 @@ ___TBISwitchTail:
 	B	$LSwitchTail
 	.size	___TBISwitchTail,.-___TBISwitchTail
 
-/* 
+/*
  * TBIRES __TBIJumpX( TBIX64 ArgsA, PTBICTX *rpSaveCtx, int TrigsMask,
  *                                    void (*fnMain)(), void *pStack );
  *
@@ -62,7 +62,7 @@ ___TBIJumpX:
  *	A0FrP, D0RtP, D0.5, D0.6, D0.7      - Saved on stack
  *	A1GbP is global to all soft threads so not virtualised
  *	A0StP is then saved as the base of the TBICTX of the thread
- *	
+ *
  */
 	.text
 	.balign	4
@@ -72,7 +72,7 @@ ___TBISwitch:
 	XORS	D0Re0,D0Re0,D0Re0		/* Set ZERO flag */
 $LSwitchStart:
 	MOV	D0FrT,A0FrP			/* Boing entry sequence */
-	ADD	A0FrP,A0StP,#0			
+	ADD	A0FrP,A0StP,#0
 	SETL	[A0StP+#8++],D0FrT,D1RtP
 /*
  * Save current frame state - we save all regs because we don't want
@@ -151,7 +151,7 @@ ___TBIJump:
 	XOR	D0Re0,D0Re0,D0Re0		/* D0Re0 = 0 */
 	MOV	A0StP,D0Ar6			/* Stack = Frame */
 	SWAP	D0Re0,TXMASKI			/* D0Re0 <-> TXMASKI */
-	MOV	A0FrP,D0Ar6			
+	MOV	A0FrP,D0Ar6
 	MOVT	A1LbP,#HI(__exit)
 	ADD	A1LbP,A1LbP,#LO(__exit)
 	MOV	D1RtP,A1LbP			/* D1RtP = __exit */
@@ -162,7 +162,7 @@ ___TBIJump:
 /*
  *	PTBICTX __TBISwitchInit( void *pStack, int (*fnMain)(),
  *                             .... 4 extra 32-bit args .... );
- *                             
+ *
  * Generate a new soft thread context ready for it's first outing.
  *
  *	D1Ar1 - Region of memory to be used as the new soft thread stack

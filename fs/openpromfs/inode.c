@@ -187,7 +187,7 @@ static struct dentry *openpromfs_lookup(struct inode *dir, struct dentry *dentry
 	struct inode *inode;
 	unsigned int ino;
 	int len;
-	
+
 	BUG_ON(oi->type != op_inode_node);
 
 	dp = oi->u.node;
@@ -271,7 +271,7 @@ static int openpromfs_readdir(struct file * filp, void * dirent, filldir_t filld
 	int i;
 
 	mutex_lock(&op_mutex);
-	
+
 	ino = inode->i_ino;
 	i = filp->f_pos;
 	switch (i) {
@@ -285,7 +285,7 @@ static int openpromfs_readdir(struct file * filp, void * dirent, filldir_t filld
 		if (filldir(dirent, "..", 2, i,
 			    (dp->parent == NULL ?
 			     OPENPROM_ROOT_INO :
-			     dp->parent->unique_id), DT_DIR) < 0) 
+			     dp->parent->unique_id), DT_DIR) < 0)
 			goto out;
 		i++;
 		filp->f_pos++;

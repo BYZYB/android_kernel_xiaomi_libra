@@ -401,7 +401,7 @@ static void wm8958_dsp_apply(struct snd_soc_codec *codec, int path, int start)
 			return;
 
 		snd_soc_update_bits(codec, WM8958_DSP2_CONFIG,
-				    WM8958_MBC_ENA, 0);	
+				    WM8958_MBC_ENA, 0);
 		snd_soc_write(codec, WM8958_DSP2_EXECCONTROL,
 			      WM8958_DSP2_STOP);
 		snd_soc_update_bits(codec, WM8958_DSP2_PROGRAM,

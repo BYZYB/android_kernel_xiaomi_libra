@@ -329,7 +329,7 @@ static char* dc390_p0_str[] = {
        "dc390_MsgIn_0",
        "dc390_Nop_1"
        };
-     
+
 static char* dc390_p1_str[] = {
        "dc390_DataOutPhase",
        "dc390_DataInPhase",
@@ -341,14 +341,14 @@ static char* dc390_p1_str[] = {
        "dc390_MsgInPhase",
        "dc390_Nop_1"
        };
-#endif   
+#endif
 
 static u8  dc390_eepromBuf[MAX_ADAPTER_NUM][EE_LEN];
 static u8  dc390_clock_period1[] = {4, 5, 6, 7, 8, 10, 13, 20};
 static u8  dc390_clock_speed[] = {100,80,67,57,50, 40, 31, 20};
 
 /***********************************************************************
- * Functions for the management of the internal structures 
+ * Functions for the management of the internal structures
  * (DCBs, SRBs, Queueing)
  *
  **********************************************************************/
@@ -420,7 +420,7 @@ static __inline__ void dc390_Going_remove (struct dc390_dcb* pDCB, struct dc390_
 	struct dc390_srb* psrb = pDCB->pGoingSRB;
 	while (psrb && psrb->pNextSRB != pSRB)
 	  psrb = psrb->pNextSRB;
-	if (!psrb) 
+	if (!psrb)
 	  { printk (KERN_ERR "DC390: Remove non-ex. SRB %p from Going!\n", pSRB); return; }
 	psrb->pNextSRB = pSRB->pNextSRB;
 	if (pSRB == pDCB->pGoingLast)
@@ -541,7 +541,7 @@ dc390_StartSCSI( struct dc390_acb* pACB, struct dc390_dcb* pDCB, struct dc390_sr
 
     /* Don't disconnect on AUTO_REQSENSE, cause it might be an
      * Contingent Allegiance Condition (6.6), where no tags should be used.
-     * All other have to be allowed to disconnect to prevent Incorrect 
+     * All other have to be allowed to disconnect to prevent Incorrect
      * Initiator Connection (6.8.2/6.5.2) */
     /* Changed KG, 99/06/06 */
     if (! (pSRB->SRBFlag & AUTO_REQSENSE))
@@ -576,7 +576,7 @@ dc390_StartSCSI( struct dc390_acb* pACB, struct dc390_dcb* pDCB, struct dc390_sr
     pSRB->SRBState = SRB_START_;
 
     if (try_sync_nego)
-      { 
+      {
 	u8 Sync_Off = pDCB->SyncOffset;
         DEBUG0(printk (KERN_INFO "DC390: NEW Sync Nego code triggered (%i %i)\n", pDCB->TargetID, pDCB->TargetLUN));
 	pSRB->MsgOutBuf[0] = EXTENDED_MESSAGE;
@@ -604,7 +604,7 @@ dc390_StartSCSI( struct dc390_acb* pACB, struct dc390_dcb* pDCB, struct dc390_sr
 	    DC390_write8 (ScsiFifo, 0);
 	    DEBUG1(printk (KERN_DEBUG "DC390: AutoReqSense !\n"));
 	  }
-	else	/* write cmnd to bus */ 
+	else	/* write cmnd to bus */
 	  {
 	    u8 *ptr; u8 i;
 	    ptr = (u8 *)scmd->cmnd;
@@ -679,7 +679,7 @@ DC390_Interrupt(void *dev_id)
 	printk ("DC390: Illegal Operation detected (%08x)!\n", dc390_laststatus);
 	dc390_dumpinfo (pACB, pACB->pActiveDCB, pACB->pActiveDCB->pActiveSRB);
     }
-	
+
     else if (istatus &  INVALID_CMD)
     {
 	printk ("DC390: Invalid Command detected (%08x)!\n", dc390_laststatus);
@@ -805,7 +805,7 @@ dc390_DataOut_0(struct dc390_acb* pACB, struct dc390_srb* pSRB, u8 *psstatus)
     {
 	    DC390_write8 (DMA_Cmd, WRITE_DIRECTION+DMA_IDLE_CMD);
 	    DC390_write8 (ScsiCmd, CLEAR_FIFO_CMD);
-    }	    
+    }
 }
 
 static void
@@ -1001,7 +1001,7 @@ dc390_MsgIn_reject (struct dc390_acb* pACB, struct dc390_srb* pSRB)
 static void
 dc390_EnableMsgOut_Abort ( struct dc390_acb* pACB, struct dc390_srb* pSRB )
 {
-    pSRB->MsgOutBuf[0] = ABORT; 
+    pSRB->MsgOutBuf[0] = ABORT;
     pSRB->MsgCnt = 1; DC390_ENABLE_MSGOUT;
     pSRB->pSRBDCB->DCBFlag &= ~ABORT_DEV_;
 }
@@ -1042,11 +1042,11 @@ dc390_MsgIn_QTag (struct dc390_acb* pACB, struct dc390_dcb* pDCB, s8 tag)
 
 
 /* set async transfer mode */
-static void 
+static void
 dc390_MsgIn_set_async (struct dc390_acb* pACB, struct dc390_srb* pSRB)
 {
   struct dc390_dcb* pDCB = pSRB->pSRBDCB;
-  if (!(pSRB->SRBState & DO_SYNC_NEGO)) 
+  if (!(pSRB->SRBState & DO_SYNC_NEGO))
     printk (KERN_INFO "DC390: Target %i initiates Non-Sync?\n", pDCB->TargetID);
   pSRB->SRBState &= ~DO_SYNC_NEGO;
   pDCB->SyncMode &= ~(SYNC_ENABLE+SYNC_NEGO_DONE);
@@ -1068,10 +1068,10 @@ dc390_MsgIn_set_sync (struct dc390_acb* pACB, struct dc390_srb* pSRB)
   struct dc390_dcb* pDCB = pSRB->pSRBDCB;
   u8 oldsyncperiod = pDCB->SyncPeriod;
   u8 oldsyncoffset = pDCB->SyncOffset;
-  
+
   if (!(pSRB->SRBState & DO_SYNC_NEGO))
     {
-      printk (KERN_INFO "DC390: Target %i initiates Sync: %ins %i ... answer ...\n", 
+      printk (KERN_INFO "DC390: Target %i initiates Sync: %ins %i ... answer ...\n",
 	      pDCB->TargetID, pSRB->MsgInBuf[3]<<2, pSRB->MsgInBuf[4]);
 
       /* reject */
@@ -1080,7 +1080,7 @@ dc390_MsgIn_set_sync (struct dc390_acb* pACB, struct dc390_srb* pSRB)
 
       /* Reply with corrected SDTR Message */
       if (pSRB->MsgInBuf[4] > 15)
-	{ 
+	{
 	  printk (KERN_INFO "DC390: Lower Sync Offset to 15\n");
 	  pSRB->MsgInBuf[4] = 15;
 	}
@@ -1121,21 +1121,21 @@ dc390_MsgIn_set_sync (struct dc390_acb* pACB, struct dc390_srb* pSRB)
 
   pDCB->CtrlR3 = bval;
   pDCB->SyncPeriod = (u8)wval1;
-  
+
   if ((oldsyncperiod != wval1 || oldsyncoffset != pDCB->SyncOffset) && pDCB->TargetLUN == 0)
     {
       if (! (bval & FAST_SCSI)) wval1++;
-      printk (KERN_INFO "DC390: Target %i: Sync transfer %i.%1i MHz, Offset %i\n", pDCB->TargetID, 
+      printk (KERN_INFO "DC390: Target %i: Sync transfer %i.%1i MHz, Offset %i\n", pDCB->TargetID,
 	      40/wval1, ((40%wval1)*10+wval1/2)/wval1, pDCB->SyncOffset & 0x0f);
     }
-  
+
   dc390_reprog (pACB, pDCB);
 }
 
 
 /* handle RESTORE_PTR */
 /* This doesn't look very healthy... to-be-fixed */
-static void 
+static void
 dc390_restore_ptr (struct dc390_acb* pACB, struct dc390_srb* pSRB)
 {
     struct scsi_cmnd *pcmd = pSRB->pcmd;
@@ -1177,7 +1177,7 @@ dc390_restore_ptr (struct dc390_acb* pACB, struct dc390_srb* pSRB)
 }
 
 
-/* According to the docs, the AM53C974 reads the message and 
+/* According to the docs, the AM53C974 reads the message and
  * generates a Successful Operation IRQ before asserting ACK for
  * the last byte (how does it know whether it's the last ?) */
 /* The old code handled it in another way, indicating, that on
@@ -1188,7 +1188,7 @@ dc390_restore_ptr (struct dc390_acb* pACB, struct dc390_srb* pSRB)
 /* Check if the message is complete */
 static u8 __inline__
 dc390_MsgIn_complete (u8 *msgbuf, u32 len)
-{ 
+{
   if (*msgbuf == EXTENDED_MESSAGE)
   {
 	if (len < 2) return 0;
@@ -1217,24 +1217,24 @@ dc390_MsgIn_0( struct dc390_acb* pACB, struct dc390_srb* pSRB, u8 *psstatus)
       {
 	DEBUG0 (printk (KERN_INFO "DC390: MsgIn:"); dc390_printMsg (pSRB->MsgInBuf, pACB->MsgLen));
 	/* Now eval the msg */
-	switch (pSRB->MsgInBuf[0]) 
+	switch (pSRB->MsgInBuf[0])
 	  {
-	  case DISCONNECT: 
+	  case DISCONNECT:
 	    pSRB->SRBState = SRB_DISCONNECT; break;
-	    
+
 	  case SIMPLE_QUEUE_TAG:
 	  case HEAD_OF_QUEUE_TAG:
 	  case ORDERED_QUEUE_TAG:
 	    pSRB = dc390_MsgIn_QTag (pACB, pDCB, pSRB->MsgInBuf[1]);
 	    break;
-	    
-	  case MESSAGE_REJECT: 
+
+	  case MESSAGE_REJECT:
 	    DC390_write8 (ScsiCmd, RESET_ATN_CMD);
 	    pDCB->NegoPeriod = 50; /* 200ns <=> 5 MHz */
 	    if( pSRB->SRBState & DO_SYNC_NEGO)
 	      dc390_MsgIn_set_async (pACB, pSRB);
 	    break;
-	    
+
 	  case EXTENDED_MESSAGE:
 	    /* reject every extended msg but SDTR */
 	    if (pSRB->MsgInBuf[1] != 3 || pSRB->MsgInBuf[2] != EXTENDED_SDTR)
@@ -1246,13 +1246,13 @@ dc390_MsgIn_0( struct dc390_acb* pACB, struct dc390_srb* pSRB, u8 *psstatus)
 		else
 		  dc390_MsgIn_set_sync (pACB, pSRB);
 	      }
-	    
+
 	    // nothing has to be done
 	  case COMMAND_COMPLETE: break;
-	    
+
 	    // SAVE POINTER may be ignored as we have the struct dc390_srb* associated with the
 	    // scsi command. Thanks, Gerard, for pointing it out.
-	  case SAVE_POINTERS: 
+	  case SAVE_POINTERS:
 	    pSRB->Saved_Ptr = pSRB->TotalXferredLen;
 	    break;
 	    // The device might want to restart transfer with a RESTORE
@@ -1264,7 +1264,7 @@ dc390_MsgIn_0( struct dc390_acb* pACB, struct dc390_srb* pSRB, u8 *psstatus)
 	    // reject unknown messages
 	  default: dc390_MsgIn_reject (pACB, pSRB);
 	  }
-	
+
 	/* Clear counter and MsgIn state */
 	pSRB->SRBState &= ~SRB_MSGIN;
 	pACB->MsgLen = 0;
@@ -1454,7 +1454,7 @@ mop1:
 	if (pDCB->SyncOffset & 0x0f)
 		    DC390_write8 (ScsiFifo, pDCB->SyncOffset);
 	else
-		    DC390_write8 (ScsiFifo, SYNC_NEGO_OFFSET);		    
+		    DC390_write8 (ScsiFifo, SYNC_NEGO_OFFSET);
 	pSRB->SRBState |= DO_SYNC_NEGO;
 	DC390_write8 (ScsiCmd, INFO_XFER_CMD);
     }
@@ -1911,7 +1911,7 @@ static int DC390_queuecommand_lck(struct scsi_cmnd *cmd,
 	srb->pSRBDCB = dcb;
 	srb->pcmd = cmd;
 	cmd->host_scribble = (char *)srb;
-    
+
 	srb->SGIndex = 0;
 	srb->AdaptStatus = 0;
 	srb->TargetStatus = 0;
@@ -1953,7 +1953,7 @@ static void dc390_dumpinfo (struct dc390_acb* pACB, struct dc390_dcb* pDCB, stru
     if (!pDCB) pDCB = pACB->pActiveDCB;
     if (!pSRB && pDCB) pSRB = pDCB->pActiveSRB;
 
-    if (pSRB) 
+    if (pSRB)
     {
 	printk ("DC390: SRB: Xferred %08lx, Remain %08lx, State %08x, Phase %02x\n",
 		pSRB->TotalXferredLen, pSRB->SGToBeXferLen, pSRB->SRBState,
@@ -1998,8 +1998,8 @@ static int DC390_abort(struct scsi_cmnd *cmd)
 
 	scmd_printk(KERN_WARNING, cmd, "DC390: Abort command\n");
 
-	/* abort() is too stupid for already sent commands at the moment. 
-	 * If it's called we are in trouble anyway, so let's dump some info 
+	/* abort() is too stupid for already sent commands at the moment.
+	 * If it's called we are in trouble anyway, so let's dump some info
 	 * into the syslog at least. (KG, 98/08/20,99/06/20) */
 	dc390_dumpinfo(pACB, pDCB, NULL);
 
@@ -2048,9 +2048,9 @@ static int DC390_bus_reset (struct scsi_cmnd *cmd)
 
 	dc390_ResetDevParam(pACB);
 	mdelay(1);
-	pACB->pScsiHost->last_reset = jiffies + 3*HZ/2 
+	pACB->pScsiHost->last_reset = jiffies + 3*HZ/2
 		+ HZ * dc390_eepromBuf[pACB->AdapterIndex][EE_DELAY];
-    
+
 	DC390_write8(ScsiCmd, CLEAR_FIFO_CMD);
 	DC390_read8(INT_Status);		/* Reset Pending INT */
 
@@ -2090,7 +2090,7 @@ static int dc390_slave_alloc(struct scsi_device *scsi_device)
 	} else {
 		pACB->pLastDCB->pNextDCB = pDCB;
 	}
-   
+
 	pDCB->pNextDCB = pACB->pLinkDCB;
 	pACB->pLastDCB = pDCB;
 
@@ -2099,8 +2099,8 @@ static int dc390_slave_alloc(struct scsi_device *scsi_device)
 	pDCB->TargetLUN = lun;
 
 	/*
-	 * Some values are for all LUNs: Copy them 
-	 * In a clean way: We would have an own structure for a SCSI-ID 
+	 * Some values are for all LUNs: Copy them
+	 * In a clean way: We would have an own structure for a SCSI-ID
 	 */
 	if (lun && (pDCB2 = dc390_findDCB(pACB, id, 0))) {
 		pDCB->DevMode = pDCB2->DevMode;
@@ -2108,7 +2108,7 @@ static int dc390_slave_alloc(struct scsi_device *scsi_device)
 		pDCB->SyncPeriod = pDCB2->SyncPeriod;
 		pDCB->SyncOffset = pDCB2->SyncOffset;
 		pDCB->NegoPeriod = pDCB2->NegoPeriod;
-      
+
 		pDCB->CtrlR3 = pDCB2->CtrlR3;
 		pDCB->CtrlR4 = pDCB2->CtrlR4;
 	} else {
@@ -2155,7 +2155,7 @@ static void dc390_slave_destroy(struct scsi_device *scsi_device)
 	pACB->scan_devices = 0;
 
 	BUG_ON(pDCB->GoingSRBCnt > 1);
-	
+
 	if (pDCB == pACB->pLinkDCB) {
 		if (pACB->pLastDCB == pDCB) {
 			pDCB->pNextDCB = NULL;
@@ -2176,8 +2176,8 @@ static void dc390_slave_destroy(struct scsi_device *scsi_device)
 		pACB->pLinkDCB = pDCB->pNextDCB;
 	if (pDCB == pACB->pDCBRunRobin)
 		pACB->pDCBRunRobin = pDCB->pNextDCB;
-	kfree(pDCB); 
-	
+	kfree(pDCB);
+
 	pACB->DCBCnt--;
 }
 
@@ -2197,7 +2197,7 @@ static int dc390_slave_configure(struct scsi_device *sdev)
 
 static struct scsi_host_template driver_template = {
 	.module			= THIS_MODULE,
-	.proc_name		= "tmscsim", 
+	.proc_name		= "tmscsim",
 	.name			= DC390_BANNER " V" DC390_VERSION,
 	.slave_alloc		= dc390_slave_alloc,
 	.slave_configure	= dc390_slave_configure,
@@ -2344,7 +2344,7 @@ static void dc390_check_eeprom(struct pci_dev *pdev, u8 index)
 
 	dc390_read_eeprom(pdev, ptr);
 	memcpy(dc390_eepromBuf[index], EEbuf, EE_ADAPT_SCSI_ID);
-	memcpy(&dc390_eepromBuf[index][EE_ADAPT_SCSI_ID], 
+	memcpy(&dc390_eepromBuf[index][EE_ADAPT_SCSI_ID],
 	       &EEbuf[REAL_EE_ADAPT_SCSI_ID], EE_LEN - EE_ADAPT_SCSI_ID);
 
 	dc390_eepromBuf[index][EE_DELAY] = interpd[dc390_eepromBuf[index][EE_DELAY]];
@@ -2366,7 +2366,7 @@ static void dc390_check_eeprom(struct pci_dev *pdev, u8 index)
 
 		speed = dc390_clock_speed[tmscsim[1]];
 		printk(KERN_INFO "DC390: Used defaults: AdaptID=%i, SpeedIdx=%i (%i.%i MHz), "
-		       "DevMode=0x%02x, AdaptMode=0x%02x, TaggedCmnds=%i (%i), DelayReset=%is\n", 
+		       "DevMode=0x%02x, AdaptMode=0x%02x, TaggedCmnds=%i (%i), DelayReset=%is\n",
 		       tmscsim[0], tmscsim[1], speed / 10, speed % 10,
 		       (u8)tmscsim[2], (u8)tmscsim[3], tmscsim[4], 2 << (tmscsim[4]), tmscsim[5]);
 	}
@@ -2391,19 +2391,19 @@ static void dc390_init_hw(struct dc390_acb *pACB, u8 index)
 
 	/* Reset Pending INT */
 	DC390_read8(INT_Status);
-	
+
 	/* 250ms selection timeout */
 	DC390_write8(Scsi_TimeOut, SEL_TIMEOUT);
-	
+
 	/* Conversion factor = 0 , 40MHz clock */
 	DC390_write8(Clk_Factor, CLK_FREQ_40MHZ);
-	
+
 	/* NOP cmd - clear command register */
 	DC390_write8(ScsiCmd, NOP_CMD);
-	
+
 	/* Enable Feature and SCSI-2 */
 	DC390_write8(CtrlReg2, EN_FEATURE+EN_SCSI2_CMD);
-	
+
 	/* Fast clock */
 	DC390_write8(CtrlReg3, FAST_CLK);
 
@@ -2411,7 +2411,7 @@ static void dc390_init_hw(struct dc390_acb *pACB, u8 index)
 	DC390_write8(CtrlReg4, pACB->glitch_cfg | /* glitch eater */
 		(dc390_eepromBuf[index][EE_MODE2] & ACTIVE_NEGATION) ?
 		 NEGATE_REQACKDATA : 0);
-	
+
 	/* Clear Transfer Count High: ID */
 	DC390_write8(CtcReg_High, 0);
 	DC390_write8(DMA_Cmd, DMA_IDLE_CMD);
@@ -2456,11 +2456,11 @@ static int dc390_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
 	shost->base = io_port;
 	shost->unique_id = io_port;
 	shost->last_reset = jiffies;
-	
+
 	pACB->pScsiHost = shost;
 	pACB->IOPortBase = (u16) io_port;
 	pACB->IRQLevel = pdev->irq;
-	
+
 	shost->max_id = 8;
 
 	if (shost->max_id - 1 ==
@@ -2503,7 +2503,7 @@ static int dc390_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
 	}
 
 	dc390_init_hw(pACB, dc390_adapterCnt);
-	
+
 	dc390_adapterCnt++;
 
 	pci_set_drvdata(pdev, shost);
@@ -2600,7 +2600,7 @@ module_exit(dc390_module_exit);
 
 #ifndef MODULE
 static int __init dc390_setup (char *str)
-{	
+{
 	int ints[8],i, im;
 
 	get_options(str, ARRAY_SIZE(ints), ints);

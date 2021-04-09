@@ -342,7 +342,7 @@ static int bfs_fill_super(struct super_block *s, void *data, int silent)
 	bfs_sb = (struct bfs_super_block *)sbh->b_data;
 	if (le32_to_cpu(bfs_sb->s_magic) != BFS_MAGIC) {
 		if (!silent)
-			printf("No BFS filesystem on %s (magic=%08x)\n", 
+			printf("No BFS filesystem on %s (magic=%08x)\n",
 				s->s_id,  le32_to_cpu(bfs_sb->s_magic));
 		goto out1;
 	}

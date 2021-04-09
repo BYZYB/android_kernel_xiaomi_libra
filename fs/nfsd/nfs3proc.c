@@ -234,7 +234,7 @@ nfsd3_proc_create(struct svc_rqst *rqstp, struct nfsd3_createargs *argp,
 
 	/* Unfudge the mode bits */
 	attr->ia_mode &= ~S_IFMT;
-	if (!(attr->ia_valid & ATTR_MODE)) { 
+	if (!(attr->ia_valid & ATTR_MODE)) {
 		attr->ia_valid |= ATTR_MODE;
 		attr->ia_mode = S_IFREG;
 	} else {
@@ -436,7 +436,7 @@ nfsd3_proc_readdir(struct svc_rqst *rqstp, struct nfsd3_readdirargs *argp,
 	resp->common.err = nfs_ok;
 	resp->buffer = argp->buffer;
 	resp->rqstp = rqstp;
-	nfserr = nfsd_readdir(rqstp, &resp->fh, (loff_t*) &argp->cookie, 
+	nfserr = nfsd_readdir(rqstp, &resp->fh, (loff_t*) &argp->cookie,
 					&resp->common, nfs3svc_encode_entry);
 	memcpy(resp->verf, argp->verf, 8);
 	resp->count = resp->buffer - argp->buffer;

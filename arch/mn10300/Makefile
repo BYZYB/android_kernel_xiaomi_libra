@@ -96,7 +96,6 @@ endef
 # uncomment the following to disable optimisations
 # that are unhelpful whilst debugging.
 ifdef CONFIG_DEBUG_INFO
-#KBUILD_CFLAGS	+= -O1
 KBUILD_AFLAGS	+= -Wa,--gdwarf2
 endif
 

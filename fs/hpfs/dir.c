@@ -113,7 +113,7 @@ static int hpfs_readdir(struct file *filp, void *dirent, filldir_t filldir)
 		ret = -ENOENT;
 		goto out;
 	}
-	
+
 	while (1) {
 		again:
 		/* This won't work when cycle is longer than number of dirents
@@ -309,9 +309,9 @@ struct dentry *hpfs_lookup(struct inode *dir, struct dentry *dentry, unsigned in
 	 * Didn't.
 	 */
 	bail1:
-	
+
 	hpfs_brelse4(&qbh);
-	
+
 	/*bail:*/
 
 	hpfs_unlock(dir->i_sb);

@@ -3,7 +3,7 @@
 
 		         L i n u x    C P U F r e q
 
-			   C P U   D r i v e r s 
+			   C P U   D r i v e r s
 
 		       - information for developers -
 
@@ -46,16 +46,16 @@ function check whether this kernel runs on the right CPU and the right
 chipset. If so, register a struct cpufreq_driver with the CPUfreq core
 using cpufreq_register_driver()
 
-What shall this struct cpufreq_driver contain? 
+What shall this struct cpufreq_driver contain?
 
 cpufreq_driver.name -		The name of this driver.
 
-cpufreq_driver.init -		A pointer to the per-CPU initialization 
+cpufreq_driver.init -		A pointer to the per-CPU initialization
 				function.
 
 cpufreq_driver.verify -		A pointer to a "verification" function.
 
-cpufreq_driver.setpolicy _or_ 
+cpufreq_driver.setpolicy _or_
 cpufreq_driver.target/
 target_index		-	See below on the differences.
 
@@ -78,7 +78,7 @@ cpufreq_driver.attr -		A pointer to a NULL-terminated list of
 --------------------------
 
 Whenever a new CPU is registered with the device model, or after the
-cpufreq driver registers itself, the per-CPU initialization function 
+cpufreq driver registers itself, the per-CPU initialization function
 cpufreq_driver.init is called. It takes a struct cpufreq_policy
 *policy as argument. What to do now?
 
@@ -87,8 +87,8 @@ If necessary, activate the CPUfreq support on your CPU.
 Then, the driver must fill in the following values:
 
 policy->cpuinfo.min_freq _and_
-policy->cpuinfo.max_freq -	the minimum and maximum frequency 
-				(in kHz) which is supported by 
+policy->cpuinfo.max_freq -	the minimum and maximum frequency
+				(in kHz) which is supported by
 				this CPU
 policy->cpuinfo.transition_latency   the time it takes on this CPU to
 				switch between two frequencies in
@@ -97,8 +97,8 @@ policy->cpuinfo.transition_latency   the time it takes on this CPU to
 
 policy->cur			The current operating frequency of
 				this CPU (if appropriate)
-policy->min, 
-policy->max, 
+policy->min,
+policy->max,
 policy->policy and, if necessary,
 policy->governor		must contain the "default policy" for
 				this CPU. A few moments later,
@@ -137,7 +137,7 @@ policy->max first, and only if this is no solution, decrease policy->min.
 1.4 target/target_index or setpolicy?
 ----------------------------
 
-Most cpufreq drivers or even most cpu frequency scaling algorithms 
+Most cpufreq drivers or even most cpu frequency scaling algorithms
 only allow the CPU to be set to one frequency. For these, you use the
 ->target/target_index call.
 
@@ -196,7 +196,7 @@ of an array of struct cpufreq_frequency_table entries, with any value in
 "driver_data" you want to use, and the corresponding frequency in
 "frequency". At the end of the table, you need to add a
 cpufreq_frequency_table entry with frequency set to CPUFREQ_TABLE_END. And
-if you want to skip one entry in the table, set the frequency to 
+if you want to skip one entry in the table, set the frequency to
 CPUFREQ_ENTRY_INVALID. The entries don't need to be in ascending
 order.
 

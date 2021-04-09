@@ -29,9 +29,9 @@
  *  Registers (these are taken from page 129 of the EPC User's Manual Rev 1.04
  *  All V3 register names are prefaced by V3_ to avoid clashing with any other
  *  PCI definitions.  Their names match the user's manual.
- * 
+ *
  *  I'm assuming that I20 is disabled.
- * 
+ *
  */
 #define V3_PCI_VENDOR                   0x00000000
 #define V3_PCI_DEVICE                   0x00000002
@@ -49,7 +49,7 @@
 #define V3_PCI_MAP0                     0x00000040
 #define V3_PCI_MAP1                     0x00000044
 #define V3_PCI_INT_STAT                 0x00000048
-#define V3_PCI_INT_CFG                  0x0000004C 
+#define V3_PCI_INT_CFG                  0x0000004C
 #define V3_LB_BASE0                     0x00000054
 #define V3_LB_BASE1                     0x00000058
 #define V3_LB_MAP0                      0x0000005E

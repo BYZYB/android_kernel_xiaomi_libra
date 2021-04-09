@@ -1102,7 +1102,7 @@ static void kbd_bh(unsigned long dummy)
 {
 	unsigned char leds;
 	unsigned long flags;
-	
+
 	spin_lock_irqsave(&led_lock, flags);
 	leds = getleds();
 	spin_unlock_irqrestore(&led_lock, flags);
@@ -1662,7 +1662,7 @@ int vt_do_diacrit(unsigned int cmd, void __user *up, int perm)
 				kfree(buf);
 				return -EFAULT;
 			}
-		} 
+		}
 		spin_lock_irqsave(&kbd_event_lock, flags);
 		if (ct)
 			memcpy(accent_table, buf,

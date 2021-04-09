@@ -381,7 +381,7 @@ static int parallel_test(unsigned long features,
 				/* Swallow all notifies at once. */
 				if (read(to_guest[0], buf, sizeof(buf)) < 1)
 					break;
-				
+
 				receives++;
 				virtqueue_disable_cb(vq);
 				continue;
@@ -414,7 +414,7 @@ static int parallel_test(unsigned long features,
 				continue;
 			if (read(to_guest[0], buf, sizeof(buf)) < 1)
 				break;
-				
+
 			receives++;
 			virtqueue_disable_cb(vq);
 		}

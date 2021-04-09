@@ -1164,7 +1164,7 @@ The structure has a number of fields, some of which are mandatory:
      The method should return 0 if success ful or a negative error code
      otherwise.
 
-     
+
  (*) void (*free_preparse)(struct key_preparsed_payload *prep);
 
      This method is only required if the preparse() method is provided,

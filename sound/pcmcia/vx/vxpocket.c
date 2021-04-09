@@ -50,7 +50,7 @@ module_param_array(enable, bool, NULL, 0444);
 MODULE_PARM_DESC(enable, "Enable VXPocket soundcard.");
 module_param_array(ibl, int, NULL, 0444);
 MODULE_PARM_DESC(ibl, "Capture IBL size for VXPocket soundcard.");
- 
+
 
 /*
  */
@@ -103,7 +103,7 @@ static struct snd_vx_hardware vxpocket_hw = {
 	.num_outs = 1,
 	.output_level_max = VX_ANALOG_OUT_LEVEL_MAX,
 	.output_level_db_scale = db_scale_old_vol,
-};	
+};
 
 /* VX-pocket 440
  *
@@ -125,7 +125,7 @@ static struct snd_vx_hardware vxp440_hw = {
 	.num_outs = 2,
 	.output_level_max = VX_ANALOG_OUT_LEVEL_MAX,
 	.output_level_db_scale = db_scale_old_vol,
-};	
+};
 
 
 /*

@@ -1,8 +1,8 @@
 /* net/atm/atmarp.h - RFC1577 ATM ARP */
- 
+
 /* Written 1995-2000 by Werner Almesberger, EPFL LRC/ICA */
- 
- 
+
+
 #ifndef _ATMCLIP_H
 #define _ATMCLIP_H
 

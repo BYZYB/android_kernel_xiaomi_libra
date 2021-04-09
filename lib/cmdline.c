@@ -84,7 +84,7 @@ int get_option (char **str, int *pint)
  *	the parse to end (typically a null terminator, if @str is
  *	completely parseable).
  */
- 
+
 char *get_options(const char *str, int nints, int *ints)
 {
 	int res, i = 1;

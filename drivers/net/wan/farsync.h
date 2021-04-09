@@ -226,7 +226,7 @@ struct fstioc_info {
 /* "cardMode" bitmask */
 #define CARD_MODE_IDENTIFY      0x0001
 
-/* 
+/*
  * Constants for T1/E1 configuration
  */
 

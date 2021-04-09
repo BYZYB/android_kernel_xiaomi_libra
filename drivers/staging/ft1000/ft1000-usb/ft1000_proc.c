@@ -53,8 +53,8 @@ int ft1000_read_dpram16 (struct ft1000_usb *ft1000dev, u16 indx,
 
 static int ft1000ReadProc(struct seq_file *m, void *v)
 {
-	static const char *status[] = { 
-		"Idle (Disconnect)", 
+	static const char *status[] = {
+		"Idle (Disconnect)",
 		"Searching",
 		"Active (Connected)",
 		"Waiting for L2",

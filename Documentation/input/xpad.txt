@@ -139,7 +139,7 @@ It works? Voila, you're done ;)
 
 I have to thank ITO Takayuki for the detailed info on his site
  http://euc.jp/periphs/xbox-controller.ja.html.
- 
+
 His useful info and both the usb-skeleton as well as the iforce input driver
 (Greg Kroah-Hartmann; Vojtech Pavlik) helped a lot in rapid prototyping
 the basic functionality.
@@ -150,7 +150,7 @@ the basic functionality.
 
 1. http://euc.jp/periphs/xbox-controller.ja.html (ITO Takayuki)
 2. http://xpad.xbox-scene.com/
-3. http://www.markosweb.com/www/xboxhackz.com/ 
+3. http://www.markosweb.com/www/xboxhackz.com/
 
 4. /proc/bus/usb/devices - dump from InterAct PowerPad Pro (Germany):
 
@@ -173,7 +173,7 @@ I:  If#= 0 Alt= 0 #EPs= 2 Cls=58(unk. ) Sub=42 Prot=00 Driver=xpad
 E:  Ad=82(I) Atr=03(Int.) MxPS=  32 Ivl=4ms
 E:  Ad=02(O) Atr=03(Int.) MxPS=  32 Ivl=4ms
 
--- 
+--
 Marko Friedemann <mfr@bmx-chemnitz.de>
 2002-07-16
  - original doc

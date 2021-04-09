@@ -332,7 +332,7 @@ static int par96_open(struct net_device *dev)
 	}
 	memset(&bc->modem, 0, sizeof(bc->modem));
 	bc->hdrv.par.bitrate = 9600;
-	bc->pdev = parport_register_device(pp, dev->name, NULL, par96_wakeup, 
+	bc->pdev = parport_register_device(pp, dev->name, NULL, par96_wakeup,
 				 par96_interrupt, PARPORT_DEV_EXCL, dev);
 	parport_put_port(pp);
 	if (!bc->pdev) {
@@ -514,7 +514,7 @@ static int __init init_baycompar(void)
 		dev = hdlcdrv_register(&par96_ops,
 				       sizeof(struct baycom_state),
 				       ifname, iobase[i], 0, 0);
-		if (IS_ERR(dev)) 
+		if (IS_ERR(dev))
 			break;
 
 		bc = netdev_priv(dev);

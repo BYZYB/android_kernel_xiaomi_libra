@@ -53,7 +53,7 @@ isn't as easy as a basic IO one, but not so much complex:
 
 	unsigned char my_read(struct gameport *gameport)
 	{
-		return my_mmio;	
+		return my_mmio;
 	}
 
 	gameport.read = my_read;
@@ -149,20 +149,20 @@ outb(0xff, io) will be used.
 Read the buttons and ns558 oneshot bits. If set to NULL, inb(io) will be
 used instead.
 
-	int (*cooked_read)(struct gameport *, int *axes, int *buttons);	
+	int (*cooked_read)(struct gameport *, int *axes, int *buttons);
 
 If the gameport supports cooked mode, it should point this to its cooked
 read function. It should fill axes[0..3] with four values of the joystick axes
 and buttons[0] with four bits representing the buttons.
 
-	int (*calibrate)(struct gameport *, int *axes, int *max); 
+	int (*calibrate)(struct gameport *, int *axes, int *max);
 
 Function for calibrating the ADC hardware. When called, axes[0..3] should be
 pre-filled by cooked data by the caller, max[0..3] should be pre-filled with
 expected maximums for each axis. The calibrate() function should set the
 sensitivity of the ADC hardware so that the maximums fit in its range and
 recompute the axes[] values to match the new sensitivity or re-read them from
-the hardware so that they give valid values. 
+the hardware so that they give valid values.
 
 	int (*open)(struct gameport *, int mode);
 

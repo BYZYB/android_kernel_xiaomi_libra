@@ -53,7 +53,7 @@ config COMMON_CLK_MAX77686
 	tristate "Clock driver for Maxim 77686 MFD"
 	depends on MFD_MAX77686
 	---help---
-	  This driver supports Maxim 77686 crystal oscillator clock. 
+	  This driver supports Maxim 77686 crystal oscillator clock.
 
 config COMMON_CLK_SI5351
 	tristate "Clock driver for SiLabs 5351A/B/C"

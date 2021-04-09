@@ -68,7 +68,7 @@ module_exit(cleanup_soundcore);
 #ifdef CONFIG_SOUND_OSS_CORE
 /*
  *	OSS sound core handling. Breaks out sound functions to submodules
- *	
+ *
  *	Author:		Alan Cox <alan@lxorguk.ukuu.org.uk>
  *
  *	Fixes:
@@ -80,9 +80,9 @@ module_exit(cleanup_soundcore);
  *	2 of the License, or (at your option) any later version.
  *
  *                         --------------------
- * 
+ *
  *	Top level handler for the sound subsystem. Various devices can
- *	plug into this. The fact they don't all go via OSS doesn't mean 
+ *	plug into this. The fact they don't all go via OSS doesn't mean
  *	they don't have to implement the OSS API. There is a lot of logic
  *	to keeping much of the OSS weight out of the code in a compatibility
  *	module, but it's up to the driver to rember to load it...
@@ -200,30 +200,30 @@ static int __sound_insert_unit(struct sound_unit * s, struct sound_unit **list, 
 				break;
 			list=&((*list)->next);
 		}
-	}	
-		
+	}
+
 	/*
 	 *	Fill it in
 	 */
-	 
+
 	s->unit_minor=n;
 	s->unit_fops=fops;
-	
+
 	/*
 	 *	Link it
 	 */
-	 
+
 	s->next=*list;
 	*list=s;
-	
-	
+
+
 	return n;
 }
 
 /*
  *	Remove a node from the chain. Called with the lock asserted
  */
- 
+
 static struct sound_unit *__sound_remove_unit(struct sound_unit **list, int unit)
 {
 	while(*list)
@@ -263,7 +263,7 @@ static int sound_insert_unit(struct sound_unit **list, const struct file_operati
 retry:
 	r = __sound_insert_unit(s, list, fops, index, low, top);
 	spin_unlock(&sound_loader_lock);
-	
+
 	if (r < 0)
 		goto fail;
 	else if (r < SOUND_STEP)
@@ -305,7 +305,7 @@ fail:
  *	completed the removal before their file operations become
  *	invalid.
  */
- 	
+
 static void sound_remove_unit(struct sound_unit **list, int unit)
 {
 	struct sound_unit *p;
@@ -357,7 +357,7 @@ static struct sound_unit *chains[SOUND_STEP];
  *	Return: The allocated number is returned on success. On failure,
  *	a negative error code is returned.
  */
- 
+
 int register_sound_special_device(const struct file_operations *fops, int unit,
 				  struct device *dev)
 {
@@ -422,7 +422,7 @@ int register_sound_special_device(const struct file_operations *fops, int unit,
 	return sound_insert_unit(&chains[chain], fops, -1, unit, max_unit,
 				 name, S_IRUSR | S_IWUSR, dev);
 }
- 
+
 EXPORT_SYMBOL(register_sound_special_device);
 
 int register_sound_special(const struct file_operations *fops, int unit)
@@ -476,7 +476,7 @@ EXPORT_SYMBOL(register_sound_midi);
  *	DSP's are registered as a triple. Register only one and cheat
  *	in open - see below.
  */
- 
+
 /**
  *	register_sound_dsp - register a DSP device
  *	@fops: File operations for the driver
@@ -514,7 +514,7 @@ void unregister_sound_special(int unit)
 {
 	sound_remove_unit(&chains[unit % SOUND_STEP], unit);
 }
- 
+
 EXPORT_SYMBOL(unregister_sound_special);
 
 /**
@@ -568,7 +568,7 @@ EXPORT_SYMBOL(unregister_sound_dsp);
 static struct sound_unit *__look_for_unit(int chain, int unit)
 {
 	struct sound_unit *s;
-	
+
 	s=chains[chain];
 	while(s && s->unit_minor <= unit)
 	{
@@ -593,7 +593,7 @@ static int soundcore_open(struct inode *inode, struct file *file)
 		unit|=3;
 		chain=3;
 	}
-	
+
 	spin_lock(&sound_loader_lock);
 	s = __look_for_unit(chain, unit);
 	if (s)

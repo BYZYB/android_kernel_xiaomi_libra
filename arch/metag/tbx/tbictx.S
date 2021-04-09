@@ -193,7 +193,7 @@ D	SETD	[A0.2++],TF
 	MOV	D0Ar6,TXMRSIZE
 	MOV	D1Ar5,TXDRSIZE
 	SETL	[A0.2++],D0Ar6,D1Ar5		/* Save 8*1 bytes */
-	
+
 $LCtxSaveCBUF:
 #ifdef TBI_1_3
 	MOV	D0Ar4,D0Re0			/* Copy Ctx Flags */

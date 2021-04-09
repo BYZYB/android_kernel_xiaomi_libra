@@ -1,7 +1,7 @@
 /* drivers/atm/uPD98402.c - NEC uPD98402 (PHY) declarations */
- 
+
 /* Written 1995-2000 by Werner Almesberger, EPFL LRC/ICA */
- 
+
 
 #include <linux/module.h>
 #include <linux/mm.h>
@@ -61,7 +61,7 @@ static int set_framing(struct atm_dev *dev,unsigned char framing)
 	static const unsigned char sdh[] = { 1,0,0,2 };
 	const char *set;
 	unsigned long flags;
- 
+
 	switch (framing) {
 		case SONET_FRAME_SONET:
 			set = sonet;
@@ -197,7 +197,7 @@ static void uPD98402_int(struct atm_dev *dev)
 			atomic_add(GET(HECCT),
 			    &PRIV(dev)->sonet_stats.uncorr_hcs);
 		}
-		if ((reason & uPD98402_INT_RFO) && 
+		if ((reason & uPD98402_INT_RFO) &&
 		    (time_after(jiffies, silence) || silence == 0)) {
 			printk(KERN_WARNING "%s(itf %d): uPD98402 receive "
 			    "FIFO overflow\n",dev->type,dev->number);

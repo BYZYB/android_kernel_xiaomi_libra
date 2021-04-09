@@ -13,7 +13,7 @@ driver:
   options cs4232 synthirq=9 synthio=0x200 io=0x530 irq=5 dma=1 dma2=0
   options opl3 io=0x388
 
-Things to note: 
+Things to note:
 
        the wavefront options "io" and "irq" ***MUST*** match the "synthio"
        and "synthirq" cs4232 options.

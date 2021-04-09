@@ -6,12 +6,12 @@ by Marius Ilioaea <mariusi@protv.ro>
 Sat Mar 6 23:55:27 EET 1999
 
 			Hello again,
-	
+
 	Playing with a SB Vibra 16x soundcard we found it very difficult
 to setup because the kernel reported a lot of DMA errors and wouldn't
 simply play any sound.
 	A good starting point is that the vibra16x chip full-duplex facility
-is neither still exploited by the sb driver found in the linux kernel 
+is neither still exploited by the sb driver found in the linux kernel
 (tried it with a 2.2.2-ac7), nor in the commercial OSS package (it reports
 it as half-duplex soundcard). Oh, I almost forgot, the RedHat sndconfig
 failed detecting it ;)
@@ -19,7 +19,7 @@ failed detecting it ;)
 8-bit and a 16-bit dma, which we could not allocate for vibra... it supports
 only two 8-bit dma channels, the second one will be passed to the module
 as a 16 bit channel, the kernel will yield about that but everything will
-be okay, trust us. 
+be okay, trust us.
 	The only inconvenient you may find is that you will have
 some sound playing jitters if you have HDD dma support enabled - but this
 will happen with almost all soundcards...
@@ -74,7 +74,7 @@ modprobe opl3=0x388
 CONFIG_SOUND=m
 CONFIG_SOUND_OSS=m
 CONFIG_SOUND_SB=m
-	
+
 	Enjoy your new noisy Linux box! ;)
-	
+
 

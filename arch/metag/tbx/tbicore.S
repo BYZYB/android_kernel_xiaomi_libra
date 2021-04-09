@@ -64,7 +64,7 @@ ___TBIFindSeg:
 	LSL	D0Re0,D0Re0,#(TBID_PSTAT_S-TXSTATUS_PSTAT_S)
 	XOR	D0Ar2,D0Ar2,D0Re0	/* Toggle Id PSTAT if privileged */
 	MOVNZ	D1Ar3,D1Ar1		/* Use pStart if provided */
-$LFindSegLoop:			
+$LFindSegLoop:
 	ADDS	D0Re0,D1Ar3,#0		/* End of list? Load result into D0Re0 */
 	MOVZ	PC,D1RtP		/* If result is NULL we leave */
 	GETL	D1Ar3,D0Ar4,[D1Ar3]	/* Read pLink and Id */
@@ -100,7 +100,7 @@ $LSpinLoop:
 
 /*
  * Perform an attempt to gain access to a spin-lock and set some bits
- * 
+ *
  * Register Usage: D1Ar1 is pLock, D0Ar2 is Mask, D0Re0 is the result
  *                 !!On return Zero flag is SET if we are sucessfull!!
  *                 A0.3 is used to hold base address of system event region

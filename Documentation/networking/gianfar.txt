@@ -20,7 +20,7 @@ of bytes to buf_stash_len.  echo 0 to disable.
 WARNING: You could really screw these up if you set them too low or high!
 fifo_threshold:
 To change the number of bytes the controller needs in the
-fifo before it starts transmission, echo the number of bytes to 
+fifo before it starts transmission, echo the number of bytes to
 fifo_thresh.  Range should be 0-511.
 
 fifo_starve:

@@ -1,9 +1,9 @@
 /* -*- linux-c -*-
- * Cypress USB Thermometer driver 
- * 
+ * Cypress USB Thermometer driver
+ *
  * Copyright (c) 2004 Erik Rigtorp <erkki@linux.nu> <erik@rigtorp.com>
- * 
- * This driver works with Elektor magazine USB Interface as published in 
+ *
+ * This driver works with Elektor magazine USB Interface as published in
  * issue #291. It should also work with the original starter kit/demo board
  * from Cypress.
  *
@@ -43,7 +43,7 @@ struct usb_cytherm {
 
 
 /* local function prototypes */
-static int cytherm_probe(struct usb_interface *interface, 
+static int cytherm_probe(struct usb_interface *interface,
 			 const struct usb_device_id *id);
 static void cytherm_disconnect(struct usb_interface *interface);
 
@@ -63,18 +63,18 @@ static struct usb_driver cytherm_driver = {
 #define READ_RAM   0x02 /* Reads form RAM, value = address */
 #define WRITE_RAM  0x03 /* Write to RAM, value = address, index = data */
 #define READ_PORT  0x04 /* Reads from port, value = address */
-#define WRITE_PORT 0x05 /* Write to port, value = address, index = data */ 
+#define WRITE_PORT 0x05 /* Write to port, value = address, index = data */
 
 
 /* Send a vendor command to device */
-static int vendor_command(struct usb_device *dev, unsigned char request, 
+static int vendor_command(struct usb_device *dev, unsigned char request,
 			  unsigned char value, unsigned char index,
 			  void *buf, int size)
 {
 	return usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
-			       request, 
+			       request,
 			       USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_OTHER,
-			       value, 
+			       value,
 			       index, buf, size,
 			       USB_CTRL_GET_TIMEOUT);
 }
@@ -86,8 +86,8 @@ static int vendor_command(struct usb_device *dev, unsigned char request,
 
 static ssize_t show_brightness(struct device *dev, struct device_attribute *attr, char *buf)
 {
-	struct usb_interface *intf = to_usb_interface(dev);    
-	struct usb_cytherm *cytherm = usb_get_intfdata(intf);     
+	struct usb_interface *intf = to_usb_interface(dev);
+	struct usb_cytherm *cytherm = usb_get_intfdata(intf);
 
 	return sprintf(buf, "%i", cytherm->brightness);
 }
@@ -100,7 +100,7 @@ static ssize_t set_brightness(struct device *dev, struct device_attribute *attr,
 
 	unsigned char *buffer;
 	int retval;
-   
+
 	buffer = kmalloc(8, GFP_KERNEL);
 	if (!buffer) {
 		dev_err(&cytherm->udev->dev, "out of memory\n");
@@ -108,14 +108,14 @@ static ssize_t set_brightness(struct device *dev, struct device_attribute *attr,
 	}
 
 	cytherm->brightness = simple_strtoul(buf, NULL, 10);
-   
+
 	if (cytherm->brightness > 0xFF)
 		cytherm->brightness = 0xFF;
 	else if (cytherm->brightness < 0)
 		cytherm->brightness = 0;
-   
+
 	/* Set brightness */
-	retval = vendor_command(cytherm->udev, WRITE_RAM, BRIGHTNESS, 
+	retval = vendor_command(cytherm->udev, WRITE_RAM, BRIGHTNESS,
 				cytherm->brightness, buffer, 8);
 	if (retval)
 		dev_dbg(&cytherm->udev->dev, "retval = %d\n", retval);
@@ -124,13 +124,13 @@ static ssize_t set_brightness(struct device *dev, struct device_attribute *attr,
 				0x01, buffer, 8);
 	if (retval)
 		dev_dbg(&cytherm->udev->dev, "retval = %d\n", retval);
-   
+
 	kfree(buffer);
-   
+
 	return count;
 }
 
-static DEVICE_ATTR(brightness, S_IRUGO | S_IWUSR | S_IWGRP, 
+static DEVICE_ATTR(brightness, S_IRUGO | S_IWUSR | S_IWGRP,
 		   show_brightness, set_brightness);
 
 
@@ -147,7 +147,7 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *attr, char
 	unsigned char *buffer;
 
 	int temp, sign;
-   
+
 	buffer = kmalloc(8, GFP_KERNEL);
 	if (!buffer) {
 		dev_err(&cytherm->udev->dev, "out of memory\n");
@@ -159,7 +159,7 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *attr, char
 	if (retval)
 		dev_dbg(&cytherm->udev->dev, "retval = %d\n", retval);
 	temp = buffer[1];
-   
+
 	/* read sign */
 	retval = vendor_command(cytherm->udev, READ_RAM, SIGN, 0, buffer, 8);
 	if (retval)
@@ -167,7 +167,7 @@ static ssize_t show_temp(struct device *dev, struct device_attribute *attr, char
 	sign = buffer[1];
 
 	kfree(buffer);
-   
+
 	return sprintf(buf, "%c%i.%i", sign ? '-' : '+', temp >> 1,
 		       5*(temp - ((temp >> 1) << 1)));
 }
@@ -202,7 +202,7 @@ static ssize_t show_button(struct device *dev, struct device_attribute *attr, ch
 	retval = vendor_command(cytherm->udev, READ_RAM, BUTTON, 0, buffer, 8);
 	if (retval)
 		dev_dbg(&cytherm->udev->dev, "retval = %d\n", retval);
-   
+
 	retval = buffer[1];
 
 	kfree(buffer);
@@ -256,7 +256,7 @@ static ssize_t set_port0(struct device *dev, struct device_attribute *attr, cons
 	unsigned char *buffer;
 	int retval;
 	int tmp;
-   
+
 	buffer = kmalloc(8, GFP_KERNEL);
 	if (!buffer) {
 		dev_err(&cytherm->udev->dev, "out of memory\n");
@@ -264,12 +264,12 @@ static ssize_t set_port0(struct device *dev, struct device_attribute *attr, cons
 	}
 
 	tmp = simple_strtoul(buf, NULL, 10);
-   
+
 	if (tmp > 0xFF)
 		tmp = 0xFF;
 	else if (tmp < 0)
 		tmp = 0;
-   
+
 	retval = vendor_command(cytherm->udev, WRITE_PORT, 0,
 				tmp, buffer, 8);
 	if (retval)
@@ -299,7 +299,7 @@ static ssize_t show_port1(struct device *dev, struct device_attribute *attr, cha
 	retval = vendor_command(cytherm->udev, READ_PORT, 1, 0, buffer, 8);
 	if (retval)
 		dev_dbg(&cytherm->udev->dev, "retval = %d\n", retval);
-   
+
 	retval = buffer[1];
 
 	kfree(buffer);
@@ -316,7 +316,7 @@ static ssize_t set_port1(struct device *dev, struct device_attribute *attr, cons
 	unsigned char *buffer;
 	int retval;
 	int tmp;
-   
+
 	buffer = kmalloc(8, GFP_KERNEL);
 	if (!buffer) {
 		dev_err(&cytherm->udev->dev, "out of memory\n");
@@ -324,12 +324,12 @@ static ssize_t set_port1(struct device *dev, struct device_attribute *attr, cons
 	}
 
 	tmp = simple_strtoul(buf, NULL, 10);
-   
+
 	if (tmp > 0xFF)
 		tmp = 0xFF;
 	else if (tmp < 0)
 		tmp = 0;
-   
+
 	retval = vendor_command(cytherm->udev, WRITE_PORT, 1,
 				tmp, buffer, 8);
 	if (retval)
@@ -344,7 +344,7 @@ static DEVICE_ATTR(port1, S_IRUGO | S_IWUSR | S_IWGRP, show_port1, set_port1);
 
 
 
-static int cytherm_probe(struct usb_interface *interface, 
+static int cytherm_probe(struct usb_interface *interface,
 			 const struct usb_device_id *id)
 {
 	struct usb_device *udev = interface_to_usbdev(interface);

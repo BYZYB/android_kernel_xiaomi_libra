@@ -1,7 +1,7 @@
 		Semantics and Behavior of Atomic and
 		         Bitmask Operations
 
-			  David S. Miller	 
+			  David S. Miller
 
 	This document is intended to serve as a guide to Linux port
 maintainers on how to implement atomic counter, bitops, and spinlock

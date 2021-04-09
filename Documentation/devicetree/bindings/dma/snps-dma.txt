@@ -51,7 +51,7 @@ The four cells in order are:
 4. Destination master for transfers on allocated channel
 
 Example:
-	
+
 	serial@e0000000 {
 		compatible = "arm,pl011", "arm,primecell";
 		reg = <0xe0000000 0x1000>;

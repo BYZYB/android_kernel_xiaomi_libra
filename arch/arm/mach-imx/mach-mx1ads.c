@@ -57,7 +57,7 @@ static const int mx1ads_pins[] __initconst = {
 static const struct imxuart_platform_data uart0_pdata __initconst = {
 	.flags = IMXUART_HAVE_RTSCTS,
 };
-       
+
 static const struct imxuart_platform_data uart1_pdata __initconst = {
 	.flags = IMXUART_HAVE_RTSCTS,
 };

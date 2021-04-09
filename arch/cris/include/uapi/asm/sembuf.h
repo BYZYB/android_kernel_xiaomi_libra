@@ -1,7 +1,7 @@
 #ifndef _CRIS_SEMBUF_H
 #define _CRIS_SEMBUF_H
 
-/* 
+/*
  * The semid64_ds structure for CRIS architecture.
  * Note extra padding because this structure is passed back and forth
  * between kernel and user space.

@@ -32,7 +32,7 @@ when answering to these questions since answering y to a question may
 prevent some later ones from being asked. For example don't answer y to
 the question about (PAS16) if you don't really have a PAS16.  Sound
 configuration may also be made modular by answering m to configuration
-options presented. 
+options presented.
 
 Note also that all questions may not be asked. The configuration program
 may disable some questions depending on the earlier choices. It may also
@@ -123,11 +123,11 @@ CONFIG_SOUND_YM3812
   If you compile the driver into the kernel, you have to add
   "opl3=<io>" to the kernel command line.
 
-  If you compile your drivers into the kernel, you MUST configure 
+  If you compile your drivers into the kernel, you MUST configure
   OPL3 support as a module for PAS16 support to work properly.
   You can then get OPL3 functionality by issuing the command:
   insmod opl3
-  In addition, you must either add the following line to 
+  In addition, you must either add the following line to
   /etc/modprobe.d/*.conf:
   options opl3 io=0x388
   or else add the following line to /etc/lilo.conf:
@@ -151,12 +151,12 @@ I have also included the following append line in /etc/lilo.conf:
 append="pas2=0x388,10,3,-1,0x220,5,1,-1 sb=0x220,5,1,-1 opl3=0x388"
 
 The io address of 0x388 is default configuration on the PAS16.  The
-irq of 10 and dma of 3 may not match your installation.  The above 
+irq of 10 and dma of 3 may not match your installation.  The above
 configuration enables PAS16, 8-bit Soundblaster and OPL3
 functionality.  If Soundblaster functionality is not desired, the
 following line would be appropriate:
 append="pas2=0x388,10,3,-1,0,-1,-1,-1 opl3=0x388"
 
-If sound is built totally modular, the above options may be 
+If sound is built totally modular, the above options may be
 specified in /etc/modprobe.d/*.conf for pas2, sb and opl3
-respectively. 
+respectively.

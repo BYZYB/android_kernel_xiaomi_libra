@@ -1,6 +1,6 @@
 /*
  * inode.c
- * 
+ *
  * Copyright (C) 2001 Will Dyson <will_dyson@pobox.com>
  */
 

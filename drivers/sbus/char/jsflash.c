@@ -247,7 +247,7 @@ static loff_t jsf_lseek(struct file * file, loff_t offset, int orig)
 /*
  * OS SIMM Cannot be read in other size but a 32bits word.
  */
-static ssize_t jsf_read(struct file * file, char __user * buf, 
+static ssize_t jsf_read(struct file * file, char __user * buf,
     size_t togo, loff_t *ppos)
 {
 	unsigned long p = *ppos;
@@ -366,7 +366,7 @@ static int jsf_ioctl_program(void __user *arg)
 	} b;
 
 	if (copy_from_user(&abuf, arg, JSFPRGSZ))
-		return -EFAULT; 
+		return -EFAULT;
 	p = abuf.off;
 	togo = abuf.size;
 	if ((togo & 3) || (p & 3)) return -EINVAL;

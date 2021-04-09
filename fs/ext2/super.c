@@ -746,7 +746,7 @@ static unsigned long descriptor_loc(struct super_block *sb,
 	struct ext2_sb_info *sbi = EXT2_SB(sb);
 	unsigned long bg, first_meta_bg;
 	int has_super = 0;
-	
+
 	first_meta_bg = le32_to_cpu(sbi->s_es->s_first_meta_bg);
 
 	if (!EXT2_HAS_INCOMPAT_FEATURE(sb, EXT2_FEATURE_INCOMPAT_META_BG) ||
@@ -808,7 +808,7 @@ static int ext2_fill_super(struct super_block *sb, void *data, int silent)
 
 	/*
 	 * If the superblock doesn't start on a hardware sector boundary,
-	 * calculate the offset.  
+	 * calculate the offset.
 	 */
 	if (blocksize != BLOCK_SIZE) {
 		logic_sb_block = (sb_block*BLOCK_SIZE) / blocksize;
@@ -848,7 +848,7 @@ static int ext2_fill_super(struct super_block *sb, void *data, int silent)
 	if (def_mount_opts & EXT2_DEFM_ACL)
 		set_opt(sbi->s_mount_opt, POSIX_ACL);
 #endif
-	
+
 	if (le16_to_cpu(sbi->s_es->s_errors) == EXT2_ERRORS_PANIC)
 		set_opt(sbi->s_mount_opt, ERRORS_PANIC);
 	else if (le16_to_cpu(sbi->s_es->s_errors) == EXT2_ERRORS_CONTINUE)
@@ -858,7 +858,7 @@ static int ext2_fill_super(struct super_block *sb, void *data, int silent)
 
 	sbi->s_resuid = make_kuid(&init_user_ns, le16_to_cpu(es->s_def_resuid));
 	sbi->s_resgid = make_kgid(&init_user_ns, le16_to_cpu(es->s_def_resgid));
-	
+
 	set_opt(sbi->s_mount_opt, RESERVATION);
 
 	if (!parse_options((char *) data, sb))

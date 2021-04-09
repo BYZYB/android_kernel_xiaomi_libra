@@ -26,7 +26,7 @@
 #define AUTCPU12_PHYS_FLASH		CS0_PHYS_BASE		/* physical */
 
 /* offset for device specific information structure */
-#define AUTCPU12_LCDINFO_OFFS		(0x00010000)	
+#define AUTCPU12_LCDINFO_OFFS		(0x00010000)
 
 /* Videomemory in the internal SRAM (CS 6) */
 #define AUTCPU12_PHYS_VIDEO		CS6_PHYS_BASE
@@ -49,7 +49,7 @@
 #define AUTCPU12_PHYS_LPT              	CS1_PHYS_BASE +0x0E000000  /* physical */
 
 /*
-* defines for lcd contrast 
+* defines for lcd contrast
 */
 #define AUTCPU12_DPOT_PORT_OFFSET	PEDR
 #define	AUTCPU12_DPOT_CS		(1<<0)

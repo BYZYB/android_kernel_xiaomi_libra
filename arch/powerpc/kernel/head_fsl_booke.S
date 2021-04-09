@@ -1028,7 +1028,7 @@ _GLOBAL(flush_dcache_L1)
 1:	dcbf	0,r4		/* ...and flush. */
 	add	r4,r4,r5
 	bdnz	1b
-	
+
 	/* restore HID0 */
 	mtspr	SPRN_HID0,r8
 	isync

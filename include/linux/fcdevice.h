@@ -9,7 +9,7 @@
  *
  * Authors:	Vineet Abraham <vma@iol.unh.edu>
  *
- *		Relocated to include/linux where it belongs by Alan Cox 
+ *		Relocated to include/linux where it belongs by Alan Cox
  *							<gw4pts@gw4pts.ampr.org>
  *
  *		This program is free software; you can redistribute it and/or

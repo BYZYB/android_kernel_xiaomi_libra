@@ -69,7 +69,7 @@ SPDIF OUT
 
   With installing modules with option 'spdif_out=1', you can enjoy your
  sounds from SPDIF-out of your card (if it had).
- Its Fs is fixed to 48kHz (It never means the sample frequency become 
+ Its Fs is fixed to 48kHz (It never means the sample frequency become
  up to 48kHz. All sounds via SPDIF-out also 22kHz samples). So your
  digital-in capable components has to be able to handle 48kHz Fs.
 

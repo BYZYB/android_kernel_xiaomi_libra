@@ -1,4 +1,4 @@
-/* 
+/*
  * User address space access functions.
  *
  * Copyright 1997 Andi Kleen <ak@muc.de>
@@ -56,10 +56,10 @@ EXPORT_SYMBOL(clear_user);
 
 unsigned long copy_in_user(void __user *to, const void __user *from, unsigned len)
 {
-	if (access_ok(VERIFY_WRITE, to, len) && access_ok(VERIFY_READ, from, len)) { 
+	if (access_ok(VERIFY_WRITE, to, len) && access_ok(VERIFY_READ, from, len)) {
 		return copy_user_generic((__force void *)to, (__force void *)from, len);
-	} 
-	return len;		
+	}
+	return len;
 }
 EXPORT_SYMBOL(copy_in_user);
 

@@ -63,7 +63,7 @@ struct device_attribute;
 #define ARCMSR_DEFAULT_SG_ENTRIES						38
 #define ARCMSR_MAX_HBB_POSTQUEUE						264
 #define ARCMSR_MAX_XFER_LEN							0x26000 /* 152K */
-#define ARCMSR_CDB_SG_PAGE_LENGTH						256 
+#define ARCMSR_CDB_SG_PAGE_LENGTH						256
 #ifndef PCI_DEVICE_ID_ARECA_1880
 #define PCI_DEVICE_ID_ARECA_1880 0x1880
  #endif
@@ -191,7 +191,7 @@ struct FIRMWARE_INFO
 	char          device_map[16];		/*21, 84-99*/
 	uint32_t		cfgVersion;               	/*25,100-103 Added for checking of new firmware capability*/
 	uint8_t		cfgSerial[16];           	/*26,104-119*/
-	uint32_t		cfgPicStatus;            	/*30,120-123*/	
+	uint32_t		cfgPicStatus;            	/*30,120-123*/
 };
 /* signature of set and get firmware config */
 #define ARCMSR_SIGNATURE_GET_CONFIG		      0x87974060
@@ -280,7 +280,7 @@ struct FIRMWARE_INFO
 #define ARCMSR_MESSAGE_RBUFFER			      0x0000ff00
 /* iop message_rwbuffer for message command */
 #define ARCMSR_MESSAGE_RWBUFFER			      0x0000fa00
-/* 
+/*
 ************************************************************************
 **                SPEC. for Areca HBC adapter
 ************************************************************************
@@ -582,7 +582,7 @@ struct AdapterControlBlock
 	uint32_t			firm_numbers_queue;
 	uint32_t			firm_sdram_size;
 	uint32_t			firm_hd_channels;
-	uint32_t                           	firm_cfg_version;	
+	uint32_t                           	firm_cfg_version;
 	char			firm_model[12];
 	char			firm_version[20];
 	char			device_map[20];			/*21,84-99*/
@@ -613,7 +613,7 @@ struct CommandControlBlock{
 	#define			CCB_FLAG_WRITE		0x0001
 	#define			CCB_FLAG_ERROR		0x0002
 	#define			CCB_FLAG_FLUSHCACHE		0x0004
-	#define			CCB_FLAG_MASTER_ABORTED	0x0008	
+	#define			CCB_FLAG_MASTER_ABORTED	0x0008
 	uint16_t                        	startdone;			/*x32:2byte,x32:2byte*/
 	#define			ARCMSR_CCB_DONE   	        	0x0000
 	#define			ARCMSR_CCB_START		0x55AA

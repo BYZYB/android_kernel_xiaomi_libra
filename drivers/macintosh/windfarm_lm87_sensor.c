@@ -99,7 +99,7 @@ static struct wf_sensor_ops wf_lm87_ops = {
 
 static int wf_lm87_probe(struct i2c_client *client,
 			 const struct i2c_device_id *id)
-{	
+{
 	struct wf_lm87_sensor *lm;
 	const char *name = NULL, *loc;
 	struct device_node *np = NULL;

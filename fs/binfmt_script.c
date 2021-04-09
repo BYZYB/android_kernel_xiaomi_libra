@@ -45,7 +45,7 @@ static int load_script(struct linux_binprm *bprm)
 			break;
 	}
 	for (cp = bprm->buf+2; (*cp == ' ') || (*cp == '\t'); cp++);
-	if (*cp == '\0') 
+	if (*cp == '\0')
 		return -ENOEXEC; /* No interpreter name found */
 	i_name = cp;
 	i_arg = NULL;
@@ -70,15 +70,15 @@ static int load_script(struct linux_binprm *bprm)
 	if (retval)
 		return retval;
 	retval = copy_strings_kernel(1, &bprm->interp, bprm);
-	if (retval < 0) return retval; 
+	if (retval < 0) return retval;
 	bprm->argc++;
 	if (i_arg) {
 		retval = copy_strings_kernel(1, &i_arg, bprm);
-		if (retval < 0) return retval; 
+		if (retval < 0) return retval;
 		bprm->argc++;
 	}
 	retval = copy_strings_kernel(1, &i_name, bprm);
-	if (retval) return retval; 
+	if (retval) return retval;
 	bprm->argc++;
 	retval = bprm_change_interp(interp, bprm);
 	if (retval < 0)

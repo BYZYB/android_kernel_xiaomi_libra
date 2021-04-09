@@ -103,7 +103,7 @@ extern int ibmphp_debug;
 //--------------------------------------------------------------
 
 struct rio_table_hdr {
-	u8 ver_num; 
+	u8 ver_num;
 	u8 scal_count;
 	u8 riodev_count;
 	u16 offset;
@@ -127,7 +127,7 @@ struct scal_detail {
 };
 
 //--------------------------------------------------------------
-// RIO DETAIL 
+// RIO DETAIL
 //--------------------------------------------------------------
 
 struct rio_detail {
@@ -152,7 +152,7 @@ struct opt_rio {
 	u8 first_slot_num;
 	u8 middle_num;
 	struct list_head opt_rio_list;
-};	
+};
 
 struct opt_rio_lo {
 	u8 rio_type;
@@ -161,7 +161,7 @@ struct opt_rio_lo {
 	u8 middle_num;
 	u8 pack_count;
 	struct list_head opt_rio_lo_list;
-};	
+};
 
 /****************************************************************
 *  HPC DESCRIPTOR NODE                                          *

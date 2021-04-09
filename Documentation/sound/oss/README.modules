@@ -8,14 +8,14 @@ making sound modular.
   First, configure your kernel. This is an idea of what you should be
 setting in the sound section:
 
-<M> Sound card support 
+<M> Sound card support
 
-<M> 100% Sound Blaster compatibles (SB16/32/64, ESS, Jazz16) support 
+<M> 100% Sound Blaster compatibles (SB16/32/64, ESS, Jazz16) support
 
   I have SoundBlaster. Select your card from the list.
 
-<M> Generic OPL2/OPL3 FM synthesizer support 
-<M> FM synthesizer (YM3812/OPL-3) support 
+<M> Generic OPL2/OPL3 FM synthesizer support
+<M> FM synthesizer (YM3812/OPL-3) support
 
   If you don't set these, you will probably find you can play .wav files
 but not .midi. As the help for them says, set them unless you know your

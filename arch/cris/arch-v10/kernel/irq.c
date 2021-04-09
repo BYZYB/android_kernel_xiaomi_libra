@@ -5,7 +5,7 @@
  *
  *      Authors: Bjorn Wesen (bjornw@axis.com)
  *
- *      This file contains the interrupt vectors and some 
+ *      This file contains the interrupt vectors and some
  *      helper functions
  *
  */
@@ -46,7 +46,7 @@ set_break_vector(int n, irqvectptr addr)
 	unsigned long *jaddr = (unsigned long *)(jinstr + 1);
 
 	/* if you don't know what this does, do not touch it! */
-	
+
 	*jinstr = 0x0d3f;
 	*jaddr = (unsigned long)addr;
 
@@ -91,18 +91,18 @@ BUILD_IRQ(24, 0x1000000)
 BUILD_IRQ(25, 0x2000000)
 /* IRQ 26-30 are reserved */
 BUILD_IRQ(31, 0x80000000)
- 
+
 /*
- * Pointers to the low-level handlers 
+ * Pointers to the low-level handlers
  */
 
 static void (*interrupt[NR_IRQS])(void) = {
 	NULL, NULL, IRQ2_interrupt, IRQ3_interrupt,
 	IRQ4_interrupt, IRQ5_interrupt, IRQ6_interrupt, IRQ7_interrupt,
 	IRQ8_interrupt, IRQ9_interrupt, IRQ10_interrupt, IRQ11_interrupt,
-	IRQ12_interrupt, IRQ13_interrupt, NULL, NULL,	
-	IRQ16_interrupt, IRQ17_interrupt, IRQ18_interrupt, IRQ19_interrupt,	
-	IRQ20_interrupt, IRQ21_interrupt, IRQ22_interrupt, IRQ23_interrupt,	
+	IRQ12_interrupt, IRQ13_interrupt, NULL, NULL,
+	IRQ16_interrupt, IRQ17_interrupt, IRQ18_interrupt, IRQ19_interrupt,
+	IRQ20_interrupt, IRQ21_interrupt, IRQ22_interrupt, IRQ23_interrupt,
 	IRQ24_interrupt, IRQ25_interrupt, NULL, NULL, NULL, NULL, NULL,
 	IRQ31_interrupt
 };
@@ -214,11 +214,11 @@ init_IRQ(void)
 
 	for (i = 0; i < 16; i++)
                 set_break_vector(i, do_sigtrap);
-        
+
 	/* except IRQ 15 which is the multiple-IRQ handler on Etrax100 */
 
 	set_int_vector(15, multiple_interrupt);
-	
+
 	/* 0 and 1 which are special breakpoint/NMI traps */
 
 	set_int_vector(0, hwbreakpoint);

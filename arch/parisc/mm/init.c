@@ -531,7 +531,7 @@ void free_initmem(void)
 	/* finally dump all the instructions which were cached, since the
 	 * pages are no-longer executable */
 	flush_icache_range(init_begin, init_end);
-	
+
 	num_physpages += free_initmem_default(0);
 
 	/* set up a new led state on systems shipped LED State panel */

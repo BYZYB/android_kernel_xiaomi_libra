@@ -132,7 +132,7 @@ c_sys_nis_syscall (struct pt_regs *regs)
 		return -ENOSYS;
 	printk ("%s[%d]: Unimplemented SPARC system call %d\n",
 		current->comm, task_pid_nr(current), (int)regs->u_regs[1]);
-#ifdef DEBUG_UNIMP_SYSCALL	
+#ifdef DEBUG_UNIMP_SYSCALL
 	show_regs (regs);
 #endif
 	return -ENOSYS;
@@ -200,12 +200,12 @@ SYSCALL_DEFINE5(rt_sigaction, int, sig,
 asmlinkage int sys_getdomainname(char __user *name, int len)
 {
  	int nlen, err;
- 	
+
 	if (len < 0)
 		return -EINVAL;
 
  	down_read(&uts_sem);
- 	
+
 	nlen = strlen(utsname()->domainname) + 1;
 	err = -EINVAL;
 	if (nlen > len)

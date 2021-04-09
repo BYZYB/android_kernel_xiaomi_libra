@@ -312,7 +312,7 @@ static void dummy_systimer_callback(unsigned long data)
 	struct dummy_systimer_pcm *dpcm = (struct dummy_systimer_pcm *)data;
 	unsigned long flags;
 	int elapsed = 0;
-	
+
 	spin_lock_irqsave(&dpcm->lock, flags);
 	dummy_systimer_update(dpcm);
 	dummy_systimer_rearm(dpcm);
@@ -742,7 +742,7 @@ static int snd_dummy_volume_info(struct snd_kcontrol *kcontrol,
 	uinfo->value.integer.max = 100;
 	return 0;
 }
- 
+
 static int snd_dummy_volume_get(struct snd_kcontrol *kcontrol,
 				struct snd_ctl_elem_value *ucontrol)
 {
@@ -791,7 +791,7 @@ static const DECLARE_TLV_DB_SCALE(db_scale_dummy, -4500, 30, 0);
   .private_value = addr }
 
 #define snd_dummy_capsrc_info	snd_ctl_boolean_stereo_info
- 
+
 static int snd_dummy_capsrc_get(struct snd_kcontrol *kcontrol,
 				struct snd_ctl_elem_value *ucontrol)
 {
@@ -1145,7 +1145,7 @@ static int snd_dummy_suspend(struct device *pdev)
 	snd_pcm_suspend_all(dummy->pcm);
 	return 0;
 }
-	
+
 static int snd_dummy_resume(struct device *pdev)
 {
 	struct snd_card *card = dev_get_drvdata(pdev);

@@ -217,7 +217,7 @@ static void rs_stop(struct tty_struct *tty)
 
 	if (serial_paranoia_check(info, tty->name, "rs_stop"))
 		return;
-	
+
 	local_irq_save(flags);
 	uart->ustcnt &= ~USTCNT_TXEN;
 	local_irq_restore(flags);
@@ -246,10 +246,10 @@ static void rs_start(struct tty_struct *tty)
 	struct m68k_serial *info = (struct m68k_serial *)tty->driver_data;
 	m68328_uart *uart = &uart_addr[info->line];
 	unsigned long flags;
-	
+
 	if (serial_paranoia_check(info, tty->name, "rs_start"))
 		return;
-	
+
 	local_irq_save(flags);
 	if (info->xmit_cnt && info->xmit_buf && !(uart->ustcnt & USTCNT_TXEN)) {
 #ifdef USE_INTS
@@ -267,13 +267,13 @@ static void receive_chars(struct m68k_serial *info, unsigned short rx)
 	unsigned char ch, flag;
 
 	/*
-	 * This do { } while() loop will get ALL chars out of Rx FIFO 
+	 * This do { } while() loop will get ALL chars out of Rx FIFO
          */
 #ifndef CONFIG_XCOPILOT_BUGS
 	do {
-#endif	
+#endif
 		ch = GET_FIELD(rx, URX_RXDATA);
-	
+
 		if(info->is_cons) {
 			if(URX_BREAK & rx) { /* whee, break received */
 				return;
@@ -374,7 +374,7 @@ static int startup(struct m68k_serial *info, struct tty_struct *tty)
 {
 	m68328_uart *uart = &uart_addr[info->line];
 	unsigned long flags;
-	
+
 	if (info->tport.flags & ASYNC_INITIALIZED)
 		return 0;
 
@@ -399,7 +399,7 @@ static int startup(struct m68k_serial *info, struct tty_struct *tty)
 	 * Finally, enable sequencing and interrupts
 	 */
 #ifdef USE_INTS
-	uart->ustcnt = USTCNT_UEN | USTCNT_RXEN | 
+	uart->ustcnt = USTCNT_UEN | USTCNT_RXEN |
                  USTCNT_RX_INTR_MASK | USTCNT_TX_INTR_MASK;
 #else
 	uart->ustcnt = USTCNT_UEN | USTCNT_RXEN | USTCNT_RX_INTR_MASK;
@@ -434,7 +434,7 @@ static void shutdown(struct m68k_serial *info, struct tty_struct *tty)
 		return;
 
 	local_irq_save(flags);
-	
+
 	if (info->xmit_buf) {
 		free_page((unsigned long) info->xmit_buf);
 		info->xmit_buf = 0;
@@ -442,7 +442,7 @@ static void shutdown(struct m68k_serial *info, struct tty_struct *tty)
 
 	if (tty)
 		set_bit(TTY_IO_ERROR, &tty->flags);
-	
+
 	info->tport.flags &= ~ASYNC_INITIALIZED;
 	local_irq_restore(flags);
 }
@@ -491,7 +491,7 @@ struct {
                  {1,0x26}, /* 38400 */
                  {0,0x26}, /* 57600 */
                  {1,0x38}, /* 115200 */
-}; 
+};
 #endif
 /* rate = 1036800 / ((65 - prescale) * (1<<divider)) */
 
@@ -519,14 +519,14 @@ static void change_speed(struct m68k_serial *info, struct tty_struct *tty)
                 i = (i & ~CBAUDEX) + B38400;
         }
 
-	uart->ubaud = PUT_FIELD(UBAUD_DIVIDE,    hw_baud_table[i].divisor) | 
+	uart->ubaud = PUT_FIELD(UBAUD_DIVIDE,    hw_baud_table[i].divisor) |
 		PUT_FIELD(UBAUD_PRESCALER, hw_baud_table[i].prescale);
 
 	ustcnt &= ~(USTCNT_PARITYEN | USTCNT_ODD_EVEN | USTCNT_STOP | USTCNT_8_7);
-	
+
 	if ((cflag & CSIZE) == CS8)
 		ustcnt |= USTCNT_8_7;
-		
+
 	if (cflag & CSTOPB)
 		ustcnt |= USTCNT_STOP;
 
@@ -534,7 +534,7 @@ static void change_speed(struct m68k_serial *info, struct tty_struct *tty)
 		ustcnt |= USTCNT_PARITYEN;
 	if (cflag & PARODD)
 		ustcnt |= USTCNT_ODD_EVEN;
-	
+
 #ifdef CONFIG_SERIAL_68328_RTS_CTS
 	if (cflag & CRTSCTS) {
 		uart->utx.w &= ~ UTX_NOCTS;
@@ -544,7 +544,7 @@ static void change_speed(struct m68k_serial *info, struct tty_struct *tty)
 #endif
 
 	ustcnt |= USTCNT_TXEN;
-	
+
 	uart->ustcnt = ustcnt;
 	return;
 }
@@ -589,7 +589,7 @@ static void rs_fair_output(void)
 void console_print_68328(const char *p)
 {
 	char c;
-	
+
 	while((c=*(p++)) != 0) {
 		if(c == '\n')
 			rs_put_char('\r');
@@ -610,7 +610,7 @@ static void rs_set_ldisc(struct tty_struct *tty)
 		return;
 
 	info->is_cons = (tty->termios.c_line == N_TTY);
-	
+
 	printk("ttyS%d console mode %s\n", info->line, info->is_cons ? "on" : "off");
 }
 
@@ -676,7 +676,7 @@ static int rs_write(struct tty_struct * tty,
 
 	local_save_flags(flags);
 	while (1) {
-		local_irq_disable();		
+		local_irq_disable();
 		c = min_t(int, count, min(SERIAL_XMIT_SIZE - info->xmit_cnt - 1,
 				   SERIAL_XMIT_SIZE - info->xmit_head));
 		local_irq_restore(flags);
@@ -697,7 +697,7 @@ static int rs_write(struct tty_struct * tty,
 
 	if (info->xmit_cnt && !tty->stopped) {
 		/* Enable transmitter */
-		local_irq_disable();		
+		local_irq_disable();
 #ifndef USE_INTS
 		while(info->xmit_cnt) {
 #endif
@@ -727,7 +727,7 @@ static int rs_write_room(struct tty_struct *tty)
 {
 	struct m68k_serial *info = (struct m68k_serial *)tty->driver_data;
 	int	ret;
-				
+
 	if (serial_paranoia_check(info, tty->name, "rs_write_room"))
 		return 0;
 	ret = SERIAL_XMIT_SIZE - info->xmit_cnt - 1;
@@ -739,7 +739,7 @@ static int rs_write_room(struct tty_struct *tty)
 static int rs_chars_in_buffer(struct tty_struct *tty)
 {
 	struct m68k_serial *info = (struct m68k_serial *)tty->driver_data;
-				
+
 	if (serial_paranoia_check(info, tty->name, "rs_chars_in_buffer"))
 		return 0;
 	return info->xmit_cnt;
@@ -749,7 +749,7 @@ static void rs_flush_buffer(struct tty_struct *tty)
 {
 	struct m68k_serial *info = (struct m68k_serial *)tty->driver_data;
 	unsigned long flags;
-				
+
 	if (serial_paranoia_check(info, tty->name, "rs_flush_buffer"))
 		return;
 	local_irq_save(flags);
@@ -761,7 +761,7 @@ static void rs_flush_buffer(struct tty_struct *tty)
 /*
  * ------------------------------------------------------------
  * rs_throttle()
- * 
+ *
  * This routine is called by the upper-layer tty layer to signal that
  * incoming characters should be throttled.
  * ------------------------------------------------------------
@@ -772,7 +772,7 @@ static void rs_throttle(struct tty_struct * tty)
 
 	if (serial_paranoia_check(info, tty->name, "rs_throttle"))
 		return;
-	
+
 	if (I_IXOFF(tty))
 		info->x_char = STOP_CHAR(tty);
 
@@ -785,7 +785,7 @@ static void rs_unthrottle(struct tty_struct * tty)
 
 	if (serial_paranoia_check(info, tty->name, "rs_unthrottle"))
 		return;
-	
+
 	if (I_IXOFF(tty)) {
 		if (info->x_char)
 			info->x_char = 0;
@@ -806,7 +806,7 @@ static int get_serial_info(struct m68k_serial * info,
 			   struct serial_struct * retinfo)
 {
 	struct serial_struct tmp;
-  
+
 	if (!retinfo)
 		return -EFAULT;
 	memset(&tmp, 0, sizeof(tmp));
@@ -880,7 +880,7 @@ check_and_exit:
  * 	    release the bus after transmitting. This must be done when
  * 	    the transmit shift register is empty, not be done when the
  * 	    transmit holding register is empty.  This functionality
- * 	    allows an RS485 driver to be written in user space. 
+ * 	    allows an RS485 driver to be written in user space.
  */
 static int get_lsr_info(struct m68k_serial * info, unsigned int *value)
 {
@@ -910,11 +910,11 @@ static void send_break(struct m68k_serial * info, unsigned int duration)
         if (!info->port)
                 return;
         local_irq_save(flags);
-#ifdef USE_INTS	
+#ifdef USE_INTS
 	uart->utx.w |= UTX_SEND_BREAK;
 	msleep_interruptible(duration);
 	uart->utx.w &= ~UTX_SEND_BREAK;
-#endif		
+#endif
         local_irq_restore(flags);
 }
 
@@ -933,7 +933,7 @@ static int rs_ioctl(struct tty_struct *tty,
 		if (tty->flags & (1 << TTY_IO_ERROR))
 		    return -EIO;
 	}
-	
+
 	switch (cmd) {
 		case TCSBRK:	/* SVID version: non-zero arg --> no break */
 			retval = tty_check_change(tty);
@@ -978,13 +978,13 @@ static void rs_set_termios(struct tty_struct *tty, struct ktermios *old_termios)
 	if ((old_termios->c_cflag & CRTSCTS) &&
 	    !(tty->termios.c_cflag & CRTSCTS))
 		rs_start(tty);
-	
+
 }
 
 /*
  * ------------------------------------------------------------
  * rs_close()
- * 
+ *
  * This routine is called when the serial port gets closed.  First, we
  * wait for the last remaining data to be sent.  Then, we unlink its
  * S structure from the interrupt chain if necessary, and we free
@@ -1000,14 +1000,14 @@ static void rs_close(struct tty_struct *tty, struct file * filp)
 
 	if (serial_paranoia_check(info, tty->name, "rs_close"))
 		return;
-	
+
 	local_irq_save(flags);
-	
+
 	if (tty_hung_up_p(filp)) {
 		local_irq_restore(flags);
 		return;
 	}
-	
+
 	if ((tty->count == 1) && (port->count != 1)) {
 		/*
 		 * Uh, oh.  tty->count is 1, which means that the tty
@@ -1031,7 +1031,7 @@ static void rs_close(struct tty_struct *tty, struct file * filp)
 	}
 	port->flags |= ASYNC_CLOSING;
 	/*
-	 * Now we wait for the transmit buffer to clear; and we notify 
+	 * Now we wait for the transmit buffer to clear; and we notify
 	 * the line discipline to only process XON/XOFF characters.
 	 */
 	tty->closing = 1;
@@ -1049,11 +1049,11 @@ static void rs_close(struct tty_struct *tty, struct file * filp)
 
 	shutdown(info, tty);
 	rs_flush_buffer(tty);
-		
+
 	tty_ldisc_flush(tty);
 	tty->closing = 0;
 	tty_port_tty_set(&info->tport, NULL);
-#warning "This is not and has never been valid so fix it"	
+#warning "This is not and has never been valid so fix it"
 #if 0
 	if (tty->ldisc.num != ldiscs[N_TTY].num) {
 		if (tty->ldisc.close)
@@ -1063,7 +1063,7 @@ static void rs_close(struct tty_struct *tty, struct file * filp)
 		if (tty->ldisc.open)
 			(tty->ldisc.open)(tty);
 	}
-#endif	
+#endif
 	if (port->blocked_open) {
 		if (port->close_delay)
 			msleep_interruptible(jiffies_to_msecs(port->close_delay));
@@ -1080,10 +1080,10 @@ static void rs_close(struct tty_struct *tty, struct file * filp)
 void rs_hangup(struct tty_struct *tty)
 {
 	struct m68k_serial * info = (struct m68k_serial *)tty->driver_data;
-	
+
 	if (serial_paranoia_check(info, tty->name, "rs_hangup"))
 		return;
-	
+
 	rs_flush_buffer(tty);
 	shutdown(info, tty);
 	info->tport.count = 0;
@@ -1166,14 +1166,14 @@ rs68328_init(void)
 
 	/* Initialize the tty_driver structure */
 	/* SPARC: Not all of this is exactly right for us. */
-	
+
 	serial_driver->name = "ttyS";
 	serial_driver->major = TTY_MAJOR;
 	serial_driver->minor_start = 64;
 	serial_driver->type = TTY_DRIVER_TYPE_SERIAL;
 	serial_driver->subtype = SERIAL_TYPE_NORMAL;
 	serial_driver->init_termios = tty_std_termios;
-	serial_driver->init_termios.c_cflag = 
+	serial_driver->init_termios.c_cflag =
 			m68328_console_cbaud | CS8 | CREAD | HUPCL | CLOCAL;
 	serial_driver->flags = TTY_DRIVER_REAL_RAW;
 	tty_set_operations(serial_driver, &rs_ops);
@@ -1192,11 +1192,11 @@ rs68328_init(void)
 	    info->x_char = 0;
 	    info->line = i;
 	    info->is_cons = 1; /* Means shortcuts work */
-	    
-	    printk("%s%d at 0x%08x (irq = %d)", serial_driver->name, info->line, 
+
+	    printk("%s%d at 0x%08x (irq = %d)", serial_driver->name, info->line,
 		   info->port, info->irq);
 	    printk(" is a builtin MC68328 UART\n");
-	    
+
 #ifdef CONFIG_M68VZ328
 		if (i > 0 )
 			PJSEL &= 0xCF;  /* PSW enable second port output */
@@ -1244,7 +1244,7 @@ again:
 		goto again;
 	}
 
-	UBAUD = PUT_FIELD(UBAUD_DIVIDE,    hw_baud_table[i].divisor) | 
+	UBAUD = PUT_FIELD(UBAUD_DIVIDE,    hw_baud_table[i].divisor) |
 		PUT_FIELD(UBAUD_PRESCALER, hw_baud_table[i].prescale);
 	ustcnt &= ~(USTCNT_PARITYEN | USTCNT_ODD_EVEN | USTCNT_STOP | USTCNT_8_7);
 	ustcnt |= USTCNT_8_7;

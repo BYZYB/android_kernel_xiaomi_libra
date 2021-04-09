@@ -99,7 +99,7 @@ int copy_thread(unsigned long clone_flags, unsigned long usp,
 {
 	struct pt_regs *childregs = task_pt_regs(p);
 	struct switch_stack *swstack = ((struct switch_stack *)childregs) - 1;
-	
+
 	/* put the pt_regs structure at the end of the new kernel stack page and fix it up
 	 * remember that the task_struct doubles as the kernel stack for the task
 	 */
@@ -126,7 +126,7 @@ int copy_thread(unsigned long clone_flags, unsigned long usp,
 	/* we want to return into ret_from_sys_call after the _resume */
 
 	swstack->return_ip = (unsigned long) ret_from_fork; /* Will call ret_from_sys_call */
-	
+
 	/* fix the user-mode stackpointer */
 
 	p->thread.usp = usp ?: rdusp();

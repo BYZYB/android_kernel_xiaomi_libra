@@ -16,7 +16,7 @@
  *    You should have received a copy of the GNU General Public License
  *    along with this program; if not, write to the Free Software
  *    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- * 
+ *
  * Fixup routines for kernel exception handling.
  */
 #include <asm/asm-offsets.h>
@@ -35,7 +35,7 @@
 	extrd,u \t2,63,32,\t2
 #endif
 	/* t2 = &__per_cpu_offset[smp_processor_id()]; */
-	LDREGX \t2(\t1),\t2 
+	LDREGX \t2(\t1),\t2
 	addil LT%exception_data,%r27
 	LDREG RT%exception_data(%r1),\t1
 	/* t1 = &__get_cpu_var(exception_data) */

@@ -139,13 +139,13 @@ static ssize_t pSeries_nvram_read(char *buf, size_t count, loff_t *index)
 		len = count;
 		if (len > NVRW_CNT)
 			len = NVRW_CNT;
-		
+
 		if ((rtas_call(nvram_fetch, 3, 2, &done, i, __pa(nvram_buf),
 			       len) != 0) || len != done) {
 			spin_unlock_irqrestore(&nvram_lock, flags);
 			return -EIO;
 		}
-		
+
 		memcpy(p, nvram_buf, len);
 
 		p += len;
@@ -153,7 +153,7 @@ static ssize_t pSeries_nvram_read(char *buf, size_t count, loff_t *index)
 	}
 
 	spin_unlock_irqrestore(&nvram_lock, flags);
-	
+
 	*index = i;
 	return p - buf;
 }
@@ -190,12 +190,12 @@ static ssize_t pSeries_nvram_write(char *buf, size_t count, loff_t *index)
 			spin_unlock_irqrestore(&nvram_lock, flags);
 			return -EIO;
 		}
-		
+
 		p += len;
 		i += len;
 	}
 	spin_unlock_irqrestore(&nvram_lock, flags);
-	
+
 	*index = i;
 	return p - buf;
 }
@@ -241,7 +241,7 @@ int nvram_write_os_partition(struct nvram_os_partition *part, char * buff,
 	int rc;
 	loff_t tmp_index;
 	struct err_log_info info;
-	
+
 	if (part->index == -1) {
 		return -ESPIPE;
 	}
@@ -266,7 +266,7 @@ int nvram_write_os_partition(struct nvram_os_partition *part, char * buff,
 		pr_err("%s: Failed nvram_write (%d)\n", __FUNCTION__, rc);
 		return rc;
 	}
-	
+
 	return 0;
 }
 
@@ -290,7 +290,7 @@ int nvram_read_error_log(char * buff, int length,
 	int rc;
 	loff_t tmp_index;
 	struct err_log_info info;
-	
+
 	if (rtas_log_partition.index == -1)
 		return -1;
 
@@ -330,7 +330,7 @@ int nvram_clear_error_log(void)
 		return -1;
 
 	tmp_index = rtas_log_partition.index;
-	
+
 	rc = ppc_md.nvram_write((char *)&clear_word, sizeof(int), &tmp_index);
 	if (rc <= 0) {
 		printk(KERN_ERR "nvram_clear_error_log: Failed nvram_write (%d)\n", rc);
@@ -401,7 +401,7 @@ static int __init pseries_nvram_init_os_partition(struct nvram_os_partition
 
 	part->index = p;
 	part->size = nvram_get_partition_size(p) - sizeof(struct err_log_info);
-	
+
 	return 0;
 }
 

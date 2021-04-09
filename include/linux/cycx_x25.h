@@ -24,7 +24,7 @@
 */
 #ifndef PACKED
 #define PACKED __attribute__((packed))
-#endif 
+#endif
 
 /* X.25 shared memory layout. */
 #define	X25_MBOX_OFFS	0x300	/* general mailbox block */

@@ -363,7 +363,7 @@ int radeon_bo_list_validate(struct list_head *head, int ring)
 		bo = lobj->bo;
 		if (!bo->pin_count) {
 			domain = lobj->domain;
-			
+
 		retry:
 			radeon_ttm_placement_from_domain(bo, domain);
 			if (ring == R600_RING_TYPE_UVD_INDEX)

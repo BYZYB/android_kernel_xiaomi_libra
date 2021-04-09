@@ -96,7 +96,7 @@ static char __init *decode_eisa_sig(unsigned long addr)
 		if (!i && (sig[0] & 0x80))
 			return NULL;
 	}
-	
+
         sig_str[0] = ((sig[0] >> 2) & 0x1f) + ('A' - 1);
         sig_str[1] = (((sig[0] & 3) << 3) | (sig[1] >> 5)) + ('A' - 1);
         sig_str[2] = (sig[1] & 0x1f) + ('A' - 1);
@@ -198,7 +198,7 @@ static int __init eisa_init_device(struct eisa_root_device *root,
 	sig = decode_eisa_sig(sig_addr);
 	if (!sig)
 		return -1;	/* No EISA device here */
-	
+
 	memcpy(edev->id.sig, sig, EISA_SIG_LEN);
 	edev->slot = slot;
 	edev->state = inb(SLOT_ADDRESS(root, slot) + EISA_CONFIG_OFFSET)
@@ -222,7 +222,7 @@ static int __init eisa_init_device(struct eisa_root_device *root,
 
 	if (is_forced_dev(enable_dev, enable_dev_count, root, edev))
 		edev->state = EISA_CONFIG_ENABLED | EISA_CONFIG_FORCED;
-	
+
 	if (is_forced_dev(disable_dev, disable_dev_count, root, edev))
 		edev->state = EISA_CONFIG_FORCED;
 
@@ -273,7 +273,7 @@ static int __init eisa_request_resources(struct eisa_root_device *root,
 			edev->res[i].start = edev->res[i].end = 0;
 			continue;
 		}
-		
+
 		if (slot) {
 			edev->res[i].name  = NULL;
 			edev->res[i].start = SLOT_ADDRESS(root, slot)
@@ -294,7 +294,7 @@ static int __init eisa_request_resources(struct eisa_root_device *root,
 	}
 
 	return 0;
-	
+
  failed:
 	while (--i >= 0)
 		release_resource(&edev->res[i]);
@@ -321,13 +321,13 @@ static int __init eisa_probe(struct eisa_root_device *root)
 
 	/* First try to get hold of slot 0. If there is no device
 	 * here, simply fail, unless root->force_probe is set. */
-	
+
 	edev = kzalloc(sizeof(*edev), GFP_KERNEL);
 	if (!edev) {
 		dev_err(root->dev, "EISA: Couldn't allocate mainboard slot\n");
 		return -ENOMEM;
 	}
-		
+
 	if (eisa_request_resources(root, edev, 0)) {
 		dev_warn(root->dev,
 		         "EISA: Cannot allocate resource for mainboard\n");
@@ -353,9 +353,9 @@ static int __init eisa_probe(struct eisa_root_device *root)
 		eisa_release_resources(edev);
 		kfree(edev);
 	}
-	
+
  force_probe:
-	
+
         for (c = 0, i = 1; i <= root->slots; i++) {
 		edev = kzalloc(sizeof(*edev), GFP_KERNEL);
 		if (!edev) {
@@ -421,7 +421,7 @@ int __init eisa_root_register(struct eisa_root_device *root)
 	 * been already registered. This prevents the virtual root
 	 * device from registering after the real one has, for
 	 * example... */
-	
+
 	root->eisa_root_res.name  = eisa_root_res.name;
 	root->eisa_root_res.start = root->res->start;
 	root->eisa_root_res.end   = root->res->end;
@@ -430,7 +430,7 @@ int __init eisa_root_register(struct eisa_root_device *root)
 	err = request_resource(&eisa_root_res, &root->eisa_root_res);
 	if (err)
 		return err;
-	
+
 	root->bus_nr = eisa_bus_count++;
 
 	err = eisa_probe(root);
@@ -443,7 +443,7 @@ int __init eisa_root_register(struct eisa_root_device *root)
 static int __init eisa_init(void)
 {
 	int r;
-	
+
 	r = bus_register(&eisa_bus_type);
 	if (r)
 		return r;

@@ -42,7 +42,7 @@ static inline void __arch_swab64s(__u64 *x)
 static inline __u32 __arch_swab32p(const __u32 *x)
 {
 	__u32 result;
-	
+
 	asm volatile(
 #ifndef __s390x__
 		"	icm	%0,8,%O1+3(%R1)\n"
@@ -62,7 +62,7 @@ static inline __u32 __arch_swab32p(const __u32 *x)
 static inline __u32 __arch_swab32(__u32 x)
 {
 	__u32 result;
-	
+
 	asm volatile("lrvr  %0,%1" : "=d" (result) : "d" (x));
 	return result;
 }
@@ -72,7 +72,7 @@ static inline __u32 __arch_swab32(__u32 x)
 static inline __u16 __arch_swab16p(const __u16 *x)
 {
 	__u16 result;
-	
+
 	asm volatile(
 #ifndef __s390x__
 		"	icm	%0,2,%O1+1(%R1)\n"

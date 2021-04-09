@@ -13,7 +13,7 @@ CHANGES
 OVERVIEW
 
 This README will address issues regarding how to configure the kernel
-to access a RIO 500 mp3 player.  
+to access a RIO 500 mp3 player.
 Before I explain how to use this to access the Rio500 please be warned:
 
 W A R N I N G:
@@ -27,20 +27,20 @@ It seems that the Rio has a problem when sending .mp3 with low batteries.
 I suggest when the batteries are low and you want to transfer stuff that you
 replace it with a fresh one. In my case, what happened is I lost two 16kb
 blocks (they are no longer usable to store information to it). But I don't
-know if that's normal or not; it could simply be a problem with the flash 
+know if that's normal or not; it could simply be a problem with the flash
 memory.
 
-In an extreme case, I left my Rio playing overnight and the batteries wore 
-down to nothing and appear to have corrupted the flash memory. My RIO 
-needed to be replaced as a result.  Diamond tech support is aware of the 
-problem.  Do NOT allow your batteries to wear down to nothing before 
-changing them.  It appears RIO 500 firmware does not handle low battery 
-power well at all. 
+In an extreme case, I left my Rio playing overnight and the batteries wore
+down to nothing and appear to have corrupted the flash memory. My RIO
+needed to be replaced as a result.  Diamond tech support is aware of the
+problem.  Do NOT allow your batteries to wear down to nothing before
+changing them.  It appears RIO 500 firmware does not handle low battery
+power well at all.
 
-On systems with OHCI controllers, the kernel OHCI code appears to have 
-power on problems with some chipsets.  If you are having problems 
-connecting to your RIO 500, try turning it on first and then plugging it 
-into the USB cable.  
+On systems with OHCI controllers, the kernel OHCI code appears to have
+power on problems with some chipsets.  If you are having problems
+connecting to your RIO 500, try turning it on first and then plugging it
+into the USB cable.
 
 Contact information:
 --------------------
@@ -53,12 +53,12 @@ Contact information:
 Authors:
 -------
 
-Most of the code was written by Cesar Miquel <miquel@df.uba.ar>. Keith 
+Most of the code was written by Cesar Miquel <miquel@df.uba.ar>. Keith
 Clayton <kclayton@jps.net> is incharge of the PPC port and making sure
 things work there. Bruce Tenison <btenison@dibbs.net> is adding support
 for .fon files and also does testing. The program will mostly sure be
 re-written and Pete Ikusz along with the rest will re-design it. I would
-also like to thank Tri Nguyen <tmn_3022000@hotmail.com> who provided use 
+also like to thank Tri Nguyen <tmn_3022000@hotmail.com> who provided use
 with some important information regarding the communication with the Rio.
 
 ADDITIONAL INFORMATION and Userspace tools

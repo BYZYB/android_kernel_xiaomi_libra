@@ -120,7 +120,7 @@ static struct notifier_block ipc_memory_nb = {
  *	chain: since msgmni scales to lowmem this callback routine will be
  *	called upon successful memory add / remove to recompute msmgni.
  */
- 
+
 static int __init ipc_init(void)
 {
 	sem_init();
@@ -139,7 +139,7 @@ __initcall(ipc_init);
  *	Set up the sequence range to use for the ipc identifier range (limited
  *	below IPCMNI) then initialise the ids idr.
  */
- 
+
 void ipc_init_ids(struct ipc_ids *ids)
 {
 	init_rwsem(&ids->rwsem);
@@ -193,16 +193,16 @@ void __init ipc_init_proc_interface(const char *path, const char *header,
 #endif
 
 /**
- *	ipc_findkey	-	find a key in an ipc identifier set	
+ *	ipc_findkey	-	find a key in an ipc identifier set
  *	@ids: Identifier set
  *	@key: The key to find
- *	
+ *
  *	Requires ipc_ids.rwsem locked.
  *	Returns the LOCKED pointer to the ipc structure if found or NULL
  *	if not.
  *	If key is found ipc points to the owning ipc structure
  */
- 
+
 static struct kern_ipc_perm *ipc_findkey(struct ipc_ids *ids, key_t key)
 {
 	struct kern_ipc_perm *ipc;
@@ -440,7 +440,7 @@ static int ipcget_public(struct ipc_namespace *ns, struct ipc_ids *ids,
  *	ipc_ids.rwsem (as a writer) and the spinlock for this ID are held
  *	before this function is called, and remain locked on the exit.
  */
- 
+
 void ipc_rmid(struct ipc_ids *ids, struct kern_ipc_perm *ipcp)
 {
 	int lid = ipcid_to_idx(ipcp->id);
@@ -461,7 +461,7 @@ void ipc_rmid(struct ipc_ids *ids, struct kern_ipc_perm *ipcp)
  *	Allocate memory from the appropriate pools and return a pointer to it.
  *	NULL is returned if the allocation fails
  */
- 
+
 void *ipc_alloc(int size)
 {
 	void *out;
@@ -490,7 +490,7 @@ void ipc_free(void* ptr, int size)
 }
 
 /**
- *	ipc_rcu_alloc	-	allocate ipc and rcu space 
+ *	ipc_rcu_alloc	-	allocate ipc and rcu space
  *	@size: size desired
  *
  *	Allocate memory for the rcu header structure +  the object.
@@ -546,7 +546,7 @@ void ipc_rcu_free(struct rcu_head *head)
  *
  * 	@flag will most probably be 0 or S_...UGO from <linux/stat.h>
  */
- 
+
 int ipcperms(struct ipc_namespace *ns, struct kern_ipc_perm *ipcp, short flag)
 {
 	kuid_t euid = current_euid();
@@ -561,7 +561,7 @@ int ipcperms(struct ipc_namespace *ns, struct kern_ipc_perm *ipcp, short flag)
 	else if (in_group_p(ipcp->cgid) || in_group_p(ipcp->gid))
 		granted_mode >>= 3;
 	/* is there some bit set in requested_mode but not in granted_mode? */
-	if ((requested_mode & ~granted_mode & 0007) && 
+	if ((requested_mode & ~granted_mode & 0007) &&
 	    !ns_capable(ns->user_ns, CAP_IPC_OWNER))
 		return -1;
 
@@ -581,7 +581,7 @@ int ipcperms(struct ipc_namespace *ns, struct kern_ipc_perm *ipcp, short flag)
  *	Turn the kernel object @in into a set of permissions descriptions
  *	for returning to userspace (@out).
  */
- 
+
 
 void kernel_to_ipc64_perm (struct kern_ipc_perm *in, struct ipc64_perm *out)
 {
@@ -602,7 +602,7 @@ void kernel_to_ipc64_perm (struct kern_ipc_perm *in, struct ipc64_perm *out)
  *	Turn the new style permissions object @in into a compatibility
  *	object and store it into the @out pointer.
  */
- 
+
 void ipc64_perm_to_ipc_perm (struct ipc64_perm *in, struct ipc_perm *out)
 {
 	out->key	= in->key;
@@ -784,11 +784,11 @@ err:
  *	ipc_parse_version	-	IPC call version
  *	@cmd: pointer to command
  *
- *	Return IPC_64 for new style IPC and IPC_OLD for old style IPC. 
+ *	Return IPC_64 for new style IPC and IPC_OLD for old style IPC.
  *	The @cmd value is turned from an encoding command and version into
  *	just the command code.
  */
- 
+
 int ipc_parse_version (int *cmd)
 {
 	if (*cmd & IPC_64) {

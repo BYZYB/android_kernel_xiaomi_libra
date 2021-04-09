@@ -71,16 +71,16 @@ ndo_start_xmit:
 	called without holding netif_tx_lock. In this case the driver
 	has to lock by itself when needed. It is recommended to use a try lock
 	for this and return NETDEV_TX_LOCKED when the spin lock fails.
-	The locking there should also properly protect against 
+	The locking there should also properly protect against
 	set_rx_mode. Note that the use of NETIF_F_LLTX is deprecated.
 	Don't use it for new drivers.
 
 	Context: Process with BHs disabled or BH (timer),
 	         will be called with interrupts disabled by netconsole.
 
-	Return codes: 
-	o NETDEV_TX_OK everything ok. 
-	o NETDEV_TX_BUSY Cannot transmit packet, try later 
+	Return codes:
+	o NETDEV_TX_OK everything ok.
+	o NETDEV_TX_BUSY Cannot transmit packet, try later
 	  Usually a bug, means queue start/stop flow control is broken in
 	  the driver. Note: the driver must NOT put the skb in its DMA ring.
 	o NETDEV_TX_LOCKED Locking failed, please retry quickly.

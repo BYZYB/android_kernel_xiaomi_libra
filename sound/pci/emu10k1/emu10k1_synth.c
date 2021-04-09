@@ -106,7 +106,7 @@ static int snd_emu10k1_synth_delete_device(struct snd_seq_device *dev)
 
 static int __init alsa_emu10k1_synth_init(void)
 {
-	
+
 	static struct snd_seq_dev_ops ops = {
 		snd_emu10k1_synth_new_device,
 		snd_emu10k1_synth_delete_device,

@@ -225,7 +225,7 @@ diff -u -p a/crypto/ctr.c b/crypto/ctr.c
  	if (IS_ERR(alg))
 -		return ERR_PTR(PTR_ERR(alg));
 +		return ERR_CAST(alg);
- 
+
  	/* Block size must be >= 4 bytes. */
  	err = -EINVAL;
 
@@ -267,7 +267,7 @@ diff -u -p /home/user/linux/crypto/ctr.c /tmp/nothing
  				  CRYPTO_ALG_TYPE_MASK);
  	if (IS_ERR(alg))
 -		return ERR_PTR(PTR_ERR(alg));
- 
+
  	/* Block size must be >= 4 bytes. */
  	err = -EINVAL;
 

@@ -23,7 +23,7 @@
 
 /*
  * Stackframe:
- *		
+ *
  *         +-> Back chain			(SP + 256)
  *         |   General register save area	(SP + 112)
  *         |   Parameter save area		(SP + 48)
@@ -59,7 +59,7 @@ _GLOBAL(__hash_page_4K)
 	std	r6,STK_PARAM(R6)(r1)
 	std	r8,STK_PARAM(R8)(r1)
 	std	r9,STK_PARAM(R9)(r1)
-	
+
 	/* Save non-volatile registers.
 	 * r31 will hold "old PTE"
 	 * r30 is "new PTE"
@@ -72,12 +72,12 @@ _GLOBAL(__hash_page_4K)
 	std	r29,STK_REG(R29)(r1)
 	std	r30,STK_REG(R30)(r1)
 	std	r31,STK_REG(R31)(r1)
-	
+
 	/* Step 1:
 	 *
 	 * Check permissions, atomically mark the linux PTE busy
 	 * and hashed.
-	 */ 
+	 */
 1:
 	ldarx	r31,0,r6
 	/* Check access rights (access & ~(pte_val(*ptep))) */
@@ -151,7 +151,7 @@ END_MMU_FTR_SECTION_IFSET(MMU_FTR_1T_SEGMENT)
 	ori	r3,r3,HPTE_R_C		/* Always add "C" bit for perf. */
 
 	/* We eventually do the icache sync here (maybe inline that
-	 * code rather than call a C function...) 
+	 * code rather than call a C function...)
 	 */
 BEGIN_FTR_SECTION
 	mr	r4,r30
@@ -206,7 +206,7 @@ _GLOBAL(htab_call_hpte_insert1)
 	beq-	htab_pte_insert_failure
 
 	/* Now try secondary slot */
-	
+
 	/* physical address r5 */
 	rldicl	r5,r31,64-PTE_RPN_SHIFT,PTE_RPN_SHIFT
 	sldi	r5,r5,PAGE_SHIFT
@@ -214,7 +214,7 @@ _GLOBAL(htab_call_hpte_insert1)
 	/* Calculate secondary group hash */
 	andc	r0,r27,r28
 	rldicr	r3,r0,3,63-3	/* r0 = (~hash & mask) << 3 */
-	
+
 	/* Call ppc_md.hpte_insert */
 	ld	r6,STK_PARAM(R4)(r1)	/* Retrieve new pp bits */
 	mr	r4,r29			/* Retrieve vpn */
@@ -237,13 +237,13 @@ _GLOBAL(htab_call_hpte_insert2)
 	bne	2f
 	not	r5,r5
 2:	and	r0,r5,r27
-	rldicr	r3,r0,3,63-3	/* r0 = (hash & mask) << 3 */	
+	rldicr	r3,r0,3,63-3	/* r0 = (hash & mask) << 3 */
 	/* Call ppc_md.hpte_remove */
 _GLOBAL(htab_call_hpte_remove)
 	bl	.			/* Patched by htab_finish_init() */
 
 	/* Try all again */
-	b	htab_insert_pte	
+	b	htab_insert_pte
 
 htab_bail_ok:
 	li	r3,0
@@ -252,7 +252,7 @@ htab_bail_ok:
 htab_pte_insert_ok:
 	/* Insert slot number & secondary bit in PTE */
 	rldimi	r30,r3,12,63-15
-		
+
 	/* Write out the PTE with a normal write
 	 * (maybe add eieio may be good still ?)
 	 */
@@ -296,7 +296,7 @@ _GLOBAL(htab_call_hpte_updatepp)
 	bl	.			/* Patched by htab_finish_init() */
 
 	/* if we failed because typically the HPTE wasn't really here
-	 * we try an insertion. 
+	 * we try an insertion.
 	 */
 	cmpdi	0,r3,-1
 	beq-	htab_insert_pte
@@ -587,7 +587,7 @@ htab_inval_old_hpte:
 	ori	r0,r0,_PAGE_HPTE_SUB@l
 	andc	r30,r30,r0
 	b	htab_insert_pte
-	
+
 htab_bail_ok:
 	li	r3,0
 	b	htab_bail

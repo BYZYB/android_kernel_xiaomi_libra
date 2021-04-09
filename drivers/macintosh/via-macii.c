@@ -22,7 +22,7 @@
  * Apple's "ADB Analyzer" bus sniffer is invaluable:
  *   ftp://ftp.apple.com/developer/Tool_Chest/Devices_-_Hardware/Apple_Desktop_Bus/
  */
- 
+
 #include <stdarg.h>
 #include <linux/types.h>
 #include <linux/errno.h>
@@ -152,9 +152,9 @@ int macii_init(void)
 {
 	unsigned long flags;
 	int err;
-	
+
 	local_irq_save(flags);
-	
+
 	err = macii_init_via();
 	if (err) goto out;
 
@@ -168,7 +168,7 @@ out:
 	return err;
 }
 
-/* initialize the hardware */	
+/* initialize the hardware */
 static int macii_init_via(void)
 {
 	unsigned char x;
@@ -259,7 +259,7 @@ static int macii_write(struct adb_request *req)
 		req->complete = 1;
 		return -EINVAL;
 	}
-	
+
 	req->next = NULL;
 	req->sent = 0;
 	req->complete = 0;
@@ -325,7 +325,7 @@ static void macii_poll(void)
 static int macii_reset_bus(void)
 {
 	static struct adb_request req;
-	
+
 	if (request_is_queued(&req))
 		return 0;
 
@@ -374,7 +374,7 @@ static void macii_start(void)
  * to be activity on the ADB bus. The chip will poll to achieve this.
  *
  * The basic ADB state machine was left unchanged from the original MacII code
- * by Alan Cox, which was based on the CUDA driver for PowerMac. 
+ * by Alan Cox, which was based on the CUDA driver for PowerMac.
  * The syntax of the ADB status lines is totally different on MacII,
  * though. MacII uses the states Command -> Even -> Odd -> Even ->...-> Idle
  * for sending and Idle -> Even -> Odd -> Even ->...-> Idle for receiving.

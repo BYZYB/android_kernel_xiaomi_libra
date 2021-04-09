@@ -2135,7 +2135,7 @@ xfs_dev_is_read_only(
  * 	3. accurate counter sync requires m_sb_lock + per cpu locks
  * 	4. modifying per-cpu counters requires holding per-cpu lock
  * 	5. modifying global counters requires holding m_sb_lock
- *	6. enabling or disabling a counter requires holding the m_sb_lock 
+ *	6. enabling or disabling a counter requires holding the m_sb_lock
  *	   and _none_ of the per-cpu locks.
  *
  * Disabled counters are only ever re-enabled by a balance operation

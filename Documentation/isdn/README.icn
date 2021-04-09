@@ -13,7 +13,7 @@ WWW   http:/www.think.de
 
 
 The card communicates with the PC by two interfaces:
-  1. A range of 4 successive port-addresses, whose base address can be 
+  1. A range of 4 successive port-addresses, whose base address can be
      configured with the switches.
   2. A memory window with 16KB-256KB size, which can be setup in 16k steps
      over the whole range of 16MB. Isdn4linux only uses a 16k window.
@@ -39,7 +39,7 @@ Setting up the IO-address dipswitches for the ICN-ISDN-card:
       1  0  1  0x350
       1  1  0  0x360
       1  1  1  NOT ALLOWED!
-    
+
   2. Setting for the card with dip-switches:
 
      (0 = switch closed, 1 = switch open)
@@ -81,7 +81,7 @@ Driver built into the kernel:
   idstring must start with a character! There is no way for the driver
   to distinguish between a 2B and 4B type card. Therefore, by supplying
   TWO idstrings, you tell the driver that you have a 4B installed.
-  
+
   If you like to use more than one card, you can use the program
   "icnctrl" from the utility-package to configure additional cards.
   You need to configure shared memory only once, since the icn-driver
@@ -104,12 +104,12 @@ Driver built as module:
 
   where p, m, idstring1 and idstring2 have the same meanings as the
   parameters described for the kernel-version above.
-      
+
   When using the ICN double card (4B), you MUST define TWO idstrings.
   idstring must start with a character! There is no way for the driver
   to distinguish between a 2B and 4B type card. Therefore, by supplying
   TWO idstrings, you tell the driver that you have a 4B installed.
-  
+
   Using the "icnctrl"-utility, the same features apply to the modularized
   version like to the kernel-builtin one.
 

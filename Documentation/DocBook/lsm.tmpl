@@ -7,7 +7,7 @@
  <title>Linux Security Modules:  General Security Hooks for Linux</title>
  <authorgroup>
  <author>
- <firstname>Stephen</firstname> 
+ <firstname>Stephen</firstname>
  <surname>Smalley</surname>
  <affiliation>
  <orgname>NAI Labs</orgname>
@@ -15,7 +15,7 @@
  </affiliation>
  </author>
  <author>
- <firstname>Timothy</firstname> 
+ <firstname>Timothy</firstname>
  <surname>Fraser</surname>
  <affiliation>
  <orgname>NAI Labs</orgname>
@@ -23,7 +23,7 @@
  </affiliation>
  </author>
  <author>
- <firstname>Chris</firstname> 
+ <firstname>Chris</firstname>
  <surname>Vance</surname>
  <affiliation>
  <orgname>NAI Labs</orgname>
@@ -102,12 +102,12 @@ to support new system calls for security-aware applications.
 <para>
 The LSM security fields are simply <type>void*</type> pointers.  For
 process and program execution security information, security fields
-were added to <structname>struct task_struct</structname> and 
+were added to <structname>struct task_struct</structname> and
 <structname>struct linux_binprm</structname>.  For filesystem security
-information, a security field was added to 
+information, a security field was added to
 <structname>struct super_block</structname>.  For pipe, file, and socket
-security information, security fields were added to 
-<structname>struct inode</structname> and 
+security information, security fields were added to
+<structname>struct inode</structname> and
 <structname>struct file</structname>.  For packet and network device security
 information, security fields were added to
 <structname>struct sk_buff</structname> and
@@ -115,8 +115,8 @@ information, security fields were added to
 information, security fields were added to
 <structname>struct kern_ipc_perm</structname> and
 <structname>struct msg_msg</structname>; additionally, the definitions
-for <structname>struct msg_msg</structname>, <structname>struct 
-msg_queue</structname>, and <structname>struct 
+for <structname>struct msg_msg</structname>, <structname>struct
+msg_queue</structname>, and <structname>struct
 shmid_kernel</structname> were moved to header files
 (<filename>include/linux/msg.h</filename> and
 <filename>include/linux/shm.h</filename> as appropriate) to allow
@@ -201,7 +201,7 @@ field after allocation, such as the <function>post_lookup</function>
 hook in <structname>struct inode_security_ops</structname>.  This hook
 is used to set security information for inodes after successful lookup
 operations.  An example of the second category of hooks is the
-<function>permission</function> hook in 
+<function>permission</function> hook in
 <structname>struct inode_security_ops</structname>.  This hook checks
 permission when accessing an inode.
 </para>

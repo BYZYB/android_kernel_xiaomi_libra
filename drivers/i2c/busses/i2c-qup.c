@@ -1426,7 +1426,7 @@ static const struct i2c_algorithm qup_i2c_algo = {
 	.functionality	= qup_i2c_func,
 };
 
-static int 
+static int
 qup_i2c_probe(struct platform_device *pdev)
 {
 	struct qup_i2c_dev	*dev;
@@ -1744,7 +1744,7 @@ static void qup_i2c_mem_release(struct platform_device *pdev, const char *name)
 			"platform_get_resource_byname(%s) failed\n", name);
 }
 
-static int 
+static int
 qup_i2c_remove(struct platform_device *pdev)
 {
 	struct qup_i2c_dev *dev = platform_get_drvdata(pdev);

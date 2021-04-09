@@ -10,13 +10,13 @@
  * Maintained by: <tpmdd-devel@lists.sourceforge.net>
  *
  * Device driver for TCG/TCPA TPM (trusted platform module).
- * Specifications at www.trustedcomputinggroup.org	 
+ * Specifications at www.trustedcomputinggroup.org
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, version 2 of the
  * License.
- * 
+ *
  * Note, the TPM chip is not interrupt driven (only polling)
  * and can have very long timeouts (minutes!). Hence the unusual
  * calls to msleep.
@@ -985,12 +985,12 @@ ssize_t tpm_show_pubek(struct device *dev, struct device_attribute *attr,
 	if (err)
 		goto out;
 
-	/* 
+	/*
 	   ignore header 10 bytes
 	   algorithm 32 bits (1 == RSA )
 	   encscheme 16 bits
 	   sigscheme 16 bits
-	   parameters (RSA 12->bytes: keybit, #primes, expbit)  
+	   parameters (RSA 12->bytes: keybit, #primes, expbit)
 	   keylenbytes 32 bits
 	   256 byte modulus
 	   ignore checksum 20 bytes
@@ -1508,7 +1508,7 @@ static void tpm_dev_release(struct device *dev)
 EXPORT_SYMBOL_GPL(tpm_dev_release);
 
 /*
- * Called from tpm_<specific>.c probe function only for devices 
+ * Called from tpm_<specific>.c probe function only for devices
  * the driver has determined it should claim.  Prior to calling
  * this function the specific probe function has called pci_enable_device
  * upon errant exit from this function specific probe function should call

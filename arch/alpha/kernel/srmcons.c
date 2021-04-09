@@ -24,7 +24,7 @@
 static DEFINE_SPINLOCK(srmcons_callback_lock);
 static int srm_is_registered_console = 0;
 
-/* 
+/*
  * The TTY driver
  */
 #define MAX_SRM_CONSOLE_DEVICES 1	/* only support 1 console device */
@@ -76,7 +76,7 @@ srmcons_receive_chars(unsigned long data)
 		if (!srmcons_do_receive_chars(port))
 			incr = 100;
 		spin_unlock(&srmcons_callback_lock);
-	} 
+	}
 
 	spin_lock(&port->lock);
 	if (port->tty)
@@ -98,14 +98,14 @@ srmcons_do_write(struct tty_port *port, const char *buf, int count)
 
 	for (cur = (char *)buf; remaining > 0; ) {
 		need_cr = 0;
-		/* 
+		/*
 		 * Break it up into reasonable size chunks to allow a chance
 		 * for input to get in
 		 */
 		for (c = 0; c < min_t(long, 128L, remaining) && !need_cr; c++)
 			if (cur[c] == '\n')
 				need_cr = 1;
-		
+
 		while (c > 0) {
 			result.as_long = callback_puts(0, cur, c);
 			c -= result.bits.c;
@@ -240,7 +240,7 @@ srmcons_init(void)
 
 module_init(srmcons_init);
 
-
+
 /*
  * The console driver
  */

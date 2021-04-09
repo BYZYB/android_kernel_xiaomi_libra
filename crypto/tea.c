@@ -1,9 +1,9 @@
-/* 
+/*
  * Cryptographic API.
  *
  * TEA, XTEA, and XETA crypto alogrithms
  *
- * The TEA and Xtended TEA algorithms were developed by David Wheeler 
+ * The TEA and Xtended TEA algorithms were developed by David Wheeler
  * and Roger Needham at the Computer Laboratory of Cambridge University.
  *
  * Due to the order of evaluation in XTEA many people have incorrectly
@@ -55,7 +55,7 @@ static int tea_setkey(struct crypto_tfm *tfm, const u8 *in_key,
 	ctx->KEY[2] = le32_to_cpu(key[2]);
 	ctx->KEY[3] = le32_to_cpu(key[3]);
 
-	return 0; 
+	return 0;
 
 }
 
@@ -82,7 +82,7 @@ static void tea_encrypt(struct crypto_tfm *tfm, u8 *dst, const u8 *src)
 		y += ((z << 4) + k0) ^ (z + sum) ^ ((z >> 5) + k1);
 		z += ((y << 4) + k2) ^ (y + sum) ^ ((y >> 5) + k3);
 	}
-	
+
 	out[0] = cpu_to_le32(y);
 	out[1] = cpu_to_le32(z);
 }
@@ -112,7 +112,7 @@ static void tea_decrypt(struct crypto_tfm *tfm, u8 *dst, const u8 *src)
 		y -= ((z << 4) + k0) ^ (z + sum) ^ ((z >> 5) + k1);
 		sum -= TEA_DELTA;
 	}
-	
+
 	out[0] = cpu_to_le32(y);
 	out[1] = cpu_to_le32(z);
 }
@@ -128,7 +128,7 @@ static int xtea_setkey(struct crypto_tfm *tfm, const u8 *in_key,
 	ctx->KEY[2] = le32_to_cpu(key[2]);
 	ctx->KEY[3] = le32_to_cpu(key[3]);
 
-	return 0; 
+	return 0;
 
 }
 
@@ -144,11 +144,11 @@ static void xtea_encrypt(struct crypto_tfm *tfm, u8 *dst, const u8 *src)
 	z = le32_to_cpu(in[1]);
 
 	while (sum != limit) {
-		y += ((z << 4 ^ z >> 5) + z) ^ (sum + ctx->KEY[sum&3]); 
+		y += ((z << 4 ^ z >> 5) + z) ^ (sum + ctx->KEY[sum&3]);
 		sum += XTEA_DELTA;
-		z += ((y << 4 ^ y >> 5) + y) ^ (sum + ctx->KEY[sum>>11 &3]); 
+		z += ((y << 4 ^ y >> 5) + y) ^ (sum + ctx->KEY[sum>>11 &3]);
 	}
-	
+
 	out[0] = cpu_to_le32(y);
 	out[1] = cpu_to_le32(z);
 }
@@ -170,7 +170,7 @@ static void xtea_decrypt(struct crypto_tfm *tfm, u8 *dst, const u8 *src)
 		sum -= XTEA_DELTA;
 		y -= ((z << 4 ^ z >> 5) + z) ^ (sum + ctx->KEY[sum & 3]);
 	}
-	
+
 	out[0] = cpu_to_le32(y);
 	out[1] = cpu_to_le32(z);
 }
@@ -192,7 +192,7 @@ static void xeta_encrypt(struct crypto_tfm *tfm, u8 *dst, const u8 *src)
 		sum += XTEA_DELTA;
 		z += (y << 4 ^ y >> 5) + (y ^ sum) + ctx->KEY[sum>>11 &3];
 	}
-	
+
 	out[0] = cpu_to_le32(y);
 	out[1] = cpu_to_le32(z);
 }
@@ -214,7 +214,7 @@ static void xeta_decrypt(struct crypto_tfm *tfm, u8 *dst, const u8 *src)
 		sum -= XTEA_DELTA;
 		y -= (z << 4 ^ z >> 5) + (z ^ sum) + ctx->KEY[sum & 3];
 	}
-	
+
 	out[0] = cpu_to_le32(y);
 	out[1] = cpu_to_le32(z);
 }

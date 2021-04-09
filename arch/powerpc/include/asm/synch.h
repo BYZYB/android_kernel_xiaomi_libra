@@ -1,5 +1,5 @@
-#ifndef _ASM_POWERPC_SYNCH_H 
-#define _ASM_POWERPC_SYNCH_H 
+#ifndef _ASM_POWERPC_SYNCH_H
+#define _ASM_POWERPC_SYNCH_H
 #ifdef __KERNEL__
 
 #include <linux/stringify.h>

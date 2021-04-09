@@ -1,4 +1,4 @@
-* Migrate to (and if necessary, extend) existing upstream code such as 
+* Migrate to (and if necessary, extend) existing upstream code such as
   iommu, wdt, mcbsp, gptimers
 * Decouple hardware-specific code (e.g. bridge_brd_start/stop/delete/monitor)
 * DOFF binary loader: consider pushing to user space. at the very least

@@ -94,7 +94,7 @@ hardware is not used, the transfer will be software-driven.  In order
 to cope with peripherals that only tenuously support IEEE 1284, a
 low-level driver specific function is provided, for altering 'fudge
 factors'.
-
+
 GLOBAL FUNCTIONS
 ----------------
 
@@ -221,7 +221,7 @@ int lp_init (void)
 SEE ALSO
 
 parport_unregister_driver, parport_register_device, parport_enumerate
-
+
 parport_unregister_driver - tell parport to forget about this driver
 -------------------------
 
@@ -260,7 +260,7 @@ void cleanup_module (void)
 SEE ALSO
 
 parport_register_driver, parport_enumerate
-
+
 parport_enumerate - retrieve a list of parallel ports (DEPRECATED)
 -----------------
 
@@ -313,7 +313,7 @@ used instead.
 SEE ALSO
 
 parport_register_driver, parport_unregister_driver
-
+
 parport_register_device - register to use a port
 -----------------------
 
@@ -441,7 +441,7 @@ static int toaster_detect (struct toaster *private, struct parport *port)
 SEE ALSO
 
 parport_unregister_device, parport_claim
-
+
 parport_unregister_device - finish using a port
 -------------------------
 
@@ -469,7 +469,7 @@ EXAMPLE
 SEE ALSO
 
 parport_unregister_driver
-
+
 parport_claim, parport_claim_or_block - claim the parallel port for a device
 -------------------------------------
 
@@ -505,7 +505,7 @@ ERRORS
 SEE ALSO
 
 parport_release
-
+
 parport_release - release the parallel port
 ---------------
 
@@ -537,7 +537,7 @@ static size_t write (struct pardevice *dev, const void *buf,
 SEE ALSO
 
 change_mode, parport_claim, parport_claim_or_block, parport_yield
-
+
 parport_yield, parport_yield_blocking - temporarily release a parallel port
 -------------------------------------
 
@@ -572,7 +572,7 @@ ERRORS
 SEE ALSO
 
 parport_release
-
+
 parport_wait_peripheral - wait for status lines, up to 35ms
 -----------------------
 
@@ -597,7 +597,7 @@ RETURN VALUE
 SEE ALSO
 
 parport_poll_peripheral
-
+
 parport_poll_peripheral - wait for status lines, in usec
 -----------------------
 
@@ -623,7 +623,7 @@ RETURN VALUE
 SEE ALSO
 
 parport_wait_peripheral
-
+
 parport_wait_event - wait for an event on a port
 ------------------
 
@@ -643,7 +643,7 @@ RETURN VALUE
       0  success
      <0  error (exit as soon as possible)
      >0  timed out
-
+
 parport_negotiate - perform IEEE 1284 negotiation
 -----------------
 
@@ -667,7 +667,7 @@ RETURN VALUE
 SEE ALSO
 
 parport_read, parport_write
-
+
 parport_read - read data from device
 ------------
 
@@ -689,7 +689,7 @@ If negative, an error code; otherwise the number of bytes transferred.
 SEE ALSO
 
 parport_write, parport_negotiate
-
+
 parport_write - write data to device
 -------------
 
@@ -711,7 +711,7 @@ If negative, an error code; otherwise the number of bytes transferred.
 SEE ALSO
 
 parport_read, parport_negotiate
-
+
 parport_open - register device for particular device number
 ------------
 
@@ -739,7 +739,7 @@ NULL is returned.
 SEE ALSO
 
 parport_register_device
-
+
 parport_close - unregister device for particular device number
 -------------
 
@@ -756,7 +756,7 @@ This is the equivalent of parport_unregister_device for parport_open.
 SEE ALSO
 
 parport_unregister_device, parport_open
-
+
 parport_device_id - obtain IEEE 1284 Device ID
 -----------------
 
@@ -791,7 +791,7 @@ Many devices have ill-formed IEEE 1284 Device IDs.
 SEE ALSO
 
 parport_find_class, parport_find_device
-
+
 parport_device_coords - convert device number to device coordinates
 ------------------
 
@@ -815,7 +815,7 @@ Zero on success, in which case the coordinates are (*parport, *mux,
 SEE ALSO
 
 parport_open, parport_device_id
-
+
 parport_find_class - find a device by its class
 ------------------
 
@@ -864,7 +864,7 @@ while ((devnum = parport_find_class (PARPORT_CLASS_DIGCAM, devnum)) != -1) {
 SEE ALSO
 
 parport_find_device, parport_open, parport_device_id
-
+
 parport_find_device - find a device by its class
 ------------------
 
@@ -897,7 +897,7 @@ while ((devnum = parport_find_device ("IOMEGA", "ZIP+", devnum)) != -1) {
 SEE ALSO
 
 parport_find_class, parport_open, parport_device_id
-
+
 parport_set_timeout - set the inactivity timeout
 -------------------
 
@@ -934,7 +934,7 @@ value until set again.
 SEE ALSO
 
 port->ops->xxx_read/write_yyy
-
+
 PORT FUNCTIONS
 --------------
 
@@ -966,7 +966,7 @@ register.  Otherwise the return value is undefined.
 SEE ALSO
 
 write_data, read_status, write_control
-
+
 port->ops->write_data - write the data register
 ---------------------
 
@@ -988,7 +988,7 @@ for instance).
 SEE ALSO
 
 read_data, read_status, write_control
-
+
 port->ops->read_status - read the status register
 ----------------------
 
@@ -1017,7 +1017,7 @@ There may be other bits set.
 SEE ALSO
 
 read_data, write_data, write_control
-
+
 port->ops->read_control - read the control register
 -----------------------
 
@@ -1039,7 +1039,7 @@ write_control or frob_control).  No port access is performed.
 SEE ALSO
 
 read_data, write_data, read_status, write_control
-
+
 port->ops->write_control - write the control register
 ------------------------
 
@@ -1068,7 +1068,7 @@ Writes to the control register. This is a bitmask:
 SEE ALSO
 
 read_data, write_data, read_status, frob_control
-
+
 port->ops->frob_control - write control register bits
 -----------------------
 
@@ -1097,7 +1097,7 @@ port access.
 SEE ALSO
 
 read_data, write_data, read_status, write_control
-
+
 port->ops->enable_irq - enable interrupt generation
 ---------------------
 
@@ -1121,7 +1121,7 @@ commonly generated on the rising edge of nAck.
 SEE ALSO
 
 disable_irq
-
+
 port->ops->disable_irq - disable interrupt generation
 ----------------------
 
@@ -1143,7 +1143,7 @@ The interrupt itself is not masked.
 SEE ALSO
 
 enable_irq
-
+
 port->ops->data_forward - enable data drivers
 -----------------------
 
@@ -1165,7 +1165,7 @@ communications.
 SEE ALSO
 
 data_reverse
-
+
 port->ops->data_reverse - tristate the buffer
 -----------------------
 
@@ -1187,7 +1187,7 @@ PARPORT_MODE_TRISTATE bit set.
 SEE ALSO
 
 data_forward
-
+
 port->ops->epp_write_data - write EPP data
 -------------------------
 
@@ -1216,7 +1216,7 @@ PARPORT_EPP_FAST	Use fast transfers. Some chips provide 16-bit and
 SEE ALSO
 
 epp_read_data, epp_write_addr, epp_read_addr
-
+
 port->ops->epp_read_data - read EPP data
 ------------------------
 
@@ -1245,7 +1245,7 @@ PARPORT_EPP_FAST	Use fast transfers. Some chips provide 16-bit and
 SEE ALSO
 
 epp_write_data, epp_write_addr, epp_read_addr
-
+
 port->ops->epp_write_addr - write EPP address
 -------------------------
 
@@ -1276,7 +1276,7 @@ PARPORT_EPP_FAST	Use fast transfers. Some chips provide 16-bit and
 SEE ALSO
 
 epp_write_data, epp_read_data, epp_read_addr
-
+
 port->ops->epp_read_addr - read EPP address
 ------------------------
 
@@ -1307,7 +1307,7 @@ PARPORT_EPP_FAST	Use fast transfers. Some chips provide 16-bit and
 SEE ALSO
 
 epp_write_data, epp_read_data, epp_write_addr
-
+
 port->ops->ecp_write_data - write a block of ECP data
 -------------------------
 
@@ -1333,7 +1333,7 @@ The number of bytes written.
 SEE ALSO
 
 ecp_read_data, ecp_write_addr
-
+
 port->ops->ecp_read_data - read a block of ECP data
 ------------------------
 
@@ -1360,7 +1360,7 @@ FIFO.  Is there a way of stunning the FIFO to prevent this?
 SEE ALSO
 
 ecp_write_block, ecp_write_addr
-
+
 port->ops->ecp_write_addr - write a block of ECP addresses
 -------------------------
 
@@ -1390,7 +1390,7 @@ This may use a FIFO, and if so shall not return until the FIFO is empty.
 SEE ALSO
 
 ecp_read_data, ecp_write_data
-
+
 port->ops->nibble_read_data - read a block of data in nibble mode
 ---------------------------
 
@@ -1416,7 +1416,7 @@ The number of whole bytes read.
 SEE ALSO
 
 byte_read_data, compat_write_data
-
+
 port->ops->byte_read_data - read a block of data in byte mode
 -------------------------
 
@@ -1442,7 +1442,7 @@ The number of bytes read.
 SEE ALSO
 
 nibble_read_data, compat_write_data
-
+
 port->ops->compat_write_data - write a block of data in compatibility mode
 ----------------------------
 

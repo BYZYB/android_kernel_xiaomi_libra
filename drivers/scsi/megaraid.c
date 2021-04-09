@@ -142,7 +142,7 @@ mega_setup_mailbox(adapter_t *adapter)
 			sizeof(mbox64_t), &adapter->una_mbox64_dma);
 
 	if( !adapter->una_mbox64 ) return -1;
-		
+
 	adapter->mbox = &adapter->una_mbox64->mbox;
 
 	adapter->mbox = (mbox_t *)((((unsigned long) adapter->mbox) + 15) &
@@ -461,7 +461,7 @@ mega_get_ldrv_num(adapter_t *adapter, Scsi_Cmnd *cmd, int channel)
 	int		ldrv_num;
 
 	tgt = cmd->device->id;
-	
+
 	if ( tgt > adapter->this_id )
 		tgt--;	/* we do not get inquires for initiator id */
 
@@ -558,7 +558,7 @@ mega_build_cmd(adapter_t *adapter, Scsi_Cmnd *cmd, int *busy)
 		}
 		else {
 			/* this is physical channel */
-			channel = cmd->device->channel; 
+			channel = cmd->device->channel;
 			target = cmd->device->id;
 
 			/*
@@ -577,11 +577,11 @@ mega_build_cmd(adapter_t *adapter, Scsi_Cmnd *cmd, int *busy)
 	else {
 		if( islogical ) {
 			/* this is the logical channel */
-			channel = cmd->device->channel;	
+			channel = cmd->device->channel;
 		}
 		else {
 			/* physical channel */
-			channel = cmd->device->channel - NVIRT_CHAN;	
+			channel = cmd->device->channel - NVIRT_CHAN;
 			target = cmd->device->id;
 		}
 	}
@@ -1118,7 +1118,7 @@ issue_scb(adapter_t *adapter, scb_t *scb)
 	}
 
 	/* Copy mailbox data into host structure */
-	memcpy((char *)&mbox->m_out, (char *)scb->raw_mbox, 
+	memcpy((char *)&mbox->m_out, (char *)scb->raw_mbox,
 			sizeof(struct mbox_out));
 
 	mbox->m_out.cmdid = scb->idx;	/* Set cmdid */
@@ -1303,7 +1303,7 @@ megaraid_isr_iomapped(int irq, void *devp)
 		 */
 		atomic_sub(nstatus, &adapter->pend_cmds);
 
-		memcpy(completed, (void *)adapter->mbox->m_in.completed, 
+		memcpy(completed, (void *)adapter->mbox->m_in.completed,
 				nstatus);
 
 		/* Acknowledge interrupt */
@@ -1380,7 +1380,7 @@ megaraid_isr_memmapped(int irq, void *devp)
 		 */
 		atomic_sub(nstatus, &adapter->pend_cmds);
 
-		memcpy(completed, (void *)adapter->mbox->m_in.completed, 
+		memcpy(completed, (void *)adapter->mbox->m_in.completed,
 				nstatus);
 
 		/* Acknowledge interrupt */
@@ -1963,7 +1963,7 @@ megaraid_abort_and_reset(adapter_t *adapter, Scsi_Cmnd *cmd, int aor)
 
 	printk(KERN_WARNING "megaraid: %s cmd=%x <c=%d t=%d l=%d>\n",
 	     (aor == SCB_ABORT)? "ABORTING":"RESET",
-	     cmd->cmnd[0], cmd->device->channel, 
+	     cmd->cmnd[0], cmd->device->channel,
 	     cmd->device->id, cmd->device->lun);
 
 	if(list_empty(&adapter->pending_list))
@@ -2285,22 +2285,22 @@ proc_show_battery(struct seq_file *m, void *v)
 
 	if(battery_status & MEGA_BATT_MODULE_MISSING)
 		seq_puts(m, " Module Missing");
-	
+
 	if(battery_status & MEGA_BATT_LOW_VOLTAGE)
 		seq_puts(m, " Low Voltage");
-	
+
 	if(battery_status & MEGA_BATT_TEMP_HIGH)
 		seq_puts(m, " Temperature High");
-	
+
 	if(battery_status & MEGA_BATT_PACK_MISSING)
 		seq_puts(m, " Pack Missing");
-	
+
 	if(battery_status & MEGA_BATT_CHARGE_INPROG)
 		seq_puts(m, " Charge In-progress");
-	
+
 	if(battery_status & MEGA_BATT_CHARGE_FAIL)
 		seq_puts(m, " Charge Fail");
-	
+
 	if(battery_status & MEGA_BATT_CYCLES_EXCEEDED)
 		seq_puts(m, " Cycles Exceeded");
 
@@ -2645,7 +2645,7 @@ proc_show_rdrv(struct seq_file *m, adapter_t *adapter, int start, int end )
 			seq_puts(m, ", check-consistency in progress");
 		else if( (rdrv_state[i] & 0xF0) == 0x10 )
 			seq_puts(m, ", initialization in progress");
-		
+
 		seq_putc(m, '\n');
 
 		seq_printf(m, "Span depth:%3d, ", lparam->span_depth);
@@ -3007,7 +3007,7 @@ mega_init_scb(adapter_t *adapter)
  * @filep - unused
  *
  * Routines for the character/ioctl interface to the driver. Find out if this
- * is a valid open. 
+ * is a valid open.
  */
 static int
 megadev_open (struct inode *inode, struct file *filep)
@@ -3703,7 +3703,7 @@ mega_enum_raid_scsi(adapter_t *adapter)
 
 	}
 
-	for( i = 0; i < adapter->product_info.nchannels; i++ ) { 
+	for( i = 0; i < adapter->product_info.nchannels; i++ ) {
 		if( (adapter->mega_ch_class >> i) & 0x01 ) {
 			printk(KERN_INFO "megaraid: channel[%d] is raid.\n",
 					i);
@@ -3962,7 +3962,7 @@ mega_get_max_sgl(adapter_t *adapter)
 	}
 	else {
 		adapter->sglen = *((char *)adapter->mega_buffer);
-		
+
 		/*
 		 * Make sure this is not more than the resources we are
 		 * planning to allocate
@@ -4232,7 +4232,7 @@ static struct scsi_host_template megaraid_template = {
 	.name				= "MegaRAID",
 	.proc_name			= "megaraid_legacy",
 	.info				= megaraid_info,
-	.queuecommand			= megaraid_queue,	
+	.queuecommand			= megaraid_queue,
 	.bios_param			= megaraid_biosparam,
 	.max_sectors			= MAX_SECTORS_PER_IO,
 	.can_queue			= MAX_COMMANDS,
@@ -4544,7 +4544,7 @@ megaraid_probe_one(struct pci_dev *pdev, const struct pci_device_id *id)
 		pci_set_dma_mask(pdev, DMA_BIT_MASK(32));
 		adapter->has_64bit_addr = 0;
 	}
-		
+
 	mutex_init(&adapter->int_mtx);
 	init_completion(&adapter->int_waitq);
 
@@ -4627,7 +4627,7 @@ __megaraid_shutdown(adapter_t *adapter)
 
 	/* Issue a blocking (interrupts disabled) command to the card */
 	issue_scb_block(adapter, raw_mbox);
-	
+
 	if (atomic_read(&adapter->pend_cmds) > 0)
 		printk(KERN_WARNING "megaraid: pending commands!!\n");
 

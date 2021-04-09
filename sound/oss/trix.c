@@ -16,7 +16,7 @@
  *	Christoph Hellwig	Adapted to module_init/module_exit
  *	Arnaldo C. de Melo	Got rid of attach_uart401
  */
- 
+
 #include <linux/init.h>
 #include <linux/module.h>
 
@@ -131,7 +131,7 @@ static int __init init_trix_wss(struct address_info *hw_config)
 	int old_num_mixers = num_mixers;
 	u8 config, bits;
 	int ret;
- 
+
 	switch(hw_config->irq) {
 	case 7:
 		bits = 8;
@@ -478,7 +478,7 @@ static int __init init_trix(void)
 	if (cfg2.io_base != -1) {
 		sb = probe_trix_sb(&cfg2);
 	}
-	
+
 	if (cfg_mpu.io_base != -1)
 		mpu = probe_trix_mpu(&cfg_mpu);
 
@@ -504,7 +504,7 @@ static int __init setup_trix (char *str)
 {
 	/* io, irq, dma, dma2, sb_io, sb_irq, sb_dma, mpu_io, mpu_irq */
 	int ints[9];
-	
+
 	str = get_options(str, ARRAY_SIZE(ints), ints);
 
 	io	= ints[1];

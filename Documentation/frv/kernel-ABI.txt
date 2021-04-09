@@ -99,11 +99,11 @@ prologues.
 	GR31		NOMMU	Destroyed by debug mode entry
 	GR31		MMU	Destroyed by TLB miss kernel mode entry
 	CCR.ICC2		Virtual interrupt disablement tracking
-	CCCR.CC3		Cleared by exception prologue 
+	CCCR.CC3		Cleared by exception prologue
 				(atomic op emulation)
 	SCR0		MMU	See mmu-layout.txt.
 	SCR1		MMU	See mmu-layout.txt.
-	SCR2		MMU	Save for EAR0 (destroyed by icache insns 
+	SCR2		MMU	Save for EAR0 (destroyed by icache insns
 					       in debug mode)
 	SCR3		MMU	Save for GR31 during debug exceptions
 	DAMR/IAMR	NOMMU	Fixed memory protection layout.
@@ -118,15 +118,15 @@ Certain registers are also used or modified across function calls:
 	GR2		Function call frame pointer
 	GR3		Special				Preserved
 	GR3-GR7		-				Clobbered
-	GR8		Function call arg #1		Return value 
+	GR8		Function call arg #1		Return value
 							(or clobbered)
-	GR9		Function call arg #2		Return value MSW 
+	GR9		Function call arg #2		Return value MSW
 							(or clobbered)
 	GR10-GR13	Function call arg #3-#6		Clobbered
 	GR14		-				Clobbered
 	GR15-GR16	Special				Preserved
 	GR17-GR27	-				Preserved
-	GR28-GR31	Special				Only accessed 
+	GR28-GR31	Special				Only accessed
 							explicitly
 	LR		Return address after CALL	Clobbered
 	CCR/CCCR	-				Mostly Clobbered
@@ -145,7 +145,7 @@ exception frame. Almost all the global registers from kernel-mode
 	===============	=======	==============================================
 	GR1			Debug stack pointer
 	GR16			GP-Rel base register for small data
-	GR31			Current debug exception frame pointer 
+	GR31			Current debug exception frame pointer
 				(__debug_frame)
 	SCR3		MMU	Saved value of GR31
 
@@ -219,7 +219,7 @@ What happens is this:
 
  (6) If interrupts were then saved and disabled again (local_irq_save):
 
-	ICC2.Z would be shifted into the save variable and masked off 
+	ICC2.Z would be shifted into the save variable and masked off
 	(giving a 1).
 
 	ICC2.Z would then be set to 1 (thus unchanged), and ICC2.C would be
@@ -245,7 +245,7 @@ What happens is this:
      then trap as both Z==0 [interrupts virtually enabled] and C==0
      [interrupts really disabled] would then be true.
 
- (9) The trap #2 handler would simply enable hardware interrupts 
+ (9) The trap #2 handler would simply enable hardware interrupts
      (set PSR.PIL to 0), set ICC2.C to 1 and return.
 
 (10) Immediately upon returning, the pending interrupt would be taken.

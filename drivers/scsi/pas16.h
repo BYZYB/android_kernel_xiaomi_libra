@@ -7,19 +7,19 @@
  *	drew@colorado.edu
  *      +1 (303) 666-5836
  *
- *  ( Based on T128 - DISTRIBUTION RELEASE 3. ) 
+ *  ( Based on T128 - DISTRIBUTION RELEASE 3. )
  *
  * Modified to work with the Pro Audio Spectrum/Studio 16
  * by John Weidman.
  *
  *
- * For more information, please consult 
+ * For more information, please consult
  *
  * Media Vision
  * (510) 770-8600
  * (800) 348-7116
- * 
- * and 
+ *
+ * and
  *
  * NCR 5380 Family
  * SCSI Protocol Controller
@@ -56,7 +56,7 @@
  * The Pro Audio Spectrum boards are I/O mapped. They use a Zilog 5380
  * SCSI controller, which is the equivalent of NCR's 5380.  "Pseudo-DMA"
  * architecture is used, where a PAL drives the DMA signals on the 5380
- * allowing fast, blind transfers with proper handshaking. 
+ * allowing fast, blind transfers with proper handshaking.
  */
 
 
@@ -67,7 +67,7 @@
  * the holding register, an interrupt is generated (and mixed with the
  * one with the drive) using the CD-ROM interrupt pointer.
  */
- 
+
 #define P_TIMEOUT_COUNTER_REG	0x4000
 #define P_TC_DISABLE	0x80	/* Set to 0 to enable timeout int. */
 				/* Bits D6-D0 contain timeout count */
@@ -95,7 +95,7 @@
 
 /*
  * The data register reads/writes to/from the 5380 in pseudo-DMA mode
- */ 
+ */
 
 #define P_DATA_REG_OFFSET	0x5c00	/* rw */
 
@@ -126,7 +126,7 @@ static int pas16_bus_reset(Scsi_Cmnd *);
 #endif
 
 #ifndef CAN_QUEUE
-#define CAN_QUEUE 32 
+#define CAN_QUEUE 32
 #endif
 
 #ifndef HOSTS_C
@@ -142,7 +142,7 @@ static int pas16_bus_reset(Scsi_Cmnd *);
 
 #define PAS16_io_port(reg) ( io_port + pas16_offset[(reg)] )
 
-#if !(PDEBUG & PDEBUG_TRANSFER) 
+#if !(PDEBUG & PDEBUG_TRANSFER)
 #define NCR5380_read(reg) ( inb(PAS16_io_port(reg)) )
 #define NCR5380_write(reg, value) ( outb((value),PAS16_io_port(reg)) )
 #else
@@ -166,10 +166,10 @@ static int pas16_bus_reset(Scsi_Cmnd *);
 #define NCR5380_show_info pas16_show_info
 #define NCR5380_write_info pas16_write_info
 
-/* 15 14 12 10 7 5 3 
+/* 15 14 12 10 7 5 3
    1101 0100 1010 1000 */
-   
-#define PAS16_IRQS 0xd4a8 
+
+#define PAS16_IRQS 0xd4a8
 
 #endif /* else def HOSTS_C */
 #endif /* ndef ASM */

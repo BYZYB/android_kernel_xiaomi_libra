@@ -39,7 +39,7 @@
    This file also holds the operand table.  All knowledge about
    inserting operands into instructions and vice-versa is kept in this
    file.  */
-
+
 /* Local insertion and extraction functions.  */
 
 static unsigned long insert_bat (unsigned long, long, int, const char **);
@@ -98,7 +98,7 @@ static unsigned long insert_ev4 (unsigned long, long, int, const char **);
 static long extract_ev4 (unsigned long, int, int *);
 static unsigned long insert_ev8 (unsigned long, long, int, const char **);
 static long extract_ev8 (unsigned long, int, int *);
-
+
 /* The operands table.
 
    The fields are bits, shift, insert, extract, flags.
@@ -1516,7 +1516,7 @@ extract_tbr (unsigned long insn,
     ret = 0;
   return ret;
 }
-
+
 /* Macros used to form opcodes.  */
 
 /* The main opcode.  */
@@ -1871,7 +1871,7 @@ extract_tbr (unsigned long insn,
 #define TONG	(0x14)
 #define TONE	(0x18)
 #define TOU	(0x1f)
-
+
 /* Smaller names for the flags so each entry in the opcodes table will
    fit on a single line.  */
 #undef	PPC
@@ -1912,7 +1912,7 @@ extract_tbr (unsigned long insn,
 #define PPCCHLK	PPC_OPCODE_CACHELCK
 #define PPCCHLK64	PPC_OPCODE_CACHELCK | PPC_OPCODE_BOOKE64
 #define PPCRFMCI	PPC_OPCODE_RFMCI
-
+
 /* The opcode table.
 
    The format of the opcode table is:
@@ -4693,8 +4693,8 @@ const struct powerpc_opcode powerpc_opcodes[] = {
 { "dctfix",  XRC(59,290,0), X_MASK,	POWER6,		{ FRT, FRB } },
 { "dctfix.", XRC(59,290,1), X_MASK,	POWER6,		{ FRT, FRB } },
 
-{ "ddedpd",  XRC(59,322,0), X_MASK,	POWER6,		{ SP, FRT, FRB } }, 
-{ "ddedpd.", XRC(59,322,1), X_MASK,	POWER6,		{ SP, FRT, FRB } }, 
+{ "ddedpd",  XRC(59,322,0), X_MASK,	POWER6,		{ SP, FRT, FRB } },
+{ "ddedpd.", XRC(59,322,1), X_MASK,	POWER6,		{ SP, FRT, FRB } },
 
 { "dxex",    XRC(59,354,0), X_MASK,	POWER6,		{ FRT, FRB } },
 { "dxex.",   XRC(59,354,1), X_MASK,	POWER6,		{ FRT, FRB } },
@@ -4935,7 +4935,7 @@ const struct powerpc_opcode powerpc_opcodes[] = {
 };
 
 const int powerpc_num_opcodes = ARRAY_SIZE(powerpc_opcodes);
-
+
 /* The macro table.  This is only used by the assembler.  */
 
 /* The expressions of the form (-x ! 31) & (x | 31) have the value 0

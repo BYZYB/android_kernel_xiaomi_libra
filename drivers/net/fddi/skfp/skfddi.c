@@ -57,7 +57,7 @@
  * Compilation options (-Dxxx):
  *              DRIVERDEBUG     print lots of messages to log file
  *              DUMPPACKETS     print received/transmitted packets to logfile
- * 
+ *
  * Tested cpu architectures:
  *	- i386
  *	- sparc64
@@ -67,7 +67,7 @@
 /* each new release!!! */
 #define VERSION		"2.07"
 
-static const char * const boot_msg = 
+static const char * const boot_msg =
 	"SysKonnect FDDI PCI Adapter driver v" VERSION " for\n"
 	"  SK-55xx/SK-58xx adapters (SK-NET FDDI-FP/UP/LP)";
 
@@ -176,20 +176,20 @@ static const struct net_device_ops skfp_netdev_ops = {
  * =================
  * = skfp_init_one =
  * =================
- *   
+ *
  * Overview:
  *   Probes for supported FDDI PCI controllers
- *  
+ *
  * Returns:
  *   Condition code
- *       
+ *
  * Arguments:
  *   pdev - pointer to PCI device information
  *
  * Functional Description:
  *   This is now called by PCI driver registration process
  *   for each board found.
- *   
+ *
  * Return Codes:
  *   0           - This device (fddi0, fddi1, etc) configured successfully
  *   -ENODEV - No devices present, or no SysKonnect FDDI PCI device
@@ -211,7 +211,7 @@ static int skfp_init_one(struct pci_dev *pdev,
 
 	pr_debug("entering skfp_init_one\n");
 
-	if (num_boards == 0) 
+	if (num_boards == 0)
 		printk("%s\n", boot_msg);
 
 	err = pci_enable_device(pdev);
@@ -288,18 +288,18 @@ static int skfp_init_one(struct pci_dev *pdev,
 	pci_set_drvdata(pdev, dev);
 
 	if ((pdev->subsystem_device & 0xff00) == 0x5500 ||
-	    (pdev->subsystem_device & 0xff00) == 0x5800) 
+	    (pdev->subsystem_device & 0xff00) == 0x5800)
 		printk("%s: SysKonnect FDDI PCI adapter"
-		       " found (SK-%04X)\n", dev->name,	
+		       " found (SK-%04X)\n", dev->name,
 		       pdev->subsystem_device);
 	else
 		printk("%s: FDDI PCI adapter found\n", dev->name);
 
 	return 0;
 err_out5:
-	if (smc->os.SharedMemAddr) 
+	if (smc->os.SharedMemAddr)
 		pci_free_consistent(pdev, smc->os.SharedMemSize,
-				    smc->os.SharedMemAddr, 
+				    smc->os.SharedMemAddr,
 				    smc->os.SharedMemDMA);
 	pci_free_consistent(pdev, MAX_FRAME_SIZE,
 			    smc->os.LocalRxBuffer, smc->os.LocalRxBufferDMA);
@@ -358,21 +358,21 @@ static void skfp_remove_one(struct pci_dev *pdev)
  * ====================
  * = skfp_driver_init =
  * ====================
- *   
+ *
  * Overview:
  *   Initializes remaining adapter board structure information
  *   and makes sure adapter is in a safe state prior to skfp_open().
- *  
+ *
  * Returns:
  *   Condition code
- *       
+ *
  * Arguments:
  *   dev - pointer to device information
  *
  * Functional Description:
  *   This function allocates additional resources such as the host memory
  *   blocks needed by the adapter.
- *   The adapter is also reset. The OS must call skfp_open() to open 
+ *   The adapter is also reset. The OS must call skfp_open() to open
  *   the adapter and bring it on-line.
  *
  * Return Codes:
@@ -394,7 +394,7 @@ static  int skfp_driver_init(struct net_device *dev)
 	smc->hw.irq = dev->irq;
 
 	spin_lock_init(&bp->DriverLock);
-	
+
 	// Allocate invalid frame
 	bp->LocalRxBuffer = pci_alloc_consistent(&bp->pdev, MAX_FRAME_SIZE, &bp->LocalRxBufferDMA);
 	if (!bp->LocalRxBuffer) {
@@ -463,13 +463,13 @@ fail:
  * =============
  * = skfp_open =
  * =============
- *   
+ *
  * Overview:
  *   Opens the adapter
- *  
+ *
  * Returns:
  *   Condition code
- *       
+ *
  * Arguments:
  *   dev - pointer to device information
  *
@@ -524,13 +524,13 @@ static int skfp_open(struct net_device *dev)
  * ==============
  * = skfp_close =
  * ==============
- *   
+ *
  * Overview:
  *   Closes the device/module.
- *  
+ *
  * Returns:
  *   Condition code
- *       
+ *
  * Arguments:
  *   dev - pointer to device information
  *
@@ -573,13 +573,13 @@ static int skfp_close(struct net_device *dev)
  * ==================
  * = skfp_interrupt =
  * ==================
- *   
+ *
  * Overview:
  *   Interrupt processing routine
- *  
+ *
  * Returns:
  *   None
- *       
+ *
  * Arguments:
  *   irq        - interrupt vector
  *   dev_id     - pointer to device information
@@ -644,13 +644,13 @@ static irqreturn_t skfp_interrupt(int irq, void *dev_id)
  * ======================
  * = skfp_ctl_get_stats =
  * ======================
- *   
+ *
  * Overview:
  *   Get statistics for FDDI adapter
- *  
+ *
  * Returns:
  *   Pointer to FDDI statistics structure
- *       
+ *
  * Arguments:
  *   dev - pointer to device information
  *
@@ -802,14 +802,14 @@ static struct net_device_stats *skfp_ctl_get_stats(struct net_device *dev)
  * ==============================
  * = skfp_ctl_set_multicast_list =
  * ==============================
- *   
+ *
  * Overview:
  *   Enable/Disable LLC frame promiscuous mode reception
  *   on the adapter and/or update multicast address table.
- *  
+ *
  * Returns:
  *   None
- *       
+ *
  * Arguments:
  *   dev - pointer to device information
  *
@@ -904,13 +904,13 @@ static void skfp_ctl_set_multicast_list_wo_lock(struct net_device *dev)
  * ===========================
  * = skfp_ctl_set_mac_address =
  * ===========================
- *   
+ *
  * Overview:
  *   set new mac address on adapter and update dev_addr field in device table.
- *  
+ *
  * Returns:
  *   None
- *       
+ *
  * Arguments:
  *   dev  - pointer to device information
  *   addr - pointer to sockaddr structure containing unicast address to set
@@ -940,17 +940,17 @@ static int skfp_ctl_set_mac_address(struct net_device *dev, void *addr)
  * ==============
  * = skfp_ioctl =
  * ==============
- *   
+ *
  * Overview:
  *
  * Perform IOCTL call functions here. Some are privileged operations and the
  * effective uid is checked in those cases.
- *  
+ *
  * Returns:
  *   status value
  *   0 - success
  *   other - failure
- *       
+ *
  * Arguments:
  *   dev  - pointer to device information
  *   rq - pointer to ioctl request structure
@@ -996,13 +996,13 @@ static int skfp_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
  * =====================
  * = skfp_send_pkt     =
  * =====================
- *   
+ *
  * Overview:
  *   Queues a packet for transmission and try to transmit it.
- *  
+ *
  * Returns:
  *   Condition code
- *       
+ *
  * Arguments:
  *   skb - pointer to sk_buff to queue for transmission
  *   dev - pointer to device information
@@ -1014,8 +1014,8 @@ static int skfp_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
  *   (skb->data) can be converted to a physical address
  *   by using pci_map_single().
  *
- *   We have an internal queue for packets we can not send 
- *   immediately. Packets in this queue can be given to the 
+ *   We have an internal queue for packets we can not send
+ *   immediately. Packets in this queue can be given to the
  *   adapter if transmit buffers are freed.
  *
  *   We can't free the skb until after it's been DMA'd
@@ -1083,21 +1083,21 @@ static netdev_tx_t skfp_send_pkt(struct sk_buff *skb,
  * =======================
  * = send_queued_packets =
  * =======================
- *   
+ *
  * Overview:
  *   Send packets from the driver queue as long as there are some and
  *   transmit resources are available.
- *  
+ *
  * Returns:
  *   None
- *       
+ *
  * Arguments:
  *   smc - pointer to smc (adapter) structure
  *
  * Functional Description:
  *   Take a packet from queue if there is any. If not, then we are done.
  *   Check if there are resources to send the packet. If not, requeue it
- *   and exit. 
+ *   and exit.
  *   Set packet descriptor flags and give packet to adapter.
  *   Check if any send resources can be freed (we do not use the
  *   transmit complete interrupt).
@@ -1197,7 +1197,7 @@ static void send_queued_packets(struct s_smc *smc)
 
 
 /************************
- * 
+ *
  * CheckSourceAddress
  *
  * Verify if the source address is set. Insert it if necessary.

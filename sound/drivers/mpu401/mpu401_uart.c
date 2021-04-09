@@ -135,7 +135,7 @@ static void _snd_mpu401_uart_interrupt(struct snd_mpu401 *mpu)
 irqreturn_t snd_mpu401_uart_interrupt(int irq, void *dev_id)
 {
 	struct snd_mpu401 *mpu = dev_id;
-	
+
 	if (mpu == NULL)
 		return IRQ_NONE;
 	_snd_mpu401_uart_interrupt(mpu);
@@ -156,7 +156,7 @@ EXPORT_SYMBOL(snd_mpu401_uart_interrupt);
 irqreturn_t snd_mpu401_uart_interrupt_tx(int irq, void *dev_id)
 {
 	struct snd_mpu401 *mpu = dev_id;
-	
+
 	if (mpu == NULL)
 		return IRQ_NONE;
 	uart_interrupt_tx(mpu);
@@ -197,7 +197,7 @@ static void snd_mpu401_uart_add_timer (struct snd_mpu401 *mpu, int input)
 		mpu->timer.function = snd_mpu401_uart_timer;
 		mpu->timer.expires = 1 + jiffies;
 		add_timer(&mpu->timer);
-	} 
+	}
 	mpu->timer_invoked |= input ? MPU401_MODE_INPUT_TIMER :
 		MPU401_MODE_OUTPUT_TIMER;
 	spin_unlock_irqrestore (&mpu->timer_lock, flags);
@@ -382,7 +382,7 @@ snd_mpu401_uart_input_trigger(struct snd_rawmidi_substream *substream, int up)
 			if (mpu->info_flags & MPU401_INFO_USE_TIMER)
 				snd_mpu401_uart_add_timer(mpu, 1);
 		}
-		
+
 		/* read data in advance */
 		spin_lock_irqsave(&mpu->input_lock, flags);
 		snd_mpu401_uart_input_read(mpu);

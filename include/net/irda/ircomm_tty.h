@@ -1,31 +1,31 @@
 /*********************************************************************
- *                
+ *
  * Filename:      ircomm_tty.h
- * Version:       
- * Description:   
+ * Version:
+ * Description:
  * Status:        Experimental.
  * Author:        Dag Brattli <dagb@cs.uit.no>
  * Created at:    Sun Jun  6 23:24:22 1999
  * Modified at:   Fri Jan 28 13:16:57 2000
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
- * 
+ *
  *     Copyright (c) 1999-2000 Dag Brattli, All Rights Reserved.
- *     
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *     GNU General Public License for more details.
- * 
- *     You should have received a copy of the GNU General Public License 
- *     along with this program; if not, write to the Free Software 
- *     Foundation, Inc., 59 Temple Place, Suite 330, Boston, 
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program; if not, write to the Free Software
+ *     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *     MA 02111-1307 USA
- *     
+ *
  ********************************************************************/
 
 #ifndef IRCOMM_TTY_H
@@ -108,9 +108,9 @@ void ircomm_tty_check_modem_status(struct ircomm_tty_cb *self);
 extern int ircomm_tty_tiocmget(struct tty_struct *tty);
 extern int ircomm_tty_tiocmset(struct tty_struct *tty,
 			       unsigned int set, unsigned int clear);
-extern int ircomm_tty_ioctl(struct tty_struct *tty, 
+extern int ircomm_tty_ioctl(struct tty_struct *tty,
 			    unsigned int cmd, unsigned long arg);
-extern void ircomm_tty_set_termios(struct tty_struct *tty, 
+extern void ircomm_tty_set_termios(struct tty_struct *tty,
 				   struct ktermios *old_termios);
 
 #endif

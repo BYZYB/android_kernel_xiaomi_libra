@@ -71,7 +71,7 @@ struct ctlr_info
 	int	major;
 	int 	max_commands;
 	int	commands_outstanding;
-	int 	max_outstanding; /* Debug */ 
+	int 	max_outstanding; /* Debug */
 	int	num_luns;
 	int 	highest_lun;
 	int	usage_count;  /* number of opens all all minor devices */
@@ -103,7 +103,7 @@ struct ctlr_info
 
 	struct access_method access;
 
-	/* queue and queue Info */ 
+	/* queue and queue Info */
 	struct list_head reqQ;
 	struct list_head cmpQ;
 	unsigned int Qdepth;
@@ -113,12 +113,12 @@ struct ctlr_info
 
 	/* pointers to command and error info pool */
 	CommandList_struct 	*cmd_pool;
-	dma_addr_t		cmd_pool_dhandle; 
+	dma_addr_t		cmd_pool_dhandle;
 	ErrorInfo_struct 	*errinfo_pool;
-	dma_addr_t		errinfo_pool_dhandle; 
+	dma_addr_t		errinfo_pool_dhandle;
         unsigned long  		*cmd_pool_bits;
 	int			nr_allocs;
-	int			nr_frees; 
+	int			nr_frees;
 	int			busy_configuring;
 	int			busy_initializing;
 	int			busy_scanning;
@@ -175,7 +175,7 @@ struct ctlr_info
 #define SA5B_INTR_OFF		0x04
 #define SA5_INTR_PENDING	0x08
 #define SA5B_INTR_PENDING	0x04
-#define FIFO_EMPTY		0xffffffff	
+#define FIFO_EMPTY		0xffffffff
 #define CCISS_FIRMWARE_READY	0xffff0000 /* value in scratchpad register */
 /* Perf. mode flags */
 #define SA5_PERF_INTR_PENDING	0x04
@@ -189,7 +189,7 @@ struct ctlr_info
 
 #define  CISS_ERROR_BIT		0x02
 
-#define CCISS_INTR_ON 	1 
+#define CCISS_INTR_ON 	1
 #define CCISS_INTR_OFF	0
 
 
@@ -214,10 +214,10 @@ struct ctlr_info
 #define CCISS_POST_RESET_NOOP_RETRIES (12)
 #define CCISS_POST_RESET_NOOP_TIMEOUT_MSECS (10000)
 
-/* 
-	Send the command to the hardware 
+/*
+	Send the command to the hardware
 */
-static void SA5_submit_command( ctlr_info_t *h, CommandList_struct *c) 
+static void SA5_submit_command( ctlr_info_t *h, CommandList_struct *c)
 {
 #ifdef CCISS_DEBUG
 	printk(KERN_WARNING "cciss%d: Sending %08x - down to controller\n",
@@ -230,14 +230,14 @@ static void SA5_submit_command( ctlr_info_t *h, CommandList_struct *c)
 		h->max_outstanding = h->commands_outstanding;
 }
 
-/*  
- *  This card is the opposite of the other cards.  
- *   0 turns interrupts on... 
- *   0x08 turns them off... 
+/*
+ *  This card is the opposite of the other cards.
+ *   0 turns interrupts on...
+ *   0x08 turns them off...
  */
 static void SA5_intr_mask(ctlr_info_t *h, unsigned long val)
 {
-	if (val) 
+	if (val)
 	{ /* Turn interrupts on */
 		h->interrupts_enabled = 1;
 		writel(0, h->vaddr + SA5_REPLY_INTR_MASK_OFFSET);
@@ -245,7 +245,7 @@ static void SA5_intr_mask(ctlr_info_t *h, unsigned long val)
 	} else /* Turn them off */
 	{
 		h->interrupts_enabled = 0;
-        	writel( SA5_INTR_OFF, 
+        	writel( SA5_INTR_OFF,
 			h->vaddr + SA5_REPLY_INTR_MASK_OFFSET);
 		(void) readl(h->vaddr + SA5_REPLY_INTR_MASK_OFFSET);
 	}
@@ -287,39 +287,39 @@ static void SA5_performant_intr_mask(ctlr_info_t *h, unsigned long val)
 }
 
 /*
- *  Returns true if fifo is full.  
- * 
- */ 
+ *  Returns true if fifo is full.
+ *
+ */
 static unsigned long SA5_fifo_full(ctlr_info_t *h)
 {
 	if( h->commands_outstanding >= h->max_commands)
 		return(1);
-	else 
+	else
 		return(0);
 
 }
-/* 
- *   returns value read from hardware. 
- *     returns FIFO_EMPTY if there is nothing to read 
- */ 
+/*
+ *   returns value read from hardware.
+ *     returns FIFO_EMPTY if there is nothing to read
+ */
 static unsigned long SA5_completed(ctlr_info_t *h)
 {
-	unsigned long register_value 
+	unsigned long register_value
 		= readl(h->vaddr + SA5_REPLY_PORT_OFFSET);
 	if(register_value != FIFO_EMPTY)
 	{
 		h->commands_outstanding--;
 #ifdef CCISS_DEBUG
 		printk("cciss:  Read %lx back from board\n", register_value);
-#endif /* CCISS_DEBUG */ 
-	} 
+#endif /* CCISS_DEBUG */
+	}
 #ifdef CCISS_DEBUG
 	else
 	{
 		printk("cciss:  FIFO Empty read\n");
 	}
-#endif 
-	return ( register_value); 
+#endif
+	return ( register_value);
 
 }
 
@@ -357,17 +357,17 @@ static unsigned long SA5_performant_completed(ctlr_info_t *h)
 	return register_value;
 }
 /*
- *	Returns true if an interrupt is pending.. 
+ *	Returns true if an interrupt is pending..
  */
 static bool SA5_intr_pending(ctlr_info_t *h)
 {
-	unsigned long register_value  = 
+	unsigned long register_value  =
 		readl(h->vaddr + SA5_INTR_STATUS);
 #ifdef CCISS_DEBUG
 	printk("cciss: intr_pending %lx\n", register_value);
 #endif  /* CCISS_DEBUG */
-	if( register_value &  SA5_INTR_PENDING) 
-		return  1;	
+	if( register_value &  SA5_INTR_PENDING)
+		return  1;
 	return 0 ;
 }
 

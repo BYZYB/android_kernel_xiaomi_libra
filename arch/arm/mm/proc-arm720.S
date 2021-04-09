@@ -137,7 +137,7 @@ __arm710_setup:
 	 *  R
 	 * .RVI ZFRS BLDP WCAM
 	 * .... 0001 ..11 1101
-	 * 
+	 *
 	 */
 	.type	arm710_cr1_clear, #object
 	.type	arm710_cr1_set, #object
@@ -165,7 +165,7 @@ __arm720_setup:
 	 *  R
 	 * .RVI ZFRS BLDP WCAM
 	 * ..1. 1001 ..11 1101
-	 * 
+	 *
 	 */
 	.type	arm720_crval, #object
 arm720_crval:
@@ -187,7 +187,7 @@ arm720_crval:
 /*
  * See <asm/procinfo.h> for a definition of this structure.
  */
-	
+
 		.section ".proc.info.init", #alloc, #execinstr
 
 .macro arm720_proc_info name:req, cpu_val:req, cpu_mask:req, cpu_name:req, cpu_flush:req

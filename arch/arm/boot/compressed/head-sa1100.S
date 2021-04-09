@@ -1,8 +1,8 @@
-/* 
+/*
  * linux/arch/arm/boot/compressed/head-sa1100.S
- * 
+ *
  * Copyright (C) 1999 Nicolas Pitre <nico@fluxnic.net>
- * 
+ *
  * SA1100 specific tweaks.  This is merged into head.S by the linker.
  *
  */

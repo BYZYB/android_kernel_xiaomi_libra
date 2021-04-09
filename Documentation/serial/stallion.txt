@@ -374,7 +374,7 @@ The ports of the EasyIO-8M board do not have DCD or DTR signals. So these
 ports cannot be used as real modem devices. Generally, when using these
 ports you should only use the cueX devices.
 
-The driver utility package contains a couple of very useful programs. One 
+The driver utility package contains a couple of very useful programs. One
 is a serial port statistics collection and display program - very handy
 for solving serial port problems. The other is an extended option setting
 program that works with the intelligent boards.

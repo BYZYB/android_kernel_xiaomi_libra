@@ -118,7 +118,7 @@ struct arc_hardware {
 struct archdr {
     /* hardware requirements */
     struct arc_hardware hard;
-     
+
     /* arcnet encapsulation-specific bits */
     union {
 	struct arc_rfc1201   rfc1201;

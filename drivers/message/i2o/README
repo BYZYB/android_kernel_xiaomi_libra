@@ -41,7 +41,7 @@ Taneli Vähäkangas, University of Helsinki Finland
 
 CREDITS
 
-	This work was made possible by 
+	This work was made possible by
 
 Red Hat Software
 	Funding for the Building #3 part of the project
@@ -60,12 +60,12 @@ SysKonnect
         Loan of FDDI and Gigabit Ethernet cards
 
 ASUSTeK
-        Loan of I2O motherboard 
+        Loan of I2O motherboard
 
 STATUS:
 
 o	The core setup works within limits.
-o	The scsi layer seems to almost work. 
+o	The scsi layer seems to almost work.
            I'm still chasing down the hang bug.
 o	The block OSM is mostly functional
 o	LAN OSM works with FDDI and Ethernet cards.
@@ -89,7 +89,7 @@ o	Finish Media changers
 SCSI:
 o	Find the right way to associate drives/luns/busses
 
-Lan:	
+Lan:
 o	Performance tuning
 o	Test Fibre Channel code
 

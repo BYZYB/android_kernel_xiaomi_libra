@@ -1,4 +1,4 @@
-/* 
+/*
  * include/asm-parisc/rtc.h
  *
  * Copyright 2002 Randolph CHung <tausq@debian.org>
@@ -100,7 +100,7 @@ static int set_rtc_time(struct rtc_time *wtime)
 {
 	u_int32_t secs;
 
-	secs = mktime(wtime->tm_year + 1900, wtime->tm_mon + 1, wtime->tm_mday, 
+	secs = mktime(wtime->tm_year + 1900, wtime->tm_mon + 1, wtime->tm_mday,
 		      wtime->tm_hour, wtime->tm_min, wtime->tm_sec);
 
 	if(pdc_tod_set(secs, 0) < 0)

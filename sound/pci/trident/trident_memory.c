@@ -203,7 +203,7 @@ snd_trident_alloc_sg_pages(struct snd_trident *trident,
 	if (snd_BUG_ON(!hdr))
 		return NULL;
 
-	
+
 
 	mutex_lock(&hdr->block_mutex);
 	blk = search_empty(hdr, runtime->dma_bytes);
@@ -211,7 +211,7 @@ snd_trident_alloc_sg_pages(struct snd_trident *trident,
 		mutex_unlock(&hdr->block_mutex);
 		return NULL;
 	}
-			   
+
 	/* set TLB entries */
 	idx = 0;
 	for (page = firstpg(blk); page <= lastpg(blk); page++, idx++) {
@@ -258,7 +258,7 @@ snd_trident_alloc_cont_pages(struct snd_trident *trident,
 		mutex_unlock(&hdr->block_mutex);
 		return NULL;
 	}
-			   
+
 	/* set TLB entries */
 	addr = runtime->dma_addr;
 	ptr = (unsigned long)runtime->dma_area;

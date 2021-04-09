@@ -119,7 +119,7 @@ static inline int smp_startup_cpu(unsigned int lcpu)
 	if (get_cpu_current_state(lcpu) == CPU_STATE_INACTIVE)
 		goto out;
 #endif
-	/* 
+	/*
 	 * If the RTAS start-cpu token does not exist then presume the
 	 * cpu is already spinning.
 	 */
@@ -251,7 +251,7 @@ static void __init smp_init_pseries(void)
 
 	/* Mark threads which are still spinning in hold loops. */
 	if (cpu_has_feature(CPU_FTR_SMT)) {
-		for_each_present_cpu(i) { 
+		for_each_present_cpu(i) {
 			if (cpu_thread_in_core(i) == 0)
 				cpumask_set_cpu(i, of_spin_mask);
 		}

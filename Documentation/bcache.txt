@@ -231,7 +231,7 @@ sequential_merge
   against all new requests to determine which new requests are sequential
   continuations of previous requests for the purpose of determining sequential
   cutoff. This is necessary if the sequential cutoff value is greater than the
-  maximum acceptable sequential size for any single request. 
+  maximum acceptable sequential size for any single request.
 
 state
   The backing device can be in one of four different states:
@@ -316,7 +316,7 @@ bucket_size
   Size of buckets
 
 cache<0..n>
-  Symlink to each of the cache devices comprising this cache set. 
+  Symlink to each of the cache devices comprising this cache set.
 
 cache_available_percent
   Percentage of cache device which doesn't contain dirty data, and could

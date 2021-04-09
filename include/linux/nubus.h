@@ -4,7 +4,7 @@
   Originally written by Alan Cox.
 
   Hacked to death by C. Scott Ananian and David Huggins-Daines.
-  
+
   Some of the constants in here are from the corresponding
   NetBSD/OpenBSD header file, by Allen Briggs.  We figured out the
   rest of them on our own. */
@@ -17,7 +17,7 @@
 struct nubus_board {
 	struct nubus_board* next;
 	struct nubus_dev* first_dev;
-	
+
 	/* Only 9-E actually exist, though 0-8 are also theoretically
 	   possible, and 0 is a special case which represents the
 	   motherboard and onboard peripherals (Ethernet, video) */
@@ -29,7 +29,7 @@ struct nubus_board {
 	unsigned char* fblock;
 	/* Root directory (does *not* always equal fblock + doffset!) */
 	unsigned char* directory;
-	
+
 	unsigned long slot_addr;
 	/* Offset to root directory (sometimes) */
 	unsigned long doffset;
@@ -66,7 +66,7 @@ struct nubus_dev {
 	unsigned long iobase;
 	unsigned long iosize;
 	unsigned char flags, hwdevid;
-	
+
 	/* Functional directory */
 	unsigned char* directory;
 	/* Much of our info comes from here */

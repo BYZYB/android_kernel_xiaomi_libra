@@ -166,7 +166,7 @@ int usb_register_dev(struct usb_interface *intf,
 	char *temp;
 
 #ifdef CONFIG_USB_DYNAMIC_MINORS
-	/* 
+	/*
 	 * We don't care what the device tries to start at, we want to start
 	 * at zero to pack the devices into the smallest available space with
 	 * no holes in the minor range.

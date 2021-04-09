@@ -58,7 +58,7 @@ static unsigned short translations[][256] = {
     0x00e8, 0x00e9, 0x00ea, 0x00eb, 0x00ec, 0x00ed, 0x00ee, 0x00ef,
     0x00f0, 0x00f1, 0x00f2, 0x00f3, 0x00f4, 0x00f5, 0x00f6, 0x00f7,
     0x00f8, 0x00f9, 0x00fa, 0x00fb, 0x00fc, 0x00fd, 0x00fe, 0x00ff
-  }, 
+  },
   /* VT100 graphics mapped to Unicode */
   {
     0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007,
@@ -96,7 +96,7 @@ static unsigned short translations[][256] = {
   },
   /* IBM Codepage 437 mapped to Unicode */
   {
-    0x0000, 0x263a, 0x263b, 0x2665, 0x2666, 0x2663, 0x2660, 0x2022, 
+    0x0000, 0x263a, 0x263b, 0x2665, 0x2666, 0x2663, 0x2660, 0x2022,
     0x25d8, 0x25cb, 0x25d9, 0x2642, 0x2640, 0x266a, 0x266b, 0x263c,
     0x25b6, 0x25c0, 0x2195, 0x203c, 0x00b6, 0x00a7, 0x25ac, 0x21a8,
     0x2191, 0x2193, 0x2192, 0x2190, 0x221f, 0x2194, 0x25b2, 0x25bc,
@@ -128,7 +128,7 @@ static unsigned short translations[][256] = {
     0x03a6, 0x0398, 0x03a9, 0x03b4, 0x221e, 0x03c6, 0x03b5, 0x2229,
     0x2261, 0x00b1, 0x2265, 0x2264, 0x2320, 0x2321, 0x00f7, 0x2248,
     0x00b0, 0x2219, 0x00b7, 0x221a, 0x207f, 0x00b2, 0x25a0, 0x00a0
-  }, 
+  },
   /* User mapping -- default to codes for direct font mapping */
   {
     0xf000, 0xf001, 0xf002, 0xf003, 0xf004, 0xf005, 0xf006, 0xf007,
@@ -189,7 +189,7 @@ static void set_inverse_transl(struct vc_data *conp, struct uni_pagedir *p, int 
 	int j, glyph;
 	unsigned short *t = translations[i];
 	unsigned char *q;
-	
+
 	if (!p) return;
 	q = p->inverse_translations[i];
 
@@ -283,7 +283,7 @@ static void update_user_maps(void)
 {
 	int i;
 	struct uni_pagedir *p, *q = NULL;
-	
+
 	for (i = 0; i < MAX_NR_CONSOLES; i++) {
 		if (!vc_cons_allocated(i))
 			continue;
@@ -374,12 +374,12 @@ int con_get_trans_new(ushort __user * arg)
 	for (i=0; i<E_TABSZ ; i++)
 	  __put_user(p[i], arg+i);
 	console_unlock();
-	
+
 	return 0;
 }
 
 /*
- * Unicode -> current font conversion 
+ * Unicode -> current font conversion
  *
  * A font has at most 512 chars, usually 256.
  * But one font position may represent several Unicode chars.
@@ -396,7 +396,7 @@ static void con_release_unimap(struct uni_pagedir *p)
 	u16 **p1;
 	int i, j;
 
-	if (p == dflt) dflt = NULL;  
+	if (p == dflt) dflt = NULL;
 	for (i = 0; i < 32; i++) {
 		if ((p1 = p->uni_pgdir[i]) != NULL) {
 			for (j = 0; j < 32; j++)
@@ -427,12 +427,12 @@ void con_free_unimap(struct vc_data *vc)
 	con_release_unimap(p);
 	kfree(p);
 }
-  
+
 static int con_unify_unimap(struct vc_data *conp, struct uni_pagedir *p)
 {
 	int i, j, k;
 	struct uni_pagedir *q;
-	
+
 	for (i = 0; i < MAX_NR_CONSOLES; i++) {
 		if (!vc_cons_allocated(i))
 			continue;
@@ -488,7 +488,7 @@ con_insert_unipair(struct uni_pagedir *p, u_short unicode, u_short fontpos)
 	}
 
 	p2[unicode & 0x3f] = fontpos;
-	
+
 	p->sum += (fontpos << 20) + unicode;
 
 	return 0;
@@ -530,7 +530,7 @@ int con_clear_unimap(struct vc_data *vc, struct unimapinit *ui)
 	console_unlock();
 	return ret;
 }
-	
+
 int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
 {
 	int err = 0, err1, i;
@@ -544,22 +544,22 @@ int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
 		console_unlock();
 		return -EIO;
 	}
-	
+
 	if (!ct) {
 		console_unlock();
 		return 0;
 	}
-	
+
 	if (p->refcount > 1) {
 		int j, k;
 		u16 **p1, *p2, l;
-		
+
 		err1 = con_do_clear_unimap(vc, NULL);
 		if (err1) {
 			console_unlock();
 			return err1;
 		}
-		
+
 		/*
 		 * Since refcount was > 1, con_clear_unimap() allocated a
 		 * a new uni_pagedir for this vc.  Re: p != q
@@ -590,7 +590,7 @@ int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
 						con_release_unimap(q);
 						kfree(q);
 						console_unlock();
-						return err1; 
+						return err1;
 					}
 				}
 			} else {
@@ -620,7 +620,7 @@ int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
 			err = err1;
 		list++;
 	}
-	
+
 	/*
 	 * Merge with fontmaps of any other virtual consoles.
 	 */
@@ -644,7 +644,7 @@ int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
  *	Loads the unimap for the hardware font, as defined in uni_hash.tbl.
  *	The representation used was the most compact I could come up
  *	with.  This routine is executed at video setup, and when the
- *	PIO_FONTRESET ioctl is called. 
+ *	PIO_FONTRESET ioctl is called.
  *
  *	The caller must hold the console lock
  */
@@ -667,23 +667,23 @@ int con_set_default_unimap(struct vc_data *vc)
 		}
 		return 0;
 	}
-	
+
 	/* The default font is always 256 characters */
 
 	err = con_do_clear_unimap(vc, NULL);
 	if (err)
 		return err;
-    
+
 	p = (struct uni_pagedir *)*vc->vc_uni_pagedir_loc;
 	q = dfont_unitable;
-	
+
 	for (i = 0; i < 256; i++)
 		for (j = dfont_unicount[i]; j; j--) {
 			err1 = con_insert_unipair(p, *(q++), i);
 			if (err1)
 				err = err1;
 		}
-			
+
 	if (con_unify_unimap(vc, p)) {
 		dflt = (struct uni_pagedir *)*vc->vc_uni_pagedir_loc;
 		return err;
@@ -746,7 +746,7 @@ int con_get_unimap(struct vc_data *vc, ushort ct, ushort __user *uct, struct uni
 					if (*p2 < MAX_GLYPH && ect++ < ct) {
 						__put_user((u_short)((i<<11)+(j<<6)+k),
 							   &list->unicode);
-						__put_user((u_short) *p2, 
+						__put_user((u_short) *p2,
 							   &list->fontpos);
 						list++;
 					}
@@ -786,12 +786,12 @@ int conv_uni_to_8bit(u32 uni)
 }
 
 int
-conv_uni_to_pc(struct vc_data *conp, long ucs) 
+conv_uni_to_pc(struct vc_data *conp, long ucs)
 {
 	int h;
 	u16 **p1, *p2;
 	struct uni_pagedir *p;
-  
+
 	/* Only 16-bit codes supported at this time */
 	if (ucs > 0xffff)
 		return -4;		/* Not found */
@@ -806,11 +806,11 @@ conv_uni_to_pc(struct vc_data *conp, long ucs)
 	 */
 	else if ((ucs & ~UNI_DIRECT_MASK) == UNI_DIRECT_BASE)
 		return ucs & UNI_DIRECT_MASK;
-  
+
 	if (!*conp->vc_uni_pagedir_loc)
 		return -3;
 
-	p = (struct uni_pagedir *)*conp->vc_uni_pagedir_loc;  
+	p = (struct uni_pagedir *)*conp->vc_uni_pagedir_loc;
 	if ((p1 = p->uni_pgdir[ucs >> 11]) &&
 	    (p2 = p1[(ucs >> 6) & 0x1f]) &&
 	    (h = p2[ucs & 0x3f]) < MAX_GLYPH)
@@ -824,11 +824,11 @@ conv_uni_to_pc(struct vc_data *conp, long ucs)
  * initialized.  It must be possible to call kmalloc(..., GFP_KERNEL)
  * from this function, hence the call from sys_setup.
  */
-void __init 
+void __init
 console_map_init(void)
 {
 	int i;
-	
+
 	for (i = 0; i < MAX_NR_CONSOLES; i++)
 		if (vc_cons_allocated(i) && !*vc_cons[i].d->vc_uni_pagedir_loc)
 			con_set_default_unimap(vc_cons[i].d);

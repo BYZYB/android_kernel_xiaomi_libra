@@ -224,7 +224,7 @@ typedef __uint32_t xlog_tid_t;
 #define XLOG_COVER_OPS		5
 
 
-/* Ticket reservation region accounting */ 
+/* Ticket reservation region accounting */
 #define XLOG_TIC_LEN_MAX	15
 
 /*
@@ -255,7 +255,7 @@ typedef struct xlog_ticket {
 	uint		   t_res_num_ophdrs;		 /* num op hdrs  : 4 */
 	uint		   t_res_arr_sum;		 /* array sum    : 4 */
 	uint		   t_res_o_flow;		 /* sum overflow : 4 */
-	xlog_res_t	   t_res_arr[XLOG_TIC_LEN_MAX];  /* array of res : 8 * 15 */ 
+	xlog_res_t	   t_res_arr[XLOG_TIC_LEN_MAX];  /* array of res : 8 * 15 */
 } xlog_ticket_t;
 
 #endif

@@ -363,10 +363,10 @@ static void btuart_change_speed(btuart_info_t *info, unsigned int speed)
 
 	fcr = UART_FCR_ENABLE_FIFO | UART_FCR_CLEAR_RCVR | UART_FCR_CLEAR_XMIT;
 
-	/* 
+	/*
 	 * Use trigger level 1 to avoid 3 ms. timeout delay at 9600 bps, and
 	 * almost 1,7 ms at 19200 bps. At speeds above that we can just forget
-	 * about this timeout since it will always be fast enough. 
+	 * about this timeout since it will always be fast enough.
 	 */
 
 	if (speed < 38400)

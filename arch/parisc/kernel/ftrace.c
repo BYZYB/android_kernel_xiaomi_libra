@@ -176,7 +176,7 @@ void ftrace_function_trampoline(unsigned long parent,
 		/* sanity check: parent_rp should hold parent */
 		if (*parent_rp != parent)
 			return;
-		
+
 		prepare_ftrace_return(parent_rp, self_addr);
 		return;
 	}

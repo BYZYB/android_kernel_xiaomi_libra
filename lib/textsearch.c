@@ -33,7 +33,7 @@
  *     |             (3)|----->| find()/next() |-----------+          |
  *     |             (7)|----->| destroy()     |----------------------+
  *     +----------------+      +---------------+
- *  
+ *
  *   (1) User configures a search by calling _prepare() specifying the
  *       search parameters such as the pattern and algorithm name.
  *   (2) Core requests the algorithm to allocate and initialize a search
@@ -223,7 +223,7 @@ static unsigned int get_linear_data(unsigned int consumed, const u8 **dst,
  *
  * Returns the position of first occurrence of the pattern or
  * %UINT_MAX if no occurrence was found.
- */ 
+ */
 unsigned int textsearch_find_continuous(struct ts_config *conf,
 					struct ts_state *state,
 					const void *data, unsigned int len)
@@ -263,7 +263,7 @@ struct ts_config *textsearch_prepare(const char *algo, const void *pattern,
 	int err = -ENOENT;
 	struct ts_config *conf;
 	struct ts_ops *ops;
-	
+
 	if (len == 0)
 		return ERR_PTR(-EINVAL);
 
@@ -295,7 +295,7 @@ struct ts_config *textsearch_prepare(const char *algo, const void *pattern,
 errout:
 	if (ops)
 		module_put(ops->owner);
-		
+
 	return ERR_PTR(err);
 }
 

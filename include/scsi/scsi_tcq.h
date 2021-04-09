@@ -91,7 +91,7 @@ static inline void scsi_deactivate_tcq(struct scsi_device *sdev, int depth)
  * @msg:	pointer to the area to place the tag
  *
  * Notes:
- *	designed to create the correct type of tag message for the 
+ *	designed to create the correct type of tag message for the
  *	particular request.  Returns the size of the tag message.
  *	May return 0 if TCQ is disabled for this device.
  **/

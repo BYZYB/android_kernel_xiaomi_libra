@@ -977,7 +977,7 @@ static unsigned int get_timestamp(void)
 
 #endif
 
-static int 
+static int
 bridge_probe(struct usb_interface *iface, const struct usb_device_id *id)
 {
 	struct usb_host_endpoint	*endpoint = NULL;

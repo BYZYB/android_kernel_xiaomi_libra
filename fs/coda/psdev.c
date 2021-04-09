@@ -8,10 +8,10 @@
  *		modify it under the terms of the GNU General Public License
  *		as published by the Free Software Foundation; either version
  *		2 of the License, or (at your option) any later version.
- * 
+ *
  *              Adapted to become the Linux 2.0 Coda pseudo device
- *              Peter  Braam  <braam@maths.ox.ac.uk> 
- *              Michael Callahan <mjc@emmy.smith.edu>           
+ *              Peter  Braam  <braam@maths.ox.ac.uk>
+ *              Michael Callahan <mjc@emmy.smith.edu>
  *
  *              Changes for Linux 2.1
  *              Copyright (c) 1997 Carnegie-Mellon University
@@ -93,8 +93,8 @@ static long coda_psdev_ioctl(struct file * filp, unsigned int cmd, unsigned long
 /*
  *	Receive a message written by Venus to the psdev
  */
- 
-static ssize_t coda_psdev_write(struct file *file, const char __user *buf, 
+
+static ssize_t coda_psdev_write(struct file *file, const char __user *buf,
 				size_t nbytes, loff_t *off)
 {
         struct venus_comm *vcp = (struct venus_comm *) file->private_data;
@@ -143,7 +143,7 @@ static ssize_t coda_psdev_write(struct file *file, const char __user *buf,
 		count = nbytes;
 		goto out;
 	}
-        
+
 	/* Look for the message on the processing queue. */
 	mutex_lock(&vcp->vc_mutex);
 	list_for_each(lh, &vcp->vc_processing) {
@@ -157,7 +157,7 @@ static ssize_t coda_psdev_write(struct file *file, const char __user *buf,
 	mutex_unlock(&vcp->vc_mutex);
 
 	if (!req) {
-		printk("psdev_write: msg (%d, %d) not found\n", 
+		printk("psdev_write: msg (%d, %d) not found\n",
 			hdr.opcode, hdr.unique);
 		retval = -ESRCH;
 		goto out;
@@ -191,14 +191,14 @@ static ssize_t coda_psdev_write(struct file *file, const char __user *buf,
 
         wake_up(&req->uc_sleep);
 out:
-        return(count ? count : retval);  
+        return(count ? count : retval);
 }
 
 /*
  *	Read a message from the kernel to Venus
  */
 
-static ssize_t coda_psdev_read(struct file * file, char __user * buf, 
+static ssize_t coda_psdev_read(struct file * file, char __user * buf,
 			       size_t nbytes, loff_t *off)
 {
 	DECLARE_WAITQUEUE(wait, current);
@@ -247,7 +247,7 @@ static ssize_t coda_psdev_read(struct file * file, char __user * buf,
 
 	if (copy_to_user(buf, req->uc_data, count))
 	        retval = -EFAULT;
-        
+
 	/* If request was not a signal, enqueue and don't free */
 	if (!(req->uc_flags & CODA_REQ_ASYNC)) {
 		req->uc_flags |= CODA_REQ_READ;
@@ -354,7 +354,7 @@ static int init_coda_psdev(void)
 {
 	int i, err = 0;
 	if (register_chrdev(CODA_PSDEV_MAJOR, "coda", &coda_psdev_fops)) {
-              printk(KERN_ERR "coda_psdev: unable to get major %d\n", 
+              printk(KERN_ERR "coda_psdev: unable to get major %d\n",
 		     CODA_PSDEV_MAJOR);
               return -EIO;
 	}
@@ -362,7 +362,7 @@ static int init_coda_psdev(void)
 	if (IS_ERR(coda_psdev_class)) {
 		err = PTR_ERR(coda_psdev_class);
 		goto out_chrdev;
-	}		
+	}
 	for (i = 0; i < MAX_CODADEVS; i++) {
 		mutex_init(&(&coda_comms[i])->vc_mutex);
 		device_create(coda_psdev_class, NULL,
@@ -396,7 +396,7 @@ static int __init init_coda(void)
 		printk("Problem (%d) in init_coda_psdev\n", status);
 		goto out1;
 	}
-	
+
 	status = register_filesystem(&coda_fs_type);
 	if (status) {
 		printk("coda: failed to register filesystem!\n");

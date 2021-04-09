@@ -222,7 +222,7 @@ static void dbe_TurnOffDma(struct sgivw_par *par)
  *  Set the User Defined Part of the Display. Again if par use it to get
  *  real video mode.
  */
-static int sgivwfb_check_var(struct fb_var_screeninfo *var, 
+static int sgivwfb_check_var(struct fb_var_screeninfo *var,
 			     struct fb_info *info)
 {
 	struct sgivw_par *par = (struct sgivw_par *)info->par;
@@ -366,9 +366,9 @@ static void sgivwfb_setup_flatpanel(struct sgivw_par *par, struct dbe_timing_inf
 	int fp_wid, fp_hgt, fp_vbs, fp_vbe;
 	u32 outputVal = 0;
 
-	SET_DBE_FIELD(VT_FLAGS, HDRV_INVERT, outputVal, 
+	SET_DBE_FIELD(VT_FLAGS, HDRV_INVERT, outputVal,
 		(currentTiming->flags & FB_SYNC_HOR_HIGH_ACT) ? 0 : 1);
-	SET_DBE_FIELD(VT_FLAGS, VDRV_INVERT, outputVal, 
+	SET_DBE_FIELD(VT_FLAGS, VDRV_INVERT, outputVal,
 		(currentTiming->flags & FB_SYNC_VERT_HIGH_ACT) ? 0 : 1);
 	DBE_SETREG(vt_flags, outputVal);
 
@@ -803,7 +803,7 @@ static int sgivwfb_probe(struct platform_device *dev)
 
 	platform_set_drvdata(dev, info);
 
-	printk(KERN_INFO "fb%d: SGI DBE frame buffer device, using %ldK of video memory at %#lx\n",      
+	printk(KERN_INFO "fb%d: SGI DBE frame buffer device, using %ldK of video memory at %#lx\n",
 		info->node, sgivwfb_mem_size >> 10, sgivwfb_mem_phys);
 	return 0;
 

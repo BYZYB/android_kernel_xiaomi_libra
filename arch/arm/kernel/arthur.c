@@ -46,7 +46,7 @@ static unsigned long arthur_to_linux_signals[32] = {
 static unsigned long linux_to_arthur_signals[32] = {
 	0,		-1,		ARTHUR_SIGINT,	-1,
        	ARTHUR_SIGILL,	5,		ARTHUR_SIGABRT,	7,
-	ARTHUR_SIGFPE,	9,		ARTHUR_SIGUSR1,	ARTHUR_SIGSEGV,	
+	ARTHUR_SIGFPE,	9,		ARTHUR_SIGUSR1,	ARTHUR_SIGSEGV,
 	ARTHUR_SIGUSR2,	13,		14,		ARTHUR_SIGTERM,
 	16,		17,		18,		19,
 	20,		21,		22,		23,

@@ -1,5 +1,5 @@
 /*
- *	Just a place holder. 
+ *	Just a place holder.
  */
 
 #ifndef _UAPI_SPARC_SETUP_H

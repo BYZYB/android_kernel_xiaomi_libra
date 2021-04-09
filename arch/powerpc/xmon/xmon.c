@@ -1762,7 +1762,7 @@ static void
 byterev(unsigned char *val, int size)
 {
 	int t;
-	
+
 	switch (size) {
 	case 2:
 		SWAP(val[0], val[1], t);

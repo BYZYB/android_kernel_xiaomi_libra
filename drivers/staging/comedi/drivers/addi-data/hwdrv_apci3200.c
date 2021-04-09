@@ -169,7 +169,7 @@ struct str_BoardInfos {
 	unsigned int ui_InterruptChannelValue[144];	/* Buffer */
 	unsigned char b_StructInitialized;
 	/* 7 is the maximal number of channels */
-	unsigned int ui_ScanValueArray[7 + 12];	
+	unsigned int ui_ScanValueArray[7 + 12];
 
 	int i_ConnectionType;
 	int i_NbrOfModule;

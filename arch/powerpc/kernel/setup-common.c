@@ -84,7 +84,7 @@ char cmd_line[COMMAND_LINE_SIZE];
 
 /*
  * This still seems to be needed... -- paulus
- */ 
+ */
 struct screen_info screen_info = {
 	.orig_x = 0,
 	.orig_y = 25,

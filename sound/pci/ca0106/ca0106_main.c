@@ -18,7 +18,7 @@
  *      So, to record from the MIC, set the MIC Playback volume to max,
  *      unmute the MIC and turn up the MASTER Playback volume.
  *      So, to prevent feedback when capturing, minimise the "Capture feedback into Playback" volume.
- *   
+ *
  *    The only playback controls that currently do anything are: -
  *    Analog Front
  *    Analog Rear
@@ -26,12 +26,12 @@
  *    SPDIF Front
  *    SPDIF Rear
  *    SPDIF Center/LFE
- *   
+ *
  *    For capture from Mic in or Line in.
  *    Digital/Analog ( switch must be in Analog mode for CAPTURE. )
- * 
+ *
  *    CAPTURE feedback into PLAYBACK
- * 
+ *
  *  Changelog:
  *    Support interrupts per period.
  *    Removed noise from Center/LFE channel when in Analog mode.
@@ -108,7 +108,7 @@
  *    DAC: CS4382 (114 dB, 24-Bit, 192 kHz, 8-Channel D/A Converter with DSD Support)
  *    SPDIF Out control switches between Mic in and SPDIF out.
  *    No sound out or mic input working yet.
- * 
+ *
  *  GENERAL INFO:
  *    Model: SB0413
  *    P17 Chip: CA0106-DAT
@@ -202,7 +202,7 @@ static struct snd_ca0106_details ca0106_chip_details[] = {
 	 /* AudigyLS[SB0310] */
 	 { .serial = 0x10021102,
 	   .name   = "AudigyLS [SB0310]",
-	   .ac97   = 1 } , 
+	   .ac97   = 1 } ,
 	 /* Unknown AudigyLS that also says SB0310 on it */
 	 { .serial = 0x10051102,
 	   .name   = "AudigyLS [SB0310b]",
@@ -297,7 +297,7 @@ static struct snd_ca0106_details ca0106_chip_details[] = {
 
 /* hardware definition */
 static struct snd_pcm_hardware snd_ca0106_playback_hw = {
-	.info =			SNDRV_PCM_INFO_MMAP | 
+	.info =			SNDRV_PCM_INFO_MMAP |
 				SNDRV_PCM_INFO_INTERLEAVED |
 				SNDRV_PCM_INFO_BLOCK_TRANSFER |
 				SNDRV_PCM_INFO_MMAP_VALID |
@@ -318,7 +318,7 @@ static struct snd_pcm_hardware snd_ca0106_playback_hw = {
 };
 
 static struct snd_pcm_hardware snd_ca0106_capture_hw = {
-	.info =			(SNDRV_PCM_INFO_MMAP | 
+	.info =			(SNDRV_PCM_INFO_MMAP |
 				 SNDRV_PCM_INFO_INTERLEAVED |
 				 SNDRV_PCM_INFO_BLOCK_TRANSFER |
 				 SNDRV_PCM_INFO_MMAP_VALID),
@@ -343,13 +343,13 @@ static struct snd_pcm_hardware snd_ca0106_capture_hw = {
 	.fifo_size =		0,
 };
 
-unsigned int snd_ca0106_ptr_read(struct snd_ca0106 * emu, 
-					  unsigned int reg, 
+unsigned int snd_ca0106_ptr_read(struct snd_ca0106 * emu,
+					  unsigned int reg,
 					  unsigned int chn)
 {
 	unsigned long flags;
 	unsigned int regptr, val;
-  
+
 	regptr = (reg << 16) | chn;
 
 	spin_lock_irqsave(&emu->emu_lock, flags);
@@ -359,9 +359,9 @@ unsigned int snd_ca0106_ptr_read(struct snd_ca0106 * emu,
 	return val;
 }
 
-void snd_ca0106_ptr_write(struct snd_ca0106 *emu, 
-				   unsigned int reg, 
-				   unsigned int chn, 
+void snd_ca0106_ptr_write(struct snd_ca0106 *emu,
+				   unsigned int reg,
+				   unsigned int chn,
 				   unsigned int data)
 {
 	unsigned int regptr;
@@ -459,7 +459,7 @@ int snd_ca0106_i2c_write(struct snd_ca0106 *emu,
 		snd_printk(KERN_ERR "Writing to ADC failed!\n");
 		return -EINVAL;
 	}
-    
+
     	return 0;
 }
 
@@ -572,10 +572,10 @@ static int snd_ca0106_pcm_open_playback_channel(struct snd_pcm_substream *substr
 	epcm->emu = chip;
 	epcm->substream = substream;
         epcm->channel_id=channel_id;
-  
+
 	runtime->private_data = epcm;
 	runtime->private_free = snd_ca0106_pcm_free_substream;
-  
+
 	runtime->hw = snd_ca0106_playback_hw;
 
         channel->emu = chip;
@@ -666,10 +666,10 @@ static int snd_ca0106_pcm_open_capture_channel(struct snd_pcm_substream *substre
 	epcm->emu = chip;
 	epcm->substream = substream;
         epcm->channel_id=channel_id;
-  
+
 	runtime->private_data = epcm;
 	runtime->private_free = snd_ca0106_pcm_free_substream;
-  
+
 	runtime->hw = snd_ca0106_capture_hw;
 
         channel->emu = chip;
@@ -769,7 +769,7 @@ static int snd_ca0106_pcm_prepare_playback(struct snd_pcm_substream *substream)
 	u32 reg71_set = 0;
 	u32 reg71;
 	int i;
-	
+
 #if 0 /* debug */
 	snd_printk(KERN_DEBUG
 		   "prepare:channel_number=%d, rate=%d, format=0x%x, "
@@ -790,23 +790,23 @@ static int snd_ca0106_pcm_prepare_playback(struct snd_pcm_substream *substream)
 	switch (runtime->rate) {
 	case 44100:
 		reg40_set = 0x10000 << (channel<<1);
-		reg71_set = 0x01010000; 
+		reg71_set = 0x01010000;
 		break;
         case 48000:
 		reg40_set = 0;
-		reg71_set = 0; 
+		reg71_set = 0;
 		break;
 	case 96000:
 		reg40_set = 0x20000 << (channel<<1);
-		reg71_set = 0x02020000; 
+		reg71_set = 0x02020000;
 		break;
 	case 192000:
 		reg40_set = 0x30000 << (channel<<1);
-		reg71_set = 0x03030000; 
+		reg71_set = 0x03030000;
 		break;
 	default:
 		reg40_set = 0;
-		reg71_set = 0; 
+		reg71_set = 0;
 		break;
 	}
 	/* Format is a global setting */
@@ -837,7 +837,7 @@ static int snd_ca0106_pcm_prepare_playback(struct snd_pcm_substream *substream)
 		table_base[i*2] = runtime->dma_addr + (i * period_size_bytes);
 		table_base[i*2+1] = period_size_bytes << 16;
 	}
- 
+
 	snd_ca0106_ptr_write(emu, PLAYBACK_LIST_ADDR, channel, emu->buffer.addr+(8*16*channel));
 	snd_ca0106_ptr_write(emu, PLAYBACK_LIST_SIZE, channel, (runtime->periods - 1) << 19);
 	snd_ca0106_ptr_write(emu, PLAYBACK_LIST_PTR, channel, 0);
@@ -874,7 +874,7 @@ static int snd_ca0106_pcm_prepare_capture(struct snd_pcm_substream *substream)
 	u32 reg71_mask = 0x0000c000 ; /* Global. Set ADC rate. */
 	u32 reg71_set = 0;
 	u32 reg71;
-	
+
 #if 0 /* debug */
 	snd_printk(KERN_DEBUG
 		   "prepare:channel_number=%d, rate=%d, format=0x%x, "
@@ -895,18 +895,18 @@ static int snd_ca0106_pcm_prepare_capture(struct snd_pcm_substream *substream)
 		reg71_set = 0x00004000;
 		break;
         case 48000:
-		reg71_set = 0; 
+		reg71_set = 0;
 		break;
 	case 96000:
 		reg71_set = 0x00008000;
 		over_sampling=0xa;
 		break;
 	case 192000:
-		reg71_set = 0x0000c000; 
+		reg71_set = 0x0000c000;
 		over_sampling=0xa;
 		break;
 	default:
-		reg71_set = 0; 
+		reg71_set = 0;
 		break;
 	}
 	/* Format is a global setting */
@@ -1164,9 +1164,9 @@ static struct snd_pcm_ops snd_ca0106_playback_center_lfe_ops = {
         .ioctl =        snd_pcm_lib_ioctl,
         .hw_params =    snd_ca0106_pcm_hw_params_playback,
         .hw_free =      snd_ca0106_pcm_hw_free_playback,
-        .prepare =      snd_ca0106_pcm_prepare_playback,     
-        .trigger =      snd_ca0106_pcm_trigger_playback,  
-        .pointer =      snd_ca0106_pcm_pointer_playback, 
+        .prepare =      snd_ca0106_pcm_prepare_playback,
+        .trigger =      snd_ca0106_pcm_trigger_playback,
+        .pointer =      snd_ca0106_pcm_pointer_playback,
 };
 
 static struct snd_pcm_ops snd_ca0106_playback_unknown_ops = {
@@ -1175,9 +1175,9 @@ static struct snd_pcm_ops snd_ca0106_playback_unknown_ops = {
         .ioctl =        snd_pcm_lib_ioctl,
         .hw_params =    snd_ca0106_pcm_hw_params_playback,
         .hw_free =      snd_ca0106_pcm_hw_free_playback,
-        .prepare =      snd_ca0106_pcm_prepare_playback,     
-        .trigger =      snd_ca0106_pcm_trigger_playback,  
-        .pointer =      snd_ca0106_pcm_pointer_playback, 
+        .prepare =      snd_ca0106_pcm_prepare_playback,
+        .trigger =      snd_ca0106_pcm_trigger_playback,
+        .pointer =      snd_ca0106_pcm_pointer_playback,
 };
 
 static struct snd_pcm_ops snd_ca0106_playback_rear_ops = {
@@ -1186,9 +1186,9 @@ static struct snd_pcm_ops snd_ca0106_playback_rear_ops = {
         .ioctl =        snd_pcm_lib_ioctl,
         .hw_params =    snd_ca0106_pcm_hw_params_playback,
 		.hw_free =      snd_ca0106_pcm_hw_free_playback,
-        .prepare =      snd_ca0106_pcm_prepare_playback,     
-        .trigger =      snd_ca0106_pcm_trigger_playback,  
-        .pointer =      snd_ca0106_pcm_pointer_playback, 
+        .prepare =      snd_ca0106_pcm_prepare_playback,
+        .trigger =      snd_ca0106_pcm_trigger_playback,
+        .pointer =      snd_ca0106_pcm_pointer_playback,
 };
 
 
@@ -1211,7 +1211,7 @@ static void snd_ca0106_ac97_write(struct snd_ac97 *ac97,
 {
 	struct snd_ca0106 *emu = ac97->private_data;
 	unsigned long flags;
-  
+
 	spin_lock_irqsave(&emu->emu_lock, flags);
 	outb(reg, emu->port + AC97ADDRESS);
 	outw(val, emu->port + AC97DATA);
@@ -1227,7 +1227,7 @@ static int snd_ca0106_ac97(struct snd_ca0106 *chip)
 		.write = snd_ca0106_ac97_write,
 		.read = snd_ca0106_ac97_read,
 	};
-  
+
 	if ((err = snd_ac97_bus(chip->card, 0, &ops, NULL, &pbus)) < 0)
 		return err;
 	pbus->no_vra = 1; /* we don't need VRA */
@@ -1358,11 +1358,11 @@ static int snd_ca0106_pcm(struct snd_ca0106 *emu, int device)
 	struct snd_pcm_substream *substream;
 	const struct snd_pcm_chmap_elem *map = NULL;
 	int err;
-  
+
 	err = snd_pcm_new(emu->card, "ca0106", device, 1, 1, &pcm);
 	if (err < 0)
 		return err;
-  
+
 	pcm->private_data = emu;
 
 	switch (device) {
@@ -1391,33 +1391,33 @@ static int snd_ca0106_pcm(struct snd_ca0106 *emu, int device)
 	pcm->info_flags = 0;
 	strcpy(pcm->name, "CA0106");
 
-	for(substream = pcm->streams[SNDRV_PCM_STREAM_PLAYBACK].substream; 
-	    substream; 
+	for(substream = pcm->streams[SNDRV_PCM_STREAM_PLAYBACK].substream;
+	    substream;
 	    substream = substream->next) {
-		if ((err = snd_pcm_lib_preallocate_pages(substream, 
-							 SNDRV_DMA_TYPE_DEV, 
-							 snd_dma_pci_data(emu->pci), 
+		if ((err = snd_pcm_lib_preallocate_pages(substream,
+							 SNDRV_DMA_TYPE_DEV,
+							 snd_dma_pci_data(emu->pci),
 							 64*1024, 64*1024)) < 0) /* FIXME: 32*1024 for sound buffer, between 32and64 for Periods table. */
 			return err;
 	}
 
-	for (substream = pcm->streams[SNDRV_PCM_STREAM_CAPTURE].substream; 
-	      substream; 
+	for (substream = pcm->streams[SNDRV_PCM_STREAM_CAPTURE].substream;
+	      substream;
 	      substream = substream->next) {
- 		if ((err = snd_pcm_lib_preallocate_pages(substream, 
-	                                           SNDRV_DMA_TYPE_DEV, 
-	                                           snd_dma_pci_data(emu->pci), 
+ 		if ((err = snd_pcm_lib_preallocate_pages(substream,
+	                                           SNDRV_DMA_TYPE_DEV,
+	                                           snd_dma_pci_data(emu->pci),
 	                                           64*1024, 64*1024)) < 0)
 			return err;
 	}
-  
+
 	err = snd_pcm_add_chmap_ctls(pcm, SNDRV_PCM_STREAM_PLAYBACK, map, 2,
 				     1 << 2, NULL);
 	if (err < 0)
 		return err;
 
 	emu->pcm[device] = pcm;
-  
+
 	return 0;
 }
 
@@ -1820,7 +1820,7 @@ static int snd_ca0106_midi(struct snd_ca0106 *chip, unsigned int channel)
 	midi->get_dev_id_port = ca0106_dev_id_port;
 
 	midi->dev_id = chip;
-	
+
 	if ((err = ca_midi_init(chip, midi, 0, name)) < 0)
 		return err;
 

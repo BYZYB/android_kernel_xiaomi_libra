@@ -7,7 +7,7 @@ obj-$(CONFIG_ISDN_DIVAS_MAINT)		+= diva_mnt.o
 obj-$(CONFIG_ISDN_DIVAS_USERIDI)	+= diva_idi.o
 obj-$(CONFIG_ISDN_DIVAS_DIVACAPI)	+= divacapi.o
 
-# Multipart objects. 
+# Multipart objects.
 
 divas-y					:= divasmain.o divasfunc.o di.o io.o istream.o \
 					   diva.o divasproc.o diva_dma.o

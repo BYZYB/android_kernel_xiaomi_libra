@@ -56,7 +56,7 @@ static inline __sum16 ip_fast_csum(const void *iph, unsigned int ihl)
 {
 	return csum_fold(csum_partial(iph, ihl * 4, 0));
 }
- 
+
 /*
  * computes the checksum of the TCP/UDP pseudo-header
  * returns a 16-bit checksum, already complemented

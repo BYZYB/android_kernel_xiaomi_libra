@@ -4,7 +4,7 @@
  *  Copyright (C) 1996-1999 David S. Miller (davem@caip.rutgers.edu)
  *  Copyright (C) 1997-1999 Jakub Jelinek (jj@sunsite.mff.cuni.cz)
  */
- 
+
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/sched.h>
@@ -1856,15 +1856,15 @@ void __init paging_init(void)
 	 * work.
 	 */
 	init_mm.pgd += ((shift) / (sizeof(pgd_t)));
-	
+
 	memset(swapper_low_pmd_dir, 0, sizeof(swapper_low_pmd_dir));
 
 	/* Now can init the kernel/bad page tables. */
 	pud_set(pud_offset(&swapper_pg_dir[0], 0),
 		swapper_low_pmd_dir + (shift / sizeof(pgd_t)));
-	
+
 	inherit_prom_mappings();
-	
+
 	init_kpte_bitmap();
 
 	/* Ok, we can use our TLB miss and window trap handlers safely.  */
@@ -2093,8 +2093,8 @@ void __init mem_init(void)
 	printk("Memory: %luk available (%ldk kernel code, %ldk data, %ldk init) [%016lx,%016lx]\n",
 	       nr_free_pages() << (PAGE_SHIFT-10),
 	       codepages << (PAGE_SHIFT-10),
-	       datapages << (PAGE_SHIFT-10), 
-	       initpages << (PAGE_SHIFT-10), 
+	       datapages << (PAGE_SHIFT-10),
+	       initpages << (PAGE_SHIFT-10),
 	       PAGE_OFFSET, (last_valid_pfn << PAGE_SHIFT));
 
 	if (tlb_type == cheetah || tlb_type == cheetah_plus)

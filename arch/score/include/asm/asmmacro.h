@@ -71,7 +71,7 @@
 
 	mfcr	r31, cr2
 	sw	r31, [r0, PT_ECR]
-	
+
 	mfcr	r31, cr5
 	srli	r31, r31, 1
 	slli	r31, r31, 1

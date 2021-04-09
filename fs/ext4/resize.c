@@ -1276,7 +1276,7 @@ static int ext4_setup_new_descs(handle_t *handle, struct super_block *sb,
 	ext4_group_t			group;
 	__u16				*bg_flags = flex_gd->bg_flags;
 	int				i, gdb_off, gdb_num, err = 0;
-	
+
 
 	for (i = 0; i < flex_gd->count; i++, group_data++, bg_flags++) {
 		group = group_data->group;

@@ -1,4 +1,4 @@
-/* 
+/*
  * include/asm-generic/rtc.h
  *
  * Author: Tom Rini <trini@mvista.com>
@@ -56,7 +56,7 @@ static inline unsigned int __get_rtc_time(struct rtc_time *time)
 	 * can take just over 2ms. We wait 20ms. There is no need to
 	 * to poll-wait (up to 1s - eeccch) for the falling edge of RTC_UIP.
 	 * If you need to know *exactly* when a second has started, enable
-	 * periodic update complete interrupts, (via ioctl) and then 
+	 * periodic update complete interrupts, (via ioctl) and then
 	 * immediately read /dev/rtc which will block until you get the IRQ.
 	 * Once the read clears, read the RTC time (again via ioctl). Easy.
 	 */

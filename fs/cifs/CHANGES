@@ -10,7 +10,7 @@ have duplicated data). Fix oops in cifs_lookup. Workaround problem
 mounting to OS/400 Netserve. Fix oops in cifs_get_tcp_session.
 Disable use of server inode numbers when server only
 partially supports them (e.g. for one server querying inode numbers on
-FindFirst fails but QPathInfo queries works). Fix oops with dfs in 
+FindFirst fails but QPathInfo queries works). Fix oops with dfs in
 cifs_put_smb_ses. Fix mmap to work on directio mounts (needed
 for OpenOffice when on forcedirectio mount e.g.)
 
@@ -51,7 +51,7 @@ userids. Raw NTLMSSP fixed (it requires /proc/fs/cifs/experimental
 flag to be set to 2, and mount must enable krb5 to turn on extended security).
 Performance of file create to Samba improved (posix create on lookup
 removes 1 of 2 network requests sent on file create)
- 
+
 Version 1.57
 ------------
 Improve support for multiple security contexts to the same server. We
@@ -70,7 +70,7 @@ fails to support it properly, as with Samba server versions prior to 3.3.2)
 Fix "redzone overwritten" bug in cifs_put_tcon (CIFSTcon may allocate too
 little memory for the "nativeFileSystem" field returned by the server
 during mount).  Endian convert inode numbers if necessary (makes it easier
-to compare inode numbers on network files from big endian systems). 
+to compare inode numbers on network files from big endian systems).
 
 Version 1.56
 ------------
@@ -160,7 +160,7 @@ EAGAIN returned on kern_recvmsg. Return better error if server
 requires packet signing but client has disabled it. When mounted
 with cifsacl mount option - mode bits are approximated based
 on the contents of the ACL of the file or directory. When cifs
-mount helper is missing convert make sure that UNC name 
+mount helper is missing convert make sure that UNC name
 has backslash (not forward slash) between ip address of server
 and the share name.
 
@@ -208,7 +208,7 @@ on server which does not support the Unix Extensions).  Remove read only dos
 attribute on chmod when adding any write permission (ie on any of
 user/group/other (not all of user/group/other ie  0222) when
 mounted to windows.  Add support for POSIX MkDir (slight performance
-enhancement and eliminates the network race between the mkdir and set 
+enhancement and eliminates the network race between the mkdir and set
 path info of the mode).
 
 
@@ -266,7 +266,7 @@ Handle conversion of long share names (especially Asian languages)
 to Unicode during mount. Fix memory leak in sess struct on reconnect.
 Fix rare oops after acpi suspend.  Fix O_TRUNC opens to overwrite on
 cifs open which helps rare case when setpathinfo fails or server does
-not support it. 
+not support it.
 
 Version 1.42
 ------------
@@ -302,7 +302,7 @@ Version 1.39
 ------------
 Defer close of a file handle slightly if pending writes depend on that handle
 (this reduces the EBADF bad file handle errors that can be logged under heavy
-stress on writes). Modify cifs Kconfig options to expose CONFIG_CIFS_STATS2 
+stress on writes). Modify cifs Kconfig options to expose CONFIG_CIFS_STATS2
 Fix SFU style symlinks and mknod needed for servers which do not support the
 CIFS Unix Extensions.  Fix setfacl/getfacl on bigendian. Timeout negative
 dentries so files that the client sees as deleted but that later get created
@@ -348,7 +348,7 @@ Version 1.35
 ------------
 Add writepage performance improvements.  Fix path name conversions
 for long filenames on mounts which were done with "mapchars" mount option
-specified.  Ensure multiplex ids do not collide.  Fix case in which 
+specified.  Ensure multiplex ids do not collide.  Fix case in which
 rmmod can oops if done soon after last unmount.  Fix truncated
 search (readdir) output when resume filename was a long filename.
 Fix filename conversion when mapchars mount option was specified and
@@ -398,20 +398,20 @@ Version 1.31
 ------------
 Fix updates of DOS attributes and time fields so that files on NT4 servers
 do not get marked delete on close. Display sizes of cifs buffer pools in
-cifs stats. Fix oops in unmount when cifsd thread being killed by 
-shutdown. Add generic readv/writev and aio support. Report inode numbers 
+cifs stats. Fix oops in unmount when cifsd thread being killed by
+shutdown. Add generic readv/writev and aio support. Report inode numbers
 consistently in readdir and lookup (when serverino mount option is
 specified use the inode number that the server reports - for both lookup
 and readdir, otherwise by default the locally generated inode number is used
-for inodes created in either path since servers are not always able to 
+for inodes created in either path since servers are not always able to
 provide unique inode numbers when exporting multiple volumes from under one
 sharename).
 
 Version 1.30
 ------------
 Allow new nouser_xattr mount parm to disable xattr support for user namespace.
-Do not flag user_xattr mount parm in dmesg.  Retry failures setting file time  
-(mostly affects NT4 servers) by retry with handle based network operation. 
+Do not flag user_xattr mount parm in dmesg.  Retry failures setting file time
+(mostly affects NT4 servers) by retry with handle based network operation.
 Add new POSIX Query FS Info for returning statfs info more accurately.
 Handle passwords with multiple commas in them.
 
@@ -424,9 +424,9 @@ Version 1.28
 ------------
 Add module init parm for large SMB buffer size (to allow it to be changed
 from its default of 16K) which is especially useful for large file copy
-when mounting with the directio mount option. Fix oops after 
+when mounting with the directio mount option. Fix oops after
 returning from mount when experimental ExtendedSecurity enabled and
-SpnegoNegotiated returning invalid error. Fix case to retry better when 
+SpnegoNegotiated returning invalid error. Fix case to retry better when
 peek returns from 1 to 3 bytes on socket which should have more data.
 Fixed path based calls (such as cifs lookup) to handle path names
 longer than 530 (now can handle PATH_MAX). Fix pass through authentication
@@ -445,16 +445,16 @@ and for the maximum number of simultaneous requests.
 Version 1.26
 ------------
 Add setfacl support to allow setting of ACLs remotely to Samba 3.10 and later
-and other POSIX CIFS compliant servers.  Fix error mapping for getfacl 
-to EOPNOTSUPP when server does not support posix acls on the wire. Fix 
-improperly zeroed buffer in CIFS Unix extensions set times call. 
+and other POSIX CIFS compliant servers.  Fix error mapping for getfacl
+to EOPNOTSUPP when server does not support posix acls on the wire. Fix
+improperly zeroed buffer in CIFS Unix extensions set times call.
 
 Version 1.25
 ------------
-Fix internationalization problem in cifs readdir with filenames that map to 
+Fix internationalization problem in cifs readdir with filenames that map to
 longer UTF-8 strings than the string on the wire was in Unicode.  Add workaround
-for readdir to netapp servers. Fix search rewind (seek into readdir to return 
-non-consecutive entries).  Do not do readdir when server negotiates 
+for readdir to netapp servers. Fix search rewind (seek into readdir to return
+non-consecutive entries).  Do not do readdir when server negotiates
 buffer size to small to fit filename. Add support for reading POSIX ACLs from
 the server (add also acl and noacl mount options).
 
@@ -488,13 +488,13 @@ normal ACL check which occurs on the server).  Fix default uid
 on mknod to match create and mkdir. Add optional mount parm to allow
 override of the default uid behavior (in which the server sets the uid
 and gid of newly created files). Normally for network filesystem mounts
-user want the server to set the uid/gid on newly created files (rather than 
+user want the server to set the uid/gid on newly created files (rather than
 using uid of the client processes you would in a local filesystem).
 
 Version 1.20
 ------------
 Make transaction counts more consistent. Merge /proc/fs/cifs/SimultaneousOps
-info into /proc/fs/cifs/DebugData.  Fix oops in rare oops in readdir 
+info into /proc/fs/cifs/DebugData.  Fix oops in rare oops in readdir
 (in build_wildcard_path_from_dentry).  Fix mknod to pass type field
 (block/char/fifo) properly.  Remove spurious mount warning log entry when
 credentials passed as mount argument. Set major/minor device number in
@@ -515,9 +515,9 @@ Version 1.18
 ------------
 Do not rename hardlinked files (since that should be a noop). Flush
 cached write behind data when reopening a file after session abend,
-except when already in write. Grab per socket sem during reconnect 
+except when already in write. Grab per socket sem during reconnect
 to avoid oops in sendmsg if overlapping with reconnect. Do not
-reset cached inode file size on readdir for files open for write on 
+reset cached inode file size on readdir for files open for write on
 client.
 
 
@@ -573,7 +573,7 @@ Version 1.10
 Fix reconnection (and certain failed mounts) to properly wake up the
 blocked users thread so it does not seem hung (in some cases was blocked
 until the cifs receive timeout expired). Fix spurious error logging
-to kernel log when application with open network files killed. 
+to kernel log when application with open network files killed.
 
 Version 1.09
 ------------
@@ -586,20 +586,20 @@ Version 1.08
 ------------
 Allow file_mode and dir_mode (specified at mount time) to be enforced
 locally (the server already enforced its own ACLs too) for servers
-that do not report the correct mode (do not support the 
+that do not report the correct mode (do not support the
 CIFS Unix Extensions).
 
 Version 1.07
 ------------
 Fix some small memory leaks in some unmount error paths. Fix major leak
 of cache pages in readpages causing multiple read oriented stress
-testcases (including fsx, and even large file copy) to fail over time. 
+testcases (including fsx, and even large file copy) to fail over time.
 
 Version 1.06
 ------------
 Send NTCreateX with ATTR_POSIX if Linux/Unix extensions negotiated with server.
 This allows files that differ only in case and improves performance of file
-creation and file open to such servers.  Fix semaphore conflict which causes 
+creation and file open to such servers.  Fix semaphore conflict which causes
 slow delete of open file to Samba (which unfortunately can cause an oplock
 break to self while vfs_unlink held i_sem) which can hang for 20 seconds.
 
@@ -618,16 +618,16 @@ Version 1.03
 ------------
 Connect to server when port number override not specified, and tcp port
 unitialized.  Reset search to restart at correct file when kernel routine
-filldir returns error during large directory searches (readdir). 
+filldir returns error during large directory searches (readdir).
 
 Version 1.02
 ------------
-Fix caching problem when files opened by multiple clients in which 
+Fix caching problem when files opened by multiple clients in which
 page cache could contain stale data, and write through did
 not occur often enough while file was still open when read ahead
 (read oplock) not allowed.  Treat "sep=" when first mount option
 as an override of comma as the default separator between mount
-options. 
+options.
 
 Version 1.01
 ------------
@@ -653,7 +653,7 @@ Version 0.98
 Fix hang in commit_write during reconnection of open files under heavy load.
 Fix unload_nls oops in a mount failure path. Serialize writes to same socket
 which also fixes any possible races when cifs signatures are enabled in SMBs
-being sent out of signature sequence number order.    
+being sent out of signature sequence number order.
 
 Version 0.97
 ------------
@@ -669,10 +669,10 @@ error on harmless oplock release of closed handle.
 Version 0.95
 ------------
 Fix unsafe global variable usage and password hash failure on gcc 3.3.1
-Fix problem reconnecting secondary mounts to same server after session 
+Fix problem reconnecting secondary mounts to same server after session
 failure.  Fix invalid dentry - race in mkdir when directory gets created
 by another client between the lookup and mkdir.
- 
+
 Version 0.94
 ------------
 Fix to list processing in reopen_files. Fix reconnection when server hung
@@ -680,7 +680,7 @@ but tcpip session still alive.  Set proper timeout on socket read.
 
 Version 0.93
 ------------
-Add missing mount options including iocharset.  SMP fixes in write and open. 
+Add missing mount options including iocharset.  SMP fixes in write and open.
 Fix errors in reconnecting after TCP session failure.  Fix module unloading
 of default nls codepage
 
@@ -692,13 +692,13 @@ Fix spinlock usage for SMP.
 
 Version 0.91
 ------------
-Fix oops in reopen_files when invalid dentry. drop dentry on server rename 
+Fix oops in reopen_files when invalid dentry. drop dentry on server rename
 and on revalidate errors. Fix cases where pid is now tgid.  Fix return code
-on create hard link when server does not support them. 
+on create hard link when server does not support them.
 
 Version 0.90
 ------------
-Fix scheduling while atomic error in getting inode info on newly created file. 
+Fix scheduling while atomic error in getting inode info on newly created file.
 Fix truncate of existing files opened with O_CREAT but not O_TRUNC set.
 
 Version 0.89
@@ -708,7 +708,7 @@ O_CREAT but not O_EXCL
 
 Version 0.88
 ------------
-Fix non-POSIX behavior on rename of open file and delete of open file by taking 
+Fix non-POSIX behavior on rename of open file and delete of open file by taking
 advantage of trans2 SetFileInfo rename facility if available on target server.
 Retry on ENOSPC and EAGAIN socket errors.
 
@@ -716,7 +716,7 @@ Version 0.87
 ------------
 Fix oops on big endian readdir.  Set blksize to be even power of two (2**blkbits) to fix
 allocation size miscalculation. After oplock token lost do not read through
-cache. 
+cache.
 
 Version 0.86
 ------------
@@ -731,7 +731,7 @@ Version 0.84
 ------------
 Finish support for Linux 2.5 open/create changes, which removes the
 redundant NTCreate/QPathInfo/close that was sent during file create.
-Enable oplock by default. Enable packet signing by default (needed to 
+Enable oplock by default. Enable packet signing by default (needed to
 access many recent Windows servers)
 
 Version 0.83
@@ -755,7 +755,7 @@ Finish up CIFS packet digital signing for the default
 NTLM security case. This should help Windows 2003
 network interoperability since it is common for
 packet signing to be required now. Fix statfs (stat -f)
-which recently started returning errors due to 
+which recently started returning errors due to
 invalid value (-1 instead of 0) being set in the
 struct kstatfs f_ffiles field.
 
@@ -766,7 +766,7 @@ built as module.
 
 Version 0.79
 ------------
-Fix mount options for ro (readonly), uid, gid and file and directory mode. 
+Fix mount options for ro (readonly), uid, gid and file and directory mode.
 
 Version 0.78
 ------------
@@ -776,9 +776,9 @@ Fixed various incorrect or misleading smb to posix error code mappings.
 Version 0.77
 ------------
 Fix display of NTFS DFS junctions to display as symlinks.
-They are the network equivalent.  Fix oops in 
+They are the network equivalent.  Fix oops in
 cifs_partialpagewrite caused by missing spinlock protection
-of openfile linked list.  Allow writebehind caching errors to 
+of openfile linked list.  Allow writebehind caching errors to
 be returned to the application at file close.
 
 Version 0.76
@@ -824,21 +824,21 @@ mount).  Add support for overriding rsize at mount time.
 Version 0.69
 ------------
 Fix buffer overrun in readdir which caused intermittent kernel oopses.
-Fix writepage code to release kmap on write data.  Allow "-ip=" new 
+Fix writepage code to release kmap on write data.  Allow "-ip=" new
 mount option to be passed in on parameter distinct from the first part
 (server name portion of) the UNC name.  Allow override of the
-tcp port of the target server via new mount option "-port="  
+tcp port of the target server via new mount option "-port="
 
 Version 0.68
 ------------
-Fix search handle leak on rewind.  Fix setuid and gid so that they are 
+Fix search handle leak on rewind.  Fix setuid and gid so that they are
 reflected in the local inode immediately.  Cleanup of whitespace
 to make 2.4 and 2.5 versions more consistent.
 
 
 Version 0.67
 ------------
-Fix signal sending so that captive thread (cifsd) exits on umount 
+Fix signal sending so that captive thread (cifsd) exits on umount
 (which was causing the warning in kmem_cache_free of the request buffers
 at rmmod time).  This had broken as a sideeffect of the recent global
 kernel change to daemonize.  Fix memory leak in readdir code which
@@ -853,7 +853,7 @@ especially in deep directory trees.  Fix various build warnings.
 
 Version 0.65
 ------------
-Finish fixes to commit write for caching/readahead consistency.  fsx 
+Finish fixes to commit write for caching/readahead consistency.  fsx
 now works to Samba servers.  Fix oops caused when readahead
 was interrupted by a signal.
 
@@ -867,13 +867,13 @@ Version 0.63
 ------------
 Fix memory leak in AllocMidQEntry.
 Finish reconnection logic, so connection with server can be dropped
-(or server rebooted) and the cifs client will reconnect.  
+(or server rebooted) and the cifs client will reconnect.
 
 Version 0.62
 ------------
-Fix temporary socket leak when bad userid or password specified 
+Fix temporary socket leak when bad userid or password specified
 (or other SMBSessSetup failure).  Increase maximum buffer size to slightly
-over 16K to allow negotiation of up to Samba and Windows server default read 
+over 16K to allow negotiation of up to Samba and Windows server default read
 sizes.  Add support for readpages
 
 Version 0.61
@@ -892,8 +892,8 @@ previously freed socket.
 
 Version 0.60
 ------------
-Fix oops in readpages caused by not setting address space operations in inode in 
-rare code path. 
+Fix oops in readpages caused by not setting address space operations in inode in
+rare code path.
 
 Version 0.59
 ------------
@@ -908,12 +908,12 @@ Memory mapped operations now working.
 Version 0.57
 ------------
 Added writepage code for additional memory mapping support.  Fixed leak in xids causing
-the simultaneous operations counter (/proc/fs/cifs/SimultaneousOps) to increase on 
-every stat call.  Additional formatting cleanup. 
+the simultaneous operations counter (/proc/fs/cifs/SimultaneousOps) to increase on
+every stat call.  Additional formatting cleanup.
 
 Version 0.56
 ------------
-Fix bigendian bug in order of time conversion. Merge 2.5 to 2.4 version.  Formatting cleanup.   
+Fix bigendian bug in order of time conversion. Merge 2.5 to 2.4 version.  Formatting cleanup.
 
 Version 0.55
 ------------
@@ -924,7 +924,7 @@ the smb session and tree connection and mid related global variables.
 Version 0.54
 ------------
 Fix problem with captive thread hanging around at unmount time.  Adjust to 2.5.42-pre
-changes to superblock layout.   Remove wasteful allocation of smb buffers (now the send 
+changes to superblock layout.   Remove wasteful allocation of smb buffers (now the send
 buffer is reused for responses).  Add more oplock handling. Additional minor cleanup.
 
 Version 0.53
@@ -946,7 +946,7 @@ in a UNC style device name.   Implementation of readpage/writepage started.
 
 Version 0.50
 ------------
-Fix intermittent problem with incorrect smb header checking on badly 
+Fix intermittent problem with incorrect smb header checking on badly
 fragmented tcp responses
 
 Version 0.49
@@ -1018,7 +1018,7 @@ although corresponding function not fully implemented in the vfs yet
 
 Version 0.34
 ------------
-Fixed dentry caching bug, misc. cleanup 
+Fixed dentry caching bug, misc. cleanup
 
 Version 0.33
 ------------
@@ -1036,30 +1036,30 @@ Version 0.31
 ------------
 1) Fixed lockrange to be correct (it was one byte too short)
 
-2) Fixed GETLK (i.e. the fcntl call to test a range of bytes in a file to see if locked) to correctly 
+2) Fixed GETLK (i.e. the fcntl call to test a range of bytes in a file to see if locked) to correctly
 show range as locked when there is a conflict with an existing lock.
 
 3) default file perms are now 2767 (indicating support for mandatory locks) instead of 777 for directories
 in most cases.  Eventually will offer optional ability to query server for the correct perms.
 
-3) Fixed eventual trap when mounting twice to different shares on the same server when the first succeeded 
+3) Fixed eventual trap when mounting twice to different shares on the same server when the first succeeded
 but the second one was invalid and failed (the second one was incorrectly disconnecting the tcp and smb
-session) 
+session)
 
 4) Fixed error logging of valid mount options
 
 5) Removed logging of password field.
 
 6) Moved negotiate, treeDisconnect and uloggoffX (only tConx and SessSetup remain in connect.c) to cifssmb.c
-and cleaned them up and made them more consistent with other cifs functions. 
+and cleaned them up and made them more consistent with other cifs functions.
 
-7) Server support for Unix extensions is now fully detected and FindFirst is implemented both ways 
+7) Server support for Unix extensions is now fully detected and FindFirst is implemented both ways
 (with or without Unix extensions) but FindNext and QueryPathInfo with the Unix extensions are not completed,
 nor is the symlink support using the Unix extensions
 
-8) Started adding the readlink and follow_link code 
+8) Started adding the readlink and follow_link code
 
-Version 0.3 
+Version 0.3
 -----------
 Initial drop
 

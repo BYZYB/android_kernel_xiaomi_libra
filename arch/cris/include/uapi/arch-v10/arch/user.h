@@ -36,7 +36,7 @@ struct user_regs_struct {
         unsigned long bar;      /* Not accessible. */
         unsigned long dccr;     /* Dword condition code register. */
         unsigned long brp;      /* Not accessible. */
-        unsigned long usp;      /* User-mode stack pointer. Same as sp when 
+        unsigned long usp;      /* User-mode stack pointer. Same as sp when
                                    in user mode. */
         unsigned long csrinstr; /* Internal status registers. */
         unsigned long csraddr;

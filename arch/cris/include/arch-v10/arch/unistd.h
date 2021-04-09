@@ -96,7 +96,7 @@ type name (type1 arg1, type2 arg2, type3 arg3, type4 arg4) \
      return (type) __a; \
   errno = -__a; \
   return (type) -1; \
-} 
+}
 
 #define _syscall5(type,name,type1,arg1,type2,arg2,type3,arg3,type4,arg4, \
 	  type5,arg5) \

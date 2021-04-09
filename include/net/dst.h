@@ -476,7 +476,7 @@ static inline struct dst_entry *xfrm_lookup(struct net *net,
 					    int flags)
 {
 	return dst_orig;
-} 
+}
 
 static inline struct xfrm_state *dst_xfrm(const struct dst_entry *dst)
 {

@@ -358,7 +358,7 @@ static int dma_4v_map_sg(struct device *dev, struct scatterlist *sglist,
 	iommu = dev->archdata.iommu;
 	if (nelems == 0 || !iommu)
 		return 0;
-	
+
 	prot = HV_PCI_MAP_ATTR_READ;
 	if (direction != DMA_TO_DEVICE)
 		prot |= HV_PCI_MAP_ATTR_WRITE;
@@ -497,7 +497,7 @@ static void dma_4v_unmap_sg(struct device *dev, struct scatterlist *sglist,
 	iommu = dev->archdata.iommu;
 	pbm = dev->archdata.host_controller;
 	devhandle = pbm->devhandle;
-	
+
 	spin_lock_irqsave(&iommu->lock, flags);
 
 	sg = sglist;

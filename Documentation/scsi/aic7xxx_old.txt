@@ -14,25 +14,25 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
     Adaptec Cards
     ----------------------------
     AHA-274x
-    AHA-274xT               
+    AHA-274xT
     AHA-2842
-    AHA-2910B               
+    AHA-2910B
     AHA-2920C
     AHA-2930
     AHA-2930U
     AHA-2930CU
     AHA-2930U2
-    AHA-2940               
-    AHA-2940W              
-    AHA-2940U              
+    AHA-2940
+    AHA-2940W
+    AHA-2940U
     AHA-2940UW
     AHA-2940UW-PRO
-    AHA-2940AU 
+    AHA-2940AU
     AHA-2940U2W
     AHA-2940U2
     AHA-2940U2B
     AHA-2940U2BOEM
-    AHA-2944D              
+    AHA-2944D
     AHA-2944WD
     AHA-2944UD
     AHA-2944UWD
@@ -57,7 +57,7 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
 
     Motherboard Chipsets
     ----------------------------
-    AIC-777x   
+    AIC-777x
     AIC-785x
     AIC-786x
     AIC-787x
@@ -104,7 +104,7 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
     a totally separate beast from the bare SCSI controllers and this driver
     cannot be retrofitted in any sane manner to support the hardware RAID
     features on those cards - Doug Ledford).
-    
+
 
   People
   ------------------------------
@@ -118,11 +118,11 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
       (AIC7xxx FAQ author)
     Doug Ledford    dledford@redhat.com
       (Current Linux aic7xxx-5.x.x Driver/Patch/FTP maintainer)
-    
+
     Special thanks go to John Aycock (aycock@cpsc.ucalgary.ca), the original
     author of the driver. John has since retired from the project. Thanks
     again for all his work!
-    
+
   Mailing list
   ------------------------------
     There is a mailing list available for users who want to track development
@@ -141,14 +141,14 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
         unsubscribe AIC7xxx
 
     Send regular messages and replies to: AIC7xxx@FreeBSD.ORG
-    
+
   Boot Command line options
   ------------------------------
     "aic7xxx=no_reset" -  Eliminate the SCSI bus reset during startup.
         Some SCSI devices need the initial reset that this option disables
 	in order to work.  If you have problems at bootup, please make sure
 	you aren't using this option.
-	
+
     "aic7xxx=reverse_scan" - Certain PCI motherboards scan for devices at
         bootup by scanning from the highest numbered PCI device to the
 	lowest numbered PCI device, others do just the opposite and scan
@@ -159,7 +159,7 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
 	finds the drives on controller A before controller B but the linux
 	kernel finds your drives on controller B before A, then you should
 	use this option.
-	
+
     "aic7xxx=extended" - Force the driver to detect extended drive translation
         on your controller.  This helps those people who have cards without
         a SEEPROM make sure that linux and all other operating systems think
@@ -170,25 +170,25 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
 	that SCB RAM.  Without this option, the driver won't touch the SCB
 	RAM because it is known to cause problems on a few cards out there
 	(such as 3985 class cards).
-	
+
     "aic7xxx=irq_trigger:x" - Replace x with either 0 or 1 to force the kernel
         to use the correct IRQ type for your card.  This only applies to EISA
         based controllers.  On these controllers, 0 is for Edge triggered
         interrupts, and 1 is for Level triggered interrupts.  If you aren't
         sure or don't know which IRQ trigger type your EISA card uses, then
         let the kernel autodetect the trigger type.
-	
+
     "aic7xxx=verbose" - This option can be used in one of two ways.  If you
         simply specify aic7xxx=verbose, then the kernel will automatically
 	pick the default set of verbose messages for you to see.
-	Alternatively, you can specify the command as 
+	Alternatively, you can specify the command as
 	"aic7xxx=verbose:0xXXXX" where the X entries are replaced with
 	hexadecimal digits.  This option is a bit field type option.  For
-	a full listing of the available options, search for the 
+	a full listing of the available options, search for the
 	#define VERBOSE_xxxxxx lines in the aic7xxx.c file.  If you want
 	verbose messages, then it is recommended that you simply use the
 	aic7xxx=verbose variant of this command.
-	
+
     "aic7xxx=pci_parity:x" - This option controls whether or not the driver
         enables PCI parity error checking on the PCI bus.  By default, this
         checking is disabled.  To enable the checks, simply specify pci_parity
@@ -200,7 +200,7 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
         NOTE: In order to get Even PCI parity checking, you must use the
         version of the option that does not include the : and a number at
         the end (unless you want to enter exactly 2^32 - 1 as the number).
-	
+
     "aic7xxx=no_probe" - This option will disable the probing for any VLB
         based 2842 controllers and any EISA based controllers.  This is
 	needed on certain newer motherboards where the normal EISA I/O ranges
@@ -221,14 +221,14 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
 	  1  -  128ms
 	  2  -   64ms
 	  3  -   32ms
-	
+
     "aic7xxx=panic_on_abort" - This option is for debugging and will cause
         the driver to panic the linux kernel and freeze the system the first
 	time the drivers abort or reset routines are called.  This is most
 	helpful when some problem causes infinite reset loops that scroll too
 	fast to see.  By using this option, you can write down what the errors
 	actually are and send that information to me so it can be fixed.
-	
+
     "aic7xxx=dump_card" - This option will print out the *entire* set of
         configuration registers on the card during the init sequence.  This
 	is a debugging aid used to see exactly what state the card is in
@@ -236,7 +236,7 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
 	have documentation on the chipsets, this will do you absolutely
 	no good unless you are simply trying to write all the information
 	down in order to send it to me.
-	
+
     "aic7xxx=dump_sequencer" - This is the same as the above options except
         that instead of dumping the register contents on the card, this
 	option dumps the contents of the sequencer program RAM.  This gives
@@ -244,7 +244,7 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
 	card's sequencer are indeed what they are supposed to be.  Again,
 	unless you have documentation to tell you how to interpret these
 	numbers, then it is totally useless.
-	
+
     "aic7xxx=override_term:0xffffffff" - This option is used to force the
     	termination on your SCSI controllers to a particular setting.  This
 	is a bit mask variable that applies for up to 8 aic7xxx SCSI channels.
@@ -266,15 +266,15 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
 	examples of how to use this option:
 
 	Enable low and high byte termination on a non-ultra2 controller that
-	is the first aic7xxx controller (the correct bits are 0011), 
+	is the first aic7xxx controller (the correct bits are 0011),
 	aic7xxx=override_term:0x3
 
 	Enable all termination on the third aic7xxx controller, high byte
 	termination on the second aic7xxx controller, and low and high byte
-	SE termination on the first aic7xxx controller 
-	(bits are 1111 0010 0011), 
+	SE termination on the first aic7xxx controller
+	(bits are 1111 0010 0011),
 	aic7xxx=override_term:0xf23
-	
+
 	No attempt has been made to make this option non-cryptic.  It really
 	shouldn't be used except in dire circumstances, and if that happens,
 	I'm probably going to be telling you what to set this to anyway :)
@@ -370,7 +370,7 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
               moves us to the next device on the list.  Outside of device
               entries, this moves us to the next host adapter
           . - Same effect as , but is safe to use with insmod.
-          x - the number to enter into the array at this position.  
+          x - the number to enter into the array at this position.
               0 = Enable tagged queueing on this device and use the default
                   queue depth
               1-254 = Enable tagged queueing on this device and use this
@@ -407,16 +407,16 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
         add it to the lilo.conf file so there won't be any mistakes.  As
         a means of checking this parser, the entire tag_info array for
         each card is now printed out in the /proc/scsi/aic7xxx/x file.  You
-        can use that to verify that your options were parsed correctly. 
-        
+        can use that to verify that your options were parsed correctly.
+
     Boot command line options may be combined to form the proper set of options
     a user might need.  For example, the following is valid:
-    
+
     aic7xxx=verbose,extended,irq_trigger:1
-    
+
     The only requirement is that individual options be separated by a comma or
     a period on the command line.
-        
+
   Module Loading command options
   ------------------------------
     When loading the aic7xxx driver as a module, the exact same options are
@@ -430,7 +430,7 @@ linux-1.1.x and fairly stable since linux-1.2.x, and are also in FreeBSD
     This line should result in the *exact* same behaviour as if you typed
     it in at the lilo prompt and the driver was compiled into the kernel
     instead of being a module.  The reason for the single quote is so that
-    the shell won't try to interpret anything in the line, such as {. 
+    the shell won't try to interpret anything in the line, such as {.
     Insmod assumes any options starting with a letter instead of a number
     is a character string (which is what we want) and by switching all of
     the commas to periods, insmod won't interpret this as more than one

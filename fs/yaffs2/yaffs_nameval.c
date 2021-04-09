@@ -20,7 +20,7 @@
  *  strnlen+1 bytes name null terminated.
  *  nbytes    value.
  *  ----------
- *  total size  stored in record size 
+ *  total size  stored in record size
  *
  * This code has not been tested with unicode yet.
  */

@@ -57,7 +57,7 @@
  */
 
 /*
- * MFI stands for  MegaRAID SAS FW Interface. This is just a moniker for 
+ * MFI stands for  MegaRAID SAS FW Interface. This is just a moniker for
  * protocol between the software and firmware. Commands are issued using
  * "message frames"
  */
@@ -790,7 +790,7 @@ struct megasas_ctrl_info {
 * register set for both 1068 and 1078 controllers
 * structure extended for 1078 registers
 */
- 
+
 struct megasas_register_set {
 	u32	doorbell;                       /*0000h*/
 	u32	fusion_seq_offset;		/*0004h*/

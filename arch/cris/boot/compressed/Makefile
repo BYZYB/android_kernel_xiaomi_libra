@@ -3,11 +3,11 @@
 #
 
 asflags-y += $(LINUXINCLUDE)
-ccflags-y += -Ofast $(LINUXINCLUDE)
+ccflags-y += $(LINUXINCLUDE)
 
 # asflags-$(CONFIG_ETRAX_ARCH_V32) += -I$(srctree)/include/asm/mach \
 # 				    -I$(srctree)/include/asm/arch
-# ccflags-$(CONFIG_ETRAX_ARCH_V32) += -Ofast -I$(srctree)/include/asm/mach
+# ccflags-$(CONFIG_ETRAX_ARCH_V32) += -I$(srctree)/include/asm/mach
 # 					-I$(srctree)/include/asm/arch
 
 arch-$(CONFIG_ETRAX_ARCH_V10) = v10

@@ -1,8 +1,8 @@
-/* 
+/*
  *  NCR53c406.c
  *  Low-level SCSI driver for NCR53c406a chip.
  *  Copyright (C) 1994, 1995, 1996 Normunds Saumanis (normunds@fi.ibm.com)
- * 
+ *
  *  LILO command line usage: ncr53c406a=<PORTBASE>[,<IRQ>[,<FASTPIO>]]
  *  Specify IRQ = 0 for non-interrupt driven mode.
  *  FASTPIO = 1 for fast pio mode, 0 for slow mode.
@@ -31,7 +31,7 @@
 				/* #define IRQ_LEV   0	*//* define this if autoprobe fails */
 #define DMA_CHAN  5		/* this is ignored if DMA is disabled */
 
-/* Set this to 0 if you encounter kernel lockups while transferring 
+/* Set this to 0 if you encounter kernel lockups while transferring
  * data in PIO mode */
 #define USE_FAST_PIO 1
 
@@ -544,7 +544,7 @@ static int __init NCR53c406a_detect(struct scsi_host_template * tpnt)
 		DEB(printk("NCR53c406a: No interrupts detected\n"));
 		printk("NCR53c406a driver no longer supports polling interface\n");
 		printk("Please email linux-scsi@vger.kernel.org\n");
-                        
+
 #if USE_DMA
 		printk("NCR53c406a: No interrupts found and DMA mode defined. Giving up.\n");
 #endif				/* USE_DMA */
@@ -1053,18 +1053,18 @@ MODULE_LICENSE("GPL");
 
 static struct scsi_host_template driver_template =
 {
-     .proc_name         	= "NCR53c406a"		/* proc_name */,        
-     .name              	= "NCR53c406a"		/* name */,             
-     .detect            	= NCR53c406a_detect	/* detect */,           
+     .proc_name         	= "NCR53c406a"		/* proc_name */,
+     .name              	= "NCR53c406a"		/* name */,
+     .detect            	= NCR53c406a_detect	/* detect */,
      .release            	= NCR53c406a_release,
-     .info              	= NCR53c406a_info		/* info */,             
-     .queuecommand      	= NCR53c406a_queue	/* queuecommand */,     
-     .eh_host_reset_handler     = NCR53c406a_host_reset	/* reset */,            
-     .bios_param        	= NCR53c406a_biosparm	/* biosparm */,         
-     .can_queue         	= 1			/* can_queue */,        
+     .info              	= NCR53c406a_info		/* info */,
+     .queuecommand      	= NCR53c406a_queue	/* queuecommand */,
+     .eh_host_reset_handler     = NCR53c406a_host_reset	/* reset */,
+     .bios_param        	= NCR53c406a_biosparm	/* biosparm */,
+     .can_queue         	= 1			/* can_queue */,
      .this_id           	= 7			/* SCSI ID of the chip */,
-     .sg_tablesize      	= 32			/*SG_ALL*/ /*SG_NONE*/, 
-     .cmd_per_lun       	= 1			/* commands per lun */, 
+     .sg_tablesize      	= 32			/*SG_ALL*/ /*SG_NONE*/,
+     .cmd_per_lun       	= 1			/* commands per lun */,
      .unchecked_isa_dma 	= 1			/* unchecked_isa_dma */,
      .use_clustering    	= ENABLE_CLUSTERING,
 };

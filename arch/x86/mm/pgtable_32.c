@@ -21,9 +21,9 @@
 unsigned int __VMALLOC_RESERVE = 128 << 20;
 
 /*
- * Associate a virtual page frame with a given physical page frame 
+ * Associate a virtual page frame with a given physical page frame
  * and protection flags for that frame.
- */ 
+ */
 void set_pte_vaddr(unsigned long vaddr, pte_t pteval)
 {
 	pgd_t *pgd;
@@ -60,11 +60,11 @@ void set_pte_vaddr(unsigned long vaddr, pte_t pteval)
 }
 
 /*
- * Associate a large virtual page frame with a given physical page frame 
+ * Associate a large virtual page frame with a given physical page frame
  * and protection flags for that frame. pfn is for the base of the page,
- * vaddr is what the page gets mapped to - both must be properly aligned. 
+ * vaddr is what the page gets mapped to - both must be properly aligned.
  * The pmd must already be instantiated. Assumes PAE mode.
- */ 
+ */
 void set_pmd_pfn(unsigned long vaddr, unsigned long pfn, pgprot_t flags)
 {
 	pgd_t *pgd;

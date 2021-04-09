@@ -74,7 +74,7 @@ static void nubus_proc_subdir(struct nubus_dev* dev,
 	while (nubus_readdir(dir, &ent) != -1) {
 		char name[8];
 		struct proc_dir_entry* e;
-		
+
 		sprintf(name, "%x", ent.type);
 		e = proc_create(name, S_IFREG | S_IRUGO | S_IWUSR, parent,
 				&nubus_proc_subdir_fops);
@@ -97,7 +97,7 @@ static void nubus_proc_populate(struct nubus_dev* dev,
 		char name[8];
 		struct proc_dir_entry* e;
 		struct nubus_dir dir;
-		
+
 		sprintf(name, "%x", ent.type);
 		e = proc_mkdir(name, parent);
 		if (!e) return;
@@ -125,14 +125,14 @@ int nubus_proc_attach_device(struct nubus_dev *dev)
 		       "NULL pointer in nubus_proc_attach_device, shoot the programmer!\n");
 		return -1;
 	}
-		
+
 	if (dev->board == NULL) {
 		printk(KERN_ERR
 		       "NULL pointer in nubus_proc_attach_device, shoot the programmer!\n");
 		printk("dev = %p, dev->board = %p\n", dev, dev->board);
 		return -1;
 	}
-		
+
 	/* Create a directory */
 	sprintf(name, "%x", dev->board->slot);
 	e = dev->procdir = proc_mkdir(name, proc_bus_nubus_dir);
@@ -217,7 +217,7 @@ static const struct file_operations nubus_proc_fops = {
 void __init proc_bus_nubus_add_devices(void)
 {
 	struct nubus_dev *dev;
-	
+
 	for(dev = nubus_devices; dev; dev = dev->next)
 		nubus_proc_attach_device(dev);
 }

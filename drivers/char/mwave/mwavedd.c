@@ -144,7 +144,7 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 				" retval %x from tp3780I_ResetDSP\n",
 				retval);
 			break;
-	
+
 		case IOCTL_MW_RUN:
 			PRINTK_1(TRACE_MWAVE,
 				"mwavedd::mwave_ioctl, IOCTL_MW_RUN"
@@ -157,10 +157,10 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 				" retval %x from tp3780I_StartDSP\n",
 				retval);
 			break;
-	
+
 		case IOCTL_MW_DSP_ABILITIES: {
 			MW_ABILITIES rAbilities;
-	
+
 			PRINTK_1(TRACE_MWAVE,
 				"mwavedd::mwave_ioctl,"
 				" IOCTL_MW_DSP_ABILITIES calling"
@@ -184,17 +184,17 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 				retval);
 		}
 			break;
-	
+
 		case IOCTL_MW_READ_DATA:
 		case IOCTL_MW_READCLEAR_DATA: {
 			MW_READWRITE rReadData;
 			unsigned short __user *pusBuffer = NULL;
-	
+
 			if( copy_from_user(&rReadData, arg,
 						sizeof(MW_READWRITE)) )
 				return -EFAULT;
 			pusBuffer = (unsigned short __user *) (rReadData.pBuf);
-	
+
 			PRINTK_4(TRACE_MWAVE,
 				"mwavedd::mwave_ioctl IOCTL_MW_READ_DATA,"
 				" size %lx, ioarg %lx pusBuffer %p\n",
@@ -208,16 +208,16 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 			mutex_unlock(&mwave_mutex);
 		}
 			break;
-	
+
 		case IOCTL_MW_READ_INST: {
 			MW_READWRITE rReadData;
 			unsigned short __user *pusBuffer = NULL;
-	
+
 			if( copy_from_user(&rReadData, arg,
 						sizeof(MW_READWRITE)) )
 				return -EFAULT;
 			pusBuffer = (unsigned short __user *) (rReadData.pBuf);
-	
+
 			PRINTK_4(TRACE_MWAVE,
 				"mwavedd::mwave_ioctl IOCTL_MW_READ_INST,"
 				" size %lx, ioarg %lx pusBuffer %p\n",
@@ -231,16 +231,16 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 			mutex_unlock(&mwave_mutex);
 		}
 			break;
-	
+
 		case IOCTL_MW_WRITE_DATA: {
 			MW_READWRITE rWriteData;
 			unsigned short __user *pusBuffer = NULL;
-	
+
 			if( copy_from_user(&rWriteData, arg,
 						sizeof(MW_READWRITE)) )
 				return -EFAULT;
 			pusBuffer = (unsigned short __user *) (rWriteData.pBuf);
-	
+
 			PRINTK_4(TRACE_MWAVE,
 				"mwavedd::mwave_ioctl IOCTL_MW_WRITE_DATA,"
 				" size %lx, ioarg %lx pusBuffer %p\n",
@@ -254,16 +254,16 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 			mutex_unlock(&mwave_mutex);
 		}
 			break;
-	
+
 		case IOCTL_MW_WRITE_INST: {
 			MW_READWRITE rWriteData;
 			unsigned short __user *pusBuffer = NULL;
-	
+
 			if( copy_from_user(&rWriteData, arg,
 						sizeof(MW_READWRITE)) )
 				return -EFAULT;
 			pusBuffer = (unsigned short __user *)(rWriteData.pBuf);
-	
+
 			PRINTK_4(TRACE_MWAVE,
 				"mwavedd::mwave_ioctl IOCTL_MW_WRITE_INST,"
 				" size %lx, ioarg %lx pusBuffer %p\n",
@@ -277,10 +277,10 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 			mutex_unlock(&mwave_mutex);
 		}
 			break;
-	
+
 		case IOCTL_MW_REGISTER_IPC: {
 			unsigned int ipcnum = (unsigned int) ioarg;
-	
+
 			if (ipcnum >= ARRAY_SIZE(pDrvData->IPCs)) {
 				PRINTK_ERROR(KERN_ERR_MWAVE
 						"mwavedd::mwave_ioctl:"
@@ -299,17 +299,17 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 			pDrvData->IPCs[ipcnum].bIsHere = FALSE;
 			pDrvData->IPCs[ipcnum].bIsEnabled = TRUE;
 			mutex_unlock(&mwave_mutex);
-	
+
 			PRINTK_2(TRACE_MWAVE,
 				"mwavedd::mwave_ioctl IOCTL_MW_REGISTER_IPC"
 				" ipcnum %x exit\n",
 				ipcnum);
 		}
 			break;
-	
+
 		case IOCTL_MW_GET_IPC: {
 			unsigned int ipcnum = (unsigned int) ioarg;
-	
+
 			if (ipcnum >= ARRAY_SIZE(pDrvData->IPCs)) {
 				PRINTK_ERROR(KERN_ERR_MWAVE
 						"mwavedd::mwave_ioctl:"
@@ -322,7 +322,7 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 				" ipcnum %x, usIntCount %x\n",
 				ipcnum,
 				pDrvData->IPCs[ipcnum].usIntCount);
-	
+
 			mutex_lock(&mwave_mutex);
 			if (pDrvData->IPCs[ipcnum].bIsEnabled == TRUE) {
 				DECLARE_WAITQUEUE(wait, current);
@@ -367,10 +367,10 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 			mutex_unlock(&mwave_mutex);
 		}
 			break;
-	
+
 		case IOCTL_MW_UNREGISTER_IPC: {
 			unsigned int ipcnum = (unsigned int) ioarg;
-	
+
 			PRINTK_2(TRACE_MWAVE,
 				"mwavedd::mwave_ioctl IOCTL_MW_UNREGISTER_IPC"
 				" ipcnum %x\n",
@@ -393,7 +393,7 @@ static long mwave_ioctl(struct file *file, unsigned int iocmd,
 			mutex_unlock(&mwave_mutex);
 		}
 			break;
-	
+
 		default:
 			return -ENOTTY;
 			break;
@@ -431,7 +431,7 @@ static ssize_t mwave_write(struct file *file, const char __user *buf,
 static int register_serial_portandirq(unsigned int port, int irq)
 {
 	struct uart_8250_port uart;
-	
+
 	switch ( port ) {
 		case 0x3f8:
 		case 0x2f8:
@@ -463,7 +463,7 @@ static int register_serial_portandirq(unsigned int port, int irq)
 	/* irq is okay */
 
 	memset(&uart, 0, sizeof(uart));
-	
+
 	uart.port.uartclk =  1843200;
 	uart.port.iobase = port;
 	uart.port.irq = irq;

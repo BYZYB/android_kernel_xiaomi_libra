@@ -19,7 +19,7 @@
  *   along with this program; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  *
- */      
+ */
 
 #include <asm/io.h>
 #include <linux/delay.h>
@@ -183,11 +183,11 @@ static int __init alsa_ice1712_akm4xxx_module_init(void)
 {
 	return 0;
 }
-        
+
 static void __exit alsa_ice1712_akm4xxx_module_exit(void)
 {
 }
-        
+
 module_init(alsa_ice1712_akm4xxx_module_init)
 module_exit(alsa_ice1712_akm4xxx_module_exit)
 

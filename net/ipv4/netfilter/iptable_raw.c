@@ -26,7 +26,7 @@ iptable_raw_hook(unsigned int hook, struct sk_buff *skb,
 {
 	const struct net *net;
 
-	if (hook == NF_INET_LOCAL_OUT && 
+	if (hook == NF_INET_LOCAL_OUT &&
 	    (skb->len < sizeof(struct iphdr) ||
 	     ip_hdrlen(skb) < sizeof(struct iphdr)))
 		/* root is playing with raw sockets. */

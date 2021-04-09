@@ -36,9 +36,9 @@
 //#define printd(x...) printk(x)
 #define printd(x...) do { } while(0)
 
-/* 
+/*
  * Note:
- * The kernel provides one architecture bit PG_arch_1 in the page flags that 
+ * The kernel provides one architecture bit PG_arch_1 in the page flags that
  * can be used for cache coherency.
  *
  * I$-D$ coherency.
@@ -54,7 +54,7 @@
  * With cache aliasing, we have to always flush the cache when pages are
  * unmapped (see tlb_start_vma(). So, we use this flag to indicate a dirty
  * page.
- * 
+ *
  *
  *
  */
@@ -73,7 +73,7 @@ void flush_dcache_page(struct page *page)
 
 	/*
 	 * If we have a mapping but the page is not mapped to user-space
-	 * yet, we simply mark this page dirty and defer flushing the 
+	 * yet, we simply mark this page dirty and defer flushing the
 	 * caches until update_mmu().
 	 */
 
@@ -89,7 +89,7 @@ void flush_dcache_page(struct page *page)
 		unsigned long alias = !(DCACHE_ALIAS_EQ(temp, phys));
 		unsigned long virt;
 
-		/* 
+		/*
 		 * Flush the page in kernel space and user space.
 		 * Note that we can omit that step if aliasing is not
 		 * an issue, but we do have to synchronize I$ and D$
@@ -125,8 +125,8 @@ void flush_cache_range(struct vm_area_struct* vma,
 	__invalidate_icache_all();
 }
 
-/* 
- * Remove any entry in the cache for this page. 
+/*
+ * Remove any entry in the cache for this page.
  *
  * Note that this function is only called for user pages, so use the
  * alias versions of the cache flush functions.
@@ -210,12 +210,12 @@ void copy_to_user_page(struct vm_area_struct *vma, struct page *page,
 	}
 
 	/* Copy data */
-	
+
 	memcpy(dst, src, len);
 
 	/*
-	 * Flush and invalidate kernel page if aliased and synchronize 
-	 * data and instruction caches for executable pages. 
+	 * Flush and invalidate kernel page if aliased and synchronize
+	 * data and instruction caches for executable pages.
 	 */
 
 	if (alias) {
@@ -239,8 +239,8 @@ extern void copy_from_user_page(struct vm_area_struct *vma, struct page *page,
 	unsigned long alias = !(DCACHE_ALIAS_EQ(vaddr, phys));
 
 	/*
-	 * Flush user page if aliased. 
-	 * (Note: a simply flush would be sufficient) 
+	 * Flush user page if aliased.
+	 * (Note: a simply flush would be sufficient)
 	 */
 
 	if (alias) {

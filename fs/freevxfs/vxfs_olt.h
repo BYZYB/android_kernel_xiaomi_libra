@@ -103,7 +103,7 @@ struct vxfs_oltilist {
 };
 
 /*
- * Current Usage Table 
+ * Current Usage Table
  */
 struct vxfs_oltcut {
 	u_int32_t	olt_type;	/* type of this record		*/
@@ -113,7 +113,7 @@ struct vxfs_oltcut {
 };
 
 /*
- * Inodes containing Superblock, Intent log and OLTs 
+ * Inodes containing Superblock, Intent log and OLTs
  */
 struct vxfs_oltsb {
 	u_int32_t	olt_type;	/* type of this record		*/
@@ -125,7 +125,7 @@ struct vxfs_oltsb {
 };
 
 /*
- * Inode containing device configuration + it's replica 
+ * Inode containing device configuration + it's replica
  */
 struct vxfs_oltdev {
 	u_int32_t	olt_type;	/* type of this record		*/
@@ -134,7 +134,7 @@ struct vxfs_oltdev {
 };
 
 /*
- * Fileset header 
+ * Fileset header
  */
 struct vxfs_oltfshead {
 	u_int32_t	olt_type;	/* type number			*/

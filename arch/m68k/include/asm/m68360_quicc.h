@@ -52,7 +52,7 @@ struct user_data {
  */
 typedef struct quicc {
 	union {
-		struct quicc32_pram ch_pram_tbl[32];	/* 32*64(bytes) per channel */	
+		struct quicc32_pram ch_pram_tbl[32];	/* 32*64(bytes) per channel */
 		struct user_data		u;
 	}ch_or_u;	/* multipul or user space */
 

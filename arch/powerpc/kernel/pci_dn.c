@@ -9,12 +9,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- *    
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
@@ -129,12 +129,12 @@ void *traverse_pci_devices(struct device_node *start, traverse_func pre,
 	return NULL;
 }
 
-/** 
+/**
  * pci_devs_phb_init_dynamic - setup pci devices under this PHB
  * phb: pci-to-host bridge (top-level bridge connecting to cpu)
  *
  * This routine is called both during boot, (before the memory
- * subsystem is set up, before kmalloc is valid) and during the 
+ * subsystem is set up, before kmalloc is valid) and during the
  * dynamic lpar operation of adding a PHB to a running system.
  */
 void pci_devs_phb_init_dynamic(struct pci_controller *phb)
@@ -154,11 +154,11 @@ void pci_devs_phb_init_dynamic(struct pci_controller *phb)
 	traverse_pci_devices(dn, update_dn_pci_info, phb);
 }
 
-/** 
+/**
  * pci_devs_phb_init - Initialize phbs and pci devs under them.
- * 
+ *
  * This routine walks over all phb's (pci-host bridges) on the
- * system, and sets up assorted pci-related structures 
+ * system, and sets up assorted pci-related structures
  * (including pci info in the device node structs) for each
  * pci device found underneath.  This routine runs once,
  * early in the boot sequence.

@@ -8,7 +8,7 @@
  *
  * Usage is simple, allocate a new id to the stub driver and bind the
  * device to it.  For example:
- * 
+ *
  * # echo "8086 10f5" > /sys/bus/pci/drivers/pci-stub/new_id
  * # echo -n 0000:00:19.0 > /sys/bus/pci/drivers/e1000e/unbind
  * # echo -n 0000:00:19.0 > /sys/bus/pci/drivers/pci-stub/bind

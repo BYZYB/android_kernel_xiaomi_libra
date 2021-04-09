@@ -510,7 +510,7 @@ static void setup_page_sizes(void)
 			"direct & indirect"
 		};
 		if (def->flags == 0) {
-			def->shift = 0;	
+			def->shift = 0;
 			continue;
 		}
 		pr_info("  %8ld KB as %s\n", 1ul << (def->shift - 10),
@@ -522,7 +522,7 @@ static void __patch_exception(int exc, unsigned long addr)
 {
 	extern unsigned int interrupt_base_book3e;
  	unsigned int *ibase = &interrupt_base_book3e;
- 
+
 	/* Our exceptions vectors start with a NOP and -then- a branch
 	 * to deal with single stepping from userspace which stops on
 	 * the second instruction. Thus we need to patch the second

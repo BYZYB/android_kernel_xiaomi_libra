@@ -30,7 +30,7 @@
 /*
 ** We don't have DMA channels... well V-class does but the
 ** Dynamic DMA Mapping interface will support them... right? :^)
-** Note: this is not relevant right now for PA-RISC, but we cannot 
+** Note: this is not relevant right now for PA-RISC, but we cannot
 ** leave this as undefined because some things (e.g. sound)
 ** won't compile :-(
 */
@@ -98,7 +98,7 @@ static __inline__ int get_dma_residue(unsigned int dmanr)
 
 	count = 1 + dma_inb(io_port);
 	count += dma_inb(io_port) << 8;
-	
+
 	return (dmanr<=3)? count : (count<<1);
 }
 

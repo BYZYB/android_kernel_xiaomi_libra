@@ -1,6 +1,6 @@
 /*
  * Linux ARCnet driver - "RIM I" (entirely mem-mapped) cards
- * 
+ *
  * Written 1994-1999 by Avery Pennarun.
  * Written 1999-2000 by Martin Mares <mj@ucw.cz>.
  * Derived from skeleton.c by Donald Becker.

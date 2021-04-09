@@ -9,7 +9,7 @@
 #define __ARCH_WANT_SYS_LLSEEK
 #define __ARCH_WANT_SYS_GETPGRP
 
-/* 
+/*
  * Ignore legacy system calls in the checksyscalls.sh script
  */
 

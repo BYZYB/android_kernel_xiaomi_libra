@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2015, 2016-2017 The Linux Foundation. All rights 
+/* Copyright (c) 2012-2015, 2016-2017 The Linux Foundation. All rights
  * reserved.
  *
  * This program is free software; you can redistribute it and/or modify

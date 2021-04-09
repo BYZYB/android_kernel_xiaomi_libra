@@ -48,7 +48,7 @@ typedef struct page *pgtable_t;
  * use __pa instead. in our system both the physical and virtual address of DRAM
  * is too high to let mem_map start at 0, so we do it this way instead (similar
  * to arm and m68k I think)
- */ 
+ */
 
 #define virt_to_page(kaddr)    (mem_map + (((unsigned long)(kaddr) - PAGE_OFFSET) >> PAGE_SHIFT))
 #define VALID_PAGE(page)       (((page) - mem_map) < max_mapnr)

@@ -1,6 +1,6 @@
  /*
  * Driver for Microtek Scanmaker X6 USB scanner and possibly others.
- * 
+ *
  * (C) Copyright 2000 John Fremlin <vii@penguinpowered.com>
  * (C) Copyright 2000 Oliver Neukum <Oliver.Neukum@lrz.uni-muenchen.de>
  *
@@ -16,7 +16,7 @@ struct mts_transfer_context
 	struct mts_desc* instance;
 	mts_scsi_cmnd_callback final_callback;
 	struct scsi_cmnd *srb;
-	
+
 	void* data;
 	unsigned data_length;
 	int data_pipe;

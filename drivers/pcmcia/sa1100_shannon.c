@@ -45,15 +45,15 @@ shannon_pcmcia_socket_state(struct soc_pcmcia_socket *skt,
 {
 	switch (skt->nr) {
 	case 0:
-		state->bvd1   = 1; 
-		state->bvd2   = 1; 
+		state->bvd1   = 1;
+		state->bvd2   = 1;
 		state->vs_3v  = 1; /* FIXME Can only apply 3.3V on Shannon. */
 		state->vs_Xv  = 0;
 		break;
 
 	case 1:
-		state->bvd1   = 1; 
-		state->bvd2   = 1; 
+		state->bvd1   = 1;
+		state->bvd2   = 1;
 		state->vs_3v  = 1; /* FIXME Can only apply 3.3V on Shannon. */
 		state->vs_Xv  = 0;
 		break;
@@ -79,7 +79,7 @@ shannon_pcmcia_configure_socket(struct soc_pcmcia_socket *skt,
 	}
 
 	printk(KERN_WARNING "%s(): Warning, Can't perform reset\n", __func__);
-	
+
 	/* Silently ignore Vpp, output enable, speaker enable. */
 
 	return 0;

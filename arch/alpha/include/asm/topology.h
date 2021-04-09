@@ -9,7 +9,7 @@
 static inline int cpu_to_node(int cpu)
 {
 	int node;
-	
+
 	if (!alpha_mv.cpuid_to_nid)
 		return 0;
 

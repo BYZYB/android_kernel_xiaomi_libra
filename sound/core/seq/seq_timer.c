@@ -54,7 +54,7 @@ static void snd_seq_timer_set_tick_resolution(struct snd_seq_timer *tmr)
 struct snd_seq_timer *snd_seq_timer_new(void)
 {
 	struct snd_seq_timer *tmr;
-	
+
 	tmr = kzalloc(sizeof(*tmr), GFP_KERNEL);
 	if (tmr == NULL) {
 		snd_printd("malloc failed for snd_seq_timer_new() \n");
@@ -64,10 +64,10 @@ struct snd_seq_timer *snd_seq_timer_new(void)
 
 	/* reset setup to defaults */
 	snd_seq_timer_defaults(tmr);
-	
+
 	/* reset time */
 	snd_seq_timer_reset(tmr);
-	
+
 	return tmr;
 }
 
@@ -316,7 +316,7 @@ int snd_seq_timer_close(struct snd_seq_queue *q)
 {
 	struct snd_seq_timer *tmr;
 	struct snd_timer_instance *t;
-	
+
 	tmr = q->timer;
 	if (snd_BUG_ON(!tmr))
 		return -EINVAL;
@@ -445,7 +445,7 @@ snd_seq_real_time_t snd_seq_timer_get_cur_time(struct snd_seq_timer *tmr)
 
 	spin_lock_irqsave(&tmr->lock, flags);
 	cur_time = tmr->cur_time;
-	if (tmr->running) { 
+	if (tmr->running) {
 		struct timeval tm;
 		int usec;
 		do_gettimeofday(&tm);
@@ -460,7 +460,7 @@ snd_seq_real_time_t snd_seq_timer_get_cur_time(struct snd_seq_timer *tmr)
 		snd_seq_sanity_real_time(&cur_time);
 	}
 	spin_unlock_irqrestore(&tmr->lock, flags);
-	return cur_time;	
+	return cur_time;
 }
 
 /* TODO: use interpolation on tick queue (will only be useful for very
@@ -481,7 +481,7 @@ void snd_seq_info_timer_read(struct snd_info_entry *entry,
 	struct snd_seq_timer *tmr;
 	struct snd_timer_instance *ti;
 	unsigned long resolution;
-	
+
 	for (idx = 0; idx < SNDRV_SEQ_MAX_QUEUES; idx++) {
 		q = queueptr(idx);
 		if (q == NULL)

@@ -1,5 +1,5 @@
 #ifndef _LAPB_H
-#define _LAPB_H 
+#define _LAPB_H
 #include <linux/lapb.h>
 
 #define	LAPB_HEADER_LEN	20		/* LAPB over Ethernet + a bit more */

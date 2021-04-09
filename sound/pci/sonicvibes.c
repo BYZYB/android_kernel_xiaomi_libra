@@ -558,7 +558,7 @@ static int snd_sonicvibes_hw_constraint_dac_rate(struct snd_pcm_hw_params *param
 {
 	unsigned int rate, div, r, m, n;
 
-	if (hw_param_interval(params, SNDRV_PCM_HW_PARAM_RATE)->min == 
+	if (hw_param_interval(params, SNDRV_PCM_HW_PARAM_RATE)->min ==
 	    hw_param_interval(params, SNDRV_PCM_HW_PARAM_RATE)->max) {
 		rate = hw_param_interval(params, SNDRV_PCM_HW_PARAM_RATE)->min;
 		div = 48000 / rate;
@@ -931,7 +931,7 @@ static int snd_sonicvibes_info_mux(struct snd_kcontrol *kcontrol, struct snd_ctl
 static int snd_sonicvibes_get_mux(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
 {
 	struct sonicvibes *sonic = snd_kcontrol_chip(kcontrol);
-	
+
 	spin_lock_irq(&sonic->reg_lock);
 	ucontrol->value.enumerated.item[0] = ((snd_sonicvibes_in1(sonic, SV_IREG_LEFT_ADC) & SV_RECSRC_OUT) >> 5) - 1;
 	ucontrol->value.enumerated.item[1] = ((snd_sonicvibes_in1(sonic, SV_IREG_RIGHT_ADC) & SV_RECSRC_OUT) >> 5) - 1;
@@ -944,7 +944,7 @@ static int snd_sonicvibes_put_mux(struct snd_kcontrol *kcontrol, struct snd_ctl_
 	struct sonicvibes *sonic = snd_kcontrol_chip(kcontrol);
 	unsigned short left, right, oval1, oval2;
 	int change;
-	
+
 	if (ucontrol->value.enumerated.item[0] >= 7 ||
 	    ucontrol->value.enumerated.item[1] >= 7)
 		return -EINVAL;
@@ -986,7 +986,7 @@ static int snd_sonicvibes_get_single(struct snd_kcontrol *kcontrol, struct snd_c
 	int shift = (kcontrol->private_value >> 8) & 0xff;
 	int mask = (kcontrol->private_value >> 16) & 0xff;
 	int invert = (kcontrol->private_value >> 24) & 0xff;
-	
+
 	spin_lock_irq(&sonic->reg_lock);
 	ucontrol->value.integer.value[0] = (snd_sonicvibes_in1(sonic, reg)>> shift) & mask;
 	spin_unlock_irq(&sonic->reg_lock);
@@ -1004,7 +1004,7 @@ static int snd_sonicvibes_put_single(struct snd_kcontrol *kcontrol, struct snd_c
 	int invert = (kcontrol->private_value >> 24) & 0xff;
 	int change;
 	unsigned short val, oval;
-	
+
 	val = (ucontrol->value.integer.value[0] & mask);
 	if (invert)
 		val = mask - val;
@@ -1044,7 +1044,7 @@ static int snd_sonicvibes_get_double(struct snd_kcontrol *kcontrol, struct snd_c
 	int shift_right = (kcontrol->private_value >> 19) & 0x07;
 	int mask = (kcontrol->private_value >> 24) & 0xff;
 	int invert = (kcontrol->private_value >> 22) & 1;
-	
+
 	spin_lock_irq(&sonic->reg_lock);
 	ucontrol->value.integer.value[0] = (snd_sonicvibes_in1(sonic, left_reg) >> shift_left) & mask;
 	ucontrol->value.integer.value[1] = (snd_sonicvibes_in1(sonic, right_reg) >> shift_right) & mask;
@@ -1067,7 +1067,7 @@ static int snd_sonicvibes_put_double(struct snd_kcontrol *kcontrol, struct snd_c
 	int invert = (kcontrol->private_value >> 22) & 1;
 	int change;
 	unsigned short val1, val2, oval1, oval2;
-	
+
 	val1 = ucontrol->value.integer.value[0] & mask;
 	val2 = ucontrol->value.integer.value[1] & mask;
 	if (invert) {
@@ -1146,7 +1146,7 @@ static int snd_sonicvibes_mixer(struct sonicvibes *sonic)
 
  */
 
-static void snd_sonicvibes_proc_read(struct snd_info_entry *entry, 
+static void snd_sonicvibes_proc_read(struct snd_info_entry *entry,
 				     struct snd_info_buffer *buffer)
 {
 	struct sonicvibes *sonic = entry->private_data;
@@ -1458,7 +1458,7 @@ static int snd_sonic_probe(struct pci_dev *pci,
 		dev++;
 		return -ENOENT;
 	}
- 
+
 	err = snd_card_create(index[dev], id[dev], THIS_MODULE, 0, &card);
 	if (err < 0)
 		return err;
@@ -1519,7 +1519,7 @@ static int snd_sonic_probe(struct pci_dev *pci,
 		snd_card_free(card);
 		return err;
 	}
-	
+
 	pci_set_drvdata(pci, card);
 	dev++;
 	return 0;

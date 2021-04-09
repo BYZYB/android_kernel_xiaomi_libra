@@ -34,7 +34,7 @@
 
 
 	.text
-	
+
 #include <asm/assembly.h>
 #include <asm/errno.h>
 #include <linux/linkage.h>

@@ -41,7 +41,7 @@ static struct nf_hook_ops *arpfilter_ops __read_mostly;
 static int __net_init arptable_filter_net_init(struct net *net)
 {
 	struct arpt_replace *repl;
-	
+
 	repl = arpt_alloc_initial_table(&packet_filter);
 	if (repl == NULL)
 		return -ENOMEM;

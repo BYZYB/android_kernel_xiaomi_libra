@@ -4,11 +4,11 @@
  *
  *  Kendrick Smith <kmsmith@umich.edu>
  *  Andy Adamson <andros@umich.edu>
- *  
+ *
  *  Redistribution and use in source and binary forms, with or without
  *  modification, are permitted provided that the following conditions
  *  are met:
- *  
+ *
  *  1. Redistributions of source code must retain the above copyright
  *     notice, this list of conditions and the following disclaimer.
  *  2. Redistributions in binary form must reproduce the above copyright
@@ -228,9 +228,9 @@ struct nfsd4_sessionid {
  * struct nfs4_client - one per client.  Clientids live here.
  * 	o Each nfs4_client is hashed by clientid.
  *
- * 	o Each nfs4_clients is also hashed by name 
+ * 	o Each nfs4_clients is also hashed by name
  * 	  (the opaque quantity initially sent by the client to identify itself).
- * 	  
+ *
  *	o cl_perclient list is used to ensure no dangling stateowner references
  *	  when we expire the nfs4_client
  */
@@ -311,18 +311,18 @@ update_stateid(stateid_t *stateid)
 		stateid->si_generation = 1;
 }
 
-/* A reasonable value for REPLAY_ISIZE was estimated as follows:  
- * The OPEN response, typically the largest, requires 
- *   4(status) + 8(stateid) + 20(changeinfo) + 4(rflags) +  8(verifier) + 
- *   4(deleg. type) + 8(deleg. stateid) + 4(deleg. recall flag) + 
- *   20(deleg. space limit) + ~32(deleg. ace) = 112 bytes 
+/* A reasonable value for REPLAY_ISIZE was estimated as follows:
+ * The OPEN response, typically the largest, requires
+ *   4(status) + 8(stateid) + 20(changeinfo) + 4(rflags) +  8(verifier) +
+ *   4(deleg. type) + 8(deleg. stateid) + 4(deleg. recall flag) +
+ *   20(deleg. space limit) + ~32(deleg. ace) = 112 bytes
  */
 
-#define NFSD4_REPLAY_ISIZE       112 
+#define NFSD4_REPLAY_ISIZE       112
 
 /*
- * Replay buffer, where the result of the last seqid-mutating operation 
- * is cached. 
+ * Replay buffer, where the result of the last seqid-mutating operation
+ * is cached.
  */
 struct nfs4_replay {
 	__be32			rp_status;

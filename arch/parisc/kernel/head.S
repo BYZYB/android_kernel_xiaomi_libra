@@ -15,7 +15,7 @@
 #include <asm/asm-offsets.h>
 #include <asm/psw.h>
 #include <asm/pdc.h>
-	
+
 #include <asm/assembly.h>
 #include <asm/pgtable.h>
 
@@ -79,7 +79,7 @@ $bss_loop:
 #if PT_NLEVELS == 3
 	/* Set pmd in pgd */
 	load32		PA(pmd0),%r5
-	shrd            %r5,PxD_VALUE_SHIFT,%r3	
+	shrd            %r5,PxD_VALUE_SHIFT,%r3
 	ldo		(PxD_FLAG_PRESENT+PxD_FLAG_VALID)(%r3),%r3
 	stw		%r3,ASM_PGD_ENTRY*ASM_PGD_ENTRY_SIZE(%r4)
 	ldo		ASM_PMD_ENTRY*ASM_PMD_ENTRY_SIZE(%r5),%r4
@@ -148,7 +148,7 @@ $pgt_fill_loop:
 	** Code Common to both Monarch and Slave processors.
 	** Entry:
 	**
-	**  1.1:	
+	**  1.1:
 	**    %r11 must contain RFI target address.
 	**    %r25/%r26 args to pass to target function
 	**    %r2  in case rfi target decides it didn't like something
@@ -157,7 +157,7 @@ $pgt_fill_loop:
 	**    %r3  PDCE_PROC address
 	**    %r11 RFI target address
 	**
-	** Caller must init: SR4-7, %sp, %r10, %cr24/25, 
+	** Caller must init: SR4-7, %sp, %r10, %cr24/25,
 	*/
 common_stext:
 	.proc
@@ -213,7 +213,7 @@ stext_pdc_ret:
 	ldd             TASK_PT_GR11(%r10), %r11
 	tovirt_r1       %sp
 #endif
-	
+
 	/* PARANOID: clear user scratch/user space SR's */
 	mtsp	%r0,%sr0
 	mtsp	%r0,%sr1
@@ -229,7 +229,7 @@ stext_pdc_ret:
 	/* Initialize the global data pointer */
 	loadgp
 
-	/* Set up our interrupt table.  HPMCs might not work after this! 
+	/* Set up our interrupt table.  HPMCs might not work after this!
 	 *
 	 * We need to install the correct iva for PA1.1 or PA2.0. The
 	 * following short sequence of instructions can determine this
@@ -274,7 +274,7 @@ aligned_rfi:
 
 	load32		KERNEL_PSW,%r10
 	mtctl		%r10,%ipsw
-	
+
 	/* Jump through hyperspace to Virt Mode */
 	rfi
 	nop
@@ -336,10 +336,10 @@ smp_slave_stext:
 	/* Load RFI *return* address in case smp_callin bails */
 	load32		smp_callin_rtn,%r2
 #endif
-	
+
 	/* Load RFI target address.  */
 	load32		smp_callin,%r11
-	
+
 	/* ok...common code can handle the rest */
 	b		common_stext
 	nop
@@ -357,6 +357,6 @@ ENDPROC(stext)
 
 	.type	$global$,@object
 	.size	$global$,4
-$global$:	
+$global$:
 	.word 0
 #endif /*!CONFIG_64BIT*/

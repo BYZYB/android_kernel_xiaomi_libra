@@ -145,7 +145,7 @@ ENTRY(switch_to_guest)
 
 	// The TSS entry which controls traps
 	// Must be loaded up with "ltr" now:
-	// The GDT entry that TSS uses 
+	// The GDT entry that TSS uses
 	// Changes type when we load it: damn Intel!
 	// For after we switch over our page tables
 	// That entry will be read-only: we'd crash.

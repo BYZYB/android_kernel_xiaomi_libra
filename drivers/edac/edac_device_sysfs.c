@@ -1,7 +1,7 @@
 /*
  * file for managing the edac_device subsystem of devices for EDAC
  *
- * (C) 2007 SoftwareBitMaker 
+ * (C) 2007 SoftwareBitMaker
  *
  * This file may be distributed under the terms of the
  * GNU General Public License.

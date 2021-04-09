@@ -1159,9 +1159,9 @@ static int tvp5150_probe(struct i2c_client *c,
 	sd = &core->sd;
 	v4l2_i2c_subdev_init(sd, c, &tvp5150_ops);
 
-	/* 
+	/*
 	 * Read consequent registers - TVP5150_MSB_DEV_ID, TVP5150_LSB_DEV_ID,
-	 * TVP5150_ROM_MAJOR_VER, TVP5150_ROM_MINOR_VER 
+	 * TVP5150_ROM_MAJOR_VER, TVP5150_ROM_MINOR_VER
 	 */
 	for (i = 0; i < 4; i++) {
 		res = tvp5150_read(sd, TVP5150_MSB_DEV_ID + i);

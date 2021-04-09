@@ -1,4 +1,4 @@
-/* 
+/*
  * Driver for NeoMagic 256AV and 256ZX chipsets.
  * Copyright (c) 2000 by Takashi Iwai <tiwai@suse.de>
  *
@@ -23,7 +23,7 @@
  *   along with this program; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  */
-  
+
 #include <asm/io.h>
 #include <linux/delay.h>
 #include <linux/interrupt.h>
@@ -190,7 +190,7 @@ struct nm256_stream {
 	struct snd_pcm_substream *substream;
 	int running;
 	int suspended;
-	
+
 	u32 buf;	/* offset from chip->buffer */
 	int bufsize;	/* buffer size in bytes */
 	void __iomem *bufptr;		/* mapped pointer */
@@ -205,7 +205,7 @@ struct nm256_stream {
 };
 
 struct nm256 {
-	
+
 	struct snd_card *card;
 
 	void __iomem *cport;		/* control port */
@@ -400,7 +400,7 @@ static unsigned int samplerates[8] = {
 	8000, 11025, 16000, 22050, 24000, 32000, 44100, 48000,
 };
 static struct snd_pcm_hw_constraint_list constraints_rates = {
-	.count = ARRAY_SIZE(samplerates), 
+	.count = ARRAY_SIZE(samplerates),
 	.list = samplerates,
 	.mask = 0,
 };
@@ -680,7 +680,7 @@ snd_nm256_capture_pointer(struct snd_pcm_substream *substream)
 	if (snd_BUG_ON(!s))
 		return 0;
 	curp = snd_nm256_readl(chip, NM_RBUFFER_CURRP) - (unsigned long)s->buf;
-	curp %= s->dma_size;	
+	curp %= s->dma_size;
 	return bytes_to_frames(substream->runtime, curp);
 }
 
@@ -956,8 +956,8 @@ snd_nm256_pcm(struct nm256 *chip, int device)
 }
 
 
-/* 
- * Initialize the hardware. 
+/*
+ * Initialize the hardware.
  */
 static void
 snd_nm256_init_chip(struct nm256 *chip)
@@ -997,8 +997,8 @@ snd_nm256_intr_check(struct nm256 *chip)
 	return IRQ_NONE;
 }
 
-/* 
- * Handle a potential interrupt for the device referred to by DEV_ID. 
+/*
+ * Handle a potential interrupt for the device referred to by DEV_ID.
  *
  * I don't like the cut-n-paste job here either between the two routines,
  * but there are sufficient differences between the two interrupt handlers
@@ -1147,8 +1147,8 @@ snd_nm256_ac97_ready(struct nm256 *chip)
 	testaddr = chip->mixer_status_offset;
 	testb = chip->mixer_status_mask;
 
-	/* 
-	 * Loop around waiting for the mixer to become ready. 
+	/*
+	 * Loop around waiting for the mixer to become ready.
 	 */
 	while (timeout-- > 0) {
 		if ((snd_nm256_readw(chip, testaddr) & testb) == 0)
@@ -1158,7 +1158,7 @@ snd_nm256_ac97_ready(struct nm256 *chip)
 	return 0;
 }
 
-/* 
+/*
  * Initial register values to be written to the AC97 mixer.
  * While most of these are identical to the reset values, we do this
  * so that we have most of the register contents cached--this avoids
@@ -1187,7 +1187,7 @@ static struct initialValues nm256_ac97_init_val[] =
 	{ AC97_REC_SEL,		0x0000 },
 	{ AC97_REC_GAIN,	0x0B0B },
 	{ AC97_GENERAL_PURPOSE,	0x0000 },
-	{ AC97_3D_CONTROL,	0x8000 }, 
+	{ AC97_3D_CONTROL,	0x8000 },
 	{ AC97_VENDOR_ID1, 	0x8384 },
 	{ AC97_VENDOR_ID2,	0x7609 },
 };
@@ -1217,7 +1217,7 @@ snd_nm256_ac97_read(struct snd_ac97 *ac97, unsigned short reg)
 	return chip->ac97_regs[idx];
 }
 
-/* 
+/*
  */
 static void
 snd_nm256_ac97_write(struct snd_ac97 *ac97,
@@ -1330,7 +1330,7 @@ snd_nm256_mixer(struct nm256 *chip)
 	return 0;
 }
 
-/* 
+/*
  * See if the signature left by the NM256 BIOS is intact; if so, we use
  * the associated address as the end of our audio buffer in the video
  * RAM.
@@ -1505,7 +1505,7 @@ snd_nm256_create(struct snd_card *card, struct pci_dev *pci,
 	chip->streams[SNDRV_PCM_STREAM_PLAYBACK].bufsize = playback_bufsize * 1024;
 	chip->streams[SNDRV_PCM_STREAM_CAPTURE].bufsize = capture_bufsize * 1024;
 
-	/* 
+	/*
 	 * The NM256 has two memory ports.  The first port is nothing
 	 * more than a chunk of video RAM, which is used as the I/O ring
 	 * buffer.  The second port has the actual juicy stuff (like the
@@ -1562,7 +1562,7 @@ snd_nm256_create(struct snd_card *card, struct pci_dev *pci,
 		chip->mixer_status_offset = NM2_MIXER_STATUS_OFFSET;
 		chip->mixer_status_mask = NM2_MIXER_READY_MASK;
 	}
-	
+
 	chip->buffer_size = chip->streams[SNDRV_PCM_STREAM_PLAYBACK].bufsize +
 		chip->streams[SNDRV_PCM_STREAM_CAPTURE].bufsize;
 	if (chip->use_cache)
@@ -1622,7 +1622,7 @@ snd_nm256_create(struct snd_card *card, struct pci_dev *pci,
 	snd_nm256_init_chip(chip);
 
 	// pci_set_master(pci); /* needed? */
-	
+
 	if ((err = snd_device_new(card, SNDRV_DEV_LOWLEVEL, chip, &ops)) < 0)
 		goto __error;
 

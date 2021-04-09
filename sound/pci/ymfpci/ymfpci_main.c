@@ -79,7 +79,7 @@ static int snd_ymfpci_codec_ready(struct snd_ymfpci *chip, int secondary)
 {
 	unsigned long end_time;
 	u32 reg = secondary ? YDSXGR_SECSTATUSADR : YDSXGR_PRISTATUSADR;
-	
+
 	end_time = jiffies + msecs_to_jiffies(750);
 	do {
 		if ((snd_ymfpci_readw(chip, reg) & 0x8000) == 0)
@@ -94,7 +94,7 @@ static void snd_ymfpci_codec_write(struct snd_ac97 *ac97, u16 reg, u16 val)
 {
 	struct snd_ymfpci *chip = ac97->private_data;
 	u32 cmd;
-	
+
 	snd_ymfpci_codec_ready(chip, 0);
 	cmd = ((YDSXG_AC97WRITECMD | reg) << 16) | val;
 	snd_ymfpci_writel(chip, YDSXGR_AC97CMDDATA, cmd);
@@ -145,7 +145,7 @@ static u32 snd_ymfpci_calc_lpfK(u32 rate)
 		0x00570000, 0x06AA0000, 0x18B20000, 0x20930000,
 		0x2B9A0000, 0x35A10000, 0x3EAA0000, 0x40000000
 	};
-	
+
 	if (rate == 44100)
 		return 0x40000000;	/* FIXME: What's the right value? */
 	for (i = 0; i < 8; i++)
@@ -161,7 +161,7 @@ static u32 snd_ymfpci_calc_lpfQ(u32 rate)
 		0x35280000, 0x34A70000, 0x32020000, 0x31770000,
 		0x31390000, 0x31C90000, 0x33D00000, 0x40000000
 	};
-	
+
 	if (rate == 44100)
 		return 0x370A0000;
 	for (i = 0; i < 8; i++)
@@ -220,7 +220,7 @@ static int voice_alloc(struct snd_ymfpci *chip,
 {
 	struct snd_ymfpci_voice *voice, *voice2;
 	int idx;
-	
+
 	*rvoice = NULL;
 	for (idx = 0; idx < YDSXG_PLAYBACK_VOICES; idx += pair ? 2 : 1) {
 		voice = &chip->voices[idx];
@@ -258,12 +258,12 @@ static int snd_ymfpci_voice_alloc(struct snd_ymfpci *chip,
 {
 	unsigned long flags;
 	int result;
-	
+
 	if (snd_BUG_ON(!rvoice))
 		return -EINVAL;
 	if (snd_BUG_ON(pair && type != YMFPCI_PCM))
 		return -EINVAL;
-	
+
 	spin_lock_irqsave(&chip->voice_lock, flags);
 	for (;;) {
 		result = voice_alloc(chip, type, pair, rvoice);
@@ -272,14 +272,14 @@ static int snd_ymfpci_voice_alloc(struct snd_ymfpci *chip,
 		/* TODO: synth/midi voice deallocation */
 		break;
 	}
-	spin_unlock_irqrestore(&chip->voice_lock, flags);	
-	return result;		
+	spin_unlock_irqrestore(&chip->voice_lock, flags);
+	return result;
 }
 
 static int snd_ymfpci_voice_free(struct snd_ymfpci *chip, struct snd_ymfpci_voice *pvoice)
 {
 	unsigned long flags;
-	
+
 	if (snd_BUG_ON(!pvoice))
 		return -EINVAL;
 	snd_ymfpci_hw_stop(chip);
@@ -303,7 +303,7 @@ static void snd_ymfpci_pcm_interrupt(struct snd_ymfpci *chip, struct snd_ymfpci_
 {
 	struct snd_ymfpci_pcm *ypcm;
 	u32 pos, delta;
-	
+
 	if ((ypcm = voice->ypcm) == NULL)
 		return;
 	if (ypcm->substream == NULL)
@@ -335,7 +335,7 @@ static void snd_ymfpci_pcm_interrupt(struct snd_ymfpci *chip, struct snd_ymfpci_
 			unsigned int next_bank = 1 - chip->active_bank;
 			struct snd_ymfpci_playback_bank *bank;
 			u32 volume;
-			
+
 			bank = &voice->bank[next_bank];
 			volume = cpu_to_le32(chip->pcm_mixer[subs].left << 15);
 			bank->left_gain_end = volume;
@@ -359,7 +359,7 @@ static void snd_ymfpci_pcm_capture_interrupt(struct snd_pcm_substream *substream
 	struct snd_ymfpci_pcm *ypcm = runtime->private_data;
 	struct snd_ymfpci *chip = ypcm->chip;
 	u32 pos, delta;
-	
+
 	spin_lock(&chip->reg_lock);
 	if (ypcm->running) {
 		pos = le32_to_cpu(chip->bank_capture[ypcm->capture_bank_number][chip->active_bank]->start) >> ypcm->shift;
@@ -478,7 +478,7 @@ static int snd_ymfpci_pcm_voice_alloc(struct snd_ymfpci_pcm *ypcm, int voices)
 		if (ypcm->voices[0] != NULL && ypcm->voices[1] == NULL) {
 			snd_ymfpci_voice_free(ypcm->chip, ypcm->voices[0]);
 			ypcm->voices[0] = NULL;
-		}		
+		}
 	}
 	err = snd_ymfpci_voice_alloc(ypcm->chip, YMFPCI_PCM, voices > 1, &ypcm->voices[0]);
 	if (err < 0)
@@ -652,7 +652,7 @@ static int snd_ymfpci_playback_hw_free(struct snd_pcm_substream *substream)
 	struct snd_ymfpci *chip = snd_pcm_substream_chip(substream);
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct snd_ymfpci_pcm *ypcm;
-	
+
 	if (runtime->private_data == NULL)
 		return 0;
 	ypcm = runtime->private_data;
@@ -846,7 +846,7 @@ static irqreturn_t snd_ymfpci_interrupt(int irq, void *dev_id)
 static struct snd_pcm_hardware snd_ymfpci_playback =
 {
 	.info =			(SNDRV_PCM_INFO_MMAP |
-				 SNDRV_PCM_INFO_MMAP_VALID | 
+				 SNDRV_PCM_INFO_MMAP_VALID |
 				 SNDRV_PCM_INFO_INTERLEAVED |
 				 SNDRV_PCM_INFO_BLOCK_TRANSFER |
 				 SNDRV_PCM_INFO_PAUSE |
@@ -952,7 +952,7 @@ static int snd_ymfpci_playback_open(struct snd_pcm_substream *substream)
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct snd_ymfpci_pcm *ypcm;
 	int err;
-	
+
 	if ((err = snd_ymfpci_playback_open_1(substream)) < 0)
 		return err;
 	ypcm = runtime->private_data;
@@ -974,7 +974,7 @@ static int snd_ymfpci_playback_spdif_open(struct snd_pcm_substream *substream)
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct snd_ymfpci_pcm *ypcm;
 	int err;
-	
+
 	if ((err = snd_ymfpci_playback_open_1(substream)) < 0)
 		return err;
 	ypcm = runtime->private_data;
@@ -1002,7 +1002,7 @@ static int snd_ymfpci_playback_4ch_open(struct snd_pcm_substream *substream)
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct snd_ymfpci_pcm *ypcm;
 	int err;
-	
+
 	if ((err = snd_ymfpci_playback_open_1(substream)) < 0)
 		return err;
 	ypcm = runtime->private_data;
@@ -1040,7 +1040,7 @@ static int snd_ymfpci_capture_open(struct snd_pcm_substream *substream,
 		return -ENOMEM;
 	ypcm->chip = chip;
 	ypcm->type = capture_bank_number + CAPTURE_REC;
-	ypcm->substream = substream;	
+	ypcm->substream = substream;
 	ypcm->capture_bank_number = capture_bank_number;
 	chip->capture_substream[capture_bank_number] = substream;
 	runtime->private_data = ypcm;
@@ -1491,7 +1491,7 @@ static int snd_ymfpci_get_single(struct snd_kcontrol *kcontrol,
 	int reg = kcontrol->private_value & 0xffff;
 	unsigned int shift = (kcontrol->private_value >> 16) & 0xff;
 	unsigned int mask = 1;
-	
+
 	switch (reg) {
 	case YDSXGR_SPDIFOUTCTRL: break;
 	case YDSXGR_SPDIFINCTRL: break;
@@ -1511,7 +1511,7 @@ static int snd_ymfpci_put_single(struct snd_kcontrol *kcontrol,
  	unsigned int mask = 1;
 	int change;
 	unsigned int val, oval;
-	
+
 	switch (reg) {
 	case YDSXGR_SPDIFOUTCTRL: break;
 	case YDSXGR_SPDIFINCTRL: break;
@@ -1557,7 +1557,7 @@ static int snd_ymfpci_get_double(struct snd_kcontrol *kcontrol, struct snd_ctl_e
 	unsigned int reg = kcontrol->private_value;
 	unsigned int shift_left = 0, shift_right = 16, mask = 16383;
 	unsigned int val;
-	
+
 	if (reg < 0x80 || reg >= 0xc0)
 		return -EINVAL;
 	spin_lock_irq(&chip->reg_lock);
@@ -1575,7 +1575,7 @@ static int snd_ymfpci_put_double(struct snd_kcontrol *kcontrol, struct snd_ctl_e
 	unsigned int shift_left = 0, shift_right = 16, mask = 16383;
 	int change;
 	unsigned int val1, val2, oval;
-	
+
 	if (reg < 0x80 || reg >= 0xc0)
 		return -EINVAL;
 	val1 = ucontrol->value.integer.value[0] & mask;
@@ -1599,7 +1599,7 @@ static int snd_ymfpci_put_nativedacvol(struct snd_kcontrol *kcontrol,
 	unsigned int reg2 = YDSXGR_BUF441OUTVOL;
 	int change;
 	unsigned int value, oval;
-	
+
 	value = ucontrol->value.integer.value[0] & 0x3fff;
 	value |= (ucontrol->value.integer.value[1] & 0x3fff) << 16;
 	spin_lock_irq(&chip->reg_lock);
@@ -1996,12 +1996,12 @@ int snd_ymfpci_timer(struct snd_ymfpci *chip, int device)
  *  proc interface
  */
 
-static void snd_ymfpci_proc_read(struct snd_info_entry *entry, 
+static void snd_ymfpci_proc_read(struct snd_info_entry *entry,
 				 struct snd_info_buffer *buffer)
 {
 	struct snd_ymfpci *chip = entry->private_data;
 	int i;
-	
+
 	snd_iprintf(buffer, "YMFPCI\n\n");
 	for (i = 0; i <= YDSXGR_WORKBASE; i += 4)
 		snd_iprintf(buffer, "%04x: %04x\n", i, snd_ymfpci_readl(chip, i));
@@ -2010,7 +2010,7 @@ static void snd_ymfpci_proc_read(struct snd_info_entry *entry,
 static int snd_ymfpci_proc_init(struct snd_card *card, struct snd_ymfpci *chip)
 {
 	struct snd_info_entry *entry;
-	
+
 	if (! snd_card_proc_new(card, "ymfpci", &entry))
 		snd_info_set_text_ops(entry, chip, snd_ymfpci_proc_read);
 	return 0;
@@ -2141,7 +2141,7 @@ static int snd_ymfpci_memalloc(struct snd_ymfpci *chip)
 	chip->bank_size_capture = snd_ymfpci_readl(chip, YDSXGR_RECCTRLSIZE) << 2;
 	chip->bank_size_effect = snd_ymfpci_readl(chip, YDSXGR_EFFCTRLSIZE) << 2;
 	chip->work_size = YDSXG_DEFAULT_WORK_SIZE;
-	
+
 	size = ALIGN(playback_ctrl_size, 0x100) +
 	       ALIGN(chip->bank_size_playback * 2 * YDSXG_PLAYBACK_VOICES, 0x100) +
 	       ALIGN(chip->bank_size_capture * 2 * YDSXG_CAPTURE_VOICES, 0x100) +
@@ -2150,7 +2150,7 @@ static int snd_ymfpci_memalloc(struct snd_ymfpci *chip)
 	/* work_ptr must be aligned to 256 bytes, but it's already
 	   covered with the kernel page allocation mechanism */
 	if (snd_dma_alloc_pages(SNDRV_DMA_TYPE_DEV, snd_dma_pci_data(chip->pci),
-				size, &chip->work_ptr) < 0) 
+				size, &chip->work_ptr) < 0)
 		return -ENOMEM;
 	ptr = chip->work_ptr.area;
 	ptr_addr = chip->work_ptr.addr;
@@ -2196,7 +2196,7 @@ static int snd_ymfpci_memalloc(struct snd_ymfpci *chip)
 	ptr_addr = ALIGN(ptr_addr, 0x100);
 	chip->work_base = ptr;
 	chip->work_base_addr = ptr_addr;
-	
+
 	snd_BUG_ON(ptr + chip->work_size !=
 		   chip->work_ptr.area + chip->work_ptr.bytes);
 
@@ -2225,7 +2225,7 @@ static int snd_ymfpci_memalloc(struct snd_ymfpci *chip)
 	snd_ymfpci_writel(chip, YDSXGR_NATIVEDACINVOL, 0x3fff3fff);
 	snd_ymfpci_writel(chip, YDSXGR_PRIADCLOOPVOL, 0x3fff3fff);
 	snd_ymfpci_writel(chip, YDSXGR_LEGACYOUTVOL, 0x3fff3fff);
-	
+
 	return 0;
 }
 
@@ -2273,11 +2273,11 @@ static int snd_ymfpci_free(struct snd_ymfpci *chip)
 		iounmap(chip->reg_area_virt);
 	if (chip->work_ptr.area)
 		snd_dma_free_pages(&chip->work_ptr);
-	
+
 	release_and_free_resource(chip->res_reg_area);
 
 	pci_write_config_word(chip->pci, 0x40, chip->old_legacy_ctrl);
-	
+
 	pci_disable_device(chip->pci);
 	release_firmware(chip->dsp_microcode);
 	release_firmware(chip->controller_microcode);
@@ -2327,7 +2327,7 @@ static int snd_ymfpci_suspend(struct device *dev)
 	struct snd_card *card = dev_get_drvdata(dev);
 	struct snd_ymfpci *chip = card->private_data;
 	unsigned int i;
-	
+
 	snd_power_change_state(card, SNDRV_CTL_POWER_D3hot);
 	snd_pcm_suspend_all(chip->pcm);
 	snd_pcm_suspend_all(chip->pcm2);
@@ -2405,7 +2405,7 @@ int snd_ymfpci_create(struct snd_card *card,
 	static struct snd_device_ops ops = {
 		.dev_free =	snd_ymfpci_dev_free,
 	};
-	
+
 	*rchip = NULL;
 
 	/* enable PCI device */

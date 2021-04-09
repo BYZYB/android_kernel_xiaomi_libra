@@ -79,7 +79,7 @@ options opl3 io=0x388
 install mad16 /sbin/modprobe -i mad16 && /sbin/ad1848_mixer_reroute 14 8 15 3 16 6
 
 If you have an MPU daughtercard or onboard MPU you will want to add to the
-"options mad16" line - eg 
+"options mad16" line - eg
 
 options mad16 irq=5 dma=0 dma16=3 io=0x530 mpu_io=0x330 mpu_irq=9
 

@@ -723,7 +723,7 @@ sa1100_irda_ioctl(struct net_device *dev, struct ifreq *ifreq, int cmd)
 	default:
 		break;
 	}
-		
+
 	return ret;
 }
 
@@ -982,7 +982,7 @@ static int sa1100_irda_probe(struct platform_device *pdev)
 	case 38400:		baudrate_mask |= IR_38400;
 	case 19200:		baudrate_mask |= IR_19200;
 	}
-		
+
 	si->qos.baud_rate.bits &= baudrate_mask;
 	si->qos.min_turn_time.bits = 7;
 

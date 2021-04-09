@@ -85,7 +85,7 @@ zone(0): 2048 pages.
 zone(1): 0 pages.
 zone(2): 0 pages.
 Linux/CRIS port on ETRAX 100LX (c) 2001 Axis Communications AB
-Kernel command line: 
+Kernel command line:
 Calibrating delay loop... 19.91 BogoMIPS
 Memory: 13872k/16384k available (587k kernel code, 2512k reserved, 44k data, 24k init)
 kmem_create: Forcing size word alignment - vm_area_struct

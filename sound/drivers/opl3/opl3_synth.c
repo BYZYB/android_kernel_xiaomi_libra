@@ -1,9 +1,9 @@
 /*
  *  Copyright (c) by Uros Bizjak <uros@kss-loka.si>
- *                   
+ *
  *  Routines for OPL2/OPL3/OPL4 control
  *
- *   This program is free software; you can redistribute it and/or modify 
+ *   This program is free software; you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation; either version 2 of the License, or
  *   (at your option) any later version.
@@ -426,7 +426,7 @@ static int snd_opl3_play_note(struct snd_opl3 * opl3, struct snd_dm_fm_note * no
 	reg_val = (unsigned char) note->fnum;
 	opl3_reg = reg_side | (OPL3_REG_FNUM_LOW + voice_offset);
 	opl3->command(opl3, opl3_reg, reg_val);
-	
+
 	reg_val = 0x00;
 	/* Set output sound flag */
 	if (note->key_on)
@@ -436,7 +436,7 @@ static int snd_opl3_play_note(struct snd_opl3 * opl3, struct snd_dm_fm_note * no
 	/* Set higher 2 bits of note frequency */
 	reg_val |= (unsigned char) (note->fnum >> 8) & OPL3_FNUM_HIGH_MASK;
 
-	/* Set OPL3 KEYON_BLOCK register of requested voice */ 
+	/* Set OPL3 KEYON_BLOCK register of requested voice */
 	opl3_reg = reg_side | (OPL3_REG_KEYON_BLOCK + voice_offset);
 	opl3->command(opl3, opl3_reg, reg_val);
 
@@ -485,13 +485,13 @@ static int snd_opl3_set_voice(struct snd_opl3 * opl3, struct snd_dm_fm_voice * v
 	/* Set sustaining sound phase */
 	if (voice->do_sustain)
 		reg_val |= OPL3_SUSTAIN_ON;
-	/* Set keyboard scaling bit */ 
+	/* Set keyboard scaling bit */
 	if (voice->kbd_scale)
 		reg_val |= OPL3_KSR;
 	/* Set harmonic or frequency multiplier */
 	reg_val |= voice->harmonic & OPL3_MULTIPLE_MASK;
 
-	/* Set OPL3 AM_VIB register of requested voice/operator */ 
+	/* Set OPL3 AM_VIB register of requested voice/operator */
 	opl3_reg = reg_side | (OPL3_REG_AM_VIB + op_offset);
 	opl3->command(opl3, opl3_reg, reg_val);
 
@@ -500,7 +500,7 @@ static int snd_opl3_set_voice(struct snd_opl3 * opl3, struct snd_dm_fm_voice * v
 	/* Set output volume */
 	reg_val |= ~voice->volume & OPL3_TOTAL_LEVEL_MASK;
 
-	/* Set OPL3 KSL_LEVEL register of requested voice/operator */ 
+	/* Set OPL3 KSL_LEVEL register of requested voice/operator */
 	opl3_reg = reg_side | (OPL3_REG_KSL_LEVEL + op_offset);
 	opl3->command(opl3, opl3_reg, reg_val);
 
@@ -509,7 +509,7 @@ static int snd_opl3_set_voice(struct snd_opl3 * opl3, struct snd_dm_fm_voice * v
 	/* Set decay phase level */
 	reg_val |= voice->decay & OPL3_DECAY_MASK;
 
-	/* Set OPL3 ATTACK_DECAY register of requested voice/operator */ 
+	/* Set OPL3 ATTACK_DECAY register of requested voice/operator */
 	opl3_reg = reg_side | (OPL3_REG_ATTACK_DECAY + op_offset);
 	opl3->command(opl3, opl3_reg, reg_val);
 
@@ -518,7 +518,7 @@ static int snd_opl3_set_voice(struct snd_opl3 * opl3, struct snd_dm_fm_voice * v
 	/* Set release phase level */
 	reg_val |= voice->release & OPL3_RELEASE_MASK;
 
-	/* Set OPL3 SUSTAIN_RELEASE register of requested voice/operator */ 
+	/* Set OPL3 SUSTAIN_RELEASE register of requested voice/operator */
 	opl3_reg = reg_side | (OPL3_REG_SUSTAIN_RELEASE + op_offset);
 	opl3->command(opl3, opl3_reg, reg_val);
 

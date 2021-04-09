@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      irqueue.h
  * Version:       0.3
  * Description:   General queue implementation
@@ -8,23 +8,23 @@
  * Created at:    Tue Jun  9 13:26:50 1998
  * Modified at:   Thu Oct  7 13:25:16 1999
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
- * 
+ *
  *     Copyright (C) 1998-1999, Aage Kvalnes <aage@cs.uit.no>
  *     Copyright (c) 1998, Dag Brattli
  *     All Rights Reserved.
- *      
+ *
  *     This code is taken from the Vortex Operating System written by Aage
  *     Kvalnes and has been ported to Linux and Linux/IR by Dag Brattli
  *
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- *  
+ *
  *     Neither Dag Brattli nor University of Tromsø admit liability nor
- *     provide warranty for any of this software. This material is 
+ *     provide warranty for any of this software. This material is
  *     provided "AS-IS" and at no charge.
- *     
+ *
  ********************************************************************/
 
 #include <linux/types.h>
@@ -48,7 +48,7 @@
 #define HASHBIN_SIZE   8
 #define HASHBIN_MASK   0x7
 
-#ifndef IRDA_ALIGN 
+#ifndef IRDA_ALIGN
 #define IRDA_ALIGN __attribute__((aligned))
 #endif
 
@@ -79,7 +79,7 @@ typedef struct hashbin_t {
 hashbin_t *hashbin_new(int type);
 int      hashbin_delete(hashbin_t* hashbin, FREE_FUNC func);
 int      hashbin_clear(hashbin_t* hashbin, FREE_FUNC free_func);
-void     hashbin_insert(hashbin_t* hashbin, irda_queue_t* entry, long hashv, 
+void     hashbin_insert(hashbin_t* hashbin, irda_queue_t* entry, long hashv,
 			const char* name);
 void*    hashbin_remove(hashbin_t* hashbin, long hashv, const char* name);
 void*    hashbin_remove_first(hashbin_t *hashbin);

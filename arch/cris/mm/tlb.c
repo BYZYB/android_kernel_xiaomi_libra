@@ -2,7 +2,7 @@
  *  linux/arch/cris/mm/tlb.c
  *
  *  Copyright (C) 2000, 2001  Axis Communications AB
- *  
+ *
  *  Authors:   Bjorn Wesen (bjornw@axis.com)
  *
  */
@@ -60,10 +60,10 @@ alloc_context(struct mm_struct *mm)
 	map_replace_ptr++;
 
 	if(map_replace_ptr == INVALID_PAGEID)
-		map_replace_ptr = 0;         /* wrap around */	
+		map_replace_ptr = 0;         /* wrap around */
 }
 
-/* 
+/*
  * if needed, get a new MMU context for the mm. otherwise nothing is done.
  */
 
@@ -103,7 +103,7 @@ tlb_init(void)
 
 	for (i = 1; i < ARRAY_SIZE(page_id_map); i++)
 		page_id_map[i] = NULL;
-	
+
 	/* invalidate the entire TLB */
 
 	flush_tlb_all();

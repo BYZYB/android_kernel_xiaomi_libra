@@ -113,7 +113,7 @@ static inline u64 gfs2_rbm_to_block(const struct gfs2_rbm *rbm)
 static inline bool gfs2_rbm_eq(const struct gfs2_rbm *rbm1,
 			       const struct gfs2_rbm *rbm2)
 {
-	return (rbm1->rgd == rbm2->rgd) && (rbm1->bi == rbm2->bi) && 
+	return (rbm1->rgd == rbm2->rgd) && (rbm1->bi == rbm2->bi) &&
 	       (rbm1->offset == rbm2->offset);
 }
 

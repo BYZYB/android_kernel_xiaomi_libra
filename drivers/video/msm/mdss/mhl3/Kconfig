@@ -10,7 +10,7 @@ config MEDIA_DATA_TUNNEL_SUPPORT
 	  to the system.
 
 config SII8620_MHL_TX
-	tristate 
+	tristate
 	prompt "Silicon Image 8620 HDMI to MHL Tx"
 	depends on I2C
 	default n

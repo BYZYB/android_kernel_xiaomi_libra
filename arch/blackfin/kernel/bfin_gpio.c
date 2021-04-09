@@ -58,7 +58,7 @@ static struct gpio_port_t * const gpio_array[] = {
 	(struct gpio_port_t *) FIO0_FLAG_D,
 	(struct gpio_port_t *) FIO1_FLAG_D,
 	(struct gpio_port_t *) FIO2_FLAG_D,
-#elif defined(CONFIG_BF54x) || defined(CONFIG_BF60x) 
+#elif defined(CONFIG_BF54x) || defined(CONFIG_BF60x)
 	(struct gpio_port_t *)PORTA_FER,
 	(struct gpio_port_t *)PORTB_FER,
 	(struct gpio_port_t *)PORTC_FER,

@@ -5,7 +5,7 @@
 <book id="Z85230Guide">
  <bookinfo>
   <title>Z8530 Programming Guide</title>
-  
+
   <authorgroup>
    <author>
     <firstname>Alan</firstname>
@@ -31,21 +31,21 @@
      version 2 of the License, or (at your option) any later
      version.
    </para>
-      
+
    <para>
      This program is distributed in the hope that it will be
      useful, but WITHOUT ANY WARRANTY; without even the implied
      warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
      See the GNU General Public License for more details.
    </para>
-      
+
    <para>
      You should have received a copy of the GNU General Public
      License along with this program; if not, write to the Free
      Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
      MA 02111-1307 USA
    </para>
-      
+
    <para>
      For more details see the file COPYING in the source
      distribution of Linux.
@@ -66,11 +66,11 @@
   <para>
 	The current driver only support synchronous operation. Merging the
 	asynchronous driver support into this code to allow any Z85x30
-	device to be used as both a tty interface and as a synchronous 
+	device to be used as both a tty interface and as a synchronous
 	controller is a project for Linux post the 2.4 release
   </para>
   </chapter>
-  
+
   <chapter id="Driver_Modes">
  	<title>Driver Modes</title>
   <para>
@@ -98,7 +98,7 @@
 	Transmit DMA mode uses a single DMA channel. The DMA channel is used
 	for transmission as the transmit FIFO is smaller than the receive
 	FIFO. it gives better performance than pure PIO mode but is nowhere
-	near as ideal as pure DMA mode. 
+	near as ideal as pure DMA mode.
   </para>
   </chapter>
 
@@ -106,14 +106,14 @@
  	<title>Using the Z85230 driver</title>
   <para>
 	The Z85230 driver provides the back end interface to your board. To
-	configure a Z8530 interface you need to detect the board and to 
+	configure a Z8530 interface you need to detect the board and to
 	identify its ports and interrupt resources. It is also your problem
 	to verify the resources are available.
   </para>
   <para>
 	Having identified the chip you need to fill in a struct z8530_dev,
 	which describes each chip. This object must exist until you finally
-	shutdown the board. Firstly zero the active field. This ensures 
+	shutdown the board. Firstly zero the active field. This ensures
 	nothing goes off without you intending it. The irq field should
 	be set to the interrupt number of the chip. (Each chip has a single
 	interrupt source rather than each channel). You are responsible
@@ -123,7 +123,7 @@
 	be shared or not is board dependent, and up to you to initialise.
   </para>
   <para>
-	The structure holds two channel structures. 
+	The structure holds two channel structures.
 	Initialise chanA.ctrlio and chanA.dataio with the address of the
 	control and data ports. You can or this with Z8530_PORT_SLEEP to
 	indicate your interface needs the 5uS delay for chip settling done
@@ -152,7 +152,7 @@
   </para>
   <para>
 	Having initialised the device you can then call
-	<function>z8530_init</function>. This will probe the chip and 
+	<function>z8530_init</function>. This will probe the chip and
 	reset it into a known state. An identification sequence is then
 	run to identify the chip type. If the checks fail to pass the
 	function returns a non zero error code. Typically this indicates
@@ -162,7 +162,7 @@
   </para>
   <para>
 	Once you have called z8530_init you can also make use of the utility
-	function <function>z8530_describe</function>. This provides a 
+	function <function>z8530_describe</function>. This provides a
 	consistent reporting format for the Z8530 devices, and allows all
 	the drivers to provide consistent reporting.
   </para>
@@ -174,7 +174,7 @@
 	If you wish to use the network interface facilities of the driver,
 	then you need to attach a network device to each channel that is
 	present and in use. In addition to use the generic HDLC
-	you need to follow some additional plumbing rules. They may seem 
+	you need to follow some additional plumbing rules. They may seem
 	complex but a look at the example hostess_sv11 driver should
 	reassure you.
   </para>
@@ -197,7 +197,7 @@
   </para>
   <para>
 	Before you register your network device you will also need to
-	provide suitable handlers for most of the network device callbacks. 
+	provide suitable handlers for most of the network device callbacks.
 	See the network device documentation for more details on this.
   </para>
   </chapter>
@@ -209,7 +209,7 @@
 	port registers on the Z8530 chips. When programming the register
 	settings for a channel be aware that the documentation recommends
 	initialisation orders. Strange things happen when these are not
-	followed. 
+	followed.
   </para>
   <para>
 	<function>z8530_channel_load</function> takes an array of
@@ -246,7 +246,7 @@
   <para>
 	Once the port is open it will call the rx_function of each channel
 	whenever a completed packet arrived. This is invoked from
-	interrupt context and passes you the channel and a network	
+	interrupt context and passes you the channel and a network
 	buffer (struct sk_buff) holding the data. The data includes
 	the CRC bytes so most users will want to trim the last two
 	bytes before processing the data. This function is very timing
@@ -259,9 +259,9 @@
 	z8530_sync_open</function> is called. This expects to be passed
 	the network device and the channel. Typically this is called from
 	your network device open callback. On a failure a non zero error
-	status is returned. The <function>z8530_sync_close</function> 
-	function shuts down a PIO channel. This must be done before the 
-	channel is opened again	and before the driver shuts down 
+	status is returned. The <function>z8530_sync_close</function>
+	function shuts down a PIO channel. This must be done before the
+	channel is opened again	and before the driver shuts down
 	and unloads.
   </para>
   <para>
@@ -278,7 +278,7 @@
   <para>
 	The final supported mode uses a single DMA channel to drive the
 	transmit side. As the Z85C30 has a larger FIFO on the receive
-	channel	this tends to increase the maximum speed a little. 
+	channel	this tends to increase the maximum speed a little.
 	This is activated by calling the <function>z8530_sync_txdma_open
 	</function>. This returns a non zero error code on failure. The
 	<function>z8530_sync_txdma_close</function> function closes down
@@ -325,7 +325,7 @@
 	Should you need to retarget the Z8530 driver to another architecture
 	the only code that should need changing are the port I/O functions.
 	At the moment these assume PC I/O port accesses. This may not be
-	appropriate for all platforms. Replacing 
+	appropriate for all platforms. Replacing
 	<function>z8530_read_port</function> and <function>z8530_write_port
 	</function> is intended to be all that is required to port this
 	driver layer.
@@ -354,7 +354,7 @@
     </para>
     </listitem></varlistentry>
   </variablelist>
-	
+
   </para>
   </chapter>
 

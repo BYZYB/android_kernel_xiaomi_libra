@@ -590,7 +590,7 @@ int radeon_cs_finish_pages(struct radeon_cs_parser *p)
 			if (size == 0)
 				size = PAGE_SIZE;
 		}
-		
+
 		if (DRM_COPY_FROM_USER(p->ib.ptr + (i * (PAGE_SIZE/4)),
 				       ibc->user_ptr + (i * PAGE_SIZE),
 				       size))

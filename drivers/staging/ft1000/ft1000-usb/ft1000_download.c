@@ -579,7 +579,7 @@ static u32 write_blk (struct ft1000_usb *ft1000dev, u16 **pUsFile, u8 **pUcFile,
 					Status = STATUS_FAILURE;
 					break;
 				}
-			   
+
 			}
 			else
 			{
@@ -589,7 +589,7 @@ static u32 write_blk (struct ft1000_usb *ft1000dev, u16 **pUsFile, u8 **pUcFile,
 					Status = STATUS_FAILURE;
 					break;
 				}
-			    
+
 			}
 
 			if (Status == STATUS_SUCCESS)

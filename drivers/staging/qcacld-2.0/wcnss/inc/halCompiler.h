@@ -30,7 +30,7 @@
  *  @file:     aniCompiler.h
  *
  *  @brief:    This file tries to abstract the differences among compilers.
- *             Supported compilers are: 
+ *             Supported compilers are:
  *             ARM RVCT compiler
  *
  *  @author:   Kumar Anand
@@ -44,7 +44,7 @@
  * 1. GNU C/C++ Compiler
  *
  * How to detect gcc : __GNUC__
- * How to detect gcc version : 
+ * How to detect gcc version :
  *   major version : __GNUC__ (2 = 2.x, 3 = 3.x, 4 = 4.x)
  *   minor version : __GNUC_MINOR__
  *
@@ -78,7 +78,7 @@
  * Alignment directives : Compiler may think packed data structures have
  * no specific alignment requirement. Then compiler may generate multiple
  * byte accesses to access two byte or four bytes data structures. This
- * affects on performance especially for RISC systems. If some data 
+ * affects on performance especially for RISC systems. If some data
  * structure is located on specific alignment always, alignment directives
  * help compiler generate more efficient codes.
  */
@@ -89,8 +89,8 @@
 #if defined(_MSC_VER)
 #define __ANI_COMPILER_PRAGMA_PACK_STACK        1
 #define __ANI_COMPILER_PRAGMA_PACK              1
-#define __ani_attr_pre_packed 
-#define __ani_attr_packed 
+#define __ani_attr_pre_packed
+#define __ani_attr_packed
 #define __ani_attr_aligned_2
 #define __ani_attr_aligned_4
 #define __ani_attr_aligned_8
@@ -101,8 +101,8 @@
 #define ALIGN(__value)
 #elif defined(__INTEL_COMPILER) || defined(__ICC) || defined(__ECC)
 #define __ANI_COMPILER_PRAGMA_PACK              1
-#define __ani_attr_pre_packed 
-#define __ani_attr_packed 
+#define __ani_attr_pre_packed
+#define __ani_attr_packed
 #define __ani_attr_aligned_2
 #define __ani_attr_aligned_4
 #define __ani_attr_aligned_8
@@ -112,7 +112,7 @@
 #define PACKED_POST
 #define ALIGN(__value)
 #elif defined(__GNUC__)
-#define __ani_attr_pre_packed 
+#define __ani_attr_pre_packed
 #define __ani_attr_packed                       __attribute__((packed))
 #define __ani_attr_aligned_2                    __attribute__((aligned(2)))
 #define __ani_attr_aligned_4                    __attribute__((aligned(4)))
@@ -131,11 +131,11 @@
 #elif defined(ANI_COMPILER_TYPE_RVCT)
 /* Nothing defined so far */
 
-/* 
- * RIVA 1.2 and Pronto uses ARMCT5.1 compiler and it throws lot of warning when __align() is used in structure definitions. 
- * __attribute__((aligned())) is GNU compiler attribute that is accepted by ARM compiler and resolves the warnings. 
+/*
+ * RIVA 1.2 and Pronto uses ARMCT5.1 compiler and it throws lot of warning when __align() is used in structure definitions.
+ * __attribute__((aligned())) is GNU compiler attribute that is accepted by ARM compiler and resolves the warnings.
  */
-#if (__ARMCC_VERSION > 400000) 
+#if (__ARMCC_VERSION > 400000)
 #define __ani_attr_packed
 #define __ani_attr_pre_packed                   __packed
 #define __ani_attr_aligned_2                    __attribute__((aligned(2)))

@@ -117,7 +117,7 @@ __copy_to_user(void __user *to, const void *from, unsigned long n)
 		return __copy_to_user_std(to, from, n);
 	return __copy_to_user_memcpy(to, from, n);
 }
-	
+
 static unsigned long noinline
 __clear_user_memset(void __user *addr, unsigned long n)
 {

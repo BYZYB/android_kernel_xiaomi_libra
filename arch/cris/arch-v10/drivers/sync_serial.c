@@ -625,7 +625,7 @@ static int sync_serial_open(struct inode *inode, struct file *file)
 		DEBUG(printk(KERN_DEBUG "sser%d rec started\n", dev));
 	}
 	err = 0;
-	
+
 out:
 	mutex_unlock(&sync_serial_mutex);
 	return err;

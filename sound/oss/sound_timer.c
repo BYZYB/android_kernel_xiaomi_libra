@@ -50,10 +50,10 @@ void reprogram_timer(void)
 	 *	The user is changing the timer rate before setting a timer
 	 *	slap, bad bad not allowed.
 	 */
-	 
+
 	if(!tmr)
 		return;
-		
+
 	usecs_per_tick = (60 * 1000000) / (curr_tempo * curr_timebase);
 
 	/*
@@ -183,7 +183,7 @@ static int timer_ioctl(int dev, unsigned int cmd, void __user *arg)
 	int __user *p = arg;
 	int val;
 
-	switch (cmd) 
+	switch (cmd)
 	{
 		case SNDCTL_TMR_SOURCE:
 			val = TMR_INTERNAL;
@@ -193,7 +193,7 @@ static int timer_ioctl(int dev, unsigned int cmd, void __user *arg)
 			tmr_reset();
 			tmr_running = 1;
 			return 0;
-		
+
 		case SNDCTL_TMR_STOP:
 			tmr_running = 0;
 			return 0;
@@ -205,7 +205,7 @@ static int timer_ioctl(int dev, unsigned int cmd, void __user *arg)
 		case SNDCTL_TMR_TIMEBASE:
 			if (get_user(val, p))
 				return -EFAULT;
-			if (val) 
+			if (val)
 			{
 				if (val < 1)
 					val = 1;
@@ -219,7 +219,7 @@ static int timer_ioctl(int dev, unsigned int cmd, void __user *arg)
 		case SNDCTL_TMR_TEMPO:
 			if (get_user(val, p))
 				return -EFAULT;
-			if (val) 
+			if (val)
 			{
 				if (val < 8)
 					val = 8;
@@ -241,11 +241,11 @@ static int timer_ioctl(int dev, unsigned int cmd, void __user *arg)
 				return -EINVAL;
 			val = ((curr_tempo * curr_timebase) + 30) / 60;
 			break;
-		
+
 		case SNDCTL_SEQ_GETTIME:
 			val = curr_ticks;
 			break;
-		
+
 		case SNDCTL_TMR_METRONOME:
 		default:
 			return -EINVAL;
@@ -281,7 +281,7 @@ static struct sound_timer_operations sound_timer =
 void sound_timer_interrupt(void)
 {
 	unsigned long flags;
-	
+
 	if (!opened)
 		return;
 

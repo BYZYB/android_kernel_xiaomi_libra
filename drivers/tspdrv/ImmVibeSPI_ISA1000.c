@@ -100,13 +100,13 @@ static ssize_t isa1000_vib_level_store(struct device *dev,
                                        const char *buf, size_t count)
 {
     int rc, val;
-    
+
     rc = kstrtoint(buf, 10, &val);
     if (rc) {
         pr_err("%s: error getting level\n", __func__);
         return -EINVAL;
     }
-    
+
     if (val < MIN_VIBE_STRENGTH) {
         pr_err("%s: level %d not in range (%d - %d), using min.\n",
                __func__, val, MIN_VIBE_STRENGTH, MAX_VIBE_STRENGTH);
@@ -116,9 +116,9 @@ static ssize_t isa1000_vib_level_store(struct device *dev,
                __func__, val, MIN_VIBE_STRENGTH, MAX_VIBE_STRENGTH);
         val = MAX_VIBE_STRENGTH;
     }
-    
+
     vibe_strength = val;
-    
+
     return strnlen(buf, count);
 }
 static DEVICE_ATTR(vtg_min, S_IRUGO, isa1000_vib_min_show, NULL);

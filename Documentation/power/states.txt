@@ -30,11 +30,11 @@ String:		"standby"
 This state offers minimal, though real, power savings, while providing
 a very low-latency transition back to a working system. No operating
 state is lost (the CPU retains power), so the system easily starts up
-again where it left off. 
+again where it left off.
 
 We try to put devices in a low-power state equivalent to D1, which
 also offers low power savings, but low resume latency. Not all devices
-support D1, and those that don't are left on. 
+support D1, and those that don't are left on.
 
 
 State:		Suspend-to-RAM
@@ -43,15 +43,15 @@ String:		"mem"
 
 This state offers significant power savings as everything in the
 system is put into a low-power state, except for memory, which is
-placed in self-refresh mode to retain its contents. 
+placed in self-refresh mode to retain its contents.
 
 System and device state is saved and kept in memory. All devices are
 suspended and put into D3. In many cases, all peripheral buses lose
 power when entering STR, so devices must be able to handle the
-transition back to the On state. 
+transition back to the On state.
 
 For at least ACPI, STR requires some minimal boot-strapping code to
-resume the system from STR. This may be true on other platforms. 
+resume the system from STR. This may be true on other platforms.
 
 
 State:		Suspend-to-disk
@@ -62,13 +62,13 @@ This state offers the greatest power savings, and can be used even in
 the absence of low-level platform support for power management. This
 state operates similarly to Suspend-to-RAM, but includes a final step
 of writing memory contents to disk. On resume, this is read and memory
-is restored to its pre-suspend state. 
+is restored to its pre-suspend state.
 
 STD can be handled by the firmware or the kernel. If it is handled by
 the firmware, it usually requires a dedicated partition that must be
 setup via another operating system for it to use. Despite the
 inconvenience, this method requires minimal work by the kernel, since
-the firmware will also handle restoring memory contents on resume. 
+the firmware will also handle restoring memory contents on resume.
 
 For suspend-to-disk, a mechanism called 'swsusp' (Swap Suspend) is used
 to write memory contents to free swap space. swsusp has some restrictive

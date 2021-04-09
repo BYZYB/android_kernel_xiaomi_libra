@@ -1107,7 +1107,7 @@ static int set_input(struct i2c_client *client, enum cx25840_video_input vid_inp
 			cx25840_write4(client, 0x410, 0xffff0dbf);
 			cx25840_write4(client, 0x414, 0x00137d03);
 
-			/* on the 887, 0x418 is HSCALE_CTRL, on the 888 it is 
+			/* on the 887, 0x418 is HSCALE_CTRL, on the 888 it is
 			   CHROMA_CTRL */
 			if (is_cx23888(state))
 				cx25840_write4(client, 0x418, 0x01008080);
@@ -1116,7 +1116,7 @@ static int set_input(struct i2c_client *client, enum cx25840_video_input vid_inp
 
 			cx25840_write4(client, 0x41c, 0x00000000);
 
-			/* on the 887, 0x420 is CHROMA_CTRL, on the 888 it is 
+			/* on the 887, 0x420 is CHROMA_CTRL, on the 888 it is
 			   CRUSH_CTRL */
 			if (is_cx23888(state))
 				cx25840_write4(client, 0x420, 0x001c3e0f);

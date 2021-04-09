@@ -1,4 +1,4 @@
-/* 
+/*
  *    Copyright (C) 2002 Richard Hirst <rhirst at parisc-linux.org>
  *    Copyright (C) 2003 James Bottomley <jejb at parisc-linux.org>
  *    Copyright (C) 2003 Randolph Chung <tausq with parisc-linux.org>

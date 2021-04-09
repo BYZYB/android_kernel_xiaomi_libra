@@ -53,7 +53,7 @@ ENDPROC(fast_io_protect)
 #if XTENSA_HAVE_COPROCESSORS
 
 /*
- * Macros for lazy context switch. 
+ * Macros for lazy context switch.
  */
 
 #define SAVE_CP_REGS(x)							\
@@ -129,12 +129,12 @@ ENDPROC(fast_io_protect)
 	LOAD_CP_REGS_TAB(7)
 
 /*
- * coprocessor_save(buffer, index) 
+ * coprocessor_save(buffer, index)
  *                    a2      a3
  * coprocessor_load(buffer, index)
  *                    a2      a3
  *
- * Save or load coprocessor registers for coprocessor 'index'. 
+ * Save or load coprocessor registers for coprocessor 'index'.
  * The register values are saved to or loaded from them 'buffer' address.
  *
  * Note that these functions don't update the coprocessor_owner information!
@@ -177,8 +177,8 @@ ENDPROC(coprocessor_load)
  * coprocessor_restore(struct task_info*, index)
  *                              a2         a3
  *
- * Save or load coprocessor registers for coprocessor 'index'. 
- * The register values are saved to or loaded from the coprocessor area 
+ * Save or load coprocessor registers for coprocessor 'index'.
+ * The register values are saved to or loaded from the coprocessor area
  * inside the task_info structure.
  *
  * Note that these functions don't update the coprocessor_owner information!
@@ -292,7 +292,7 @@ ENTRY(fast_coprocessor)
 	s32i	a5, a4, THREAD_CPENABLE
 
 	/*
-	 * Get context save area and 'call' save routine. 
+	 * Get context save area and 'call' save routine.
 	 * (a4 still holds previous owner (thread_info), a3 CP number)
 	 */
 

@@ -1374,7 +1374,7 @@ static int gfs2_dir_read_leaf(struct inode *inode, u64 *offset, void *opaque,
 						"g.offset (%u)\n",
 					(unsigned long long)bh->b_blocknr,
 					entries2, g.offset);
-					
+
 				error = -EIO;
 				goto out_free;
 			}
@@ -1575,7 +1575,7 @@ struct inode *gfs2_dir_search(struct inode *dir, const struct qstr *name)
 	if (dent) {
 		if (IS_ERR(dent))
 			return ERR_CAST(dent);
-		inode = gfs2_inode_lookup(dir->i_sb, 
+		inode = gfs2_inode_lookup(dir->i_sb,
 				be16_to_cpu(dent->de_type),
 				be64_to_cpu(dent->de_inum.no_addr),
 				be64_to_cpu(dent->de_inum.no_formal_ino), 0);

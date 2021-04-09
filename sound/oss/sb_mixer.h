@@ -1,6 +1,6 @@
 /*
  * sound/oss/sb_mixer.h
- * 
+ *
  * Definitions for the SB Pro and SB16 mixers
  */
 /*
@@ -25,11 +25,11 @@
  */
 /*
  * Mixer registers
- * 
+ *
  * NOTE!	RECORD_SRC == IN_FILTER
  */
 
-/* 
+/*
  * Mixer registers of SB Pro
  */
 #define VOC_VOL		0x04
@@ -48,7 +48,7 @@
 #define OPSW		0x3c
 
 /*
- * Additional registers on the SG NX Pro 
+ * Additional registers on the SG NX Pro
  */
 #define COVOX_VOL	0x42
 #define TREBLE_LVL	0x44

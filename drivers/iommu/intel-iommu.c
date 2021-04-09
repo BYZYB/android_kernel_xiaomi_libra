@@ -2159,7 +2159,7 @@ static int iommu_prepare_identity_map(struct pci_dev *pdev,
 	printk(KERN_INFO
 	       "IOMMU: Setting identity map for device %s [0x%Lx - 0x%Lx]\n",
 	       pci_name(pdev), start, end);
-	
+
 	if (end < start) {
 		WARN(1, "Your BIOS is broken; RMRR ends before it starts!\n"
 			"BIOS vendor: %s; Ver: %s; Product Version: %s\n",
@@ -2383,7 +2383,7 @@ static int iommu_should_identity_map(struct pci_dev *pdev, int startup)
 	 * Practically speaking, we can't change things around for these
 	 * devices at run-time, because we can't be sure there'll be no
 	 * DMA transactions in flight for any of their siblings.
-	 * 
+	 *
 	 * So PCI devices (unless they're on the root bus) as well as
 	 * their parent PCI-PCI or PCIe-PCI bridges must be left _out_ of
 	 * the 1:1 domain, just in _case_ one of their siblings turns out
@@ -2397,9 +2397,9 @@ static int iommu_should_identity_map(struct pci_dev *pdev, int startup)
 	} else if (pci_pcie_type(pdev) == PCI_EXP_TYPE_PCI_BRIDGE)
 		return 0;
 
-	/* 
+	/*
 	 * At boot time, we don't yet know if devices will be 64-bit capable.
-	 * Assume that they will -- if they turn out not to be, then we can 
+	 * Assume that they will -- if they turn out not to be, then we can
 	 * take them out of the 1:1 domain later.
 	 */
 	if (!startup) {
@@ -3364,7 +3364,7 @@ static int init_iommu_hw(void)
 				iommu_disable_protect_mem_regions(iommu);
 			continue;
 		}
-	
+
 		iommu_flush_write_buffer(iommu);
 
 		iommu_set_root_entry(iommu);
@@ -4364,7 +4364,7 @@ static void __init check_tylersburg_isoch(void)
 		iommu_identity_mapping |= IDENTMAP_AZALIA;
 		return;
 	}
-	
+
 	printk(KERN_WARNING "DMAR: Recommended TLB entries for ISOCH unit is 16; your BIOS set %d\n",
 	       vtisochctrl);
 }

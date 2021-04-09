@@ -72,7 +72,7 @@
 /*
  * All of the registers are allocated 32 bytes of address space, except
  * for the data register (read/write to/from the 5380 in pseudo-DMA mode)
- */ 
+ */
 #define T_CONTROL_REG_OFFSET	0x1c00	/* rw */
 #define T_CR_INT		0x10	/* Enable interrupts */
 #define T_CR_CT			0x02	/* Reset watchdog timer */

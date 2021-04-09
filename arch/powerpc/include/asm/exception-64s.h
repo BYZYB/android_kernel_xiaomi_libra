@@ -112,7 +112,7 @@
 #endif
 
 /*
- * PPR save/restore macros used in exceptions_64s.S  
+ * PPR save/restore macros used in exceptions_64s.S
  * Used for P7 or later processors
  */
 #define SAVE_PPR(area, ra, rb)						\
@@ -135,7 +135,7 @@ END_FTR_SECTION_NESTED(CPU_FTR_HAS_PPR,CPU_FTR_HAS_PPR,941)
 #define HMT_MEDIUM_PPR_DISCARD						\
 BEGIN_FTR_SECTION_NESTED(942)						\
 	HMT_MEDIUM;							\
-END_FTR_SECTION_NESTED(CPU_FTR_HAS_PPR,0,942)  /*non P7*/		
+END_FTR_SECTION_NESTED(CPU_FTR_HAS_PPR,0,942)  /*non P7*/
 
 /*
  * Get an SPR into a register if the CPU has the given feature

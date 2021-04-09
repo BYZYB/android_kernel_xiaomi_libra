@@ -6,8 +6,8 @@ Key to symbols
 S     (1 bit) : Start bit
 P     (1 bit) : Stop bit
 Rd/Wr (1 bit) : Read/Write bit. Rd equals 1, Wr equals 0.
-A, NA (1 bit) : Accept and reverse accept bit. 
-Addr  (7 bits): I2C 7 bit address. Note that this can be expanded as usual to 
+A, NA (1 bit) : Accept and reverse accept bit.
+Addr  (7 bits): I2C 7 bit address. Note that this can be expanded as usual to
                 get a 10 bit I2C address.
 Comm  (8 bits): Command byte, a data byte which often selects a register on
                 the device.
@@ -53,7 +53,7 @@ The following modifications to the I2C protocol can also be generated,
 with the exception of I2C_M_NOSTART these are usually only needed to
 work around device issues:
 
-  Flag I2C_M_NOSTART: 
+  Flag I2C_M_NOSTART:
     In a combined transaction, no 'S Addr Wr/Rd [A]' is generated at some
     point. For example, setting I2C_M_NOSTART on the second partial message
     generates something like:

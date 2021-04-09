@@ -122,7 +122,7 @@ static __inline__ void atomic_clear_mask(unsigned long mask, unsigned long *v)
 	                     "mov.l %0,er0\n\t"
 	                     "and.l %1,er0\n\t"
 	                     "mov.l er0,%0\n\t"
-	                     "ldc r1l,ccr" 
+	                     "ldc r1l,ccr"
                              : "=m" (*v) : "g" (~(mask)) :"er0","er1");
 }
 
@@ -133,7 +133,7 @@ static __inline__ void atomic_set_mask(unsigned long mask, unsigned long *v)
 	                     "mov.l %0,er0\n\t"
 	                     "or.l %1,er0\n\t"
 	                     "mov.l er0,%0\n\t"
-	                     "ldc r1l,ccr" 
+	                     "ldc r1l,ccr"
                              : "=m" (*v) : "g" (mask) :"er0","er1");
 }
 

@@ -5871,7 +5871,7 @@ returnFailure:
  * @param  limMsg - Lim Message structure object with the MimoPSparam in body
  * @return None
  */
-tSirRetStatus 
+tSirRetStatus
 limPostSMStateUpdate(tpAniSirGlobal pMac,
         tANI_U16 staIdx, tSirMacHTMIMOPowerSaveState state,
         tANI_U8 *pPeerStaMac, tANI_U8 sessionId)

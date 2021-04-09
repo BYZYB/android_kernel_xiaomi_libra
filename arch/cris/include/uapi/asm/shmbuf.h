@@ -1,7 +1,7 @@
 #ifndef _CRIS_SHMBUF_H
 #define _CRIS_SHMBUF_H
 
-/* 
+/*
  * The shmid64_ds structure for CRIS architecture (same as for i386)
  * Note extra padding because this structure is passed back and forth
  * between kernel and user space.

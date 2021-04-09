@@ -122,12 +122,12 @@ static int __init default_appraise_policy_setup(char *str)
 }
 __setup("ima_appraise_tcb", default_appraise_policy_setup);
 
-/* 
+/*
  * Although the IMA policy does not change, the LSM policy can be
  * reloaded, leaving the IMA LSM based rules referring to the old,
  * stale LSM policy.
  *
- * Update the IMA LSM based rules to reflect the reloaded LSM policy. 
+ * Update the IMA LSM based rules to reflect the reloaded LSM policy.
  * We assume the rules still exist; and BUG_ON() if they don't.
  */
 static void ima_lsm_update_rules(void)
@@ -216,7 +216,7 @@ retry:
 			retried = 1;
 			ima_lsm_update_rules();
 			goto retry;
-		} 
+		}
 		if (!rc)
 			return false;
 	}
@@ -304,7 +304,7 @@ void __init ima_init_policy(void)
 	measure_entries = ima_use_tcb ? ARRAY_SIZE(default_rules) : 0;
 	appraise_entries = ima_use_appraise_tcb ?
 			 ARRAY_SIZE(default_appraise_rules) : 0;
-	
+
 	for (i = 0; i < measure_entries + appraise_entries; i++) {
 		if (i < measure_entries)
 			list_add_tail(&default_rules[i].list,

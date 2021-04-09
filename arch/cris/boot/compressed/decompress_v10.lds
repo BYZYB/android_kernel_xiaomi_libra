@@ -1,7 +1,7 @@
 /* OUTPUT_FORMAT(elf32-us-cris) */
 OUTPUT_FORMAT(elf32-cris)
 
-MEMORY 
+MEMORY
 	{
 	dram : ORIGIN = 0x40700000,
 	       LENGTH = 0x00100000

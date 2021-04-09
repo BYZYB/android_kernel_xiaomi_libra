@@ -17,7 +17,7 @@ Non-USB-specific:
 
 0		URB submission went fine
 
--ENOMEM		no memory for allocation of internal structures	
+-ENOMEM		no memory for allocation of internal structures
 
 USB-specific:
 
@@ -95,12 +95,12 @@ Individual frame descriptor status fields may report more status codes.
 -EPROTO (*, **)		a) bitstuff error
 			b) no response packet received within the
 			   prescribed bus turn-around time
-			c) unknown USB error 
+			c) unknown USB error
 
 -EILSEQ (*, **)		a) CRC mismatch
 			b) no response packet received within the
 			   prescribed bus turn-around time
-			c) unknown USB error 
+			c) unknown USB error
 
 			Note that often the controller hardware does not
 			distinguish among cases a), b), and c), so a

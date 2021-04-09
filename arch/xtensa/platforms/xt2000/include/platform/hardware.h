@@ -17,7 +17,7 @@
 
 #include <variant/core.h>
 
-/* 
+/*
  * Memory configuration.
  */
 

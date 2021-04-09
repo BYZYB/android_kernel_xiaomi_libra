@@ -44,7 +44,7 @@ enum {
 	TCPF_CLOSE_WAIT	 = (1 << 8),
 	TCPF_LAST_ACK	 = (1 << 9),
 	TCPF_LISTEN	 = (1 << 10),
-	TCPF_CLOSING	 = (1 << 11) 
+	TCPF_CLOSING	 = (1 << 11)
 };
 
 #endif	/* _LINUX_TCP_STATES_H */

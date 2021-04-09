@@ -138,11 +138,11 @@ PCM Stuff
 =========
 
 snd_hda_build_pcms() gives the necessary information to create PCM
-streams.  When it's called, each codec belonging to the bus stores 
+streams.  When it's called, each codec belonging to the bus stores
 codec->num_pcms and codec->pcm_info fields.  The num_pcms indicates
 the number of elements in pcm_info array.  The card driver is supposed
 to traverse the codec linked list, read the pcm information in
-pcm_info array, and build pcm instances according to them. 
+pcm_info array, and build pcm instances according to them.
 
 The pcm_info array contains the following record:
 

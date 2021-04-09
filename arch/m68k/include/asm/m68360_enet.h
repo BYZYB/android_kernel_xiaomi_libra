@@ -86,9 +86,9 @@
 /*
  * ethernet specific parameters
  */
-#define CRC_WORD 4          /* Length in bytes of CRC */               
+#define CRC_WORD 4          /* Length in bytes of CRC */
 #define C_PRES   0xffffffff /* preform 32 bit CRC */
-#define C_MASK   0xdebb20e3 /* comply with 32 bit CRC */       
+#define C_MASK   0xdebb20e3 /* comply with 32 bit CRC */
 #define CRCEC    0x00000000
 #define ALEC     0x00000000
 #define DISFC    0x00000000
@@ -98,18 +98,18 @@
 #define MINFLR   0x0040     /* Minimum frame size 64 */
 #define MAXD1    0x05ee     /* Max dma count 1518 */
 #define MAXD2    0x05ee
-#define GADDR1   0x00000000 /* Clear group address */  
+#define GADDR1   0x00000000 /* Clear group address */
 #define GADDR2   0x00000000
-#define GADDR3   0x00000000    
-#define GADDR4   0x00000000    
-#define P_PER    0x00000000 /*not used */              
-#define IADDR1   0x00000000 /* Individual hash table not used */       
+#define GADDR3   0x00000000
+#define GADDR4   0x00000000
+#define P_PER    0x00000000 /*not used */
+#define IADDR1   0x00000000 /* Individual hash table not used */
 #define IADDR2   0x00000000
-#define IADDR3   0x00000000    
-#define IADDR4   0x00000000            
-#define TADDR_H  0x00000000 /* clear this regs */              
-#define TADDR_M  0x00000000            
-#define TADDR_L  0x00000000            
+#define IADDR3   0x00000000
+#define IADDR4   0x00000000
+#define TADDR_H  0x00000000 /* clear this regs */
+#define TADDR_M  0x00000000
+#define TADDR_L  0x00000000
 
 /*       SCC Parameter Ram */
 #define RFCR    0x18 /* normal operation */

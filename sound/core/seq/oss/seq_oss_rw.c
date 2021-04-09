@@ -190,12 +190,12 @@ insert_queue(struct seq_oss_devinfo *dp, union evrec *rec, struct file *opt)
 	}
 	return rc;
 }
-		
+
 
 /*
  * select / poll
  */
-  
+
 unsigned int
 snd_seq_oss_poll(struct seq_oss_devinfo *dp, struct file *file, poll_table * wait)
 {

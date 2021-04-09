@@ -126,7 +126,7 @@
 
 
 /* serial interface */
-#define RS232		1 
+#define RS232		1
 #define RS422PTP	2
 #define RS422MD		3
 #define RS485NE		4
@@ -134,21 +134,21 @@
 
 #define serial_inp(up, offset)      serial_in(up, offset)
 #define serial_outp(up, offset, value)  serial_out(up, offset, value)
-	
+
 #define PASS_LIMIT  256
 #define is_real_interrupt(irq)  ((irq) != 0)
 
 #define PROBE_ANY   (~0)
 
 static DEFINE_MUTEX(mp_mutex);
-#define MP_MUTEX_LOCK(x) mutex_lock(&(x)) 
-#define MP_MUTEX_UNLOCK(x) mutex_unlock(&(x)) 
-#define MP_STATE_LOCK(x) mutex_lock(&((x)->mutex)) 
-#define MP_STATE_UNLOCK(x) mutex_unlock(&((x)->mutex)) 
-        
+#define MP_MUTEX_LOCK(x) mutex_lock(&(x))
+#define MP_MUTEX_UNLOCK(x) mutex_unlock(&(x))
+#define MP_STATE_LOCK(x) mutex_lock(&((x)->mutex))
+#define MP_STATE_UNLOCK(x) mutex_unlock(&((x)->mutex))
+
 
 #define UART_LSR_SPECIAL    0x1E
-        
+
 #define HIGH_BITS_OFFSET        ((sizeof(long)-sizeof(int))*8)
 #define uart_users(state)       ((state)->count + ((state)->info ? (state)->info->blocked_open : 0))
 

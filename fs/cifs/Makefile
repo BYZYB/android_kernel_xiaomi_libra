@@ -1,5 +1,5 @@
 #
-# Makefile for Linux CIFS VFS client 
+# Makefile for Linux CIFS VFS client
 #
 obj-$(CONFIG_CIFS) += cifs.o
 

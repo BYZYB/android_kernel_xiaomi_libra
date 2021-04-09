@@ -2315,7 +2315,7 @@ static ssize_t sony_nc_lid_resume_show(struct device *dev,
 		pos = 0;
 	else
 		return -EINVAL;
-	       
+
 	return snprintf(buffer, PAGE_SIZE, "%d\n",
 			(lid_ctl->status >> pos) & 0x01);
 }

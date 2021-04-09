@@ -36,11 +36,11 @@
 	(_r)->r1 = 0;  (_r)->r0 = 0;  (_r)->mof = 0; (_r)->srp = 0; \
 } while (0)
 
-/* The additional layer below is because the stack pointer is missing in 
+/* The additional layer below is because the stack pointer is missing in
    the pt_regs struct, but needed in a core dump. pr_reg is a elf_gregset_t,
    and should be filled in according to the layout of the user_regs_struct
    struct; regs is a pt_regs struct. We dump all registers, though several are
-   obviously unnecessary. That way there's less need for intelligence at 
+   obviously unnecessary. That way there's less need for intelligence at
    the receiving end (i.e. gdb). */
 #define ELF_CORE_COPY_REGS(pr_reg, regs)                   \
 	pr_reg[0] = regs->r0;                              \

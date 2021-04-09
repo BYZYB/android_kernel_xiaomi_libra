@@ -141,7 +141,7 @@ unsigned long __init bootmem_init(unsigned long *pages_avail)
 	}
 
 	/* Start with page aligned address of last symbol in kernel
-	 * image.  
+	 * image.
 	 */
 	start_pfn  = (unsigned long)__pa(PAGE_ALIGN((unsigned long) &_end));
 
@@ -181,7 +181,7 @@ unsigned long __init bootmem_init(unsigned long *pages_avail)
 				bootmap_pfn = PAGE_ALIGN (initrd_end) >> PAGE_SHIFT;
 		}
 	}
-#endif	
+#endif
 	/* Initialize the boot-time allocator. */
 	bootmap_size = init_bootmem_node(NODE_DATA(0), bootmap_pfn, pfn_base,
 					 max_low_pfn);
@@ -222,7 +222,7 @@ unsigned long __init bootmem_init(unsigned long *pages_avail)
 		*pages_avail -= PAGE_ALIGN(size) >> PAGE_SHIFT;
 
 		initrd_start = (initrd_start - phys_base) + PAGE_OFFSET;
-		initrd_end = (initrd_end - phys_base) + PAGE_OFFSET;		
+		initrd_end = (initrd_end - phys_base) + PAGE_OFFSET;
 	}
 #endif
 	/* Reserve the kernel text/data/bss. */
@@ -290,7 +290,7 @@ void __init mem_init(void)
 {
 	int codepages = 0;
 	int datapages = 0;
-	int initpages = 0; 
+	int initpages = 0;
 	int reservedpages = 0;
 	int i;
 
@@ -339,7 +339,7 @@ void __init mem_init(void)
 
 		map_high_region(start_pfn, end_pfn);
 	}
-	
+
 	codepages = (((unsigned long) &_etext) - ((unsigned long)&_start));
 	codepages = PAGE_ALIGN(codepages) >> PAGE_SHIFT;
 	datapages = (((unsigned long) &_edata) - ((unsigned long)&_etext));
@@ -358,7 +358,7 @@ void __init mem_init(void)
 	       num_physpages << (PAGE_SHIFT - 10),
 	       codepages << (PAGE_SHIFT-10),
 	       reservedpages << (PAGE_SHIFT - 10),
-	       datapages << (PAGE_SHIFT-10), 
+	       datapages << (PAGE_SHIFT-10),
 	       initpages << (PAGE_SHIFT-10),
 	       totalhigh_pages << (PAGE_SHIFT-10));
 }

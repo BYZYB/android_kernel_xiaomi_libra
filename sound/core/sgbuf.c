@@ -58,7 +58,7 @@ int snd_free_sgbuf_pages(struct snd_dma_buffer *dmab)
 	kfree(sgbuf->page_table);
 	kfree(sgbuf);
 	dmab->private_data = NULL;
-	
+
 	return 0;
 }
 

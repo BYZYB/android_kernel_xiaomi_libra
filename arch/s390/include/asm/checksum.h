@@ -5,7 +5,7 @@
  *    Copyright IBM Corp. 1999
  *    Author(s): Ulrich Hild        (first version)
  *               Martin Schwidefsky (heavily optimized CKSM version)
- *               D.J. Barrow        (third attempt) 
+ *               D.J. Barrow        (third attempt)
  */
 
 #ifndef _S390_CHECKSUM_H
@@ -59,7 +59,7 @@ csum_partial_copy_from_user(const void __user *src, void *dst,
 		memset(dst + len - missing, 0, missing);
 		*err_ptr = -EFAULT;
 	}
-		
+
 	return csum_partial(dst, len, sum);
 }
 

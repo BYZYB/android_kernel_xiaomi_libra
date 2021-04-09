@@ -360,7 +360,7 @@ static VOID PruneQueue(struct bcm_mini_adapter *Adapter, INT iIndex)
 		if(PacketToDrop)
 		{
 			if (netif_msg_tx_err(Adapter))
-				pr_info(PFX "%s: tx queue %d overlimit\n", 
+				pr_info(PFX "%s: tx queue %d overlimit\n",
 					Adapter->dev->name, iIndex);
 
 			netstats->tx_dropped++;

@@ -13,8 +13,8 @@
  * 2. The name of the author may not be used to endorse or promote products
  *    derived from this software without specific prior written permission.
  *
- * Where this Software is combined with software released under the terms of 
- * the GNU General Public License (GPL) and the terms of the GPL would require the 
+ * Where this Software is combined with software released under the terms of
+ * the GNU General Public License (GPL) and the terms of the GPL would require the
  * combined work to also be released under the terms of the GPL, the terms
  * and conditions of this License will apply in addition to those of the
  * GPL with the exception of any terms or conditions of this License that
@@ -47,9 +47,9 @@
  * on just in case the reselection wins so that we can retry the selection at
  * a later time.  This problem cannot be resolved by holding a single entry
  * in scratch ram since a reconnecting target can request sense and this will
- * create yet another SCB waiting for selection.  The solution used here is to 
+ * create yet another SCB waiting for selection.  The solution used here is to
  * use byte 27 of the SCB as a pseudo-next pointer and to thread a list
- * of SCBs that are awaiting selection.  Since 0-0xfe are valid SCB indexes, 
+ * of SCBs that are awaiting selection.  Since 0-0xfe are valid SCB indexes,
  * SCB_LIST_NULL is 0xff which is out of range.  An entry is also added to
  * this list every time a request sense occurs or after completing a non-tagged
  * command for which a second SCB has been queued.  The sequencer will
@@ -107,7 +107,7 @@ test_queue:
 	}
 
 /*
- * We have at least one queued SCB now and we don't have any 
+ * We have at least one queued SCB now and we don't have any
  * SCBs in the list of SCBs awaiting selection.  If we have
  * any SCBs available for use, pull the tag from the QINFIFO
  * and get to work on it.
@@ -206,7 +206,7 @@ ultra_2:
 		mov     A,FUNCTION1;
 		test	SINDIR, A	jz ndx_dtr;
 		or	SXFRCTL0, FAST20;
-	} 
+	}
 /*
  * Initialize SCSIRATE with the appropriate value for this target.
  * The SCSIRATE settings for each target are stored in an array
@@ -216,7 +216,7 @@ ndx_dtr:
 	shr	A,4,SAVED_TCL;
 	if ((p->features & AHC_TWIN) != 0) {
 		test	SBLKCTL,SELBUSB	jz ndx_dtr_2;
-		or	SAVED_TCL, SELBUSB; 
+		or	SAVED_TCL, SELBUSB;
 		or	A,0x08;			/* Channel B entries add 8 */
 ndx_dtr_2:
 	}
@@ -308,7 +308,7 @@ await_busfree:
 	test	SSTAT1,REQINIT|BUSFREE	jz .;
 	test	SSTAT1, BUSFREE jnz poll_for_work;
 	mvi	INTSTAT, BAD_PHASE;
-	
+
 clear_target_state:
 	/*
 	 * We assume that the kernel driver may reset us
@@ -423,7 +423,7 @@ data_phase_inbounds:
 		and	DMAPARAMS, ~WIDEODD;
 	}
 data_phase_wideodd:
-	if ((p->features & AHC_ULTRA2) != 0) {	
+	if ((p->features & AHC_ULTRA2) != 0) {
 		mov	SG_CACHEPTR, A;
 		mov	DFCNTRL, DMAPARAMS; /* start the operation */
 		test	SXFRCTL1, BITBUCKET jnz data_phase_overrun;
@@ -440,7 +440,7 @@ data_phase_dma_done:
 		test	SINDEX,0xff	jz data_phase_finish;
 	}
 /*
- * Advance the scatter-gather pointers 
+ * Advance the scatter-gather pointers
  */
 sg_advance:
 	if ((p->features & AHC_ULTRA2) != 0) {
@@ -552,7 +552,7 @@ u2_phasemis_loop:
 data_phase_finish:
 /*
  * After a DMA finishes, save the SG and STCNT residuals back into the SCB
- * We use STCNT instead of HCNT, since it's a reflection of how many bytes 
+ * We use STCNT instead of HCNT, since it's a reflection of how many bytes
  * were transferred on the SCSI (as opposed to the host) bus.
  */
 	if ((p->features & AHC_CMD_CHAN) != 0) {
@@ -691,7 +691,7 @@ p_status:
  * sequence and send it to the target.  In addition, if the MK_MESSAGE bit
  * is set in the SCB_CONTROL byte, interrupt the host and allow it to send
  * it's own message.
- * 
+ *
  * If MSG_OUT is == HOST_MSG, also interrupt the host and take a message.
  * This is done to allow the hsot to send messages outside of an identify
  * sequence while protecting the seqencer from testing the MK_MESSAGE bit
@@ -805,7 +805,7 @@ mesgin_complete:
  * and trigger a completion interrupt.  Before doing so, check to see if there
  * is a residual or the status byte is something other than STATUS_GOOD (0).
  * In either of these conditions, we upload the SCB back to the host so it can
- * process this information.  In the case of a non zero status byte, we 
+ * process this information.  In the case of a non zero status byte, we
  * additionally interrupt the kernel driver synchronously, allowing it to
  * decide if sense should be retrieved.  If the kernel driver wishes to request
  * sense, it will fill the kernel SCB with a request sense command and set
@@ -936,7 +936,7 @@ mesgin_rdptrs:
  * clearing the "disconnected" bit so we don't "find" it by accident later.
  */
 mesgin_identify:
-	
+
 	if ((p->features & AHC_WIDE) != 0) {
 		and	A,0x0f;		/* lun in lower four bits */
 	} else {
@@ -1000,9 +1000,9 @@ not_found:
 	jmp	mesgin_done;
 
 /*
- * Message reject?  Let the kernel driver handle this.  If we have an 
- * outstanding WDTR or SDTR negotiation, assume that it's a response from 
- * the target selecting 8bit or asynchronous transfer, otherwise just ignore 
+ * Message reject?  Let the kernel driver handle this.  If we have an
+ * outstanding WDTR or SDTR negotiation, assume that it's a response from
+ * the target selecting 8bit or asynchronous transfer, otherwise just ignore
  * it since we have no clue what it pertains to.
  */
 mesgin_reject:
@@ -1025,7 +1025,7 @@ mesgin_wide_residue:
  */
  	mvi	INTSTAT, WIDE_RESIDUE;
 	jmp	mesgin_done;
-	
+
 /*
  * [ ADD MORE MESSAGE HANDLING HERE ]
  */
@@ -1072,7 +1072,7 @@ inb_first:
 inb_last:
 	mov	NONE,SCSIDATL ret;		/*dummy read from latch to ACK*/
 
-	
+
 mesgin_phasemis:
 /*
  * We expected to receive another byte, but the target changed phase
@@ -1113,7 +1113,7 @@ dma_fifoempty:
 	/* Don't clobber an inprogress host data transfer */
 	test	DFSTATUS, MREQPEND	jnz dma_fifoempty;
 /*
- * Now shut the DMA enables off and make sure that the DMA enables are 
+ * Now shut the DMA enables off and make sure that the DMA enables are
  * actually off first lest we get an ILLSADDR.
  */
 dma_dmadone:
@@ -1127,7 +1127,7 @@ dma_shutdown:
 dma_halt:
 	/*
 	 * Some revisions of the aic7880 have a problem where, if the
-	 * data fifo is full, but the PCI input latch is not empty, 
+	 * data fifo is full, but the PCI input latch is not empty,
 	 * HDMAEN cannot be cleared.  The fix used here is to attempt
 	 * to drain the data fifo until there is space for the input
 	 * latch to drain and HDMAEN de-asserts.
@@ -1294,7 +1294,7 @@ get_SCBID_from_host:
 	mvi	UNTAGGEDSCB_OFFSET call fetch_byte;
 	mov	RETURN_1,  RETURN_2 ret;
 
-phase_lock:     
+phase_lock:
 	test	SSTAT1, REQINIT jz phase_lock;
 	test	SSTAT1, SCSIPERR jnz phase_lock;
 	and	SCSISIGO, PHASE_MASK, SCSISIGI;

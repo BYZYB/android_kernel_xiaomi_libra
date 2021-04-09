@@ -53,10 +53,10 @@ typedef struct file_private_info {
 typedef struct
 {
 	char *string;
-	/* 
-	 * This assumes that all args are converted into longs 
-	 * on L/390 this is the case for all types of parameter 
-	 * except of floats, and long long (32 bit) 
+	/*
+	 * This assumes that all args are converted into longs
+	 * on L/390 this is the case for all types of parameter
+	 * except of floats, and long long (32 bit)
 	 *
 	 */
 	long args[0];
@@ -339,7 +339,7 @@ debug_info_create(const char *name, int pages_per_area, int nr_areas,
 
         rc = debug_info_alloc(name, pages_per_area, nr_areas, buf_size,
 				DEBUG_DEFAULT_LEVEL, ALL_AREAS);
-        if(!rc) 
+        if(!rc)
 		goto out;
 
 	rc->mode = mode & ~S_IFMT;
@@ -470,7 +470,7 @@ debug_format_entry(file_private_info_t *p_info)
 		goto out;    /* or if 'pages_per_area' is 0 */
 	act_entry = (debug_entry_t *) ((char*)id_snap->areas[p_info->act_area]
 				[p_info->act_page] + p_info->act_entry);
-                        
+
 	if (act_entry->id.stck == 0LL)
 			goto out;  /* empty entry */
 	if (view->header_proc)
@@ -516,7 +516,7 @@ debug_next_entry(file_private_info_t *p_info)
 			return 1;
 	}
 out:
-	return 0;	
+	return 0;
 }
 
 /*
@@ -536,7 +536,7 @@ debug_output(struct file *file,		/* file descriptor */
 	file_private_info_t *p_info;
 
 	p_info = ((file_private_info_t *) file->private_data);
-	if (*offset != p_info->offset) 
+	if (*offset != p_info->offset)
 		return -EPIPE;
 	if(p_info->act_area >= p_info->debug_info_snap->nr_areas)
 		return 0;
@@ -707,7 +707,7 @@ debug_info_t *debug_register_mode(const char *name, int pages_per_area,
         /* create new debug_info */
 
 	rc = debug_info_create(name, pages_per_area, nr_areas, buf_size, mode);
-	if(!rc) 
+	if(!rc)
 		goto out;
 	debug_register_view(rc, &debug_level_view);
         debug_register_view(rc, &debug_flush_view);
@@ -802,7 +802,7 @@ debug_set_level(debug_info_t* id, int new_level)
 {
 	unsigned long flags;
 	if(!id)
-		return;	
+		return;
 	spin_lock_irqsave(&id->lock,flags);
         if(new_level == DEBUG_OFF_LEVEL){
                 id->level = DEBUG_OFF_LEVEL;
@@ -1329,7 +1329,7 @@ out:
 /*
  * flushes debug areas
  */
- 
+
 static void debug_flush(debug_info_t* id, int area)
 {
         unsigned long flags;
@@ -1358,7 +1358,7 @@ static void debug_flush(debug_info_t* id, int area)
 }
 
 /*
- * view function: flushes debug areas 
+ * view function: flushes debug areas
  */
 
 static int
@@ -1379,7 +1379,7 @@ debug_input_flush_fn(debug_info_t * id, struct debug_view *view,
                 rc = -EFAULT;
                 goto out;
         }
-        if(input_buf[0] == '-') { 
+        if(input_buf[0] == '-') {
                 debug_flush(id, DEBUG_FLUSH_ALL);
                 goto out;
         }
@@ -1497,7 +1497,7 @@ debug_sprintf_format_fn(debug_info_t * id, struct debug_view *view,
 	int index[DEBUG_SPRINTF_MAX_ARGS];
 
 	/* count of longs fit into one entry */
-	num_longs = id->buf_size /  sizeof(long); 
+	num_longs = id->buf_size /  sizeof(long);
 
 	if(num_longs < 1)
 		goto out; /* bufsize of entry too small */

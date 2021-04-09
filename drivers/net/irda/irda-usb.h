@@ -3,7 +3,7 @@
  * Filename:      irda-usb.h
  * Version:       0.10
  * Description:   IrDA-USB Driver
- * Status:        Experimental 
+ * Status:        Experimental
  * Author:        Dag Brattli <dag@brattli.net>
  *
  *	Copyright (C) 2001, Roman Weissgaerber <weissg@vienna.at>
@@ -12,7 +12,7 @@
  *      Copyright (C) 2004, SigmaTel, Inc. <irquality@sigmatel.com>
  *      Copyright (C) 2005, Milan Beno <beno@pobox.sk>
  *      Copyright (C) 2006, Nick FEdchik <nick@fedchik.org.ua>
- *          
+ *
  *	This program is free software; you can redistribute it and/or modify
  *	it under the terms of the GNU General Public License as published by
  *	the Free Software Foundation; either version 2 of the License, or
@@ -68,7 +68,7 @@
 /* Send speed command in case of timeout, just for trying to get things sane */
 #define IU_BUG_KICK_TIMEOUT
 /* Show the USB class descriptor */
-#undef IU_DUMP_CLASS_DESC 
+#undef IU_DUMP_CLASS_DESC
 /* Assume a minimum round trip latency for USB transfer (in us)...
  * USB transfer are done in the next USB slot if there is no traffic
  * (1/19 msec) and is done at 12 Mb/s :
@@ -150,7 +150,7 @@ struct irda_usb_cb {
 	struct urb *idle_rx_urb;	/* Pointer to idle URB in Rx path */
 	struct urb *tx_urb;		/* URB used to send data frames */
 	struct urb *speed_urb;		/* URB used to send speed commands */
-	
+
 	struct net_device *netdev;	/* Yes! we are some kind of netdev. */
 	struct irlap_cb   *irlap;	/* The link layer we are binded to */
 	struct qos_info qos;

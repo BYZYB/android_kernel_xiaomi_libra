@@ -20,7 +20,7 @@
  *   along with this program; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  *
- */      
+ */
 
 #include <linux/delay.h>
 #include <linux/interrupt.h>
@@ -69,7 +69,7 @@ struct se_spec {
  *  WM8740
  *      A 2ch-DAC of main outputs.
  *      It setuped as I2S mode by wire, so no way to setup from software.
- *      The sample-rate are automatically changed. 
+ *      The sample-rate are automatically changed.
  *          ML/I2S (28pin) --------+
  *          MC/DM1 (27pin) -- 5V   |
  *          MD/DM0 (26pin) -- GND  |

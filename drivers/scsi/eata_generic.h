@@ -21,9 +21,9 @@
 #define R_LIMIT 0x20000
 
 #define MAXISA	   4
-#define MAXEISA	  16  
+#define MAXEISA	  16
 #define MAXPCI	  16
-#define MAXIRQ	  16 
+#define MAXIRQ	  16
 #define MAXTARGET 16
 #define MAXCHANNEL 3
 
@@ -49,18 +49,18 @@
 #define NEC_ID2         0xa3
 #define NEC_ID3         0x82
 
- 
+
 #define EATA_CP_SIZE	 44
 
 #define MAX_PCI_DEVICES  32	       /* Maximum # Of Devices Per Bus	 */
 #define MAX_METHOD_2	 16	       /* Max Devices For Method 2	 */
 #define MAX_PCI_BUS	 16	       /* Maximum # Of Busses Allowed	 */
 
-#define SG_SIZE		 64 
+#define SG_SIZE		 64
 #define SG_SIZE_BIG	 252	       /* max. 8096 elements, 64k */
 
-#define UPPER_DEVICE_QUEUE_LIMIT 64    /* The limit we have to set for the 
-					* device queue to keep the broken 
+#define UPPER_DEVICE_QUEUE_LIMIT 64    /* The limit we have to set for the
+					* device queue to keep the broken
 					* midlevel SCSI code from producing
 					* bogus timeouts
 					*/
@@ -90,11 +90,11 @@
 /***********************************************
  *    EATA Command & Register definitions      *
  ***********************************************/
-#define PCI_REG_DPTconfig	 0x40	 
-#define PCI_REG_PumpModeAddress	 0x44	 
-#define PCI_REG_PumpModeData	 0x48	 
-#define PCI_REG_ConfigParam1	 0x50	 
-#define PCI_REG_ConfigParam2	 0x54	 
+#define PCI_REG_DPTconfig	 0x40
+#define PCI_REG_PumpModeAddress	 0x44
+#define PCI_REG_PumpModeData	 0x48
+#define PCI_REG_ConfigParam1	 0x50
+#define PCI_REG_ConfigParam2	 0x54
 
 
 #define EATA_CMD_PIO_SETUPTEST	 0xc6
@@ -113,7 +113,7 @@
 
 #define ECS_EMULATE_SENSE	 0xd4
 
-#define EATA_GENERIC_ABORT       0x00 
+#define EATA_GENERIC_ABORT       0x00
 #define EATA_SPECIFIC_RESET      0x01
 #define EATA_BUS_RESET           0x02
 #define EATA_SPECIFIC_ABORT      0x03
@@ -124,14 +124,14 @@
 #define HA_CTRLREG     0x206       /* control register for HBA    */
 #define HA_CTRL_DISINT 0x02        /* CTRLREG: disable interrupts */
 #define HA_CTRL_RESCPU 0x04        /* CTRLREG: reset processor    */
-#define HA_CTRL_8HEADS 0x08        /* CTRLREG: set for drives with* 
+#define HA_CTRL_8HEADS 0x08        /* CTRLREG: set for drives with*
 				    * >=8 heads (WD1003 rudimentary :-) */
 
 #define HA_WCOMMAND    0x07	   /* command register offset	*/
 #define HA_WIFC        0x06	   /* immediate command offset  */
-#define HA_WCODE       0x05 
-#define HA_WCODE2      0x04 
-#define HA_WDMAADDR    0x02	   /* DMA address LSB offset	*/  
+#define HA_WCODE       0x05
+#define HA_WCODE2      0x04
+#define HA_WDMAADDR    0x02	   /* DMA address LSB offset	*/
 #define HA_RAUXSTAT    0x08	   /* aux status register offset*/
 #define HA_RSTATUS     0x07	   /* status register offset	*/
 #define HA_RDATA       0x00	   /* data register (16bit)	*/
@@ -147,7 +147,7 @@
 #define HA_SFAULT      0x20	   /* write fault		*/
 #define HA_SREADY      0x40	   /* drive ready		*/
 #define HA_SBUSY       0x80	   /* drive busy		*/
-#define HA_SDRDY       HA_SSC+HA_SREADY+HA_SDRQ 
+#define HA_SDRDY       HA_SSC+HA_SREADY+HA_SDRQ
 
 /**********************************************
  * Message definitions			      *
@@ -184,7 +184,7 @@ struct reg_bit {      /* reading this one will clear the interrupt    */
     __u8 error:1;     /* previous command ended in an error	      */
     __u8 more:1;      /* more DATA coming soon, poll BSY & DRQ (PIO)  */
     __u8 corr:1;      /* data read was successfully corrected with ECC*/
-    __u8 drq:1;	      /* data request active  */     
+    __u8 drq:1;	      /* data request active  */
     __u8 sc:1;	      /* seek complete	      */
     __u8 fault:1;     /* write fault	      */
     __u8 ready:1;     /* drive ready	      */
@@ -200,11 +200,11 @@ struct reg_abit {     /* reading this won't clear the interrupt */
 struct eata_register {	    /* EATA register set */
     __u8 data_reg[2];	    /* R, couldn't figure this one out		*/
     __u8 cp_addr[4];	    /* W, CP address register			*/
-    union { 
+    union {
 	__u8 command;	    /* W, command code: [read|set] conf, send CP*/
 	struct reg_bit status;	/* R, see register_bit1			*/
 	__u8 statusbyte;
-    } ovr;   
+    } ovr;
     struct reg_abit aux_stat; /* R, see register_bit2			*/
 };
 
@@ -229,7 +229,7 @@ struct get_conf {	      /* Read Configuration Array		*/
     __u8 scsi_id[4];	      /* SCSI ID of controller 2-0 Byte 0 res.	*
 			       * if not, zero is returned		*/
     __u32  cplen;	      /* CP length: number of valid cp bytes	*/
-    __u32  splen;	      /* Number of bytes returned after		* 
+    __u32  splen;	      /* Number of bytes returned after		*
 			       * Receive SP command			*/
     __u16 queuesiz;	      /* max number of queueable CPs		*/
     __u16 dummy;
@@ -255,7 +255,7 @@ struct get_conf {	      /* Read Configuration Array		*/
 	  is_PCI:1,	      /* HBA is PCI				*/
 	 is_EISA:1;	      /* HBA is EISA				*/
     __u8 RAIDNUM;             /* unique HBA identifier                  */
-    __u8 unused[474]; 
+    __u8 unused[474];
 };
 
 struct eata_sg_list
@@ -265,7 +265,7 @@ struct eata_sg_list
 };
 
 struct eata_ccb {	      /* Send Command Packet structure	    */
- 
+
     __u8 SCSI_Reset:1,	      /* Cause a SCSI Bus reset on the cmd	*/
 	   HBA_Init:1,	      /* Cause Controller to reinitialize	*/
        Auto_Req_Sen:1,	      /* Do Auto Request Sense on errors	*/
@@ -274,7 +274,7 @@ struct eata_ccb {	      /* Send Command Packet structure	    */
 	  Interpret:1,	      /* Interpret the SCSI cdb of own use	*/
 	    DataOut:1,	      /* Data Out phase with command		*/
 	     DataIn:1;	      /* Data In phase with command		*/
-    __u8 reqlen;	      /* Request Sense Length			* 
+    __u8 reqlen;	      /* Request Sense Length			*
 			       * Valid if Auto_Req_Sen=1		*/
     __u8 unused[3];
     __u8  FWNEST:1,	      /* send cmd to phys RAID component	*/
@@ -284,7 +284,7 @@ struct eata_ccb {	      /* Send Command Packet structure	    */
 	 I_HBA_C:1,	      /* HBA inhibit caching			*/
 	 unused3:5;
 
-    __u8     cp_id:5,	      /* SCSI Device ID of target		*/ 
+    __u8     cp_id:5,	      /* SCSI Device ID of target		*/
 	cp_channel:3;	      /* SCSI Channel # of HBA			*/
     __u8    cp_lun:3,
 		  :2,
@@ -300,7 +300,7 @@ struct eata_ccb {	      /* Send Command Packet structure	    */
     void *cp_viraddr;	      /* address of this ccb			*/
     __u32 cp_dataDMA;	      /* Data Address, if scatter=1		*
 			       * address of scatter packet		*/
-    __u32 cp_statDMA;	      /* address for Status Packet		*/ 
+    __u32 cp_statDMA;	      /* address for Status Packet		*/
     __u32 cp_reqDMA;	      /* Request Sense Address, used if		*
 			       * CP command ends with error		*/
     /* Additional CP info begins here */
@@ -346,7 +346,7 @@ typedef struct hstd {
     __u32  reads_lat[12][4];
     __u32  writes_lat[12][4];
     __u32  all_lat[4];
-    __u8   resetlevel[MAXCHANNEL]; 
+    __u8   resetlevel[MAXCHANNEL];
     __u32  last_ccb;		 /* Last used ccb	       */
     __u32  cplen;		 /* size of CP in words	       */
     __u16  cppadlen;		 /* pad length of cp in words  */
@@ -355,10 +355,10 @@ typedef struct hstd {
     __u16  devflags;		 /* bits set for detected devices */
     __u8   hostid;		 /* SCSI ID of HBA	       */
     __u8   moresupport;		 /* HBA supports MORE flag     */
-    struct Scsi_Host *next;	    
+    struct Scsi_Host *next;
     struct Scsi_Host *prev;
     struct pci_dev *pdev;	/* PCI device or NULL for non PCI */
-    struct eata_sp sp;		 /* status packet	       */ 
+    struct eata_sp sp;		 /* status packet	       */
     struct eata_ccb ccb[0];	 /* ccb array begins here      */
 }hostdata;
 

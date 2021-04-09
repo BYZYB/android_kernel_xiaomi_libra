@@ -423,7 +423,7 @@ static __inline__ void li_writeb(lithium_t *lith, int off, unsigned char val)
 #define LI_AUDIO2_UST		0x308	/* counts samples actually */
 #define LI_AUDIO2_MSC		0x30C	/* processed as of time UST */
 
-/* 
+/*
  * Lithium's DMA engine operates on chunks of 32 bytes.  We call that
  * a DMACHUNK.
  */
@@ -662,7 +662,7 @@ static void li_shutdown_dma(dma_chan_t *chan)
 	void * lith1 = lith->page1;
 
 	DBGEV("(chan=0x%p)\n", chan);
-	
+
 	chan->ctlval &= ~LI_CCTL_DMA_ENABLE;
 	DBGPV("ctlreg 0x%x = 0x%lx\n", chan->desc->ctlreg, chan->ctlval);
 	li_writel(lith, chan->desc->ctlreg, chan->ctlval);
@@ -778,7 +778,7 @@ static void li_read_USTMSC(dma_chan_t *chan, ustmsc_t *ustmsc)
 
 			now_high1 = li_readl(lith, LI_UST_HIGH);
 		} while (now_high0 != now_high1);
-	}	
+	}
 	spin_unlock(&lith->lock);
 	ustmsc->ust = ((unsigned long long) now_high0 << 32 | chan_ust);
 }
@@ -1283,7 +1283,7 @@ static void ad1843_setup_dac(lithium_t *lith,
 	case 1:			ad_mode = 1; break;
 	default:		ASSERT(0);
 	}
-		
+
 	DBGPV("ad_mode = %d, ad_fmt = %d\n", ad_mode, ad_fmt);
 	ASSERT(framerate >= 4000 && framerate <= 49000);
 	ad1843_write_bits(lith, &ad1843_C1C, framerate);
@@ -1829,7 +1829,7 @@ static void pcm_shutdown_port(vwsnd_dev_t *devc,
 		spin_lock_irqsave(&aport->lock, flags);
 		{
 			hwstate = aport->hwstate;
-		}		
+		}
 		spin_unlock_irqrestore(&aport->lock, flags);
 		if (hwstate == HW_STOPPED)
 			break;
@@ -2444,7 +2444,7 @@ static int vwsnd_audio_do_ioctl(struct file *file,
 	unsigned long flags;
 	int ival;
 
-	
+
 	DBGEV("(file=0x%p, cmd=0x%x, arg=0x%lx)\n",
 	      file, cmd, arg);
 	switch (cmd) {
@@ -3270,7 +3270,7 @@ static int __init probe_vwsnd(struct address_info *hw_config)
 	do {
 		w = li_readl(&lith, LI_HOST_CONTROLLER);
 	} while (w == LI_HC_LINK_ENABLE && time_before(jiffies, later));
-	
+
 	li_destroy(&lith);
 
 	DBGPV("HC = 0x%04x\n", w);

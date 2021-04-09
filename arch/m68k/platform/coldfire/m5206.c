@@ -4,7 +4,7 @@
  *	linux/arch/m68knommu/platform/5206/config.c
  *
  *	Copyright (C) 1999-2002, Greg Ungerer (gerg@snapgear.com)
- * 	Copyright (C) 2000-2001, Lineo Inc. (www.lineo.com) 
+ * 	Copyright (C) 2000-2001, Lineo Inc. (www.lineo.com)
  */
 
 /***************************************************************************/

@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      iriap.h
  * Version:       0.5
  * Description:   Information Access Protocol (IAP)
@@ -8,17 +8,17 @@
  * Created at:    Thu Aug 21 00:02:07 1997
  * Modified at:   Sat Dec 25 16:42:09 1999
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
- * 
- *     Copyright (c) 1997-1999 Dag Brattli <dagb@cs.uit.no>, 
+ *
+ *     Copyright (c) 1997-1999 Dag Brattli <dagb@cs.uit.no>,
  *     All Rights Reserved.
- *     
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
  *
  *     Neither Dag Brattli nor University of Tromsø admit liability nor
- *     provide warranty for any of this software. This material is 
+ *     provide warranty for any of this software. This material is
  *     provided "AS-IS" and at no charge.
  *
  ********************************************************************/
@@ -53,11 +53,11 @@
 #define IAS_ATTRIB_UNKNOWN 2
 #define IAS_DISCONNECT     10
 
-typedef void (*CONFIRM_CALLBACK)(int result, __u16 obj_id, 
+typedef void (*CONFIRM_CALLBACK)(int result, __u16 obj_id,
 				 struct ias_value *value, void *priv);
 
 struct iriap_cb {
-	irda_queue_t q; /* Must be first */	
+	irda_queue_t q; /* Must be first */
 	magic_t magic;  /* Magic cookie */
 
 	int          mode;   /* Client or server */
@@ -73,28 +73,28 @@ struct iriap_cb {
 	/* Client states */
 	IRIAP_STATE client_state;
 	IRIAP_STATE call_state;
-	
+
 	/* Server states */
 	IRIAP_STATE server_state;
 	IRIAP_STATE r_connect_state;
-	
+
 	CONFIRM_CALLBACK confirm;
 	void *priv;                /* Used to identify client */
 
 	__u8 max_header_size;
 	__u32 max_data_size;
-	
+
 	struct timer_list watchdog_timer;
 };
 
 int  iriap_init(void);
 void iriap_cleanup(void);
 
-struct iriap_cb *iriap_open(__u8 slsap_sel, int mode, void *priv, 
+struct iriap_cb *iriap_open(__u8 slsap_sel, int mode, void *priv,
 			    CONFIRM_CALLBACK callback);
 void iriap_close(struct iriap_cb *self);
 
-int iriap_getvaluebyclass_request(struct iriap_cb *self, 
+int iriap_getvaluebyclass_request(struct iriap_cb *self,
 				  __u32 saddr, __u32 daddr,
 				  char *name, char *attr);
 void iriap_connect_request(struct iriap_cb *self);

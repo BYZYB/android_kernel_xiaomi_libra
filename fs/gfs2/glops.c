@@ -222,7 +222,7 @@ static void inode_go_sync(struct gfs2_glock *gl)
  * inode_go_inval - prepare a inode glock to be released
  * @gl: the glock
  * @flags:
- * 
+ *
  * Normally we invlidate everything, but if we are moving into
  * LM_ST_DEFERRED from LM_ST_SHARED or LM_ST_EXCLUSIVE then we
  * can keep hold of the metadata, since it won't have changed.

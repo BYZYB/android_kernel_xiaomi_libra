@@ -482,7 +482,7 @@ static int wm8960_add_widgets(struct snd_soc_codec *codec)
 		if (strcmp(w->name, "OUT3 VMID") == 0)
 			wm8960->out3 = w;
 	}
-	
+
 	return 0;
 }
 

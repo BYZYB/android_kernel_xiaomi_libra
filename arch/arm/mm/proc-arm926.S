@@ -440,7 +440,7 @@ __arm926_setup:
 #ifdef CONFIG_CPU_DCACHE_WRITETHROUGH
 	mov	r0, #4				@ disable write-back on caches explicitly
 	mcr	p15, 7, r0, c15, c0, 0
-#endif 
+#endif
 
 	adr	r5, arm926_crval
 	ldmia	r5, {r5, r6}
@@ -457,7 +457,7 @@ __arm926_setup:
 	 *  R
 	 * .RVI ZFRS BLDP WCAM
 	 * .011 0001 ..11 0101
-	 * 
+	 *
 	 */
 	.type	arm926_crval, #object
 arm926_crval:

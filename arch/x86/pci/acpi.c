@@ -335,7 +335,7 @@ setup_resource(struct acpi_resource *acpi_res, void *data)
 	} else if (orig_end != end) {
 		dev_info(&info->bridge->dev,
 			"host bridge window [%#llx-%#llx] "
-			"([%#llx-%#llx] ignored, not CPU addressable)\n", 
+			"([%#llx-%#llx] ignored, not CPU addressable)\n",
 			start, orig_end, end + 1, orig_end);
 	}
 

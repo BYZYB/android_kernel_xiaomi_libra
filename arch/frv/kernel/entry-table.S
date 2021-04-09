@@ -324,6 +324,6 @@ __trap_fixup_kernel_data_tlb_miss:
 	.rept		7
 	.long		__entry_atomic_op
 	.endr
-	
+
 	.org		TBR_TT_BREAK >> 2
 	.long		__entry_debug_exception

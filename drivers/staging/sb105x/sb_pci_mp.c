@@ -172,7 +172,7 @@ static int sb1053a_get_interface(struct mp_port *mtpt, int port_num)
 
 	return (interface);
 }
-		
+
 static int sb1054_get_register(struct sb_uart_port * port, int page, int reg)
 {
 	int ret = 0;
@@ -236,7 +236,7 @@ static int sb1054_get_register(struct sb_uart_port * port, int page, int reg)
 }
 
 static int sb1054_set_register(struct sb_uart_port * port, int page, int reg, int value)
-{  
+{
 	int lcr = 0;
 	int mcr = 0;
 	int ret = 0;
@@ -346,9 +346,9 @@ static void SendATCommand(struct mp_port * mtpt)
 	serial_outp(mtpt,UART_DLM,(Divisor & 0xff00)>>8); //baudrate is 4800
 
 
-	serial_outp(mtpt,UART_LCR,lineControl);	
+	serial_outp(mtpt,UART_LCR,lineControl);
 	serial_outp(mtpt,UART_LCR,0x03); // N-8-1
-	serial_outp(mtpt,UART_FCR,7); 
+	serial_outp(mtpt,UART_FCR,7);
 	serial_outp(mtpt,UART_MCR,0x3);
 	while(ch[i]){
 		while((serial_inp(mtpt,UART_LSR) & 0x60) !=0x60){
@@ -373,12 +373,12 @@ static int set_deep_fifo(struct sb_uart_port * port, int status)
 	{
 		afr_status &= ~SB105X_AFR_AFEN;
 	}
-		
+
 	sb1054_set_register(port,PAGE_4,SB105X_AFR,afr_status);
-	sb1054_set_register(port,PAGE_4,SB105X_TTR,ttr[port->line]); 
-	sb1054_set_register(port,PAGE_4,SB105X_RTR,rtr[port->line]); 
+	sb1054_set_register(port,PAGE_4,SB105X_TTR,ttr[port->line]);
+	sb1054_set_register(port,PAGE_4,SB105X_RTR,rtr[port->line]);
 	afr_status = sb1054_get_register(port, PAGE_4, SB105X_AFR);
-		
+
 	return afr_status;
 }
 
@@ -438,7 +438,7 @@ static int set_auto_rts(struct sb_uart_port *port, int status)
 	sb1054_set_register(port,PAGE_3,SB105X_EFR,efr_status);
 	efr_status = sb1054_get_register(port, PAGE_3, SB105X_EFR);
 #endif
-		
+
 //ATR
 	atr_status = sb1054_get_register(port, PAGE_3, SB105X_ATR);
 	switch(status)
@@ -534,7 +534,7 @@ static int mp_startup(struct sb_uart_state *state, int init_hw)
 			return -ENOMEM;
 
 		info->xmit.buf = (unsigned char *) page;
-			
+
 		uart_circ_clear(&info->xmit);
 	}
 
@@ -654,7 +654,7 @@ static int mp_write(struct tty_struct *tty, const unsigned char * buf, int count
 
 	if (!circ->buf)
 		return 0;
-		
+
 	while (1) {
 		c = CIRC_SPACE_TO_END(circ->head, circ->tail, UART_XMIT_SIZE);
 		if (count < c)
@@ -1164,7 +1164,7 @@ static int mp_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
 
 		case TIOCSENDADDR:
 			/* send address in multi-drop mode */
-			if ((info->port.type == PORT_16C105XA) 
+			if ((info->port.type == PORT_16C105XA)
 					&& (state->port->mdmode & (MDMODE_ENABLE)))
 			{
 				if (mp_chars_in_buffer(tty) > 0)
@@ -1219,11 +1219,11 @@ static int mp_ioctl(struct tty_struct *tty, unsigned int cmd, unsigned long arg)
 			ret = get_device_type(arg);;
 			return ret;
 		case TIOCSMULTIECHO: /* set to multi-drop mode(RS422) or echo mode(RS485)*/
-			outb( ( inb(info->interface_config_addr) & ~0x03 ) | 0x01 ,  
+			outb( ( inb(info->interface_config_addr) & ~0x03 ) | 0x01 ,
 					info->interface_config_addr);
 			return 0;
 		case TIOCSPTPNOECHO: /* set to multi-drop mode(RS422) or echo mode(RS485) */
-			outb( ( inb(info->interface_config_addr) & ~0x03 )  ,             
+			outb( ( inb(info->interface_config_addr) & ~0x03 )  ,
 					info->interface_config_addr);
 			return 0;
 	}
@@ -1365,7 +1365,7 @@ static void mp_close(struct tty_struct *tty, struct file *filp)
 	tty_ldisc_flush(tty);
 	tty->closing = 0;
 	state->info->tty = NULL;
-	if (state->info->blocked_open) 
+	if (state->info->blocked_open)
 	{
 		if (state->close_delay)
 		{
@@ -1761,7 +1761,7 @@ static int mp_register_driver(struct uart_driver *drv)
 	normal->major		= drv->major;
 	normal->minor_start	= drv->minor;
 
-	normal->num		= MAX_MP_PORT ; 
+	normal->num		= MAX_MP_PORT ;
 
 	normal->type		= TTY_DRIVER_TYPE_SERIAL;
 	normal->subtype		= SERIAL_TYPE_NORMAL;
@@ -1775,8 +1775,8 @@ static int mp_register_driver(struct uart_driver *drv)
 for (i = 0; i < drv->nr; i++) {
 	struct sb_uart_state *state = drv->state + i;
 
-	state->close_delay     = 500;   
-	state->closing_wait    = 30000; 
+	state->close_delay     = 500;
+	state->closing_wait    = 30000;
 
 	mutex_init(&state->mutex);
 	}
@@ -1929,7 +1929,7 @@ static void autoconfig(struct mp_port *mtpt, unsigned int probeflags)
 	DEBUG_AUTOCONF("iir=%d ", scratch);
 	if(mtpt->device->nr_ports >= 8)
 		b_ret = read_option_register(mtpt,(MP_OPTR_DIR0 + ((mtpt->port.line)/8)));
-	else	
+	else
 		b_ret = read_option_register(mtpt,MP_OPTR_DIR0);
 	u_type = (b_ret & 0xf0) >> 4;
 	if(mtpt->port.type == PORT_UNKNOWN )
@@ -1959,7 +1959,7 @@ static void autoconfig(struct mp_port *mtpt, unsigned int probeflags)
 					}
 				}
 				break;
-			default:	
+			default:
 				mtpt->port.type = PORT_UNKNOWN;
 				break;
 		}
@@ -2086,12 +2086,12 @@ static _INLINE_ void receive_chars(struct mp_port *mtpt, int *status )
 		{
 			ch = serial_inp(mtpt, UART_RX);
 		}
-		else if (lsr & UART_LSR_SPECIAL) 
+		else if (lsr & UART_LSR_SPECIAL)
 		{
 			flag = 0;
 			ch = serial_inp(mtpt, UART_RX);
 
-			if (lsr & UART_LSR_BI) 
+			if (lsr & UART_LSR_BI)
 			{
 
 				mtpt->port.icount.brk++;
@@ -2099,7 +2099,7 @@ static _INLINE_ void receive_chars(struct mp_port *mtpt, int *status )
 
 				if (sb_uart_handle_break(&mtpt->port))
 					goto ignore_char;
-			} 
+			}
 			if (lsr & UART_LSR_PE)
 			{
 				mtpt->port.icount.parity++;
@@ -2216,7 +2216,7 @@ static inline void multi_handle_port(struct mp_port *mtpt)
 		{
 			if (mtpt->interface >= RS485NE)
 				uart_set_mctrl(&mtpt->port, TIOCM_RTS);
-			
+
 			transmit_chars(mtpt);
 
 
@@ -2246,10 +2246,10 @@ static irqreturn_t multi_interrupt(int irq, void *dev_id)
 		unsigned int iir;
 
 		mtpt = list_entry(lhead, struct mp_port, list);
-		
+
 		iir = serial_in(mtpt, UART_IIR);
 		printk("interrupt! port %d, iir 0x%x\n", mtpt->port.line, iir); //wlee
-		if (!(iir & UART_IIR_NO_INT)) 
+		if (!(iir & UART_IIR_NO_INT))
 		{
 			printk("interrupt handle\n");
 			spin_lock(&mtpt->port.lock);
@@ -2261,7 +2261,7 @@ static irqreturn_t multi_interrupt(int irq, void *dev_id)
 			end = lhead;
 
 		lhead = lhead->next;
-		if (lhead == iinfo->head && pass_counter++ > PASS_LIMIT) 
+		if (lhead == iinfo->head && pass_counter++ > PASS_LIMIT)
 		{
 			printk(KERN_ERR "multi: too much work for "
 					"irq%d\n", irq);
@@ -2453,8 +2453,8 @@ static int multi_startup(struct sb_uart_port *port)
 
 		mtpt->timer.data = (unsigned long)mtpt;
 		mod_timer(&mtpt->timer, jiffies + timeout);
-	} 
-	else 
+	}
+	else
 	{
 		retval = serial_link_irq_chain(mtpt);
 		if (retval)
@@ -2470,7 +2470,7 @@ static int multi_startup(struct sb_uart_port *port)
 	multi_set_mctrl(&mtpt->port, mtpt->port.mctrl);
 	spin_unlock_irqrestore(&mtpt->port.lock, flags);
 
-	
+
 	mtpt->ier = UART_IER_RLSI | UART_IER_RDI;
 	serial_outp(mtpt, UART_IER, mtpt->ier);
 
@@ -2659,7 +2659,7 @@ static void multi_set_termios(struct sb_uart_port *port, struct MP_TERMIOS *term
 	{
 		SendATCommand(mtpt);
 		printk("SendATCommand\n");
-	}	
+	}
 	multi_set_mctrl(&mtpt->port, mtpt->port.mctrl);
 	spin_unlock_irqrestore(&mtpt->port.lock, flags);
 }
@@ -2680,8 +2680,8 @@ static void multi_pm(struct sb_uart_port *port, unsigned int state, unsigned int
 
 		if (mtpt->pm)
 			mtpt->pm(port, state, oldstate);
-	} 
-	else 
+	}
+	else
 	{
 		if (mtpt->capabilities & UART_STARTECH) {
 			serial_outp(mtpt, UART_LCR, 0xBF);
@@ -2789,7 +2789,7 @@ static struct uart_driver multi_reg = {
 	.dev_name       = "ttyMP",
 	.major          = SB_TTY_MP_MAJOR,
 	.minor          = 0,
-	.nr             = MAX_MP_PORT, 
+	.nr             = MAX_MP_PORT,
 	.cons           = NULL,
 };
 
@@ -2800,19 +2800,19 @@ static void __init multi_init_ports(void)
 	int i,j,k;
 	unsigned char osc;
 	unsigned char b_ret = 0;
-	static struct mp_device_t * sbdev; 
+	static struct mp_device_t * sbdev;
 
 	if (!first)
 		return;
 	first = 0;
 
-	mtpt = multi_ports; 
+	mtpt = multi_ports;
 
 	for (k=0;k<NR_BOARD;k++)
 	{
 		sbdev = &mp_devs[k];
 
-		for (i = 0; i < sbdev->nr_ports; i++, mtpt++) 
+		for (i = 0; i < sbdev->nr_ports; i++, mtpt++)
 		{
 			mtpt->device 		= sbdev;
 			mtpt->port.iobase   = sbdev->uart_access_addr + 8*i;
@@ -2885,13 +2885,13 @@ static void __init multi_register_ports(struct uart_driver *drv)
  *  pcidev  - pci_dev structure address
  *  offset  - BAR offset PCI_BASE_ADDRESS_0 ~ PCI_BASE_ADDRESS_4
  *  address - address to be changed BAR value
- *  size	- size of address space 
+ *  size	- size of address space
  *
  * RETURNS
  *  If this function performs successful, it returns 0. Otherwise, It returns -1.
  */
-static int pci_remap_base(struct pci_dev *pcidev, unsigned int offset, 
-		unsigned int address, unsigned int size) 
+static int pci_remap_base(struct pci_dev *pcidev, unsigned int offset,
+		unsigned int address, unsigned int size)
 {
 #if 0
 	struct resource *root;
@@ -2938,7 +2938,7 @@ static int init_mp_dev(struct pci_dev *pcidev, mppcibrd_t brd)
 	{
 		sbdev->option_reg_addr = pcidev->resource[1].start & PCI_BASE_ADDRESS_IO_MASK;
 	}
-#if 1	
+#if 1
 	if (sbdev->revision == 0xc0)
 	{
 		outb(0x00, sbdev->option_reg_addr + MP_OPTR_GPOCR);
@@ -3110,7 +3110,7 @@ static int __init multi_init(void)
 		for(i=0;i<256;i++)
 		{
 			fcr_arr[i] = 0x01;
-			
+
 		}
 	}
 	if(deep_count==0)
@@ -3118,7 +3118,7 @@ static int __init multi_init(void)
 		for(i=0;i<256;i++)
 		{
 			deep[i] = 1;
-			
+
 		}
 	}
 	if(rtr_count==0)
@@ -3151,16 +3151,16 @@ printk("FOUND~~~\n");
 				int status;
 	        		pci_disable_device(dev);
 	        		status = pci_enable_device(dev);
-            
+
 	   		     	if (status != 0)
-        			{ 
+        			{
                				printk("Multiport Board Enable Fail !\n\n");
                				status = -ENXIO;
                 			return status;
            			}
 			}
 
-			init_mp_dev(dev, mp_pciboards[i]);	
+			init_mp_dev(dev, mp_pciboards[i]);
 		}
 	}
 

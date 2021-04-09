@@ -24,6 +24,6 @@ csum_tcpudp_nofold(__be32 saddr, __be32 daddr, unsigned short len,
 	: "0" (sum), "r" (daddr), "r" (saddr), "r" ((len + proto) << 8));
 
 	return res;
-}	
+}
 
 #endif

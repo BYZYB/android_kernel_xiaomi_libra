@@ -41,7 +41,7 @@ user-mode process' data.
 As a comparison, the Linux/i386 2.0 puts the kernel and physical RAM at
 address 0, overlapping with the user-mode virtual space, so that descriptor
 registers are needed for each memory access to specify which MMU space to
-map through. That changed in 2.2, putting the kernel/physical RAM at 
+map through. That changed in 2.2, putting the kernel/physical RAM at
 0xc0000000, to co-exist with the user-mode mapping. We will do something
 quite similar, but with the additional complexity of having to map the
 internal chip I/O registers and the flash memory area (including SRAM
@@ -50,16 +50,16 @@ and peripherial chip-selets).
 The kernel-mode segmentation map:
 
         ------------------------                ------------------------
-FFFFFFFF|                      | => cached      |                      | 
+FFFFFFFF|                      | => cached      |                      |
         |    kernel seg_f      |    flash       |                      |
 F0000000|______________________|                |                      |
-EFFFFFFF|                      | => uncached    |                      | 
+EFFFFFFF|                      | => uncached    |                      |
         |    kernel seg_e      |    flash       |                      |
 E0000000|______________________|                |        DRAM          |
-DFFFFFFF|                      |  paged to any  |      Un-cached       | 
+DFFFFFFF|                      |  paged to any  |      Un-cached       |
         |    kernel seg_d      |    =======>    |                      |
 D0000000|______________________|                |                      |
-CFFFFFFF|                      |                |                      | 
+CFFFFFFF|                      |                |                      |
         |    kernel seg_c      |==\             |                      |
 C0000000|______________________|   \            |______________________|
 BFFFFFFF|                      |  uncached      |                      |
@@ -70,14 +70,14 @@ AFFFFFFF|                      |       \a       |                      |
         |                      |         \h     |______________________|
         |                      |          \e    |                      |
         |                      |           \d   |                      |
-        | kernel seg_0 - seg_a |            \==>|         DRAM         | 
+        | kernel seg_0 - seg_a |            \==>|         DRAM         |
         |                      |                |        Cached        |
         |                      |  paged to any  |                      |
-        |                      |    =======>    |______________________| 
+        |                      |    =======>    |______________________|
         |                      |                |                      |
         |                      |                |        Illegal       |
         |                      |                |______________________|
-        |                      |                |                      |      
+        |                      |                |                      |
         |                      |                | FLASH/SRAM/Peripheral|
 00000000|______________________|                |______________________|
 
@@ -95,12 +95,12 @@ few extra instructions would be needed for each access to user mode
 memory.
 
 The kernel needs access to both cached and uncached flash. Uncached is
-necessary because of the special write/erase sequences. Also, the 
+necessary because of the special write/erase sequences. Also, the
 peripherial chip-selects are decoded from that region.
 
 The kernel also needs its own virtual memory space. That is kseg_d. It
 is used by the vmalloc() kernel function to allocate virtual contiguous
-chunks of memory not possible using the normal kmalloc physical RAM 
+chunks of memory not possible using the normal kmalloc physical RAM
 allocator.
 
 The setting of the actual MMU control registers to use this layout would
@@ -108,7 +108,7 @@ be something like this:
 
 R_MMU_KSEG = ( ( seg_f, seg     ) |   // Flash cached
                ( seg_e, seg     ) |   // Flash uncached
-               ( seg_d, page    ) |   // kernel vmalloc area    
+               ( seg_d, page    ) |   // kernel vmalloc area
                ( seg_c, seg     ) |   // kernel linear segment
                ( seg_b, seg     ) |   // kernel linear segment
                ( seg_a, page    ) |
@@ -154,7 +154,7 @@ Paging - PTE's, PMD's and PGD's
 
 The paging mechanism uses virtual addresses to split a process memory-space into
 pages, a page being the smallest unit that can be freely remapped in memory. On
-Linux/CRIS, a page is 8192 bytes (for technical reasons not equal to 4096 as in 
+Linux/CRIS, a page is 8192 bytes (for technical reasons not equal to 4096 as in
 most other 32-bit architectures). It would be inefficient to let a virtual memory
 mapping be controlled by a long table of page mappings, so it is broken down into
 a 2-level structure with a Page Directory containing pointers to Page Tables which
@@ -183,7 +183,7 @@ static inline pgd_t * pgd_offset(struct mm_struct * mm, unsigned long address)
 }
 
 PGDIR_SHIFT is the log2 of the amount of memory an entry in the PGD can map; in our
-case it is 24, corresponding to 16 MB. This means that each entry in the PGD 
+case it is 24, corresponding to 16 MB. This means that each entry in the PGD
 corresponds to 16 MB of virtual memory.
 
 The pgd_t from our example will therefore be the 208'th (0xd0) entry in mm->pgd.
@@ -204,7 +204,7 @@ static inline pte_t * pte_offset(pmd_t * dir, unsigned long address)
 }
 
 PAGE_SHIFT is the log2 of the size of a page; 13 in our case. PTRS_PER_PTE is
-the number of pointers that fit in a Page Table and is used to mask off the 
+the number of pointers that fit in a Page Table and is used to mask off the
 PGD-part of the address.
 
 The so-far unused bits 0 to 12 are used to index inside a page linearily.
@@ -212,7 +212,7 @@ The so-far unused bits 0 to 12 are used to index inside a page linearily.
 The VM system
 -------------
 
-The kernels own page-directory is the swapper_pg_dir, cleared in paging_init, 
+The kernels own page-directory is the swapper_pg_dir, cleared in paging_init,
 and contains the kernels virtual mappings (the kernel itself is not paged - it
 is mapped linearily using kseg_c as described above). Architectures without
 kernel segments like the i386, need to setup swapper_pg_dir directly in head.S
@@ -227,7 +227,7 @@ void * vmalloc(unsigned long size)
 The vmalloc-system keeps a paged segment in kernel-space at 0xd0000000. What
 happens first is that a virtual address chunk is allocated to the request using
 get_vm_area(size). After that, physical RAM pages are allocated and put into
-the kernel's page-table using alloc_area_pages(addr, size). 
+the kernel's page-table using alloc_area_pages(addr, size).
 
 static int alloc_area_pages(unsigned long address, unsigned long size)
 
@@ -235,9 +235,9 @@ First the PGD entry is found using init_mm.pgd. This is passed to
 alloc_area_pmd (remember the 3->2 folding). It uses pte_alloc_kernel to
 check if the PGD entry points anywhere - if not, a page table page is
 allocated and the PGD entry updated. Then the alloc_area_pte function is
-used just like alloc_area_pmd to check which page table entry is desired, 
+used just like alloc_area_pmd to check which page table entry is desired,
 and a physical page is allocated and the table entry updated. All of this
-is repeated at the top-level until the entire address range specified has 
+is repeated at the top-level until the entire address range specified has
 been mapped.
 
 

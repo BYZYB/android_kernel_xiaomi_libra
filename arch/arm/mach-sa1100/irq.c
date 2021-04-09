@@ -254,7 +254,7 @@ static int sa1100irq_suspend(void)
 	 */
 	GRER = PWER & GPIO_IRQ_rising_edge;
 	GFER = PWER & GPIO_IRQ_falling_edge;
-	
+
 	/*
 	 * Clear any pending GPIO interrupts.
 	 */

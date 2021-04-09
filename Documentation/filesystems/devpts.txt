@@ -126,7 +126,7 @@ once), following user-space issues should be noted.
    does not provide strict isolation in a container environment. i.e by
    mounting devpts without the 'newinstance' option, a container could
    get visibility into the 'host' or root container's devpts.
-   
+
    To workaround this and have strict isolation, all mounts of devpts,
    including the mount in the root container, should use the newinstance
    option.

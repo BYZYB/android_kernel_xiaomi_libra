@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      irlmp.h
  * Version:       0.9
  * Description:   IrDA Link Management Protocol (LMP) layer
@@ -8,18 +8,18 @@
  * Created at:    Sun Aug 17 20:54:32 1997
  * Modified at:   Fri Dec 10 13:23:01 1999
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
- * 
- *     Copyright (c) 1998-1999 Dag Brattli <dagb@cs.uit.no>, 
+ *
+ *     Copyright (c) 1998-1999 Dag Brattli <dagb@cs.uit.no>,
  *     All Rights Reserved.
  *     Copyright (c) 2000-2002 Jean Tourrilhes <jt@hpl.hp.com>
- *     
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
  *
  *     Neither Dag Brattli nor University of Tromsø admit liability nor
- *     provide warranty for any of this software. This material is 
+ *     provide warranty for any of this software. This material is
  *     provided "AS-IS" and at no charge.
  *
  ********************************************************************/
@@ -151,10 +151,10 @@ struct lap_cb {
 	__u8  caddr;  /* Connection address */
  	__u32 saddr;  /* Source device address */
  	__u32 daddr;  /* Destination device address */
-	
+
 	struct qos_info *qos;  /* LAP QoS for this session */
 	struct timer_list idle_timer;
-	
+
 #ifdef CONFIG_IRDA_CACHE_LAST_LSAP
 	/* The lsap cache was moved from struct irlmp_cb to here because
 	 * it must be associated with the specific LAP. Also, this
@@ -170,7 +170,7 @@ struct irlmp_cb {
 	magic_t magic;
 
 	__u8 conflict_flag;
-	
+
 	discovery_t discovery_cmd; /* Discovery command to use by IrLAP */
 	discovery_t discovery_rsp; /* Discovery response to use by IrLAP */
 
@@ -203,14 +203,14 @@ int irlmp_unregister_service(void *handle);
 void *irlmp_register_client(__u16 hint_mask, DISCOVERY_CALLBACK1 disco_clb,
 			    DISCOVERY_CALLBACK2 expir_clb, void *priv);
 int irlmp_unregister_client(void *handle);
-int irlmp_update_client(void *handle, __u16 hint_mask, 
+int irlmp_update_client(void *handle, __u16 hint_mask,
 			DISCOVERY_CALLBACK1 disco_clb,
 			DISCOVERY_CALLBACK2 expir_clb, void *priv);
 
 void irlmp_register_link(struct irlap_cb *, __u32 saddr, notify_t *);
 void irlmp_unregister_link(__u32 saddr);
 
-int  irlmp_connect_request(struct lsap_cb *, __u8 dlsap_sel, 
+int  irlmp_connect_request(struct lsap_cb *, __u8 dlsap_sel,
 			   __u32 saddr, __u32 daddr,
 			   struct qos_info *, struct sk_buff *);
 void irlmp_connect_indication(struct lsap_cb *self, struct sk_buff *skb);
@@ -218,7 +218,7 @@ int  irlmp_connect_response(struct lsap_cb *, struct sk_buff *);
 void irlmp_connect_confirm(struct lsap_cb *, struct sk_buff *);
 struct lsap_cb *irlmp_dup(struct lsap_cb *self, void *instance);
 
-void irlmp_disconnect_indication(struct lsap_cb *self, LM_REASON reason, 
+void irlmp_disconnect_indication(struct lsap_cb *self, LM_REASON reason,
 				 struct sk_buff *userdata);
 int  irlmp_disconnect_request(struct lsap_cb *, struct sk_buff *userdata);
 

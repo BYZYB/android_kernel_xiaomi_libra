@@ -1,5 +1,5 @@
 /*
- * arch/arm/mach-ixp4xx/include/mach/hardware.h 
+ * arch/arm/mach-ixp4xx/include/mach/hardware.h
  *
  * Copyright (C) 2002 Intel Corporation.
  * Copyright (C) 2003-2004 MontaVista Software, Inc.

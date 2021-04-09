@@ -499,7 +499,7 @@ syscall_exit_work:
 	stwcx.	r8,0,r12
 	bne-	3b
 	subi	r12,r12,TI_FLAGS
-	
+
 4:	/* Anything which requires enabling interrupts? */
 	andi.	r0,r9,(_TIF_SYSCALL_T_OR_A|_TIF_SINGLESTEP)
 	beq	ret_from_except

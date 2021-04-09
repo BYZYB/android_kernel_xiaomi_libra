@@ -225,7 +225,7 @@ static unsigned long __peek_user(struct task_struct *child, addr_t addr)
 		tmp = 0;
 
 	} else if (addr < (addr_t) (&dummy->regs.fp_regs + 1)) {
-		/* 
+		/*
 		 * floating point regs. are stored in the thread structure
 		 */
 		offset = addr - (addr_t) &dummy->regs.fp_regs;
@@ -399,7 +399,7 @@ static int poke_user(struct task_struct *child, addr_t addr, addr_t data)
 long arch_ptrace(struct task_struct *child, long request,
 		 unsigned long addr, unsigned long data)
 {
-	ptrace_area parea; 
+	ptrace_area parea;
 	int copied, ret;
 
 	switch (request) {
@@ -562,7 +562,7 @@ static u32 __peek_user_compat(struct task_struct *child, addr_t addr)
 
 	} else if (addr < (addr_t) (&dummy32->regs.fp_regs + 1)) {
 		/*
-		 * floating point regs. are stored in the thread structure 
+		 * floating point regs. are stored in the thread structure
 		 */
 	        offset = addr - (addr_t) &dummy32->regs.fp_regs;
 		tmp = *(__u32 *)((addr_t) &child->thread.fp_regs + offset);
@@ -670,7 +670,7 @@ static int __poke_user_compat(struct task_struct *child,
 
 	} else if (addr < (addr_t) (&dummy32->regs.fp_regs + 1)) {
 		/*
-		 * floating point regs. are stored in the thread structure 
+		 * floating point regs. are stored in the thread structure
 		 */
 		if (addr == (addr_t) &dummy32->regs.fp_regs.fpc &&
 		    (tmp & ~FPC_VALID_MASK) != 0)

@@ -84,7 +84,7 @@ void __init btext_prepare_BAT(void)
 		lowbits = addr & ~0xFF000000UL;
 		addr &= 0xFF000000UL;
 		disp_BAT[0] = vaddr | (BL_16M<<2) | 2;
-		disp_BAT[1] = addr | (_PAGE_NO_CACHE | _PAGE_GUARDED | BPP_RW);	
+		disp_BAT[1] = addr | (_PAGE_NO_CACHE | _PAGE_GUARDED | BPP_RW);
 	} else {
 		/* 601 */
 		lowbits = addr & ~0xFF800000UL;
@@ -217,7 +217,7 @@ int btext_initialize(struct device_node *np)
 int __init btext_find_display(int allow_nonstdout)
 {
 	const char *name;
-	struct device_node *np = NULL; 
+	struct device_node *np = NULL;
 	int rc = -ENODEV;
 
 	name = of_get_property(of_chosen, "linux,stdout-path", NULL);

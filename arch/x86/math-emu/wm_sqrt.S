@@ -70,7 +70,7 @@ FPU_fsqrt_arg_1:
 	.long	0
 FPU_fsqrt_arg_0:
 	.long	0		/* ls word, at most the ms bit is set */
-#endif /* NON_REENTRANT_FPU */ 
+#endif /* NON_REENTRANT_FPU */
 
 
 .text
@@ -224,7 +224,7 @@ sqrt_stage_2_finish:
 sqrt_stage_2_error:
 	pushl	EX_INTERNAL|0x213
 	call	EXCEPTION
-#endif /* PARANOID */ 
+#endif /* PARANOID */
 
 sqrt_stage_2_done:
 
@@ -385,7 +385,7 @@ sqrt_near_exact:
 	call	EXCEPTION
 
 sqrt_near_exact_ok:
-#endif /* PARANOID */ 
+#endif /* PARANOID */
 
 	or	%ebx,%ebx
 	js	sqrt_near_exact_small
@@ -403,7 +403,7 @@ sqrt_near_exact_small:
 /* Our estimate is too small */
 	movl	$0x000000ff,%eax
 	jmp	sqrt_round_result
-	
+
 sqrt_near_exact_large:
 /* Our estimate is too large, we need to decrement it */
 	subl	$1,%edi
@@ -445,7 +445,7 @@ sqrt_get_more_precision:
 	call	EXCEPTION
 
 sqrt_more_prec_ok:
-#endif /* PARANOID */ 
+#endif /* PARANOID */
 
 	or	%ebx,%ebx
 	js	sqrt_more_prec_small
@@ -463,7 +463,7 @@ sqrt_more_prec_small:
 /* Our estimate is too small */
 	movl	$0x800000ff,%eax
 	jmp	sqrt_round_result
-	
+
 sqrt_more_prec_large:
 /* Our estimate is too large */
 	movl	$0x7fffff00,%eax

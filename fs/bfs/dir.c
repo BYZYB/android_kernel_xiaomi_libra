@@ -72,7 +72,7 @@ static int bfs_readdir(struct file *f, void *dirent, filldir_t filldir)
 	}
 
 	mutex_unlock(&info->bfs_lock);
-	return 0;	
+	return 0;
 }
 
 const struct file_operations bfs_dir_operations = {
@@ -232,8 +232,8 @@ static int bfs_rename(struct inode *old_dir, struct dentry *old_dentry,
 	info = BFS_SB(old_inode->i_sb);
 
 	mutex_lock(&info->bfs_lock);
-	old_bh = bfs_find_entry(old_dir, 
-				old_dentry->d_name.name, 
+	old_bh = bfs_find_entry(old_dir,
+				old_dentry->d_name.name,
 				old_dentry->d_name.len, &old_de);
 
 	if (!old_bh || (le16_to_cpu(old_de->ino) != old_inode->i_ino))
@@ -241,8 +241,8 @@ static int bfs_rename(struct inode *old_dir, struct dentry *old_dentry,
 
 	error = -EPERM;
 	new_inode = new_dentry->d_inode;
-	new_bh = bfs_find_entry(new_dir, 
-				new_dentry->d_name.name, 
+	new_bh = bfs_find_entry(new_dir,
+				new_dentry->d_name.name,
 				new_dentry->d_name.len, &new_de);
 
 	if (new_bh && !new_inode) {
@@ -250,7 +250,7 @@ static int bfs_rename(struct inode *old_dir, struct dentry *old_dentry,
 		new_bh = NULL;
 	}
 	if (!new_bh) {
-		error = bfs_add_entry(new_dir, 
+		error = bfs_add_entry(new_dir,
 					new_dentry->d_name.name,
 					new_dentry->d_name.len,
 					old_inode->i_ino);

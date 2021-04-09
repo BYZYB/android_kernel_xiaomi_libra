@@ -1,4 +1,4 @@
-/* 
+/*
  * Cryptographic API.
  *
  * Support for VIA PadLock hardware crypto engine.

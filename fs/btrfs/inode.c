@@ -3676,7 +3676,7 @@ int btrfs_unlink_inode(struct btrfs_trans_handle *trans,
 	}
 	return ret;
 }
-		
+
 
 /* helper to check if there is any shared block in the path */
 static int check_path_shared(struct btrfs_root *root,

@@ -1,5 +1,5 @@
 /*
- *	PCI BIOS function numbering for conventional PCI BIOS 
+ *	PCI BIOS function numbering for conventional PCI BIOS
  *	systems
  */
 

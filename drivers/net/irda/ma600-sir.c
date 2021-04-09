@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      ma600.c
  * Version:       0.1
  * Description:   Implementation of the MA600 dongle
@@ -9,26 +9,26 @@
  * Modified at:   Sat Aug 16 09:34:13 2003
  * Modified by:   Martin Diehl <mad@mdiehl.de> (modified for new sir_dev)
  *
- * Note: very thanks to Mr. Maru Wang <maru@mobileaction.com.tw> for providing 
+ * Note: very thanks to Mr. Maru Wang <maru@mobileaction.com.tw> for providing
  *       information on the MA600 dongle
- * 
+ *
  *     Copyright (c) 2000 Leung, All Rights Reserved.
- *      
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- *  
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *     GNU General Public License for more details.
- * 
- *     You should have received a copy of the GNU General Public License 
- *     along with this program; if not, write to the Free Software 
- *     Foundation, Inc., 59 Temple Place, Suite 330, Boston, 
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program; if not, write to the Free Software
+ *     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *     MA 02111-1307 USA
- *     
+ *
  ********************************************************************/
 
 #include <linux/module.h>
@@ -96,7 +96,7 @@ static int ma600_open(struct sir_dev *dev)
 	qos->baud_rate.bits &= IR_2400|IR_9600|IR_19200|IR_38400
 				|IR_57600|IR_115200;
 	/* Hm, 0x01 means 10ms - for >= 1ms we would need 0x07 */
-	qos->min_turn_time.bits = 0x01;		/* Needs at least 1 ms */	
+	qos->min_turn_time.bits = 0x01;		/* Needs at least 1 ms */
 	irda_qos_bits_to_value(qos);
 
 	/* irda thread waits 50 msec for power settling */
@@ -161,10 +161,10 @@ static __u8 get_control_byte(__u32 speed)
  *    1. Reset (already done by irda thread state machine)
  *    2. clear RTS, set DTR and wait for 1ms
  *    3. send Control Byte to the MA600 through TXD to set new baud rate
- *       wait until the stop bit of Control Byte is sent (for 9600 baud rate, 
+ *       wait until the stop bit of Control Byte is sent (for 9600 baud rate,
  *       it takes about 10 msec)
  *    4. set RTS, set DTR (return to NORMAL Operation)
- *    5. wait at least 10 ms, new setting (baud rate, etc) takes effect here 
+ *    5. wait at least 10 ms, new setting (baud rate, etc) takes effect here
  *       after
  */
 
@@ -175,7 +175,7 @@ static __u8 get_control_byte(__u32 speed)
 static int ma600_change_speed(struct sir_dev *dev, unsigned speed)
 {
 	u8	byte;
-	
+
 	IRDA_DEBUG(2, "%s(), speed=%d (was %d)\n", __func__,
 		speed, dev->speed);
 
@@ -257,7 +257,7 @@ MODULE_AUTHOR("Leung <95Etwl@alumni.ee.ust.hk> http://www.engsvr.ust/~eetwl95");
 MODULE_DESCRIPTION("MA600 dongle driver version 0.1");
 MODULE_LICENSE("GPL");
 MODULE_ALIAS("irda-dongle-11"); /* IRDA_MA600_DONGLE */
-		
+
 module_init(ma600_sir_init);
 module_exit(ma600_sir_cleanup);
 

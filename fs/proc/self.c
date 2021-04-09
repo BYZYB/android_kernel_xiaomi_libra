@@ -57,7 +57,7 @@ int proc_setup_self(struct super_block *s)
 	struct inode *root_inode = s->s_root->d_inode;
 	struct pid_namespace *ns = s->s_fs_info;
 	struct dentry *self;
-	
+
 	mutex_lock(&root_inode->i_mutex);
 	self = d_alloc_name(s->s_root, "self");
 	if (self) {

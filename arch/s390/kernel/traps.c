@@ -356,7 +356,7 @@ void data_exception(struct pt_regs *regs)
 			break;
                 }
         }
-#endif 
+#endif
 	if (current->thread.fp_regs.fpc & FPC_DXC_MASK)
 		signal = SIGFPE;
 	else

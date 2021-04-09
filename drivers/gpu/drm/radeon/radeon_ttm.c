@@ -791,7 +791,7 @@ static int radeon_ttm_fault(struct vm_area_struct *vma, struct vm_fault *vmf)
 	struct radeon_device *rdev;
 	int r;
 
-	bo = (struct ttm_buffer_object *)vma->vm_private_data;	
+	bo = (struct ttm_buffer_object *)vma->vm_private_data;
 	if (bo == NULL) {
 		return VM_FAULT_NOPAGE;
 	}

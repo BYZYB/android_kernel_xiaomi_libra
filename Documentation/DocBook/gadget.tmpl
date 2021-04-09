@@ -7,7 +7,7 @@
     <title>USB Gadget API for Linux</title>
     <date>20 August 2004</date>
     <edition>20 August 2004</edition>
-  
+
     <legalnotice>
        <para>
 	 This documentation is free software; you can redistribute
@@ -16,21 +16,21 @@
 	 version 2 of the License, or (at your option) any later
 	 version.
        </para>
-	  
+
        <para>
 	 This program is distributed in the hope that it will be
 	 useful, but WITHOUT ANY WARRANTY; without even the implied
 	 warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 	 See the GNU General Public License for more details.
        </para>
-	  
+
        <para>
 	 You should have received a copy of the GNU General Public
 	 License along with this program; if not, write to the Free
 	 Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
 	 MA 02111-1307 USA
        </para>
-	  
+
        <para>
 	 For more details see the file COPYING in the source
 	 distribution of Linux.
@@ -42,7 +42,7 @@
     </copyright>
 
     <author>
-      <firstname>David</firstname> 
+      <firstname>David</firstname>
       <surname>Brownell</surname>
       <affiliation>
         <address><email>dbrownell@users.sourceforge.net</email></address>
@@ -305,7 +305,7 @@ exposed by the gadget, and submitting one or more
 <emphasis>struct usb_request</emphasis> buffers to transfer data.
 Understand those four data types, and their operations, and
 you will understand how this API works.
-</para> 
+</para>
 
 <note><title>Incomplete Data Type Descriptions</title>
 
@@ -319,7 +319,7 @@ data types and functions are described here.
 
 <para>However, docproc does not understand all the C constructs
 that are used, so some relevant information is likely omitted from
-what you are reading.  
+what you are reading.
 One example of such information is endpoint autoconfiguration.
 You'll have to read the header file, and use example source
 code (such as that for "Gadget Zero"), to fully understand the API.
@@ -575,7 +575,7 @@ This is the <filename>net2280</filename> driver module.
 The driver supports Linux kernel versions 2.4 and 2.6;
 contact NetChip Technologies for development boards and product
 information.
-</para> 
+</para>
 
 <para>Other hardware working in the "gadget" framework includes:
 Intel's PXA 25x and IXP42x series processors
@@ -628,7 +628,7 @@ for usb controller hardware), other gadget drivers exist.
 
 <para>There's an <emphasis>ethernet</emphasis> gadget
 driver, which implements one of the most useful
-<emphasis>Communications Device Class</emphasis> (CDC) models.  
+<emphasis>Communications Device Class</emphasis> (CDC) models.
 One of the standards for cable modem interoperability even
 specifies the use of this ethernet model as one of two
 mandatory options.
@@ -704,7 +704,7 @@ by Texas Instruments for
 series processors.
 Other OTG systems should work in similar ways, but the
 hardware level details could be very different.
-</para> 
+</para>
 
 <para>Systems need specialized hardware support to implement OTG,
 notably including a special <emphasis>Mini-AB</emphasis> jack
@@ -783,7 +783,7 @@ controllers depending on the relevant device role.
 Some related changes were needed inside usbcore, so that it
 can identify OTG-capable devices and respond appropriately
 to HNP or SRP protocols.
-</para> 
+</para>
 
 </chapter>
 

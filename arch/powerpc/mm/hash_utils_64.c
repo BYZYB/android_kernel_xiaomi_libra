@@ -6,7 +6,7 @@
  *
  * SMP scalability work:
  *    Copyright (C) 2001 Anton Blanchard <anton@au.ibm.com>, IBM
- * 
+ *
  *    Module name: htab.c
  *
  *    Description:
@@ -659,7 +659,7 @@ static void __init htab_initialize(void)
 	/*
 	 * Calculate the required size of the htab.  We want the number of
 	 * PTEGs to equal one half the number of real pages.
-	 */ 
+	 */
 	htab_size_bytes = htab_get_table_size();
 	pteg_count = htab_size_bytes >> 7;
 
@@ -668,7 +668,7 @@ static void __init htab_initialize(void)
 	if (firmware_has_feature(FW_FEATURE_LPAR)) {
 		/* Using a hypervisor which owns the htab */
 		htab_address = NULL;
-		_SDR1 = 0; 
+		_SDR1 = 0;
 #ifdef CONFIG_FA_DUMP
 		/*
 		 * If firmware assisted dump is active firmware preserves
@@ -993,7 +993,7 @@ int hash_page(unsigned long ea, unsigned long access, unsigned long trap)
 		break;
 	default:
 		/* Not a valid range
-		 * Send the problem up to do_page_fault 
+		 * Send the problem up to do_page_fault
 		 */
 		rc = 1;
 		goto bail;

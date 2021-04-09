@@ -590,7 +590,7 @@ update_mboxes(struct intel_ring_buffer *ring,
 
 /**
  * gen6_add_request - Update the semaphore mailbox registers
- * 
+ *
  * @ring - ring that is adding a request
  * @seqno - return seqno stuck into the ring
  *

@@ -25,28 +25,28 @@
  * 98-05-28: Vladimir Michl <vladimir.michl@upol.cz>
  *          Fixed computation of mixer volumes
  * 04-05-1999: Anthony Barbachan <barbcode@xmen.cis.fordham.edu>
- *          Added code that allows the user to enable his cdrom and/or 
- *          joystick through the module parameters pss_cdrom_port and 
+ *          Added code that allows the user to enable his cdrom and/or
+ *          joystick through the module parameters pss_cdrom_port and
  *          pss_enable_joystick.  pss_cdrom_port takes a port address as its
  *          argument.  pss_enable_joystick takes either a 0 or a non-0 as its
  *          argument.
  * 04-06-1999: Anthony Barbachan <barbcode@xmen.cis.fordham.edu>
- *          Separated some code into new functions for easier reuse.  
- *          Cleaned up and streamlined new code.  Added code to allow a user 
- *          to only use this driver for enabling non-sound components 
- *          through the new module parameter pss_no_sound (flag).  Added 
- *          code that would allow a user to decide whether the driver should 
- *          reset the configured hardware settings for the PSS board through 
- *          the module parameter pss_keep_settings (flag).   This flag will 
- *          allow a user to free up resources in use by this card if needbe, 
- *          furthermore it allows him to use this driver to just enable the 
- *          emulations and then be unloaded as it is no longer needed.  Both 
- *          new settings are only available to this driver if compiled as a 
- *          module.  The default settings of all new parameters are set to 
+ *          Separated some code into new functions for easier reuse.
+ *          Cleaned up and streamlined new code.  Added code to allow a user
+ *          to only use this driver for enabling non-sound components
+ *          through the new module parameter pss_no_sound (flag).  Added
+ *          code that would allow a user to decide whether the driver should
+ *          reset the configured hardware settings for the PSS board through
+ *          the module parameter pss_keep_settings (flag).   This flag will
+ *          allow a user to free up resources in use by this card if needbe,
+ *          furthermore it allows him to use this driver to just enable the
+ *          emulations and then be unloaded as it is no longer needed.  Both
+ *          new settings are only available to this driver if compiled as a
+ *          module.  The default settings of all new parameters are set to
  *          load the driver as it did in previous versions.
  * 04-07-1999: Anthony Barbachan <barbcode@xmen.cis.fordham.edu>
- *          Added module parameter pss_firmware to allow the user to tell 
- *          the driver where the firmware file is located.  The default 
+ *          Added module parameter pss_firmware to allow the user to tell
+ *          the driver where the firmware file is located.  The default
  *          setting is the previous hardcoded setting "/etc/sound/pss_synth".
  * 00-03-03: Christoph Hellwig <chhellwig@infradead.org>
  *	    Adapted to module_init/module_exit
@@ -139,7 +139,7 @@ typedef struct pss_confdata {
 	pss_mixerdata   mixer;
 	int             ad_mixer_dev;
 } pss_confdata;
-  
+
 static pss_confdata pss_data;
 static pss_confdata *devc = &pss_data;
 static DEFINE_SPINLOCK(lock);
@@ -194,7 +194,7 @@ static int __init probe_pss(struct address_info *hw_config)
 	}
 	id = inw(REG(PSS_ID));
 	if ((id >> 8) != 'E') {
-		printk(KERN_ERR "No PSS signature detected at 0x%x (0x%x)\n",  devc->base,  id); 
+		printk(KERN_ERR "No PSS signature detected at 0x%x (0x%x)\n",  devc->base,  id);
 		release_region(devc->base, 0x10);
 		return 0;
 	}
@@ -350,7 +350,7 @@ static int pss_download_boot(pss_confdata * devc, unsigned char *block, int size
 			}
 		}
 /*_____ Send the next byte */
-		if (count >= size) 
+		if (count >= size)
 		{
 			/* If not data in block send 0xffff */
 			outw (0xffff, REG (PSS_DATA));
@@ -433,7 +433,7 @@ static void set_bass(pss_confdata *devc, int level)
 };
 
 static void set_treble(pss_confdata *devc, int level)
-{	
+{
 	int vol = (((0xfd - 0xf0) * level)/100L) + 0xf0;
 	pss_write(devc, 0x0010);
 	pss_write(devc, vol | 0x0300);
@@ -447,7 +447,7 @@ static void pss_mixer_reset(pss_confdata *devc)
 	set_synth_volume(devc, 30);
 	pss_write (devc, 0x0010);
 	pss_write (devc, 0x0800 | 0xce);	/* Stereo */
-	
+
 	if(pss_mixer)
 	{
 		devc->mixer.volume_l = devc->mixer.volume_r = 33;
@@ -462,7 +462,7 @@ static int set_volume_mono(unsigned __user *p, unsigned int *aleft)
 	unsigned int left, volume;
 	if (get_user(volume, p))
 		return -EFAULT;
-	
+
 	left = volume & 0xff;
 	if (left > 100)
 		left = 100;
@@ -501,9 +501,9 @@ static int ret_vol_stereo(int left, int right)
 
 static int call_ad_mixer(pss_confdata *devc,unsigned int cmd, void __user *arg)
 {
-	if (devc->ad_mixer_dev != NO_WSS_MIXER) 
+	if (devc->ad_mixer_dev != NO_WSS_MIXER)
 		return mixer_devs[devc->ad_mixer_dev]->ioctl(devc->ad_mixer_dev, cmd, arg);
-	else 
+	else
 		return -EINVAL;
 }
 
@@ -511,22 +511,22 @@ static int pss_mixer_ioctl (int dev, unsigned int cmd, void __user *arg)
 {
 	pss_confdata *devc = mixer_devs[dev]->devc;
 	int cmdf = cmd & 0xff;
-	
+
 	if ((cmdf != SOUND_MIXER_VOLUME) && (cmdf != SOUND_MIXER_BASS) &&
 		(cmdf != SOUND_MIXER_TREBLE) && (cmdf != SOUND_MIXER_SYNTH) &&
 		(cmdf != SOUND_MIXER_DEVMASK) && (cmdf != SOUND_MIXER_STEREODEVS) &&
 		(cmdf != SOUND_MIXER_RECMASK) && (cmdf != SOUND_MIXER_CAPS) &&
-		(cmdf != SOUND_MIXER_RECSRC)) 
+		(cmdf != SOUND_MIXER_RECSRC))
 	{
 		return call_ad_mixer(devc, cmd, arg);
 	}
-	
-	if (((cmd >> 8) & 0xff) != 'M')	
+
+	if (((cmd >> 8) & 0xff) != 'M')
 		return -EINVAL;
-		
+
 	if (_SIOC_DIR (cmd) & _SIOC_WRITE)
 	{
-		switch (cmdf)	
+		switch (cmdf)
 		{
 			case SOUND_MIXER_RECSRC:
 				if (devc->ad_mixer_dev != NO_WSS_MIXER)
@@ -549,30 +549,30 @@ static int pss_mixer_ioctl (int dev, unsigned int cmd, void __user *arg)
 					devc->mixer.volume_r);
 				return ret_vol_stereo(devc->mixer.volume_l,
 					devc->mixer.volume_r);
-		  
+
 			case SOUND_MIXER_BASS:
 				if (set_volume_mono(arg, &devc->mixer.bass))
 					return -EFAULT;
 				set_bass(devc, devc->mixer.bass);
 				return ret_vol_mono(devc->mixer.bass);
-		  
+
 			case SOUND_MIXER_TREBLE:
 				if (set_volume_mono(arg, &devc->mixer.treble))
 					return -EFAULT;
 				set_treble(devc, devc->mixer.treble);
 				return ret_vol_mono(devc->mixer.treble);
-		  
+
 			case SOUND_MIXER_SYNTH:
 				if (set_volume_mono(arg, &devc->mixer.synth))
 					return -EFAULT;
 				set_synth_volume(devc, devc->mixer.synth);
 				return ret_vol_mono(devc->mixer.synth);
-		  
+
 			default:
 				return -EINVAL;
 		}
 	}
-	else			
+	else
 	{
 		int val, and_mask = 0, or_mask = 0;
 		/*
@@ -586,14 +586,14 @@ static int pss_mixer_ioctl (int dev, unsigned int cmd, void __user *arg)
 				and_mask = ~0;
 				or_mask = SOUND_MASK_VOLUME | SOUND_MASK_BASS | SOUND_MASK_TREBLE | SOUND_MASK_SYNTH;
 				break;
-		  
+
 			case SOUND_MIXER_STEREODEVS:
 				if (call_ad_mixer(devc, cmd, arg) == -EINVAL)
 					break;
 				and_mask = ~0;
 				or_mask = SOUND_MASK_VOLUME;
 				break;
-		  
+
 			case SOUND_MIXER_RECMASK:
 				if (devc->ad_mixer_dev != NO_WSS_MIXER)
 					return call_ad_mixer(devc, cmd, arg);
@@ -613,15 +613,15 @@ static int pss_mixer_ioctl (int dev, unsigned int cmd, void __user *arg)
 			case SOUND_MIXER_VOLUME:
 				or_mask =  ret_vol_stereo(devc->mixer.volume_l, devc->mixer.volume_r);
 				break;
-			  
+
 			case SOUND_MIXER_BASS:
 				or_mask =  ret_vol_mono(devc->mixer.bass);
 				break;
-			  
+
 			case SOUND_MIXER_TREBLE:
 				or_mask = ret_vol_mono(devc->mixer.treble);
 				break;
-			  
+
 			case SOUND_MIXER_SYNTH:
 				or_mask = ret_vol_mono(devc->mixer.synth);
 				break;
@@ -701,7 +701,7 @@ static int __init attach_pss(struct address_info *hw_config)
 	/*
 	 * Disable all emulations. Will be enabled later (if required).
 	 */
-	 
+
 	disable_all_emulations();
 
 #ifdef YOU_REALLY_WANT_TO_ALLOCATE_THESE_RESOURCES
@@ -852,8 +852,8 @@ static int pss_coproc_ioctl(void *dev_info, unsigned int cmd, void __user *arg, 
 	unsigned short *data;
 	int i, err;
 	/* printk( "PSS coproc ioctl %x %x %d\n",  cmd,  arg,  local); */
-	
-	switch (cmd) 
+
+	switch (cmd)
 	{
 		case SNDCTL_COPR_RESET:
 			pss_coproc_reset(dev_info);
@@ -870,7 +870,7 @@ static int pss_coproc_ioctl(void *dev_info, unsigned int cmd, void __user *arg, 
 			err = download_boot_block(dev_info, buf);
 			vfree(buf);
 			return err;
-		
+
 		case SNDCTL_COPR_SENDMSG:
 			mbuf = vmalloc(sizeof(copr_msg));
 			if (mbuf == NULL)
@@ -914,7 +914,7 @@ static int pss_coproc_ioctl(void *dev_info, unsigned int cmd, void __user *arg, 
 				err = -EFAULT;
 			vfree(mbuf);
 			return err;
-		
+
 		case SNDCTL_COPR_RDATA:
 			if (copy_from_user(&dbuf, arg, sizeof(dbuf)))
 				return -EFAULT;
@@ -936,7 +936,7 @@ static int pss_coproc_ioctl(void *dev_info, unsigned int cmd, void __user *arg, 
 			if (copy_to_user(arg, &dbuf, sizeof(dbuf)))
 				return -EFAULT;
 			return 0;
-		
+
 		case SNDCTL_COPR_WDATA:
 			if (copy_from_user(&dbuf, arg, sizeof(dbuf)))
 				return -EFAULT;
@@ -956,7 +956,7 @@ static int pss_coproc_ioctl(void *dev_info, unsigned int cmd, void __user *arg, 
 			}
 			spin_unlock_irqrestore(&lock,flags);
 			return 0;
-		
+
 		case SNDCTL_COPR_WCODE:
 			if (copy_from_user(&dbuf, arg, sizeof(dbuf)))
 				return -EFAULT;
@@ -981,7 +981,7 @@ static int pss_coproc_ioctl(void *dev_info, unsigned int cmd, void __user *arg, 
 			}
 			spin_unlock_irqrestore(&lock,flags);
 			return 0;
-		
+
 		case SNDCTL_COPR_RCODE:
 			if (copy_from_user(&dbuf, arg, sizeof(dbuf)))
 				return -EFAULT;
@@ -1074,13 +1074,13 @@ static int __init probe_pss_mss(struct address_info *hw_config)
 		goto fail;
 
 	devc->ad_mixer_dev = NO_WSS_MIXER;
-	if (pss_mixer) 
+	if (pss_mixer)
 	{
 		if ((my_mix = sound_install_mixer (MIXER_DRIVER_VERSION,
 			"PSS-SPEAKERS and AD1848 (through MSS audio codec)",
 			&pss_mixer_operations,
 			sizeof (struct mixer_operations),
-			devc)) < 0) 
+			devc)) < 0)
 		{
 			printk(KERN_ERR "Could not install PSS mixer\n");
 			goto fail;
@@ -1251,7 +1251,7 @@ static int __init setup_pss(char *str)
 {
 	/* io, mss_io, mss_irq, mss_dma, mpu_io, mpu_irq */
 	int ints[7];
-	
+
 	str = get_options(str, ARRAY_SIZE(ints), ints);
 
 	pss_io	= ints[1];

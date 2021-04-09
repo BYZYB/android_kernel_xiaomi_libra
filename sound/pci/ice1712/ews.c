@@ -20,7 +20,7 @@
  *   along with this program; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  *
- */      
+ */
 
 #include <linux/delay.h>
 #include <linux/interrupt.h>
@@ -41,7 +41,7 @@ enum {
 	EWS_I2C_88D = 0,
 	EWS_I2C_6FIRE = 0
 };
-	
+
 
 /* additional i2c devices for EWS boards */
 struct ews_spec {
@@ -430,7 +430,7 @@ static int snd_ice1712_ews_init(struct snd_ice1712 *ice)
 	case ICE1712_SUBDEVICE_EWX2496:
 		ice->num_total_dacs = 2;
 		ice->num_total_adcs = 2;
-		break;	
+		break;
 	case ICE1712_SUBDEVICE_EWS88MT:
 	case ICE1712_SUBDEVICE_EWS88MT_NEW:
 	case ICE1712_SUBDEVICE_PHASE88:
@@ -591,7 +591,7 @@ static int snd_ice1712_ewx_io_sense_get(struct snd_kcontrol *kcontrol, struct sn
 {
 	struct snd_ice1712 *ice = snd_kcontrol_chip(kcontrol);
 	unsigned char mask = kcontrol->private_value & 0xff;
-	
+
 	snd_ice1712_save_gpio_status(ice);
 	ucontrol->value.enumerated.item[0] = snd_ice1712_read(ice, ICE1712_IREG_GPIO_DATA) & mask ? 1 : 0;
 	snd_ice1712_restore_gpio_status(ice);
@@ -754,7 +754,7 @@ static int snd_ice1712_ews88d_control_get(struct snd_kcontrol *kcontrol, struct 
 	int shift = kcontrol->private_value & 0xff;
 	int invert = (kcontrol->private_value >> 8) & 1;
 	unsigned char data[2];
-	
+
 	snd_i2c_lock(ice->i2c);
 	if (snd_i2c_readbytes(spec->i2cdevs[EWS_I2C_88D], data, 2) != 2) {
 		snd_i2c_unlock(ice->i2c);
@@ -865,7 +865,7 @@ static int snd_ice1712_6fire_control_get(struct snd_kcontrol *kcontrol, struct s
 	int shift = kcontrol->private_value & 0xff;
 	int invert = (kcontrol->private_value >> 8) & 1;
 	int data;
-	
+
 	if ((data = snd_ice1712_6fire_read_pca(ice, PCF9554_REG_OUTPUT)) < 0)
 		return data;
 	data = (data >> shift) & 1;
@@ -881,7 +881,7 @@ static int snd_ice1712_6fire_control_put(struct snd_kcontrol *kcontrol, struct s
 	int shift = kcontrol->private_value & 0xff;
 	int invert = (kcontrol->private_value >> 8) & 1;
 	int data, ndata;
-	
+
 	if ((data = snd_ice1712_6fire_read_pca(ice, PCF9554_REG_OUTPUT)) < 0)
 		return data;
 	ndata = data & ~(1 << shift);
@@ -909,12 +909,12 @@ static int snd_ice1712_6fire_select_input_info(struct snd_kcontrol *kcontrol, st
 	strcpy(uinfo->value.enumerated.name, texts[uinfo->value.enumerated.item]);
 	return 0;
 }
-     
+
 static int snd_ice1712_6fire_select_input_get(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_ice1712 *ice = snd_kcontrol_chip(kcontrol);
 	int data;
-	
+
 	if ((data = snd_ice1712_6fire_read_pca(ice, PCF9554_REG_OUTPUT)) < 0)
 		return data;
 	ucontrol->value.integer.value[0] = data & 3;
@@ -925,7 +925,7 @@ static int snd_ice1712_6fire_select_input_put(struct snd_kcontrol *kcontrol, str
 {
 	struct snd_ice1712 *ice = snd_kcontrol_chip(kcontrol);
 	int data, ndata;
-	
+
 	if ((data = snd_ice1712_6fire_read_pca(ice, PCF9554_REG_OUTPUT)) < 0)
 		return data;
 	ndata = data & ~3;
@@ -967,7 +967,7 @@ static int snd_ice1712_ews_add_controls(struct snd_ice1712 *ice)
 {
 	unsigned int idx;
 	int err;
-	
+
 	/* all terratec cards have spdif, but cs8427 module builds it's own controls */
 	if (ice->cs8427 == NULL) {
 		err = snd_ice1712_spdif_build_controls(ice);

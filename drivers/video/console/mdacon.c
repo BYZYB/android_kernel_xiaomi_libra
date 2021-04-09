@@ -8,7 +8,7 @@
  *      slight improvements (c) 2000 Edward Betts <edward@debian.org>
  *
  *  This file is based on the VGA console driver (vgacon.c):
- *	
+ *
  *	Created 28 Sep 1997 by Geert Uytterhoeven
  *
  *	Rewritten by Martin Mares <mj@ucw.cz>, July 1998
@@ -109,9 +109,9 @@ static void write_mda_b(unsigned int val, unsigned char reg)
 {
 	unsigned long flags;
 
-	spin_lock_irqsave(&mda_lock, flags);	
+	spin_lock_irqsave(&mda_lock, flags);
 
-	outb_p(reg, mda_index_port); 
+	outb_p(reg, mda_index_port);
 	outb_p(val, mda_value_port);
 
 	spin_unlock_irqrestore(&mda_lock, flags);
@@ -136,7 +136,7 @@ static int test_mda_b(unsigned char val, unsigned char reg)
 
 	spin_lock_irqsave(&mda_lock, flags);
 
-	outb_p(reg, mda_index_port); 
+	outb_p(reg, mda_index_port);
 	outb  (val, mda_value_port);
 
 	udelay(20); val = (inb_p(mda_value_port) == val);
@@ -146,7 +146,7 @@ static int test_mda_b(unsigned char val, unsigned char reg)
 }
 #endif
 
-static inline void mda_set_cursor(unsigned int location) 
+static inline void mda_set_cursor(unsigned int location)
 {
 	if (mda_cursor_loc == location)
 		return;
@@ -160,7 +160,7 @@ static inline void mda_set_cursor_size(int from, int to)
 {
 	if (mda_cursor_size_from==from && mda_cursor_size_to==to)
 		return;
-	
+
 	if (from > to) {
 		write_mda_b(MDA_CURSOR_OFF, 0x0a);	/* disable cursor */
 	} else {
@@ -185,7 +185,7 @@ static int __init mdacon_setup(char *str)
 	if (ints[0] < 2)
 		return 0;
 
-	if (ints[1] < 1 || ints[1] > MAX_NR_CONSOLES || 
+	if (ints[1] < 1 || ints[1] > MAX_NR_CONSOLES ||
 	    ints[2] < 1 || ints[2] > MAX_NR_CONSOLES)
 		return 0;
 
@@ -222,16 +222,16 @@ static int mda_detect(void)
 
 	scr_writew(0xA55A, q); scr_writew(0x0000, p);
 	if (scr_readw(q) == 0xA55A) count++;
-	
+
 	scr_writew(0x5AA5, q); scr_writew(0x0000, p);
 	if (scr_readw(q) == 0x5AA5) count++;
 
 	scr_writew(p_save, p); scr_writew(q_save, q);
-	
+
 	if (count == 4) {
 		mda_vram_len = 0x02000;
 	}
-	
+
 	/* Ok, there is definitely a card registering at the correct
 	 * memory location, so now we do an I/O port test.
 	 */
@@ -254,7 +254,7 @@ static int mda_detect(void)
 	 * bit of the status register is changing.  This test lasts for
 	 * approximately 1/10th of a second.
 	 */
-	
+
 	p_save = q_save = inb_p(mda_status_port) & MDA_STATUS_VSYNC;
 
 	for (count=0; count < 50000 && p_save == q_save; count++) {
@@ -373,18 +373,18 @@ static inline u16 mda_convert_attr(u16 ch)
 
 	/* Underline and reverse-video are mutually exclusive on MDA.
 	 * Since reverse-video is used for cursors and selected areas,
-	 * it takes precedence. 
+	 * it takes precedence.
 	 */
 
 	if (ch & 0x0800)	attr = 0x7000;	/* reverse */
 	else if (ch & 0x0400)	attr = 0x0100;	/* underline */
 
-	return ((ch & 0x0200) << 2) | 		/* intensity */ 
-		(ch & 0x8000) |			/* blink */ 
+	return ((ch & 0x0200) << 2) | 		/* intensity */
+		(ch & 0x8000) |			/* blink */
 		(ch & 0x00ff) | attr;
 }
 
-static u8 mdacon_build_attr(struct vc_data *c, u8 color, u8 intensity, 
+static u8 mdacon_build_attr(struct vc_data *c, u8 color, u8 intensity,
 			    u8 blink, u8 underline, u8 reverse, u8 italic)
 {
 	/* The attribute is just a bit vector:
@@ -427,7 +427,7 @@ static void mdacon_putcs(struct vc_data *c, const unsigned short *s,
 	}
 }
 
-static void mdacon_clear(struct vc_data *c, int y, int x, 
+static void mdacon_clear(struct vc_data *c, int y, int x,
 			  int height, int width)
 {
 	u16 *dest = MDA_ADDR(x, y);
@@ -443,15 +443,15 @@ static void mdacon_clear(struct vc_data *c, int y, int x,
 			scr_memsetw(dest, eattr, width*2);
 	}
 }
-                        
-static void mdacon_bmove(struct vc_data *c, int sy, int sx, 
+
+static void mdacon_bmove(struct vc_data *c, int sy, int sx,
 			 int dy, int dx, int height, int width)
 {
 	u16 *src, *dest;
 
 	if (width <= 0 || height <= 0)
 		return;
-		
+
 	if (sx==0 && dx==0 && width==mda_num_columns) {
 		scr_memmovew(MDA_ADDR(0,dy), MDA_ADDR(0,sy), height*width*2);
 
@@ -489,8 +489,8 @@ static int mdacon_set_palette(struct vc_data *c, unsigned char *table)
 static int mdacon_blank(struct vc_data *c, int blank, int mode_switch)
 {
 	if (mda_type == TYPE_MDA) {
-		if (blank) 
-			scr_memsetw((void *)mda_vram_base, 
+		if (blank)
+			scr_memsetw((void *)mda_vram_base,
 				mda_convert_attr(c->vc_video_erase_char),
 				c->vc_screenbuf_size);
 		/* Tell console.c that it has to restore the screen itself */
@@ -499,7 +499,7 @@ static int mdacon_blank(struct vc_data *c, int blank, int mode_switch)
 		if (blank)
 			outb_p(0x00, mda_mode_port);	/* disable video */
 		else
-			outb_p(MDA_MODE_VIDEO_EN | MDA_MODE_BLINK_EN, 
+			outb_p(MDA_MODE_VIDEO_EN | MDA_MODE_BLINK_EN,
 				mda_mode_port);
 		return 0;
 	}

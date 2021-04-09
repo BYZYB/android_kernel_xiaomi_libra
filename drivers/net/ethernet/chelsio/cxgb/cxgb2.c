@@ -374,7 +374,7 @@ static char stats_strings[][ETH_GSTRING_LEN] = {
 	"TxFCSErrors",
 	"TxJumboFramesOk",
 	"TxJumboOctetsOk",
-	
+
 	"RxOctetsOK",
 	"RxOctetsBad",
 	"RxUnicastFramesOK",
@@ -401,8 +401,8 @@ static char stats_strings[][ETH_GSTRING_LEN] = {
 	"TxTso",
 	"RxVlan",
 	"TxVlan",
-	"TxNeedHeadroom", 
-	
+	"TxNeedHeadroom",
+
 	/* Interrupt stats */
 	"rx drops",
 	"pure_rsps",
@@ -513,7 +513,7 @@ static void get_stats(struct net_device *dev, struct ethtool_stats *stats,
 	*data++ = ss.vlan_xtract;
 	*data++ = ss.vlan_insert;
 	*data++ = ss.tx_need_hdrroom;
-	
+
 	*data++ = t->rx_drops;
 	*data++ = t->pure_rsps;
 	*data++ = t->unhandled_irqs;

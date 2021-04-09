@@ -77,7 +77,7 @@ struct dn_fib_table {
 	struct hlist_node hlist;
 	u32 n;
 
-	int (*insert)(struct dn_fib_table *t, struct rtmsg *r, 
+	int (*insert)(struct dn_fib_table *t, struct rtmsg *r,
 			struct nlattr *attrs[], struct nlmsghdr *n,
 			struct netlink_skb_parms *req);
 	int (*delete)(struct dn_fib_table *t, struct rtmsg *r,
@@ -98,12 +98,12 @@ struct dn_fib_table {
 extern void dn_fib_init(void);
 extern void dn_fib_cleanup(void);
 
-extern int dn_fib_ioctl(struct socket *sock, unsigned int cmd, 
+extern int dn_fib_ioctl(struct socket *sock, unsigned int cmd,
 			unsigned long arg);
-extern struct dn_fib_info *dn_fib_create_info(const struct rtmsg *r, 
+extern struct dn_fib_info *dn_fib_create_info(const struct rtmsg *r,
 				struct nlattr *attrs[],
 				const struct nlmsghdr *nlh, int *errp);
-extern int dn_fib_semantic_match(int type, struct dn_fib_info *fi, 
+extern int dn_fib_semantic_match(int type, struct dn_fib_info *fi,
 			const struct flowidn *fld,
 			struct dn_fib_res *res);
 extern void dn_fib_release_info(struct dn_fib_info *fi);

@@ -165,7 +165,7 @@ So your kernel printed an RCU CPU stall warning.  The next question is
 warnings:
 
 o	A CPU looping in an RCU read-side critical section.
-	
+
 o	A CPU looping with interrupts disabled.  This condition can
 	result in RCU-sched and RCU-bh stalls.
 

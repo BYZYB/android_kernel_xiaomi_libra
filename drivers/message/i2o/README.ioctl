@@ -14,8 +14,8 @@ utilized by user space applications to communicate with IOPs and devices
 on individual IOPs. This document defines the specific ioctl() commands
 that are available to the user and provides examples of their uses.
 
-This document assumes the reader is familiar with or has access to the 
-I2O specification as no I2O message parameters are outlined.  For information 
+This document assumes the reader is familiar with or has access to the
+I2O specification as no I2O message parameters are outlined.  For information
 on the specification, see http://www.i2osig.org
 
 This document and the I2O user space interface are currently maintained
@@ -24,7 +24,7 @@ deepak@csociety.purdue.edu
 
 II. IOP Access
 
-Access to the I2O subsystem is provided through the device file named 
+Access to the I2O subsystem is provided through the device file named
 /dev/i2o/ctl.  This file is a character file with major number 10 and minor
 number 166.  It can be created through the following command:
 
@@ -32,7 +32,7 @@ number 166.  It can be created through the following command:
 
 III. Determining the IOP Count
 
-   SYNOPSIS 
+   SYNOPSIS
 
    ioctl(fd, I2OGETIOPS,  int *count);
 
@@ -41,7 +41,7 @@ III. Determining the IOP Count
    DESCRIPTION
 
    This function returns the system's active IOP table.  count should
-   point to a buffer containing MAX_I2O_CONTROLLERS entries.  Upon 
+   point to a buffer containing MAX_I2O_CONTROLLERS entries.  Upon
    returning, each entry will contain a non-zero value if the given
    IOP unit is active, and NULL if it is inactive or non-existent.
 
@@ -54,8 +54,8 @@ III. Determining the IOP Count
 
 IV. Getting Hardware Resource Table
 
-   SYNOPSIS 
- 
+   SYNOPSIS
+
    ioctl(fd, I2OHRTGET, struct i2o_cmd_hrt *hrt);
 
       struct i2o_cmd_hrtlct
@@ -67,24 +67,24 @@ IV. Getting Hardware Resource Table
 
    DESCRIPTION
 
-   This function returns the Hardware Resource Table of the IOP specified 
-   by hrt->iop in the buffer pointed to by hrt->resbuf. The actual size of 
+   This function returns the Hardware Resource Table of the IOP specified
+   by hrt->iop in the buffer pointed to by hrt->resbuf. The actual size of
    the data is written into *(hrt->reslen).
 
    RETURNS
 
-   This function returns 0 if no errors occur. If an error occurs, -1 
+   This function returns 0 if no errors occur. If an error occurs, -1
    is returned and errno is set appropriately:
 
       EFAULT      Invalid user space pointer was passed
       ENXIO       Invalid IOP number
       ENOBUFS     Buffer not large enough.  If this occurs, the required
                   buffer length is written into *(hrt->reslen)
-  
+
 V. Getting Logical Configuration Table
-   
-   SYNOPSIS 
- 
+
+   SYNOPSIS
+
    ioctl(fd, I2OLCTGET, struct i2o_cmd_lct *lct);
 
       struct i2o_cmd_hrtlct
@@ -97,12 +97,12 @@ V. Getting Logical Configuration Table
    DESCRIPTION
 
    This function returns the Logical Configuration Table of the IOP specified
-   by lct->iop in the buffer pointed to by lct->resbuf. The actual size of 
+   by lct->iop in the buffer pointed to by lct->resbuf. The actual size of
    the data is written into *(lct->reslen).
 
    RETURNS
 
-   This function returns 0 if no errors occur. If an error occurs, -1 
+   This function returns 0 if no errors occur. If an error occurs, -1
    is returned and errno is set appropriately:
 
       EFAULT      Invalid user space pointer was passed
@@ -111,9 +111,9 @@ V. Getting Logical Configuration Table
                   buffer length is written into *(lct->reslen)
 
 VI. Setting Parameters
-   
-   SYNOPSIS 
- 
+
+   SYNOPSIS
+
    ioctl(fd, I2OPARMSET, struct i2o_parm_setget *ops);
 
       struct i2o_cmd_psetget
@@ -129,15 +129,15 @@ VI. Setting Parameters
    DESCRIPTION
 
    This function posts a UtilParamsSet message to the device identified
-   by ops->iop and ops->tid.  The operation list for the message is 
+   by ops->iop and ops->tid.  The operation list for the message is
    sent through the ops->opbuf buffer, and the result list is written
-   into the buffer pointed to by ops->resbuf.  The number of bytes 
-   written is placed into *(ops->reslen). 
+   into the buffer pointed to by ops->resbuf.  The number of bytes
+   written is placed into *(ops->reslen).
 
    RETURNS
 
    The return value is the size in bytes of the data written into
-   ops->resbuf if no errors occur.  If an error occurs, -1 is returned 
+   ops->resbuf if no errors occur.  If an error occurs, -1 is returned
    and errno is set appropriately:
 
       EFAULT      Invalid user space pointer was passed
@@ -152,9 +152,9 @@ VI. Setting Parameters
    list to determine the specific status of the transaction.
 
 VII. Getting Parameters
-   
-   SYNOPSIS 
- 
+
+   SYNOPSIS
+
    ioctl(fd, I2OPARMGET, struct i2o_parm_setget *ops);
 
       struct i2o_parm_setget
@@ -170,7 +170,7 @@ VII. Getting Parameters
    DESCRIPTION
 
    This function posts a UtilParamsGet message to the device identified
-   by ops->iop and ops->tid.  The operation list for the message is 
+   by ops->iop and ops->tid.  The operation list for the message is
    sent through the ops->opbuf buffer, and the result list is written
    into the buffer pointed to by ops->resbuf.  The actual size of data
    written is placed into *(ops->reslen).
@@ -185,13 +185,13 @@ VII. Getting Parameters
       ENOMEM      Kernel memory allocation error
 
    A return value of 0 does not mean that the value was actually
-   properly retrieved.  The user should check the result list 
+   properly retrieved.  The user should check the result list
    to determine the specific status of the transaction.
 
 VIII. Downloading Software
-   
-   SYNOPSIS 
- 
+
+   SYNOPSIS
+
    ioctl(fd, I2OSWDL, struct i2o_sw_xfer *sw);
 
       struct i2o_sw_xfer
@@ -201,7 +201,7 @@ VIII. Downloading Software
          u8    sw_type;   /* Software type */
          u32   sw_id;     /* Software ID */
          void  *buf;      /* Pointer to software buffer */
-         u32   *swlen;    /* Length of software buffer */        
+         u32   *swlen;    /* Length of software buffer */
          u32   *maxfrag;  /* Number of fragments */
          u32   *curfrag;  /* Current fragment number */
       };
@@ -221,7 +221,7 @@ VIII. Downloading Software
 
    RETURNS
 
-   This function returns 0 no errors occur. If an error occurs, -1 
+   This function returns 0 no errors occur. If an error occurs, -1
    is returned and errno is set appropriately:
 
       EFAULT      Invalid user space pointer was passed
@@ -230,8 +230,8 @@ VIII. Downloading Software
       ENOMEM      Kernel memory allocation error
 
 IX. Uploading Software
-   
-   SYNOPSIS 
+
+   SYNOPSIS
 
    ioctl(fd, I2OSWUL, struct i2o_sw_xfer *sw);
 
@@ -242,7 +242,7 @@ IX. Uploading Software
          u8    sw_type;  /* Software type */
          u32   sw_id;    /* Software ID */
          void  *buf;     /* Pointer to software buffer */
-         u32   *swlen;   /* Length of software buffer */        
+         u32   *swlen;   /* Length of software buffer */
          u32   *maxfrag; /* Number of fragments */
          u32   *curfrag; /* Current fragment number */
       };
@@ -270,11 +270,11 @@ IX. Uploading Software
       ENXIO       Invalid IOP number
       ETIMEDOUT   Timeout waiting for reply message
       ENOMEM      Kernel memory allocation error
-         
+
 X. Removing Software
-   
-   SYNOPSIS 
- 
+
+   SYNOPSIS
+
    ioctl(fd, I2OSWDEL, struct i2o_sw_xfer *sw);
 
       struct i2o_sw_xfer
@@ -284,7 +284,7 @@ X. Removing Software
          u8    sw_type;  /* Software type */
          u32   sw_id;    /* Software ID */
          void  *buf;     /* Unused */
-         u32   *swlen;   /* Length of the software data */        
+         u32   *swlen;   /* Length of the software data */
          u32   *maxfrag; /* Unused */
          u32   *curfrag; /* Unused */
       };
@@ -292,10 +292,10 @@ X. Removing Software
    DESCRIPTION
 
    This function removes software from the IOP identified by sw->iop.
-   The RemoveFlags, SwID, SwType and SwSize fields of the ExecSwRemove message 
-   are filled in with the values of sw->flags, sw->sw_id, sw->sw_type and 
-   *(sw->swlen). Give zero in *(sw->len) if the value is unknown. IOP uses 
-   *(sw->swlen) value to verify correct identication of the module to remove. 
+   The RemoveFlags, SwID, SwType and SwSize fields of the ExecSwRemove message
+   are filled in with the values of sw->flags, sw->sw_id, sw->sw_type and
+   *(sw->swlen). Give zero in *(sw->len) if the value is unknown. IOP uses
+   *(sw->swlen) value to verify correct identication of the module to remove.
    The actual size of the module is written into *(sw->swlen).
 
    RETURNS
@@ -319,7 +319,7 @@ X. Validating Configuration
 
    This function posts an ExecConfigValidate message to the controller
    identified by iop. This message indicates that the current
-   configuration is accepted. The iop changes the status of suspect drivers 
+   configuration is accepted. The iop changes the status of suspect drivers
    to valid and may delete old drivers from its store.
 
    RETURNS
@@ -331,9 +331,9 @@ X. Validating Configuration
       ENXIO       Invalid IOP number
 
 XI. Configuration Dialog
-   
-   SYNOPSIS 
- 
+
+   SYNOPSIS
+
    ioctl(fd, I2OHTML, struct i2o_html *htquery);
       struct i2o_html
       {
@@ -343,20 +343,20 @@ XI. Configuration Dialog
          void  *resbuf;  /* Buffer for reply HTML page */
          u32   *reslen;  /* Length in bytes of reply buffer */
          void  *qbuf;    /* Pointer to HTTP query string */
-         u32   qlen;     /* Length in bytes of query string buffer */        
+         u32   qlen;     /* Length in bytes of query string buffer */
       };
 
    DESCRIPTION
 
    This function posts an UtilConfigDialog message to the device identified
-   by htquery->iop and htquery->tid.  The requested HTML page number is 
-   provided by the htquery->page field, and the resultant data is stored 
-   in the buffer pointed to by htquery->resbuf.  If there is an HTTP query 
+   by htquery->iop and htquery->tid.  The requested HTML page number is
+   provided by the htquery->page field, and the resultant data is stored
+   in the buffer pointed to by htquery->resbuf.  If there is an HTTP query
    string that is to be sent to the device, it should be sent in the buffer
    pointed to by htquery->qbuf.  If there is no query string, this field
    should be set to NULL. The actual size of the reply received is written
    into *(htquery->reslen).
-  
+
    RETURNS
 
    This function returns 0 if no error occur. If an error occurs, -1

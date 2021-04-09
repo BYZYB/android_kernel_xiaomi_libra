@@ -186,7 +186,7 @@ void sb_dsp_midi_init(sb_devc * devc, struct module *owner)
 
 	if (owner)
 			midi_devs[dev]->owner = owner;
-	
+
 	midi_devs[dev]->devc = devc;
 
 

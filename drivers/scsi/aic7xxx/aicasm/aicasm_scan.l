@@ -128,7 +128,7 @@ if[ \t]*\(		{
 					 && string_buf_ptr != string_buf
 					 && string_buf_ptr[-1] == ' ')
 						yptr++;
-					else 
+					else
 						*string_buf_ptr++ = *yptr++;
 				}
 			}
@@ -290,7 +290,7 @@ nop			{ return T_NOP; }
 				BEGIN MACRODEF;
 				return T_DEFINE;
 			}
-<MACRODEF>{WORD}{SPACE}	{ 
+<MACRODEF>{WORD}{SPACE}	{
 				char *yptr;
 
 				/* Strip space and return as a normal symbol */
@@ -444,7 +444,7 @@ nop			{ return T_NOP; }
 					return T_SYMBOL;
 				}
 			}
-.			{ 
+.			{
 				snprintf(buf, sizeof(buf), "Invalid character "
 					 "'%c'", yytext[0]);
 				stop(buf, EX_DATAERR);
@@ -474,7 +474,7 @@ include_file(char *file_name, include_type type)
 	if (newfile == NULL && type != SOURCE_FILE) {
                 path_entry_t include_dir;
                 for (include_dir = search_path.slh_first;
-                     include_dir != NULL;                
+                     include_dir != NULL;
                      include_dir = include_dir->links.sle_next) {
 			char fullname[PATH_MAX];
 

@@ -343,14 +343,14 @@ void __init realview_timer_init(unsigned int timer_irq)
 {
 	u32 val;
 
-	/* 
-	 * set clock frequency: 
+	/*
+	 * set clock frequency:
 	 *	REALVIEW_REFCLK is 32KHz
 	 *	REALVIEW_TIMCLK is 1MHz
 	 */
 	val = readl(__io_address(REALVIEW_SCTL_BASE));
 	writel((REALVIEW_TIMCLK << REALVIEW_TIMER1_EnSel) |
-	       (REALVIEW_TIMCLK << REALVIEW_TIMER2_EnSel) | 
+	       (REALVIEW_TIMCLK << REALVIEW_TIMER2_EnSel) |
 	       (REALVIEW_TIMCLK << REALVIEW_TIMER3_EnSel) |
 	       (REALVIEW_TIMCLK << REALVIEW_TIMER4_EnSel) | val,
 	       __io_address(REALVIEW_SCTL_BASE));

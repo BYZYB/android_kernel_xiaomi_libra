@@ -1,7 +1,7 @@
 /*
  * linux/arch/h8300/boot/traps.c -- general exception handling code
  * H8/300 support Yoshinori Sato <ysato@users.sourceforge.jp>
- * 
+ *
  * Cloned from Linux/m68k.
  *
  * No original Copyright holder listed,
@@ -114,7 +114,7 @@ void die(const char *str, struct pt_regs *fp, unsigned long err)
 extern char _start, _etext;
 #define check_kernel_text(addr) \
         ((addr >= (unsigned long)(&_start)) && \
-         (addr <  (unsigned long)(&_etext))) 
+         (addr <  (unsigned long)(&_etext)))
 
 static int kstack_depth_to_print = 24;
 

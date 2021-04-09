@@ -7,7 +7,7 @@
  ****************************************************************
  **
  **  WARNING:
- **  The values in this file are exported to user space via 
+ **  The values in this file are exported to user space via
  **  the sysctl() binary interface.  Do *NOT* change the
  **  numbering of any existing values here, and do not change
  **  any numbers within any one set of values.  If you have to
@@ -60,7 +60,7 @@ extern int proc_do_large_bitmap(struct ctl_table *, int,
 
 /*
  * Register a set of sysctl names by calling register_sysctl_table
- * with an initialised array of struct ctl_table's.  An entry with 
+ * with an initialised array of struct ctl_table's.  An entry with
  * NULL procname terminates the table.  table->de will be
  * set up by the registration and need not be initialised in advance.
  *
@@ -78,7 +78,7 @@ extern int proc_do_large_bitmap(struct ctl_table *, int,
  * the sysctl table.  The data and maxlen fields of the ctl_table
  * struct enable minimal validation of the values being written to be
  * performed, and the mode field allows minimal authentication.
- * 
+ *
  * There must be a proc_handler routine for any terminal nodes
  * mirrored under /proc/sys (non-terminals are handled by a built-in
  * directory handler).  Several default handlers are available to
@@ -104,7 +104,7 @@ static inline void *proc_sys_poll_event(struct ctl_table_poll *poll)
 	struct ctl_table_poll name = __CTL_TABLE_POLL_INITIALIZER(name)
 
 /* A sysctl table is an array of struct ctl_table: */
-struct ctl_table 
+struct ctl_table
 {
 	const char *procname;		/* Text ID for /proc/sys, or zero */
 	void *data;

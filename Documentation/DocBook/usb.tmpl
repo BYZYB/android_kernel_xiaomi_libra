@@ -5,7 +5,7 @@
 <book id="Linux-USB-API">
  <bookinfo>
   <title>The Linux-USB Host Side API</title>
-  
+
   <legalnotice>
    <para>
      This documentation is free software; you can redistribute
@@ -14,21 +14,21 @@
      version 2 of the License, or (at your option) any later
      version.
    </para>
-      
+
    <para>
      This program is distributed in the hope that it will be
      useful, but WITHOUT ANY WARRANTY; without even the implied
      warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
      See the GNU General Public License for more details.
    </para>
-      
+
    <para>
      You should have received a copy of the GNU General Public
      License along with this program; if not, write to the Free
      Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
      MA 02111-1307 USA
    </para>
-      
+
    <para>
      For more details see the file COPYING in the source
      distribution of Linux.
@@ -109,7 +109,7 @@
 
     <para>The device model seen by USB drivers is relatively complex.
     </para>
-     
+
     <itemizedlist>
 
 	<listitem><para>USB supports four kinds of data transfers
@@ -270,7 +270,7 @@
     </para>
 
     <para>The same basic APIs are available to drivers for all
-    those controllers.  
+    those controllers.
     For historical reasons they are in two layers:
     <structname>struct usb_bus</structname> is a rather thin
     layer that became available in the 2.2 kernels, while
@@ -321,7 +321,7 @@
 	    <title>What files are in "usbfs"?</title>
 
 	    <para>Conventionally mounted at
-	    <filename>/proc/bus/usb</filename>, usbfs 
+	    <filename>/proc/bus/usb</filename>, usbfs
 	    features include:
 	    <itemizedlist>
 		<listitem><para><filename>/proc/bus/usb/devices</filename>
@@ -492,7 +492,7 @@ for (;;) {
 	    class descriptors.
 	    </para>
 
-	    <para><emphasis>Perform USB operations</emphasis> using 
+	    <para><emphasis>Perform USB operations</emphasis> using
 	    <emphasis>ioctl()</emphasis> requests to make endpoint I/O
 	    requests (synchronously or asynchronously) or manage
 	    the device.
@@ -504,7 +504,7 @@ for (;;) {
 	    from one thread, you won't be able to write to a different
 	    endpoint from another thread until the read completes.
 	    This works for <emphasis>half duplex</emphasis> protocols,
-	    but otherwise you'd use asynchronous i/o requests. 
+	    but otherwise you'd use asynchronous i/o requests.
 	    </para>
 
 	    </sect1>
@@ -547,7 +547,7 @@ for (;;) {
 	    one using non-control endpoints, reading or writing data
 	    and claiming exclusive use of an interface.
 	    <emphasis>Bulk</emphasis> transfers are easiest to use,
-	    but only their sibling <emphasis>interrupt</emphasis> transfers 
+	    but only their sibling <emphasis>interrupt</emphasis> transfers
 	    work with low speed devices.
 	    Both interrupt and <emphasis>isochronous</emphasis> transfers
 	    offer service guarantees because their bandwidth is reserved.
@@ -830,7 +830,7 @@ usbdev_ioctl (int fd, int ifno, unsigned request, void *param)
 		    since it does not fully synchronize device, interface,
 		    and driver (not just usbfs) state.
 		    </para></warning></listitem></varlistentry>
-	    
+
 		<varlistentry><term>USBDEVFS_SETINTERFACE</term>
 		    <listitem><para>Sets the alternate setting for an
 		    interface.  The ioctl parameter is a pointer to a

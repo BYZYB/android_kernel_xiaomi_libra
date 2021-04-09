@@ -22,7 +22,7 @@ extern struct node_map_data node_data[];
  */
 
 /* Since each 1GB can only belong to one region (node), we can create
- * an index table for pfn to nid lookup; each entry in pfnnid_map 
+ * an index table for pfn to nid lookup; each entry in pfnnid_map
  * represents 1GB, and contains the node that the memory belongs to. */
 
 #define PFNNID_SHIFT (30 - PAGE_SHIFT)

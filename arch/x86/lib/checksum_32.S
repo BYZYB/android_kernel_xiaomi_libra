@@ -29,26 +29,26 @@
 #include <asm/dwarf2.h>
 #include <asm/errno.h>
 #include <asm/asm.h>
-				
+
 /*
  * computes a partial checksum, e.g. for TCP/UDP fragments
  */
 
-/*	
+/*
 unsigned int csum_partial(const unsigned char * buff, int len, unsigned int sum)
  */
-		
+
 .text
-		
+
 #ifndef CONFIG_X86_USE_PPRO_CHECKSUM
 
-	  /*		
+	  /*
 	   * Experiments with Ethernet and SLIP connections show that buff
 	   * is aligned on either a 2-byte or 4-byte boundary.  We get at
 	   * least a twofold speedup on 486 and Pentium if it is 4-byte aligned.
 	   * Fortunately, it is easy to convert 2-byte alignment to 4-byte
 	   * alignment for the unrolled loop.
-	   */		
+	   */
 ENTRY(csum_partial)
 	CFI_STARTPROC
 	pushl_cfi %esi
@@ -125,8 +125,8 @@ ENTRY(csum_partial)
 	shll $16,%ecx
 5:	movb (%esi),%cl
 6:	addl %ecx,%eax
-	adcl $0, %eax 
-7:	
+	adcl $0, %eax
+7:
 	testl $1, 12(%esp)
 	jz 8f
 	roll $8, %eax
@@ -153,15 +153,15 @@ ENTRY(csum_partial)
 	movl 16(%esp),%ecx	# Function arg: int len
 	movl 12(%esp),%esi	# Function arg:	const unsigned char *buf
 
-	testl $3, %esi         
-	jnz 25f                 
+	testl $3, %esi
+	jnz 25f
 10:
 	movl %ecx, %edx
 	movl %ecx, %ebx
 	andl $0x7c, %ebx
 	shrl $7, %ecx
 	addl %ebx,%esi
-	shrl $2, %ebx  
+	shrl $2, %ebx
 	negl %ebx
 	lea 45f(%ebx,%ebx,2), %ebx
 	testl %esi, %esi
@@ -173,8 +173,8 @@ ENTRY(csum_partial)
 	adcl $0, %eax
 	jmp 10b
 25:
-	testl $1, %esi         
-	jz 30f                 
+	testl $1, %esi
+	jz 30f
 	# buf is odd
 	dec %ecx
 	jl 90f
@@ -186,8 +186,8 @@ ENTRY(csum_partial)
 	testl $2, %esi
 	jz 10b
 
-30:	subl $2, %ecx          
-	ja 20b                 
+30:	subl $2, %ecx
+	ja 20b
 	je 32f
 	addl $2, %ecx
 	jz 80f
@@ -200,12 +200,12 @@ ENTRY(csum_partial)
 	adcl $0, %eax
 	jmp 80f
 
-40: 
+40:
 	addl -128(%esi), %eax
 	adcl -124(%esi), %eax
 	adcl -120(%esi), %eax
-	adcl -116(%esi), %eax   
-	adcl -112(%esi), %eax   
+	adcl -116(%esi), %eax
+	adcl -112(%esi), %eax
 	adcl -108(%esi), %eax
 	adcl -104(%esi), %eax
 	adcl -100(%esi), %eax
@@ -217,11 +217,11 @@ ENTRY(csum_partial)
 	adcl -76(%esi), %eax
 	adcl -72(%esi), %eax
 	adcl -68(%esi), %eax
-	adcl -64(%esi), %eax     
-	adcl -60(%esi), %eax     
-	adcl -56(%esi), %eax     
-	adcl -52(%esi), %eax   
-	adcl -48(%esi), %eax   
+	adcl -64(%esi), %eax
+	adcl -60(%esi), %eax
+	adcl -56(%esi), %eax
+	adcl -52(%esi), %eax
+	adcl -48(%esi), %eax
 	adcl -44(%esi), %eax
 	adcl -40(%esi), %eax
 	adcl -36(%esi), %eax
@@ -250,11 +250,11 @@ ENTRY(csum_partial)
 	andl -128(%esi),%ebx	# esi is 4-aligned so should be ok
 	addl %ebx,%eax
 	adcl $0,%eax
-80: 
+80:
 	testl $1, 12(%esp)
 	jz 90f
 	roll $8, %eax
-90: 
+90:
 	popl_cfi %ebx
 	CFI_RESTORE ebx
 	popl_cfi %esi
@@ -262,13 +262,13 @@ ENTRY(csum_partial)
 	ret
 	CFI_ENDPROC
 ENDPROC(csum_partial)
-				
+
 #endif
 
 /*
 unsigned int csum_partial_copy_generic (const char *src, char *dst,
 				  int len, int sum, int *src_err_ptr, int *dst_err_ptr)
- */ 
+ */
 
 /*
  * Copy from ds while checksumming, otherwise like csum_partial
@@ -291,12 +291,12 @@ unsigned int csum_partial_copy_generic (const char *src, char *dst,
 
 #ifndef CONFIG_X86_USE_PPRO_CHECKSUM
 
-#define ARGBASE 16		
+#define ARGBASE 16
 #define FP		12
-		
+
 ENTRY(csum_partial_copy_generic)
 	CFI_STARTPROC
-	subl  $4,%esp	
+	subl  $4,%esp
 	CFI_ADJUST_CFA_OFFSET 4
 	pushl_cfi %edi
 	CFI_REL_OFFSET edi, 0
@@ -309,7 +309,7 @@ ENTRY(csum_partial_copy_generic)
 	movl ARGBASE+4(%esp),%esi	# src
 	movl ARGBASE+8(%esp),%edi	# dst
 
-	testl $2, %edi			# Check alignment. 
+	testl $2, %edi			# Check alignment.
 	jz 2f				# Jump if alignment is ok.
 	subl $2, %ecx			# Alignment uses up two bytes.
 	jae 1f				# Jump if we had at least two bytes.
@@ -319,7 +319,7 @@ SRC(1:	movw (%esi), %bx	)
 	addl $2, %esi
 DST(	movw %bx, (%edi)	)
 	addl $2, %edi
-	addw %bx, %ax	
+	addw %bx, %ax
 	adcl $0, %eax
 2:
 	movl %ecx, FP(%esp)
@@ -390,14 +390,14 @@ DST(	movb %cl, (%edi)	)
 5000:
 
 # Exception handler:
-.section .fixup, "ax"							
+.section .fixup, "ax"
 
 6001:
 	movl ARGBASE+20(%esp), %ebx	# src_err_ptr
 	movl $-EFAULT, (%ebx)
 
 	# zero the complete destination - computing the rest
-	# is too much work 
+	# is too much work
 	movl ARGBASE+8(%esp), %edi	# dst
 	movl ARGBASE+12(%esp), %ecx	# len
 	xorl %eax,%eax
@@ -419,7 +419,7 @@ DST(	movb %cl, (%edi)	)
 	popl_cfi %edi
 	CFI_RESTORE edi
 	popl_cfi %ecx			# equivalent to addl $4,%esp
-	ret	
+	ret
 	CFI_ENDPROC
 ENDPROC(csum_partial_copy_generic)
 
@@ -430,7 +430,7 @@ ENDPROC(csum_partial_copy_generic)
 #define ROUND1(x) \
 	SRC(movl x(%esi), %ebx	)	;	\
 	addl %ebx, %eax			;	\
-	DST(movl %ebx, x(%edi)	)	; 
+	DST(movl %ebx, x(%edi)	)	;
 
 #define ROUND(x) \
 	SRC(movl x(%esi), %ebx	)	;	\
@@ -438,7 +438,7 @@ ENDPROC(csum_partial_copy_generic)
 	DST(movl %ebx, x(%edi)	)	;
 
 #define ARGBASE 12
-		
+
 ENTRY(csum_partial_copy_generic)
 	CFI_STARTPROC
 	pushl_cfi %ebx
@@ -448,29 +448,29 @@ ENTRY(csum_partial_copy_generic)
 	pushl_cfi %esi
 	CFI_REL_OFFSET esi, 0
 	movl ARGBASE+4(%esp),%esi	#src
-	movl ARGBASE+8(%esp),%edi	#dst	
+	movl ARGBASE+8(%esp),%edi	#dst
 	movl ARGBASE+12(%esp),%ecx	#len
 	movl ARGBASE+16(%esp),%eax	#sum
-#	movl %ecx, %edx  
-	movl %ecx, %ebx  
+#	movl %ecx, %edx
+	movl %ecx, %ebx
 	movl %esi, %edx
-	shrl $6, %ecx     
-	andl $0x3c, %ebx  
+	shrl $6, %ecx
+	andl $0x3c, %ebx
 	negl %ebx
-	subl %ebx, %esi  
-	subl %ebx, %edi  
+	subl %ebx, %esi
+	subl %ebx, %edi
 	lea  -1(%esi),%edx
 	andl $-32,%edx
 	lea 3f(%ebx,%ebx), %ebx
-	testl %esi, %esi 
+	testl %esi, %esi
 	jmp *%ebx
 1:	addl $64,%esi
-	addl $64,%edi 
+	addl $64,%edi
 	SRC(movb -32(%edx),%bl)	; SRC(movb (%edx),%bl)
-	ROUND1(-64) ROUND(-60) ROUND(-56) ROUND(-52)	
-	ROUND (-48) ROUND(-44) ROUND(-40) ROUND(-36)	
-	ROUND (-32) ROUND(-28) ROUND(-24) ROUND(-20)	
-	ROUND (-16) ROUND(-12) ROUND(-8)  ROUND(-4)	
+	ROUND1(-64) ROUND(-60) ROUND(-56) ROUND(-52)
+	ROUND (-48) ROUND(-44) ROUND(-40) ROUND(-36)
+	ROUND (-32) ROUND(-28) ROUND(-24) ROUND(-20)
+	ROUND (-16) ROUND(-12) ROUND(-8)  ROUND(-4)
 3:	adcl $0,%eax
 	addl $64, %edx
 	dec %ecx
@@ -493,7 +493,7 @@ DST(	movb %dl, (%edi)         )
 	adcl $0, %eax
 7:
 .section .fixup, "ax"
-6001:	movl	ARGBASE+20(%esp), %ebx	# src_err_ptr	
+6001:	movl	ARGBASE+20(%esp), %ebx	# src_err_ptr
 	movl $-EFAULT, (%ebx)
 	# zero the complete destination (computing the rest is too much work)
 	movl ARGBASE+8(%esp),%edi	# dst
@@ -503,8 +503,8 @@ DST(	movb %dl, (%edi)         )
 	jmp 7b
 6002:	movl ARGBASE+24(%esp), %ebx	# dst_err_ptr
 	movl $-EFAULT, (%ebx)
-	jmp  7b			
-.previous				
+	jmp  7b
+.previous
 
 	popl_cfi %esi
 	CFI_RESTORE esi
@@ -515,8 +515,8 @@ DST(	movb %dl, (%edi)         )
 	ret
 	CFI_ENDPROC
 ENDPROC(csum_partial_copy_generic)
-				
+
 #undef ROUND
-#undef ROUND1		
-		
+#undef ROUND1
+
 #endif

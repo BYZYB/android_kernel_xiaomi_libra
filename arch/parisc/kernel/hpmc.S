@@ -1,4 +1,4 @@
-/* 
+/*
  * HPMC (High Priority Machine Check) handler.
  *
  * Copyright (C) 1999 Philipp Rumpf <prumpf@tux.org>
@@ -123,7 +123,7 @@ ENTRY(os_hpmc)
 	/* Setup stack pointer. */
 
 	load32	PA(hpmc_stack),sp
-	
+
 	ldo     128(sp),sp /* leave room for arguments */
 
 	/*

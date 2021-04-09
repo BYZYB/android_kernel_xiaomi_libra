@@ -257,7 +257,7 @@ static inline unsigned long __rewind_psw(psw_t psw, unsigned long ilc)
 	return (psw.addr - ilc) & mask;
 #endif
 }
- 
+
 /*
  * Function to drop a processor into disabled wait state
  */
@@ -268,7 +268,7 @@ static inline void __noreturn disabled_wait(unsigned long code)
 
 	dw_psw.mask = PSW_MASK_BASE | PSW_MASK_WAIT | PSW_MASK_BA | PSW_MASK_EA;
         dw_psw.addr = code;
-        /* 
+        /*
          * Store status and then load disabled wait psw,
          * the processor is dead afterwards
          */

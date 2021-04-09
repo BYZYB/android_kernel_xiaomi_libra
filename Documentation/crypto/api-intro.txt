@@ -1,6 +1,6 @@
 
                     Scatterlist Cryptographic API
-                   
+
 INTRODUCTION
 
 The Scatterlist Crypto API takes page vectors (scatterlists) as
@@ -19,8 +19,8 @@ At the lowest level are algorithms, which register dynamically with the
 API.
 
 'Transforms' are user-instantiated objects, which maintain state, handle all
-of the implementation logic (e.g. manipulating page vectors) and provide an 
-abstraction to the underlying algorithms.  However, at the user 
+of the implementation logic (e.g. manipulating page vectors) and provide an
+abstraction to the underlying algorithms.  However, at the user
 level they are very simple.
 
 Conceptually, the API layering looks like this:
@@ -28,7 +28,7 @@ Conceptually, the API layering looks like this:
   [transform api]  (user interface)
   [transform ops]  (per-type logic glue e.g. cipher.c, compress.c)
   [algorithm api]  (for registering algorithms)
-  
+
 The idea is to make the user interface and algorithm registration API
 very simple, while hiding the core logic from both.  Many good ideas
 from existing APIs such as Cryptoapi and Nettle have been adapted for this.
@@ -52,27 +52,27 @@ Here's an example of how to use the API:
 	#include <linux/crypto.h>
 	#include <linux/err.h>
 	#include <linux/scatterlist.h>
-	
+
 	struct scatterlist sg[2];
 	char result[128];
 	struct crypto_hash *tfm;
 	struct hash_desc desc;
-	
+
 	tfm = crypto_alloc_hash("md5", 0, CRYPTO_ALG_ASYNC);
 	if (IS_ERR(tfm))
 		fail();
-		
+
 	/* ... set up the scatterlists ... */
 
 	desc.tfm = tfm;
 	desc.flags = 0;
-	
+
 	if (crypto_hash_digest(&desc, sg, 2, result))
 		fail();
-	
+
 	crypto_free_hash(tfm);
 
-    
+
 Many real examples are available in the regression test module (tcrypt.c).
 
 
@@ -154,7 +154,7 @@ of the API:
   Christoph Hellwig
 
 Portions of this API were derived from the following projects:
-  
+
   Kerneli Cryptoapi (http://www.kerneli.org/)
     Alexander Kjeldaas
     Herbert Valerio Riedel
@@ -166,7 +166,7 @@ Portions of this API were derived from the following projects:
     Harald Welte
 
 and;
-  
+
   Nettle (http://www.lysator.liu.se/~nisse/nettle/)
     Niels Möller
 
@@ -188,7 +188,7 @@ Original developers of the crypto algorithms:
 
 SHA1 algorithm contributors:
   Jean-Francois Dive
-  
+
 DES algorithm contributors:
   Raimar Falke
   Gisle Sælensminde
@@ -206,7 +206,7 @@ SHA256/384/512 algorithm contributors:
   Andrew McDonald
   Kyle McMartin
   Herbert Valerio Riedel
-  
+
 AES algorithm contributors:
   Alexander Kjeldaas
   Herbert Valerio Riedel

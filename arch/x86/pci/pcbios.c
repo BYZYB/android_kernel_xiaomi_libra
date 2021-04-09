@@ -249,7 +249,7 @@ static int pci_bios_write(unsigned int seg, unsigned int bus,
 	unsigned long bx = (bus << 8) | devfn;
 
 	WARN_ON(seg);
-	if ((bus > 255) || (devfn > 255) || (reg > 255)) 
+	if ((bus > 255) || (devfn > 255) || (reg > 255))
 		return -EINVAL;
 
 	raw_spin_lock_irqsave(&pci_config_lock, flags);
@@ -447,7 +447,7 @@ EXPORT_SYMBOL(pcibios_set_irq_routing);
 
 void __init pci_pcbios_init(void)
 {
-	if ((pci_probe & PCI_PROBE_BIOS) 
+	if ((pci_probe & PCI_PROBE_BIOS)
 		&& ((raw_pci_ops = pci_find_bios()))) {
 		pci_bios_present = 1;
 	}

@@ -6,7 +6,7 @@
  * This is hand-massaged output from the original memcpy.c.  We defer to
  * memcpy whenever possible; the backwards copy loops are not unrolled.
  */
-        
+
 	.set noat
 	.set noreorder
 	.text

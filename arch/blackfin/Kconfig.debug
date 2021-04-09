@@ -74,7 +74,7 @@ config DEBUG_DOUBLEFAULT
 	    - The EXCAUSE field is updated with an unrecoverable event
 	    The only way to check this is to see if EXCAUSE contains the
 	    unrecoverable event value at every exception return. By selecting
-	    this option, you are skipping over the faulting instruction, and 
+	    this option, you are skipping over the faulting instruction, and
 	    hoping things stay together enough to print out a debug message.
 
 	  This does add a little kernel code, but is the only method to debug
@@ -137,12 +137,12 @@ choice
 config DEBUG_BFIN_HWTRACE_COMPRESSION_OFF
 	bool "Trace all Loops"
 	help
-	  The trace buffer records all changes of flow 
+	  The trace buffer records all changes of flow
 
 config DEBUG_BFIN_HWTRACE_COMPRESSION_ONE
 	bool "Compress single-level loops"
 	help
-	  The trace buffer does not record single loops - helpful if trace 
+	  The trace buffer does not record single loops - helpful if trace
 	  is spinning on a while or do loop.
 
 config DEBUG_BFIN_HWTRACE_COMPRESSION_TWO
@@ -168,8 +168,8 @@ config DEBUG_BFIN_HWTRACE_EXPAND
 	help
 	  By selecting this option, every time the 16 hardware entries in
 	  the Blackfin's HW Trace buffer are full, the kernel will move them
-	  into a software buffer, for dumping when there is an issue. This 
-	  has a great impact on performance, (an interrupt every 16 change of 
+	  into a software buffer, for dumping when there is an issue. This
+	  has a great impact on performance, (an interrupt every 16 change of
 	  flows) and should normally be turned off, except in those nasty
 	  debugging sessions
 
@@ -201,7 +201,7 @@ config DEBUG_BFIN_NO_KERN_HWTRACE
 	  of code so that the trace buffer will extend further back.
 
 config EARLY_PRINTK
-	bool "Early printk" 
+	bool "Early printk"
 	default n
 	select SERIAL_CORE_CONSOLE
 	help

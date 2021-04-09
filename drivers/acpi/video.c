@@ -131,7 +131,7 @@ struct acpi_video_device_attrib {
 	u32 display_type:4;	/*Describe the specific type in use */
 	u32 vendor_specific:4;	/*Chipset Vendor Specific */
 	u32 bios_can_detect:1;	/*BIOS can detect the device */
-	u32 depend_on_vga:1;	/*Non-VGA output device whose power is related to 
+	u32 depend_on_vga:1;	/*Non-VGA output device whose power is related to
 				   the VGA device. */
 	u32 pipe_id:3;		/*For VGA multiple-head devices. */
 	u32 reserved:10;	/*Must be 0 */
@@ -614,7 +614,7 @@ acpi_video_device_EDID(struct acpi_video_device *device,
 /*
  *  Arg:
  *  	video		: video bus device pointer
- *	bios_flag	: 
+ *	bios_flag	:
  *		0.	The system BIOS should NOT automatically switch(toggle)
  *			the active display output.
  *		1.	The system BIOS should automatically switch (toggle) the
@@ -626,7 +626,7 @@ acpi_video_device_EDID(struct acpi_video_device *device,
  *	lcd_flag	:
  *		0.	The system BIOS should automatically control the brightness level
  *			of the LCD when the power changes from AC to DC
- *		1. 	The system BIOS should NOT automatically control the brightness 
+ *		1. 	The system BIOS should NOT automatically control the brightness
  *			level of the LCD when the power changes from AC to DC.
  * Return Value:
  *		-EINVAL	wrong arg.
@@ -715,7 +715,7 @@ static int acpi_video_bqc_quirk(struct acpi_video_device *device,
 
 
 /*
- *  Arg:	
+ *  Arg:
  *  	device	: video output device (LCD, CRT, ..)
  *
  *  Return Value:
@@ -987,7 +987,7 @@ static void acpi_video_device_find_cap(struct acpi_video_device *device)
 }
 
 /*
- *  Arg:	
+ *  Arg:
  *  	device	: video output device (VGA)
  *
  *  Return Value:
@@ -1191,12 +1191,12 @@ acpi_video_bus_get_one_device(struct acpi_device *device,
 
 /*
  *  Arg:
- *  	video	: video bus device 
+ *  	video	: video bus device
  *
  *  Return:
  *  	none
- *  
- *  Enumerate the video device list of the video bus, 
+ *
+ *  Enumerate the video device list of the video bus,
  *  bind the ids with the corresponding video devices
  *  under the video bus.
  */
@@ -1215,13 +1215,13 @@ static void acpi_video_device_rebind(struct acpi_video_bus *video)
 
 /*
  *  Arg:
- *  	video	: video bus device 
- *  	device	: video output device under the video 
+ *  	video	: video bus device
+ *  	device	: video output device under the video
  *  		bus
  *
  *  Return:
  *  	none
- *  
+ *
  *  Bind the ids with the corresponding video devices
  *  under the video bus.
  */
@@ -1244,11 +1244,11 @@ acpi_video_device_bind(struct acpi_video_bus *video,
 
 /*
  *  Arg:
- *  	video	: video bus device 
+ *  	video	: video bus device
  *
  *  Return:
  *  	< 0	: error
- *  
+ *
  *  Call _DOD to enumerate all devices attached to display adapter
  *
  */

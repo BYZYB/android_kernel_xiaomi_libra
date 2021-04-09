@@ -1,4 +1,4 @@
-/* 
+/*
  * ASCII values for a number of symbolic constants, printing functions,
  * etc.
  * Additions for SCSI 2 and Linux 2.2.x by D. Gilbert (990422)
@@ -36,11 +36,11 @@ static const char * cdb_byte0_names[] = {
 /* 04-07 */ "Format Unit/Medium", "Read Block Limits", NULL,
 	    "Reassign Blocks",
 /* 08-0d */ "Read(6)", NULL, "Write(6)", "Seek(6)", NULL, NULL,
-/* 0e-12 */ NULL, "Read Reverse", "Write Filemarks", "Space", "Inquiry",  
+/* 0e-12 */ NULL, "Read Reverse", "Write Filemarks", "Space", "Inquiry",
 /* 13-16 */ "Verify(6)", "Recover Buffered Data", "Mode Select(6)",
 	    "Reserve(6)",
 /* 17-1a */ "Release(6)", "Copy", "Erase", "Mode Sense(6)",
-/* 1b-1d */ "Start/Stop Unit", "Receive Diagnostic", "Send Diagnostic", 
+/* 1b-1d */ "Start/Stop Unit", "Receive Diagnostic", "Send Diagnostic",
 /* 1e-1f */ "Prevent/Allow Medium Removal", NULL,
 /* 20-22 */  NULL, NULL, NULL,
 /* 23-28 */ "Read Format Capacities", "Set Window",
@@ -48,11 +48,11 @@ static const char * cdb_byte0_names[] = {
 /* 29-2d */ "Read Generation", "Write(10)", "Seek(10)", "Erase(10)",
             "Read updated block",
 /* 2e-31 */ "Write Verify(10)", "Verify(10)", "Search High", "Search Equal",
-/* 32-34 */ "Search Low", "Set Limits", "Prefetch/Read Position", 
+/* 32-34 */ "Search Low", "Set Limits", "Prefetch/Read Position",
 /* 35-37 */ "Synchronize Cache(10)", "Lock/Unlock Cache(10)",
-	    "Read Defect Data(10)", 
-/* 38-3c */ "Medium Scan", "Compare", "Copy Verify", "Write Buffer", 
-            "Read Buffer", 
+	    "Read Defect Data(10)",
+/* 38-3c */ "Medium Scan", "Compare", "Copy Verify", "Write Buffer",
+            "Read Buffer",
 /* 3d-3f */ "Update Block", "Read Long(10)",  "Write Long(10)",
 /* 40-41 */ "Change Definition", "Write Same(10)",
 /* 42-48 */ "Unmap/Read sub-channel", "Read TOC/PMA/ATIP",
@@ -327,7 +327,7 @@ static void print_opcode_name(unsigned char * cdbp, int cdb_len)
 		break;
 	}
 }
-#endif  
+#endif
 
 void __scsi_print_command(unsigned char *cdb)
 {
@@ -336,7 +336,7 @@ void __scsi_print_command(unsigned char *cdb)
 	print_opcode_name(cdb, 0);
 	len = scsi_command_size(cdb);
 	/* print out all bytes in cdb */
-	for (k = 0; k < len; ++k) 
+	for (k = 0; k < len; ++k)
 		printk(" %02x", cdb[k]);
 	printk("\n");
 }
@@ -1306,7 +1306,7 @@ scsi_decode_sense_buffer(const unsigned char *sense_buffer, int sense_len,
 		       struct scsi_sense_hdr *sshdr)
 {
 	int k, num, res;
-    
+
 	res = scsi_normalize_sense(sense_buffer, sense_len, sshdr);
 	if (0 == res) {
 		/* this may be SCSI-1 sense data */

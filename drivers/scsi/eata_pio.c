@@ -12,7 +12,7 @@
  *                                                          *
  *  (c)1993-96 Michael Neuffer, Alfred Arnold               *
  *             neuffer@goofy.zdv.uni-mainz.de               *
- *             a.arnold@kfa-juelich.de                      * 
+ *             a.arnold@kfa-juelich.de                      *
  *                                                          *
  *  Updated 2002 by Alan Cox <alan@lxorguk.ukuu.org.uk> for *
  *   Linux 2.5.x and the newer locking and error handling   *
@@ -77,9 +77,9 @@ static unsigned int ISAirqs[MAXISA] = {
 	14, 12, 15, 11
 };
 
-static unsigned char EISAbases[] = { 
+static unsigned char EISAbases[] = {
 	1, 1, 1, 1, 1, 1, 1, 1,
-	1, 1, 1, 1, 1, 1, 1, 1 
+	1, 1, 1, 1, 1, 1, 1, 1
 };
 
 static unsigned int registered_HBAs;
@@ -168,7 +168,7 @@ static irqreturn_t eata_pio_int_handler(int irq, void *dev_id)
 	unsigned char stat, odd;
 	irqreturn_t ret = IRQ_NONE;
 
-	for (x = 1, sh = first_HBA; x <= registered_HBAs; x++, sh = SD(sh)->prev) 
+	for (x = 1, sh = first_HBA; x <= registered_HBAs; x++, sh = SD(sh)->prev)
 	{
 		if (sh->irq != irq)
 			continue;
@@ -290,7 +290,7 @@ static inline unsigned int eata_pio_send_command(unsigned long base, unsigned ch
 			return 1;
 
 	/* Enable interrupts for HBA.  It is not the best way to do it at this
-	 * place, but I hope that it doesn't interfere with the IDE driver 
+	 * place, but I hope that it doesn't interfere with the IDE driver
 	 * initialization this way */
 
 	outb(HA_CTRL_8HEADS, base + HA_CTRLREG);
@@ -374,7 +374,7 @@ static int eata_pio_queue_lck(struct scsi_cmnd *cmd,
 		cmd->SCp.ptr = sg_virt(cmd->SCp.buffer);
 		cmd->SCp.this_residual = cmd->SCp.buffer->length;
 	}
-	cmd->SCp.Status = (cmd->SCp.this_residual != 0);	/* TRUE as long as bytes 
+	cmd->SCp.Status = (cmd->SCp.this_residual != 0);	/* TRUE as long as bytes
 								 * are to transfer */
 
 	if (eata_pio_send_command(base, EATA_CMD_PIO_SEND_CP)) {
@@ -877,9 +877,9 @@ static void find_pio_PCI(struct get_conf *buf)
 					continue;	/* we'll find it later      */
 				}
 
-				/* OK. We made it till here, so we can go now  
-				 * and register it. We  only have to check and 
-				 * eventually remove it from the EISA and ISA list 
+				/* OK. We made it till here, so we can go now
+				 * and register it. We  only have to check and
+				 * eventually remove it from the EISA and ISA list
 				 */
 
 				if (!register_pio_HBA(base, buf, dev)) {

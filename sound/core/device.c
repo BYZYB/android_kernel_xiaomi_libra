@@ -79,7 +79,7 @@ EXPORT_SYMBOL(snd_device_new);
 int snd_device_free(struct snd_card *card, void *device_data)
 {
 	struct snd_device *dev;
-	
+
 	if (snd_BUG_ON(!card || !device_data))
 		return -ENXIO;
 	list_for_each_entry(dev, &card->devices, list) {
@@ -187,7 +187,7 @@ int snd_device_register_all(struct snd_card *card)
 {
 	struct snd_device *dev;
 	int err;
-	
+
 	if (snd_BUG_ON(!card))
 		return -ENXIO;
 	list_for_each_entry(dev, &card->devices, list) {

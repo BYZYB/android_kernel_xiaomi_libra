@@ -10,7 +10,7 @@
 #ifndef __REGISTERS_H
 #define __REGISTERS_H
 
-#define CLEAR_BIT(x, bit)  x =bit 
+#define CLEAR_BIT(x, bit)  x =bit
 
 /*****************************************************************
         Command Register
@@ -254,7 +254,7 @@
  *****************************************************************/
 
 /* Port A - See 360UM p. 7-358
- * 
+ *
  *  Note that most of these pins have alternate functions
  */
 

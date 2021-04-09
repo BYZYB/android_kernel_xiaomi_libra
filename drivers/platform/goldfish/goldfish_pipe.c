@@ -149,7 +149,7 @@ enum {
 
 
 static u32 goldfish_cmd_status(struct goldfish_pipe *pipe, u32 cmd)
-{ 
+{
 	unsigned long flags;
 	u32 status;
 	struct goldfish_pipe_dev *dev = pipe->dev;
@@ -163,7 +163,7 @@ static u32 goldfish_cmd_status(struct goldfish_pipe *pipe, u32 cmd)
 }
 
 static void goldfish_cmd(struct goldfish_pipe *pipe, u32 cmd)
-{ 
+{
 	unsigned long flags;
 	struct goldfish_pipe_dev *dev = pipe->dev;
 

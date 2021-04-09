@@ -1,4 +1,4 @@
-/* 
+/*
  * NCR 5380 defines
  *
  * Copyright 1993, Drew Eckhardt
@@ -9,7 +9,7 @@
  *
  * DISTRIBUTION RELEASE 7
  *
- * For more information, please consult 
+ * For more information, please consult
  *
  * NCR 5380 Family
  * SCSI Protocol Controller
@@ -63,7 +63,7 @@
 
 #define NDEBUG_ANY		0xFFFFFFFFUL
 
-/* 
+/*
  * The contents of the OUTPUT DATA register are asserted on the bus when
  * either arbitration is occurring or the phase-indicating signals (
  * IO, CD, MSG) in the TARGET COMMAND register and the ASSERT DATA
@@ -93,8 +93,8 @@
 
 #define MODE_REG		2
 /*
- * Note : BLOCK_DMA code will keep DRQ asserted for the duration of the 
- * transfer, causing the chip to hog the bus.  You probably don't want 
+ * Note : BLOCK_DMA code will keep DRQ asserted for the duration of the
+ * transfer, causing the chip to hog the bus.  You probably don't want
  * this.
  */
 #define MR_BLOCK_DMA_MODE	0x80	/* rw block mode DMA */
@@ -121,7 +121,7 @@
 
 #define STATUS_REG		4	/* ro */
 /*
- * Note : a set bit indicates an active signal, driven by us or another 
+ * Note : a set bit indicates an active signal, driven by us or another
  * device.
  */
 #define SR_RST			0x80
@@ -134,7 +134,7 @@
 #define SR_DBP			0x01
 
 /*
- * Setting a bit in this register will cause an interrupt to be generated when 
+ * Setting a bit in this register will cause an interrupt to be generated when
  * BSY is false and SEL true and this bit is asserted  on the bus.
  */
 #define SELECT_ENABLE_REG	4	/* wo */
@@ -152,7 +152,7 @@
 /* Write any value to this register to start a DMA send */
 #define START_DMA_SEND_REG	5	/* wo */
 
-/* 
+/*
  * Used in DMA transfer mode, data is latched from the SCSI bus on
  * the falling edge of REQ (ini) or ACK (tgt)
  */
@@ -206,16 +206,16 @@
 #define PHASE_MSGIN		(SR_MSG | SR_CD | SR_IO)
 #define PHASE_UNKNOWN		0xff
 
-/* 
- * Convert status register phase to something we can use to set phase in 
- * the target register so we can get phase mismatch interrupts on DMA 
+/*
+ * Convert status register phase to something we can use to set phase in
+ * the target register so we can get phase mismatch interrupts on DMA
  * transfers.
  */
 
 #define PHASE_SR_TO_TCR(phase) ((phase) >> 2)
 
 /*
- * The internal should_disconnect() function returns these based on the 
+ * The internal should_disconnect() function returns these based on the
  * expected length of a disconnect if a device supports disconnect/
  * reconnect.
  */
@@ -224,18 +224,18 @@
 #define DISCONNECT_TIME_TO_DATA	1
 #define DISCONNECT_LONG		2
 
-/* 
+/*
  * These are "special" values for the tag parameter passed to NCR5380_select.
  */
 
 #define TAG_NEXT	-1	/* Use next free tag */
-#define TAG_NONE	-2	/* 
+#define TAG_NONE	-2	/*
 				 * Establish I_T_L nexus instead of I_T_L_Q
 				 * even on SCSI-II devices.
 				 */
 
 /*
- * These are "special" values for the irq and dma_channel fields of the 
+ * These are "special" values for the irq and dma_channel fields of the
  * Scsi_Host structure
  */
 
@@ -268,7 +268,7 @@ struct NCR5380_hostdata {
 	volatile Scsi_Cmnd *issue_queue;	/* waiting to be issued */
 	volatile Scsi_Cmnd *disconnected_queue;	/* waiting for reconnect */
 	volatile int restart_select;		/* we have disconnected,
-						   used to restart 
+						   used to restart
 						   NCR5380_select() */
 	volatile unsigned aborted:1;		/* flag, says aborted */
 	int flags;
@@ -342,7 +342,7 @@ static int NCR5380_transfer_pio(struct Scsi_Host *instance, unsigned char *phase
  *
  *	Locks: takes and releases the ISA DMA lock.
  */
- 
+
 static __inline__ int NCR5380_pc_dma_setup(struct Scsi_Host *instance, unsigned char *ptr, unsigned int count, unsigned char mode)
 {
 	unsigned limit;
@@ -364,7 +364,7 @@ static __inline__ int NCR5380_pc_dma_setup(struct Scsi_Host *instance, unsigned 
 
 	if ((count & 1) || (bus_addr & 1))
 		panic("scsi%d : attempted unaligned DMA transfer\n", instance->host_no);
-	
+
 	flags=claim_dma_lock();
 	disable_dma(instance->dma_channel);
 	clear_dma_ff(instance->dma_channel);
@@ -373,7 +373,7 @@ static __inline__ int NCR5380_pc_dma_setup(struct Scsi_Host *instance, unsigned 
 	set_dma_mode(instance->dma_channel, mode);
 	enable_dma(instance->dma_channel);
 	release_dma_lock(flags);
-	
+
 	return count;
 }
 
@@ -412,7 +412,7 @@ static __inline__ int NCR5380_pc_dma_read_setup(struct Scsi_Host *instance, unsi
 }
 
 /**
- *	NCR5380_pc_dma_residual		-	return bytes left 
+ *	NCR5380_pc_dma_residual		-	return bytes left
  *	@instance: adapter
  *
  *	Reports the number of bytes left over after the DMA was terminated.
@@ -429,7 +429,7 @@ static __inline__ int NCR5380_pc_dma_residual(struct Scsi_Host *instance)
 	clear_dma_ff(instance->dma_channel);
 	tmp = get_dma_residue(instance->dma_channel);
 	release_dma_lock(flags);
-	
+
 	return tmp;
 }
 #endif				/* defined(i386) || defined(__alpha__) */

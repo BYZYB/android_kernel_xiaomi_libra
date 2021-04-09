@@ -2,7 +2,7 @@
 #include <linux/sys.h>
 #include <asm/linkage.h>
 #include <asm/unistd.h>
-	
+
 .globl SYMBOL_NAME(sys_call_table)
 
 #if defined(CONFIG_CPU_H8300H)
@@ -13,7 +13,7 @@
 #endif
 	.section .text
 	.align	2
-SYMBOL_NAME_LABEL(sys_call_table)	
+SYMBOL_NAME_LABEL(sys_call_table)
 	.long SYMBOL_NAME(sys_ni_syscall)	/* 0  -  old "setup()" system call*/
 	.long SYMBOL_NAME(sys_exit)
 	.long SYMBOL_NAME(sys_fork)
@@ -283,7 +283,7 @@ SYMBOL_NAME_LABEL(sys_call_table)
  	.long SYMBOL_NAME(sys_clock_getres)
  	.long SYMBOL_NAME(sys_clock_nanosleep)
 	.long SYMBOL_NAME(sys_statfs64)
-	.long SYMBOL_NAME(sys_fstatfs64)	
+	.long SYMBOL_NAME(sys_fstatfs64)
 	.long SYMBOL_NAME(sys_tgkill)		/* 270 */
 	.long SYMBOL_NAME(sys_utimes)
  	.long SYMBOL_NAME(sys_fadvise64_64)

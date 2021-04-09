@@ -1,15 +1,15 @@
 /*********************************************************************
  *
  *	sir_dev.c:	irda sir network device
- * 
+ *
  *	Copyright (c) 2002 Martin Diehl
- * 
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License as 
- *	published by the Free Software Foundation; either version 2 of 
+ *
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License as
+ *	published by the Free Software Foundation; either version 2 of
  *	the License, or (at your option) any later version.
  *
- ********************************************************************/    
+ ********************************************************************/
 
 #include <linux/hardirq.h>
 #include <linux/module.h>
@@ -374,7 +374,7 @@ int sirdev_raw_write(struct sir_dev *dev, const char *buf, int len)
 	}
 
 	dev->tx_buff.data = dev->tx_buff.head;
-	memcpy(dev->tx_buff.data, buf, len);	
+	memcpy(dev->tx_buff.data, buf, len);
 	dev->tx_buff.len = len;
 
 	ret = dev->drv->do_write(dev, dev->tx_buff.data, dev->tx_buff.len);
@@ -436,7 +436,7 @@ void sirdev_write_complete(struct sir_dev *dev)
 	struct sk_buff *skb;
 	int actual = 0;
 	int err;
-	
+
 	spin_lock_irqsave(&dev->tx_lock, flags);
 
 	IRDA_DEBUG(3, "%s() - dev->tx_buff.len = %d\n",
@@ -492,7 +492,7 @@ void sirdev_write_complete(struct sir_dev *dev)
 	 */
 
 	IRDA_DEBUG(5, "%s(), finished with frame!\n", __func__);
-		
+
 	if ((skb=dev->tx_skb) != NULL) {
 		dev->tx_skb = NULL;
 		dev->netdev->stats.tx_packets++;
@@ -532,7 +532,7 @@ EXPORT_SYMBOL(sirdev_write_complete);
  * normally unwrapping and building LAP-skb's (unless rx disabled)
  */
 
-int sirdev_receive(struct sir_dev *dev, const unsigned char *cp, size_t count) 
+int sirdev_receive(struct sir_dev *dev, const unsigned char *cp, size_t count)
 {
 	if (!dev || !dev->netdev) {
 		IRDA_WARNING("%s(), not ready yet!\n", __func__);
@@ -641,7 +641,7 @@ static netdev_tx_t sirdev_hard_xmit(struct sk_buff *skb,
 	spin_lock_irqsave(&dev->tx_lock, flags);
 
         /* Copy skb to tx_buff while wrapping, stuffing and making CRC */
-	dev->tx_buff.len = async_wrap_skb(skb, dev->tx_buff.data, dev->tx_buff.truesize); 
+	dev->tx_buff.len = async_wrap_skb(skb, dev->tx_buff.data, dev->tx_buff.truesize);
 
 	/* transmission will start now - disable receive.
 	 * if we are just in the middle of an incoming frame,
@@ -684,7 +684,7 @@ static int sirdev_ioctl(struct net_device *ndev, struct ifreq *rq, int cmd)
 	IRDA_ASSERT(dev != NULL, return -1;);
 
 	IRDA_DEBUG(3, "%s(), %s, (cmd=0x%X)\n", __func__, ndev->name, cmd);
-	
+
 	switch (cmd) {
 	case SIOCSBANDWIDTH: /* Set bandwidth */
 		if (!capable(CAP_NET_ADMIN))
@@ -741,7 +741,7 @@ static int sirdev_ioctl(struct net_device *ndev, struct ifreq *rq, int cmd)
 	default:
 		ret = -EOPNOTSUPP;
 	}
-	
+
 	return ret;
 }
 
@@ -752,7 +752,7 @@ static int sirdev_ioctl(struct net_device *ndev, struct ifreq *rq, int cmd)
 static int sirdev_alloc_buffers(struct sir_dev *dev)
 {
 	dev->tx_buff.truesize = SIRBUF_ALLOCSIZE;
-	dev->rx_buff.truesize = IRDA_SKB_MAX_MTU; 
+	dev->rx_buff.truesize = IRDA_SKB_MAX_MTU;
 
 	/* Bootstrap ZeroCopy Rx */
 	dev->rx_buff.skb = __netdev_alloc_skb(dev->netdev, dev->rx_buff.truesize,

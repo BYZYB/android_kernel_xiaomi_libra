@@ -55,7 +55,7 @@ extern void paging_init(void);
 /*
  * entries per page directory level: we use a two-level, so
  * we don't really have any PMD directory physically.
- * pointers are 4 bytes so we can use the page size and 
+ * pointers are 4 bytes so we can use the page size and
  * divide it by 4 (shift by 2).
  */
 #define PTRS_PER_PTE	(1UL << (PAGE_SHIFT-2))
@@ -125,8 +125,8 @@ static inline pte_t pte_wrprotect(pte_t pte)
 
 static inline pte_t pte_mkclean(pte_t pte)
 {
-	pte_val(pte) &= ~(_PAGE_MODIFIED | _PAGE_SILENT_WRITE); 
-	return pte; 
+	pte_val(pte) &= ~(_PAGE_MODIFIED | _PAGE_SILENT_WRITE);
+	return pte;
 }
 
 static inline pte_t pte_mkold(pte_t pte)
@@ -264,7 +264,7 @@ extern pgd_t swapper_pg_dir[PTRS_PER_PGD]; /* defined in head.S */
 /*
  * CRIS doesn't have any external MMU info: the kernel page
  * tables contain all the necessary information.
- * 
+ *
  * Actually I am not sure on what this could be used for.
  */
 static inline void update_mmu_cache(struct vm_area_struct * vma,

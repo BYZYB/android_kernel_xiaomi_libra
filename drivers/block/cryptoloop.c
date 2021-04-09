@@ -88,7 +88,7 @@ cryptoloop_init(struct loop_device *lo, const struct loop_info64 *info)
 
 	err = crypto_blkcipher_setkey(tfm, info->lo_encrypt_key,
 				      info->lo_encrypt_key_size);
-	
+
 	if (err != 0)
 		goto out_free_tfm;
 

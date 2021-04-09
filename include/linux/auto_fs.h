@@ -1,5 +1,5 @@
 /* -*- linux-c -*- ------------------------------------------------------- *
- *   
+ *
  * linux/include/linux/auto_fs.h
  *
  *   Copyright 1997 Transmeta Corporation - All Rights Reserved

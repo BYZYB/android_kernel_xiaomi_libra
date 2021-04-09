@@ -3,7 +3,7 @@
  *
  *----------------------------------------------------------------------------
  *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by 
+ *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
  *
@@ -210,7 +210,7 @@ sim710_eisa_probe(struct device *dev)
 	}
 
 	irq = eisa_irqs[irq_index];
-		
+
 	return sim710_probe_common(dev, io_addr, irq, 50,
 				   differential, scsi_id);
 }

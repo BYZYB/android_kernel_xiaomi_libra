@@ -9,7 +9,7 @@
  *        + Module parameters  can now be specified only in the
  *          same format as the kernel boot options.
  *
- *             boot option    old module param 
+ *             boot option    old module param
  *             -----------    ------------------
  *             addr,...       io_port=addr,...
  *             lc:[y|n]       linked_comm=[1|0]

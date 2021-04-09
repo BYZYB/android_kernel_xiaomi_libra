@@ -2,7 +2,7 @@
 #define _ASM_CRIS_UNALIGNED_H
 
 /*
- * CRIS can do unaligned accesses itself. 
+ * CRIS can do unaligned accesses itself.
  */
 #include <linux/unaligned/access_ok.h>
 #include <linux/unaligned/generic.h>

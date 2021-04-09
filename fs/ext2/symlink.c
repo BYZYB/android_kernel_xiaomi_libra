@@ -40,7 +40,7 @@ const struct inode_operations ext2_symlink_inode_operations = {
 	.removexattr	= generic_removexattr,
 #endif
 };
- 
+
 const struct inode_operations ext2_fast_symlink_inode_operations = {
 	.readlink	= generic_readlink,
 	.follow_link	= ext2_follow_link,

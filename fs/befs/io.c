@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2001 Will Dyson <will_dyson@pobox.com
  *
- * Based on portions of file.c and inode.c 
+ * Based on portions of file.c and inode.c
  * by Makoto Kato (m_kato@ga2.so-net.ne.jp)
  *
  * Many thanks to Dominic Giampaolo, author of Practical File System

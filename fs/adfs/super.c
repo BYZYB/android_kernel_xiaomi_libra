@@ -447,7 +447,7 @@ static int adfs_fill_super(struct super_block *sb, void *data, int silent)
 	asb->s_size    		= adfs_discsize(dr, sb->s_blocksize_bits);
 	asb->s_version 		= dr->format_version;
 	asb->s_log2sharesize	= dr->log2sharesize;
-	
+
 	asb->s_map = adfs_read_map(sb, dr);
 	if (!asb->s_map)
 		goto error_free_bh;

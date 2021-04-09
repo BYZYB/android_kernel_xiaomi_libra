@@ -3,7 +3,7 @@
 
 /*
  * Trantor T128/T128F/T228 driver
- *	Note : architecturally, the T100 and T130 are different and won't 
+ *	Note : architecturally, the T100 and T130 are different and won't
  * 	work
  *
  * Copyright 1993, Drew Eckhardt
@@ -14,18 +14,18 @@
  *
  * DISTRIBUTION RELEASE 3.
  *
- * For more information, please consult 
+ * For more information, please consult
  *
  * Trantor Systems, Ltd.
  * T128/T128F/T228 SCSI Host Adapter
  * Hardware Specifications
- * 
- * Trantor Systems, Ltd. 
+ *
+ * Trantor Systems, Ltd.
  * 5415 Randall Place
  * Fremont, CA 94538
  * 1+ (415) 770-1400, FAX 1+ (415) 770-9910
- * 
- * and 
+ *
+ * and
  *
  * NCR 5380 Family
  * SCSI Protocol Controller
@@ -39,15 +39,15 @@
  */
 
 /*
- * Options : 
+ * Options :
  * AUTOSENSE - if defined, REQUEST SENSE will be performed automatically
- *      for commands that return with a CHECK CONDITION status. 
+ *      for commands that return with a CHECK CONDITION status.
  *
  * PSEUDO_DMA - enables PSEUDO-DMA hardware, should give a 3-4X performance
  * increase compared to polled I/O.
  *
  * PARITY - enable parity checking.  Not supported.
- * 
+ *
  * SCSI2 - enable support for SCSI-II tagged queueing.  Untested.
  *
  *
@@ -58,36 +58,36 @@
  *
  * USLEEP - enable support for devices that don't disconnect.  Untested.
  *
- * The card is detected and initialized in one of several ways : 
- * 1.  Autoprobe (default) - since the board is memory mapped, 
+ * The card is detected and initialized in one of several ways :
+ * 1.  Autoprobe (default) - since the board is memory mapped,
  *     a BIOS signature is scanned for to locate the registers.
  *     An interrupt is triggered to autoprobe for the interrupt
  *     line.
  *
- * 2.  With command line overrides - t128=address,irq may be 
+ * 2.  With command line overrides - t128=address,irq may be
  *     used on the LILO command line to override the defaults.
  *
- * 3.  With the T128_OVERRIDE compile time define.  This is 
+ * 3.  With the T128_OVERRIDE compile time define.  This is
  *     specified as an array of address, irq tuples.  Ie, for
- *     one board at the default 0xcc000 address, IRQ5, I could say 
+ *     one board at the default 0xcc000 address, IRQ5, I could say
  *     -DT128_OVERRIDE={{0xcc000, 5}}
- *	
+ *
  *     Note that if the override methods are used, place holders must
  *     be specified for other boards in the system.
- * 
- * T128/T128F jumper/dipswitch settings (note : on my sample, the switches 
+ *
+ * T128/T128F jumper/dipswitch settings (note : on my sample, the switches
  * were epoxy'd shut, meaning I couldn't change the 0xcc000 base address) :
  *
- * T128    Sw7 Sw8 Sw6 = 0ws Sw5 = boot 
+ * T128    Sw7 Sw8 Sw6 = 0ws Sw5 = boot
  * T128F   Sw6 Sw7 Sw5 = 0ws Sw4 = boot Sw8 = floppy disable
- * cc000   off off      
+ * cc000   off off
  * c8000   off on
  * dc000   on  off
  * d8000   on  on
  *
- * 
- * Interrupts 
- * There is a 12 pin jumper block, jp1, numbered as follows : 
+ *
+ * Interrupts
+ * There is a 12 pin jumper block, jp1, numbered as follows :
  *   T128 (JP1)  	 T128F (J5)
  * 2 4 6 8 10 12	11 9  7 5 3 1
  * 1 3 5 7 9  11	12 10 8 6 4 2
@@ -95,13 +95,13 @@
  * 3   2-4
  * 5   1-3
  * 7   3-5
- * T128F only 
+ * T128F only
  * 10 8-10
  * 12 7-9
  * 14 10-12
  * 15 9-11
  */
- 
+
 /*
  * $Log: t128.c,v $
  */
@@ -156,7 +156,7 @@ static struct signature {
  * Function : t128_setup(char *str, int *ints)
  *
  * Purpose : LILO command line initialization of the overrides array,
- * 
+ *
  * Inputs : str - unused, ints - array of integer parameters with ints[0]
  *	equal to the number of ints.
  *
@@ -165,9 +165,9 @@ static struct signature {
 void __init t128_setup(char *str, int *ints){
     static int commandline_current = 0;
     int i;
-    if (ints[0] != 2) 
+    if (ints[0] != 2)
 	printk("t128_setup : usage t128=address,irq\n");
-    else 
+    else
 	if (commandline_current < NO_OVERRIDES) {
 	    overrides[commandline_current].address = ints[1];
 	    overrides[commandline_current].irq = ints[2];
@@ -180,15 +180,15 @@ void __init t128_setup(char *str, int *ints){
 	}
 }
 
-/* 
+/*
  * Function : int t128_detect(struct scsi_host_template * tpnt)
  *
  * Purpose : detects and initializes T128,T128F, or T228 controllers
- *	that were autoprobed, overridden on the LILO command line, 
+ *	that were autoprobed, overridden on the LILO command line,
  *	or specified at compile time.
  *
  * Inputs : tpnt - template for this SCSI adapter.
- * 
+ *
  * Returns : 1 if a host adapter was found, 0 if not.
  *
  */
@@ -213,7 +213,7 @@ int __init t128_detect(struct scsi_host_template * tpnt){
 	    p = ioremap(bases[current_base].address, 0x2000);
 	    if (!p)
 		base = 0;
-	} else 
+	} else
 	    for (; !base && (current_base < NO_BASES); ++current_base) {
 #if (TDEBUG & TDEBUG_INIT)
     printk("scsi-t128 : probing address %08x\n", bases[current_base].address);
@@ -223,7 +223,7 @@ int __init t128_detect(struct scsi_host_template * tpnt){
 		p = ioremap(bases[current_base].address, 0x2000);
 		if (!p)
 			continue;
-		for (sig = 0; sig < NO_SIGNATURES; ++sig) 
+		for (sig = 0; sig < NO_SIGNATURES; ++sig)
 		    if (check_signature(p + signatures[sig].offset,
 					signatures[sig].string,
 					strlen(signatures[sig].string))) {
@@ -247,7 +247,7 @@ found:
 	instance = scsi_register (tpnt, sizeof(struct NCR5380_hostdata));
 	if(instance == NULL)
 		break;
-		
+
 	instance->base = base;
 	((struct NCR5380_hostdata *)instance->hostdata)->base = p;
 
@@ -255,16 +255,16 @@ found:
 
 	if (overrides[current_override].irq != IRQ_AUTO)
 	    instance->irq = overrides[current_override].irq;
-	else 
+	else
 	    instance->irq = NCR5380_probe_irq(instance, T128_IRQS);
 
-	if (instance->irq != SCSI_IRQ_NONE) 
+	if (instance->irq != SCSI_IRQ_NONE)
 	    if (request_irq(instance->irq, t128_intr, IRQF_DISABLED, "t128",
 			    instance)) {
-		printk("scsi%d : IRQ%d not free, interrupts disabled\n", 
+		printk("scsi%d : IRQ%d not free, interrupts disabled\n",
 		    instance->host_no, instance->irq);
 		instance->irq = SCSI_IRQ_NONE;
-	    } 
+	    }
 
 	if (instance->irq == SCSI_IRQ_NONE) {
 	    printk("scsi%d : interrupts not enabled. for better interactive performance,\n", instance->host_no);
@@ -278,7 +278,7 @@ found:
 	printk("scsi%d : at 0x%08lx", instance->host_no, instance->base);
 	if (instance->irq == SCSI_IRQ_NONE)
 	    printk (" interrupts disabled");
-	else 
+	else
 	    printk (" irq %d", instance->irq);
 	printk(" options CAN_QUEUE=%d  CMD_PER_LUN=%d release=%d",
 	    CAN_QUEUE, CMD_PER_LUN, T128_PUBLIC_RELEASE);
@@ -308,17 +308,17 @@ static int t128_release(struct Scsi_Host *shost)
 /*
  * Function : int t128_biosparam(Disk * disk, struct block_device *dev, int *ip)
  *
- * Purpose : Generates a BIOS / DOS compatible H-C-S mapping for 
+ * Purpose : Generates a BIOS / DOS compatible H-C-S mapping for
  *	the specified device / size.
- * 
+ *
  * Inputs : size = size of device in sectors (512 bytes), dev = block device
- *	major / minor, ip[] = {heads, sectors, cylinders}  
+ *	major / minor, ip[] = {heads, sectors, cylinders}
  *
  * Returns : always 0 (success), initializes ip
- *	
+ *
  */
 
-/* 
+/*
  * XXX Most SCSI boards use this mapping, I could be incorrect.  Some one
  * using hard disks on a trantor should verify that this mapping corresponds
  * to that used by the BIOS / ASPI driver by running the linux fdisk program
@@ -335,15 +335,15 @@ int t128_biosparam(struct scsi_device *sdev, struct block_device *bdev,
 }
 
 /*
- * Function : int NCR5380_pread (struct Scsi_Host *instance, 
+ * Function : int NCR5380_pread (struct Scsi_Host *instance,
  *	unsigned char *dst, int len)
  *
- * Purpose : Fast 5380 pseudo-dma read function, transfers len bytes to 
+ * Purpose : Fast 5380 pseudo-dma read function, transfers len bytes to
  *	dst
- * 
+ *
  * Inputs : dst = destination, len = length in bytes
  *
- * Returns : 0 on success, non zero on a failure such as a watchdog 
+ * Returns : 0 on success, non zero on a failure such as a watchdog
  * 	timeout.
  */
 
@@ -381,15 +381,15 @@ static inline int NCR5380_pread (struct Scsi_Host *instance, unsigned char *dst,
 }
 
 /*
- * Function : int NCR5380_pwrite (struct Scsi_Host *instance, 
+ * Function : int NCR5380_pwrite (struct Scsi_Host *instance,
  *	unsigned char *src, int len)
  *
  * Purpose : Fast 5380 pseudo-dma write function, transfers len bytes from
  *	src
- * 
+ *
  * Inputs : src = source, len = length in bytes
  *
- * Returns : 0 on success, non zero on a failure such as a watchdog 
+ * Returns : 0 on success, non zero on a failure such as a watchdog
  * 	timeout.
  */
 
@@ -422,7 +422,7 @@ static inline int NCR5380_pwrite (struct Scsi_Host *instance, unsigned char *src
 	printk("scsi%d : watchdog timer fired in NCR5380_pwrite()\n",
 	    instance->host_no);
 	return -1;
-    } else 
+    } else
 	return 0;
 }
 

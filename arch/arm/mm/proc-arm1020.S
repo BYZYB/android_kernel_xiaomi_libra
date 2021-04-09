@@ -424,7 +424,7 @@ ENTRY(cpu_arm1020_switch_mm)
 	mcr	p15, 0, r1, c8, c7, 0		@ invalidate I & D TLBs
 #endif /* CONFIG_MMU */
 	mov	pc, lr
-        
+
 /*
  * cpu_arm1020_set_pte(ptep, pte)
  *

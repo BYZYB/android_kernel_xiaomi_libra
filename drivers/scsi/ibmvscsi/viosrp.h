@@ -81,7 +81,7 @@ struct viosrp_crq {
 };
 
 /* MADs are Management requests above and beyond the IUs defined in the SRP
- * standard.  
+ * standard.
  */
 enum viosrp_mad_types {
 	VIOSRP_EMPTY_IU_TYPE = 0x01,
@@ -120,7 +120,7 @@ enum viosrp_capability_flag {
 	CAP_LIST_DATA = 0x08,
 };
 
-/* 
+/*
  * Common MAD header
  */
 struct mad_common {
@@ -135,7 +135,7 @@ struct mad_common {
  * client to the server.  There is no way for the server to send
  * an asynchronous message back to the client.  The Empty IU is used
  * to hang out a meaningless request to the server so that it can respond
- * asynchrouously with something like a SCSI AER 
+ * asynchrouously with something like a SCSI AER
  */
 struct viosrp_empty_iu {
 	struct mad_common common;

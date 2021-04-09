@@ -154,18 +154,18 @@ static __inline__ void macscsi_write(struct Scsi_Host *instance, int reg, int va
  */
 
 static int __init mac_scsi_setup(char *str) {
-#ifdef DRIVER_SETUP	
+#ifdef DRIVER_SETUP
 	int ints[7];
-	
+
 	(void)get_options( str, ARRAY_SIZE(ints), ints);
-	
+
 	if (setup_called++ || ints[0] < 1 || ints[0] > 6) {
 	    printk(KERN_WARNING "scsi: <mac5380>"
 		" Usage: mac5380=<can_queue>[,<cmd_per_lun>,<sg_tablesize>,<hostid>,<use_tags>,<use_pdma>]\n");
 	    printk(KERN_ALERT "scsi: <mac5380> Bad Penguin parameters?\n");
 	    return 0;
 	}
-	    
+
 	if (ints[0] >= 1) {
 		if (ints[1] > 0)
 			/* no limits on this, just > 0 */
@@ -190,12 +190,12 @@ static int __init mac_scsi_setup(char *str) {
 		else if (ints[4] > 7)
 			printk(KERN_WARNING "mac_scsi_setup: invalid host ID %d !\n", ints[4] );
 	}
-#ifdef SUPPORT_TAGS	
+#ifdef SUPPORT_TAGS
 	if (ints[0] >= 5) {
 		if (ints[5] >= 0)
 			setup_use_tagged_queuing = !!ints[5];
 	}
-	
+
 	if (ints[0] == 6) {
 	    if (ints[6] >= 0)
 		setup_use_pdma = ints[6];
@@ -206,7 +206,7 @@ static int __init mac_scsi_setup(char *str) {
 		setup_use_pdma = ints[5];
 	}
 #endif /* SUPPORT_TAGS */
-	
+
 #endif /* DRIVER_SETUP */
 	return 1;
 }
@@ -224,7 +224,7 @@ __setup("mac5380=", mac_scsi_setup);
  * Returns : 1 if a host adapter was found, 0 if not.
  *
  */
- 
+
 int __init macscsi_detect(struct scsi_host_template * tpnt)
 {
     static int called = 0;
@@ -242,7 +242,7 @@ int __init macscsi_detect(struct scsi_host_template * tpnt)
 	(setup_can_queue > 0) ? setup_can_queue : CAN_QUEUE;
     tpnt->cmd_per_lun =
 	(setup_cmd_per_lun > 0) ? setup_cmd_per_lun : CMD_PER_LUN;
-    tpnt->sg_tablesize = 
+    tpnt->sg_tablesize =
 	(setup_sg_tablesize >= 0) ? setup_sg_tablesize : SG_TABLESIZE;
 
     if (setup_hostid >= 0)
@@ -275,14 +275,14 @@ int __init macscsi_detect(struct scsi_host_template * tpnt)
 
     if (! setup_use_pdma)
 	flags = FLAG_NO_PSEUDO_DMA;
-	
+
     instance->io_port = (unsigned long) mac_scsi_regp;
     instance->irq = IRQ_MAC_SCSI;
 
-#ifdef RESET_BOOT   
+#ifdef RESET_BOOT
     mac_scsi_reset_boot(instance);
 #endif
-    
+
     NCR5380_init(instance, flags);
 
     instance->n_io_port = 255;
@@ -330,7 +330,7 @@ static void mac_scsi_reset_boot(struct Scsi_Host *instance)
 
 	NCR5380_local_declare();
 	NCR5380_setup(instance);
-	
+
 	/*
 	 * Do a SCSI reset to clean up the bus during initialization. No messing
 	 * with the queues, interrupts, or locks necessary here.
@@ -361,15 +361,15 @@ const char * macscsi_info (struct Scsi_Host *spnt) {
 	return "";
 }
 
-/* 
+/*
    Pseudo-DMA: (Ove Edlund)
    The code attempts to catch bus errors that occur if one for example
    "trips over the cable".
-   XXX: Since bus errors in the PDMA routines never happen on my 
-   computer, the bus error code is untested. 
-   If the code works as intended, a bus error results in Pseudo-DMA 
-   beeing disabled, meaning that the driver switches to slow handshake. 
-   If bus errors are NOT extremely rare, this has to be changed. 
+   XXX: Since bus errors in the PDMA routines never happen on my
+   computer, the bus error code is untested.
+   If the code works as intended, a bus error results in Pseudo-DMA
+   beeing disabled, meaning that the driver switches to slow handshake.
+   If bus errors are NOT extremely rare, this has to be changed.
 */
 
 #define CP_IO_TO_MEM(s,d,len)				\
@@ -445,22 +445,22 @@ static int macscsi_pread (struct Scsi_Host *instance,
 
 /* These conditions are derived from MacOS */
 
-   while (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_DRQ) 
+   while (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_DRQ)
          && !(NCR5380_read(STATUS_REG) & SR_REQ))
       ;
-   if (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_DRQ) 
+   if (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_DRQ)
          && (NCR5380_read(BUS_AND_STATUS_REG) & BASR_PHASE_MATCH)) {
       printk(KERN_ERR "Error in macscsi_pread\n");
       return -1;
    }
 
    CP_IO_TO_MEM(s, d, len);
-   
+
    if (len != 0) {
       printk(KERN_NOTICE "Bus error in macscsi_pread\n");
       return -1;
    }
-   
+
    return 0;
 }
 
@@ -534,25 +534,25 @@ static int macscsi_pwrite (struct Scsi_Host *instance,
 
    s = src;
    d = mac_scsi_drq;
-   
+
 /* These conditions are derived from MacOS */
 
-   while (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_DRQ) 
-         && (!(NCR5380_read(STATUS_REG) & SR_REQ) 
-            || (NCR5380_read(BUS_AND_STATUS_REG) & BASR_PHASE_MATCH))) 
+   while (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_DRQ)
+         && (!(NCR5380_read(STATUS_REG) & SR_REQ)
+            || (NCR5380_read(BUS_AND_STATUS_REG) & BASR_PHASE_MATCH)))
       ;
    if (!(NCR5380_read(BUS_AND_STATUS_REG) & BASR_DRQ)) {
       printk(KERN_ERR "Error in macscsi_pwrite\n");
       return -1;
    }
 
-   CP_MEM_TO_IO(s, d, len);   
+   CP_MEM_TO_IO(s, d, len);
 
    if (len != 0) {
       printk(KERN_NOTICE "Bus error in macscsi_pwrite\n");
       return -1;
    }
-   
+
    return 0;
 }
 

@@ -19,7 +19,7 @@
  *   along with this program; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  *
- */      
+ */
 
 #include <linux/delay.h>
 #include <linux/interrupt.h>
@@ -571,7 +571,7 @@ static int revo_init(struct snd_ice1712 *ice)
 		err = ap192_ak4114_init(ice);
 		if (err < 0)
 			return err;
-		
+
 		/* unmute all codecs */
 		snd_ice1712_gpio_write_bits(ice, VT1724_REVO_MUTE,
 					    VT1724_REVO_MUTE);

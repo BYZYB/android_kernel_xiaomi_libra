@@ -71,7 +71,7 @@ static __inline__ int __atomic_add_return(int i, atomic_t *v)
 	return ret;
 }
 
-static __inline__ void atomic_set(atomic_t *v, int i) 
+static __inline__ void atomic_set(atomic_t *v, int i)
 {
 	unsigned long flags;
 	_atomic_spin_lock_irqsave(v, flags);

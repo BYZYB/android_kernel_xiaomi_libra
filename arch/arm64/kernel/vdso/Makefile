@@ -20,9 +20,8 @@ ccflags-y += -nostdlib -Wl,-soname=linux-vdso.so.1 \
 		$(call cc-ldoption, -Wl$(comma)--hash-style=sysv)
 ccflags-y += $(call cc-option, -fno-whole-program)
 
-# Force -O2 to avoid libgcc dependencies
-CFLAGS_REMOVE_vgettimeofday.o = -pg -Os
-CFLAGS_vgettimeofday.o = -O2 -fPIC
+CFLAGS_REMOVE_vgettimeofday.o = -pg
+CFLAGS_vgettimeofday.o = -fPIC
 CFLAGS_vgettimeofday.o += -mcmodel=tiny
 
 # Workaround for bare-metal (ELF) toolchains that neglect to pass -shared

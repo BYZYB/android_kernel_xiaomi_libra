@@ -110,8 +110,8 @@ NCR_Q720_probe_one(struct NCR_Q720_private *p, int siop,
 	       (unsigned long)paddr, differential, version);
 
 	p->hosts[siop] = ncr_attach(&NCR_Q720_tpnt, unit++, &device);
-	
-	if (!p->hosts[siop]) 
+
+	if (!p->hosts[siop])
 		goto fail;
 
 	p->irq_enable |= (1<<siop);
@@ -215,7 +215,7 @@ NCR_Q720_probe(struct device *dev)
 		       (unsigned long)(base_addr + mem_size));
 		goto out_free;
 	}
-	
+
 	if (dma_declare_coherent_memory(dev, base_addr, base_addr,
 					mem_size, DMA_MEMORY_MAP)
 	    != DMA_MEMORY_MAP) {
@@ -250,8 +250,8 @@ NCR_Q720_probe(struct device *dev)
 	}
 
 	irq = readb(mem_base + 5) & 0x0f;
-	
-	
+
+
 	/* now do the bus related transforms */
 	irq = mca_device_transform_irq(mca_dev, irq);
 

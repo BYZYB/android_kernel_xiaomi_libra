@@ -1,4 +1,4 @@
-#ifndef __MACH_PXA3XX_H	
+#ifndef __MACH_PXA3XX_H
 #define __MACH_PXA3XX_H
 
 #include <mach/hardware.h>

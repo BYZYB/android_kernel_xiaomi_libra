@@ -58,7 +58,7 @@ struct mpu_data
 	u8	curr_card_sernum[0x10];	/* 0x70 - Card current serial number */
 	u8	mlb_sernum[0x18];	/* 0x80 - MLB serial number */
 	u32	checksum1;		/* 0x98 - */
-	u32	checksum2;		/* 0x9c - */	
+	u32	checksum2;		/* 0x9c - */
 }; /* Total size = 0xa0 */
 
 /* Display a 16.16 fixed point value */

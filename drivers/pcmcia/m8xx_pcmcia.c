@@ -9,7 +9,7 @@
  *     <oliver.kurth@cyclades.de>
  * Further fixes, v2.6 kernel port
  *     <marcelo.tosatti@cyclades.com>
- * 
+ *
  * Some fixes, additions (C) 2005-2007 Montavista Software, Inc.
  *     <vbordug@ru.mvista.com>
  *

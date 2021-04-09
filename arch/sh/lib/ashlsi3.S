@@ -55,7 +55,7 @@ Boston, MA 02110-1301, USA.  */
 ! (none)
 !
 	.global	__ashlsi3
-	
+
 	.align	2
 __ashlsi3:
 	mov	#31,r0

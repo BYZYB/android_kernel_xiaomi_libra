@@ -306,7 +306,7 @@ void sync_fence_put(struct sync_fence *fence);
  * Returns true if @fence has already signaled.
  */
 bool sync_fence_check(struct sync_fence *fence);
- 
+
 /**
  * sync_fence_install() - installs a fence into a file descriptor
  * @fence:	fence to instal

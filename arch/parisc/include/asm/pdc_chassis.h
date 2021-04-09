@@ -8,12 +8,12 @@
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License, version 2, as
  *      published by the Free Software Foundation.
- *      
+ *
  *      This program is distributed in the hope that it will be useful,
  *      but WITHOUT ANY WARRANTY; without even the implied warranty of
  *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *      GNU General Public License for more details.
- *      
+ *
  *      You should have received a copy of the GNU General Public License
  *      along with this program; if not, write to the Free Software
  *      Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -22,7 +22,7 @@
  *      	- handle message ID
  *      	- handle timestamps
  */
- 
+
 
 #ifndef _PARISC_PDC_CHASSIS_H
 #define _PARISC_PDC_CHASSIS_H
@@ -64,7 +64,7 @@ void parisc_pdc_chassis_init(void);
 /* Old PDC LED control */
 #define PDC_CHASSIS_DISP_DATA(v)	((unsigned long)(v) << 17)
 
-/* 
+/*
  * Available PDC PAT LED states
  */
 
@@ -81,7 +81,7 @@ void parisc_pdc_chassis_init(void);
 #define PDC_CHASSIS_LED_FAULT_NC	(3ULL << 8)
 #define PDC_CHASSIS_LED_VALID		(1ULL << 10)
 
-/* 
+/*
  * Valid PDC PAT LED states combinations
  */
 
@@ -164,9 +164,9 @@ void parisc_pdc_chassis_init(void);
  * --------------
  * Here follows bits needed to fill up the log event sent to PDC_CHASSIS
  * The log message contains: Alert level, Source, Source detail,
- * Source ID, Problem detail, Caller activity, Activity status, 
+ * Source ID, Problem detail, Caller activity, Activity status,
  * Caller subactivity, Reporting entity type, Reporting entity ID,
- * Data type, Unique message ID and EOM. 
+ * Data type, Unique message ID and EOM.
  */
 
 /* Alert level */

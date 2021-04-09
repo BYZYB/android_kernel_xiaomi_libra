@@ -49,6 +49,6 @@ serial/		- This is for USB to serial drivers.
 storage/	- This is for USB mass-storage drivers.
 class/		- This is for all USB device drivers that do not fit
 		  into any of the above categories, and work for a range
-		  of USB Class specified devices. 
+		  of USB Class specified devices.
 misc/		- This is for all USB device drivers that do not fit
 		  into any of the above categories.

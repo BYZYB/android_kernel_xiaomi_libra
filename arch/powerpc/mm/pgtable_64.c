@@ -216,7 +216,7 @@ void __iomem * __ioremap_caller(phys_addr_t addr, unsigned long size,
 	 * up from ioremap_bot.  imalloc will use
 	 * the addresses from ioremap_bot through
 	 * IMALLOC_END
-	 * 
+	 *
 	 */
 	paligned = addr & PAGE_MASK;
 	size = PAGE_ALIGN(addr + size) - paligned;
@@ -300,7 +300,7 @@ void __iomem * ioremap_prot(phys_addr_t addr, unsigned long size,
 }
 
 
-/*  
+/*
  * Unmap an IO region and remove it from imalloc'd list.
  * Access to IO memory should be serialized by driver.
  */
@@ -310,7 +310,7 @@ void __iounmap(volatile void __iomem *token)
 
 	if (!mem_init_done)
 		return;
-	
+
 	addr = (void *) ((unsigned long __force)
 			 PCI_FIX_ADDR(token) & PAGE_MASK);
 	if ((unsigned long)addr < ioremap_bot) {

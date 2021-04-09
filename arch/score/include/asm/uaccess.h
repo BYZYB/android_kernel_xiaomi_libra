@@ -411,7 +411,7 @@ static inline long strnlen_user(const char __user *str, long len)
 {
 	if (!access_ok(VERIFY_READ, str, 0))
 		return 0;
-	else		
+	else
 		return __strnlen_user(str, len);
 }
 

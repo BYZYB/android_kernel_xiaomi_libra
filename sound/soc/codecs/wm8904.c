@@ -448,7 +448,7 @@ static void wm8904_set_retune_mobile(struct snd_soc_codec *codec)
 		wm8904->fs);
 
 	/* The EQ will be disabled while reconfiguring it, remember the
-	 * current configuration. 
+	 * current configuration.
 	 */
 	save = snd_soc_read(codec, WM8904_EQ1);
 
@@ -495,7 +495,7 @@ static int wm8904_set_deemph(struct snd_soc_codec *codec)
 	struct wm8904_priv *wm8904 = snd_soc_codec_get_drvdata(codec);
 	int val, i, best;
 
-	/* If we're using deemphasis select the nearest available sample 
+	/* If we're using deemphasis select the nearest available sample
 	 * rate.
 	 */
 	if (wm8904->deemph) {
@@ -620,7 +620,7 @@ static const struct soc_enum drc_path =
 	SOC_ENUM_SINGLE(WM8904_DRC_0, 14, 2, drc_path_text);
 
 static const struct snd_kcontrol_new wm8904_dac_snd_controls[] = {
-SOC_SINGLE_TLV("Digital Playback Boost Volume", 
+SOC_SINGLE_TLV("Digital Playback Boost Volume",
 	       WM8904_AUDIO_INTERFACE_0, 9, 3, 0, dac_boost_tlv),
 SOC_DOUBLE_R_TLV("Digital Playback Volume", WM8904_DAC_DIGITAL_VOLUME_LEFT,
 		 WM8904_DAC_DIGITAL_VOLUME_RIGHT, 1, 96, 0, digital_tlv),
@@ -1121,7 +1121,7 @@ static const struct snd_soc_dapm_route wm8904_intercon[] = {
 	{ "Left Sidetone", "Left", "ADCL" },
 	{ "Left Sidetone", "Right", "ADCR" },
 	{ "DACL", NULL, "Left Sidetone" },
-	
+
 	{ "Right Sidetone", "Left", "ADCL" },
 	{ "Right Sidetone", "Right", "ADCR" },
 	{ "DACR", NULL, "Right Sidetone" },
@@ -1524,7 +1524,7 @@ static int wm8904_set_tdm_slot(struct snd_soc_dai *dai, unsigned int tx_mask,
 	if (slots == 0)
 		goto out;
 
-	/* Note that we allow configurations we can't handle ourselves - 
+	/* Note that we allow configurations we can't handle ourselves -
 	 * for example, we can generate clocks for slots 2 and up even if
 	 * we can't use those slots ourselves.
 	 */
@@ -1786,7 +1786,7 @@ static int wm8904_set_fll(struct snd_soc_dai *dai, int fll_id, int source,
 
 	snd_soc_update_bits(codec, WM8904_FLL_CONTROL_5,
 			    WM8904_FLL_CLK_REF_DIV_MASK,
-			    fll_div.fll_clk_ref_div 
+			    fll_div.fll_clk_ref_div
 			    << WM8904_FLL_CLK_REF_DIV_SHIFT);
 
 	dev_dbg(codec->dev, "FLL configured for %dHz->%dHz\n", Fref, Fout);
@@ -1968,14 +1968,14 @@ static void wm8904_handle_retune_mobile_pdata(struct snd_soc_codec *codec)
 
 		/* Expand the array... */
 		t = krealloc(wm8904->retune_mobile_texts,
-			     sizeof(char *) * 
+			     sizeof(char *) *
 			     (wm8904->num_retune_mobile_texts + 1),
 			     GFP_KERNEL);
 		if (t == NULL)
 			continue;
 
 		/* ...store the new entry... */
-		t[wm8904->num_retune_mobile_texts] = 
+		t[wm8904->num_retune_mobile_texts] =
 			pdata->retune_mobile_cfgs[i].name;
 
 		/* ...and remember the new version. */

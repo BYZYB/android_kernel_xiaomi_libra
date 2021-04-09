@@ -90,7 +90,7 @@ static struct wf_sensor_ops wf_lm75_ops = {
 
 static int wf_lm75_probe(struct i2c_client *client,
 			 const struct i2c_device_id *id)
-{	
+{
 	struct wf_lm75_sensor *lm;
 	int rc, ds1775 = id->driver_data;
 	const char *name, *loc;
@@ -124,7 +124,7 @@ static int wf_lm75_probe(struct i2c_client *client,
 		name = "cpu-inlet-temp-1";
 	else
 		return -ENXIO;
- 	
+
 
 	lm = kzalloc(sizeof(struct wf_lm75_sensor), GFP_KERNEL);
 	if (lm == NULL)

@@ -196,7 +196,7 @@ void TKIPvMixKey(
         p1k[4] = (p1k[4] + tkip_sbox((p1k[3] ^ (((256*pbyTKey[1+j]) + pbyTKey[j]))) % 65536)) % 65536;
         p1k[4] = (p1k[4] + i) % 65536;
     }
- 
+
     /* Phase 2, Step 1 */
     ppk0 = p1k[0];
     ppk1 = p1k[1];

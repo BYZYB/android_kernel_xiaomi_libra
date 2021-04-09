@@ -2383,7 +2383,7 @@ void cpuset_cpus_allowed(struct task_struct *tsk, struct cpumask *pmask)
 {
 	unsigned long flags;
 	struct cpuset *cpus_cs;
-	 
+
 	spin_lock_irqsave(&callback_lock, flags);
 	task_lock(tsk);
 	cpus_cs = effective_cpumask_cpuset(task_cs(tsk));

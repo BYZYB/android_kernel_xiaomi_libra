@@ -3,17 +3,17 @@
  * Copyright (C) 2001 Todd Inglett, IBM Corporation
  *
  * pSeries LPAR support.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
@@ -306,7 +306,7 @@ static long pSeries_lpar_hpte_find(unsigned long vpn, int psize, int ssize)
 	}
 
 	return -1;
-} 
+}
 
 static void pSeries_lpar_hpte_updateboltedpp(unsigned long newpp,
 					     unsigned long ea,
@@ -516,7 +516,7 @@ EXPORT_SYMBOL(arch_free_page);
 /* NB: reg/unreg are called while guarded with the tracepoints_mutex */
 extern long hcall_tracepoint_refcount;
 
-/* 
+/*
  * Since the tracing code might execute hcalls we need to guard against
  * recursion. One example of this are spinlocks calling H_YIELD on
  * shared processor partitions.

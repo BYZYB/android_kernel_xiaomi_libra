@@ -244,14 +244,14 @@ static int def_tmr_ioctl(int dev, unsigned int cmd, void __user *arg)
 			return -EINVAL;
 		val = ((curr_tempo * curr_timebase) + 30) / 60;
 		return __put_user(val, p);
-		
+
 	case SNDCTL_SEQ_GETTIME:
 		return __put_user(curr_ticks, p);
-		
+
 	case SNDCTL_TMR_METRONOME:
 		/* NOP */
 		break;
-		
+
 	default:;
 	}
 	return -EINVAL;

@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      irda_device.h
  * Version:       0.9
  * Description:   Contains various declarations used by the drivers
@@ -8,26 +8,26 @@
  * Created at:    Tue Apr 14 12:41:42 1998
  * Modified at:   Mon Mar 20 09:08:57 2000
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
- * 
+ *
  *     Copyright (c) 1999-2000 Dag Brattli, All Rights Reserved.
  *     Copyright (c) 1998 Thomas Davis, <ratbert@radiks.net>,
  *     Copyright (c) 2000-2002 Jean Tourrilhes <jt@hpl.hp.com>
  *
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *     GNU General Public License for more details.
- * 
- *     You should have received a copy of the GNU General Public License 
- *     along with this program; if not, write to the Free Software 
- *     Foundation, Inc., 59 Temple Place, Suite 330, Boston, 
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program; if not, write to the Free Software
+ *     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *     MA 02111-1307 USA
- *     
+ *
  ********************************************************************/
 
 /*
@@ -133,8 +133,8 @@ struct dongle_reg {
 	struct module *owner;
 };
 
-/* 
- * Per-packet information we need to hide inside sk_buff 
+/*
+ * Per-packet information we need to hide inside sk_buff
  * (must not exceed 48 bytes, check with struct sk_buff)
  * The default_qdisc_pad field is a temporary hack.
  */
@@ -189,7 +189,7 @@ typedef struct {
 /* Maximum SIR frame (skb) that we expect to receive *unwrapped*.
  * Max LAP MTU (I field) is 2048 bytes max (IrLAP 1.1, chapt 6.6.5, p40).
  * Max LAP header is 2 bytes (for now).
- * Max CRC is 2 bytes at SIR, 4 bytes at FIR. 
+ * Max CRC is 2 bytes at SIR, 4 bytes at FIR.
  * Need 1 byte for skb_reserve() to align IP header for IrLAN.
  * Add a few extra bytes just to be safe (buffer is power of two anyway)
  * Jean II */
@@ -235,7 +235,7 @@ void irda_setup_dma(int channel, dma_addr_t buffer, int count, int mode);
 /*
  * Function irda_get_mtt (skb)
  *
- *    Utility function for getting the minimum turnaround time out of 
+ *    Utility function for getting the minimum turnaround time out of
  *    the skb, where it has been hidden in the cb field.
  */
 static inline __u16 irda_get_mtt(const struct sk_buff *skb)

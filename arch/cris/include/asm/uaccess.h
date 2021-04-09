@@ -1,4 +1,4 @@
-/* 
+/*
  * Authors:    Bjorn Wesen (bjornw@axis.com)
  *	       Hans-Peter Nilsson (hp@axis.com)
  */
@@ -35,7 +35,7 @@
 #define MAKE_MM_SEG(s)	((mm_segment_t) { (s) })
 
 /* addr_limit is the maximum accessible address for the task. we misuse
- * the KERNEL_DS and USER_DS values to both assign and compare the 
+ * the KERNEL_DS and USER_DS values to both assign and compare the
  * addr_limit values through the equally misnamed get/set_fs macros.
  * (see above)
  */

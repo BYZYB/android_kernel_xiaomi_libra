@@ -413,6 +413,26 @@ config THIN_ARCHIVES
 	  Select this if the architecture wants to use thin archives
 	  instead of ld -r to create the built-in.o files.
 
+config ARCH_SUPPORTS_LTO_CLANG
+	bool
+	help
+	  An architecture should select this option it supports:
+	  - compiling with clang,
+	  - compiling inline assembly with clang's integrated assembler,
+	  - and linking with either lld or GNU gold w/ LLVMgold.
+
+config ARCH_SUPPORTS_LTO_GCC
+	bool
+	help
+	  An architecture should select this option it supports:
+	  - compiling with gcc,
+	  - compiling inline assembly with ar.
+
+config ARCH_SUPPORTS_THINLTO
+	bool
+	help
+	  An architecture should select this if it supports clang's ThinLTO.
+
 config HAVE_CONTEXT_TRACKING
 	bool
 	default y

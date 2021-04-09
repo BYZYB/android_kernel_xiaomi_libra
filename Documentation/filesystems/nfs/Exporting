@@ -56,7 +56,7 @@ a/ A dentry flag DCACHE_DISCONNECTED which is set on
    any dentry that might not be part of the proper prefix.
    This is set when anonymous dentries are created, and cleared when a
    dentry is noticed to be a child of a dentry which is in the proper
-   prefix. 
+   prefix.
 
 b/ A per-superblock list "s_anon" of dentries which are the roots of
    subtrees that are not in the proper prefix.  These dentries, as
@@ -82,13 +82,13 @@ c/ Helper routines to allocate anonymous dentries, and to help attach
       If the passed dentry is used, NULL is returned, else the used
       dentry is returned.  This corresponds to the calling pattern of
       ->lookup.
-  
- 
+
+
 Filesystem Issues
 -----------------
 
 For a filesystem to be exportable it must:
- 
+
    1/ provide the filehandle fragment routines described below.
    2/ make sure that d_splice_alias is used rather than d_add
       when ->lookup finds an inode for a given parent and name.

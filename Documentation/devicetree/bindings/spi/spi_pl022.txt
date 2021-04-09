@@ -67,4 +67,4 @@ Example:
 			pl022,duplex = <0>;
 		};
 	};
-	
+

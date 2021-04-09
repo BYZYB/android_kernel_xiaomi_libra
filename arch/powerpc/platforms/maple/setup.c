@@ -2,7 +2,7 @@
  *  Maple (970 eval board) setup code
  *
  *  (c) Copyright 2004 Benjamin Herrenschmidt (benh@kernel.crashing.org),
- *                     IBM Corp. 
+ *                     IBM Corp.
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -196,7 +196,7 @@ void __init maple_setup_arch(void)
 	mmio_nvram_init();
 }
 
-/* 
+/*
  * Early initialization.
  */
 static void __init maple_init_early(void)

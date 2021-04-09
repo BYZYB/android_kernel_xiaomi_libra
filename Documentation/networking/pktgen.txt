@@ -1,6 +1,6 @@
 
 
-                  HOWTO for the linux packet generator 
+                  HOWTO for the linux packet generator
                   ------------------------------------
 
 Date: 041221
@@ -8,7 +8,7 @@ Date: 041221
 Enable CONFIG_NET_PKTGEN to compile and build pktgen.o either in kernel
 or as module. Module is preferred. insmod pktgen if needed. Once running
 pktgen creates a thread on each CPU where each thread has affinity to its CPU.
-Monitoring and controlling is done via /proc. Easiest to select a suitable 
+Monitoring and controlling is done via /proc. Easiest to select a suitable
 a sample script and configure.
 
 On a dual CPU:
@@ -26,33 +26,33 @@ For monitoring and control pktgen creates:
 
 Viewing threads
 ===============
-/proc/net/pktgen/kpktgend_0 
+/proc/net/pktgen/kpktgend_0
 Name: kpktgend_0  max_before_softirq: 10000
-Running: 
-Stopped: eth1 
+Running:
+Stopped: eth1
 Result: OK: max_before_softirq=10000
 
-Most important the devices assigned to thread. Note! A device can only belong 
+Most important the devices assigned to thread. Note! A device can only belong
 to one thread.
 
 
 Viewing devices
 ===============
 
-Parm section holds configured info. Current hold running stats. 
+Parm section holds configured info. Current hold running stats.
 Result is printed after run or after interruption. Example:
 
-/proc/net/pktgen/eth1       
+/proc/net/pktgen/eth1
 
 Params: count 10000000  min_pkt_size: 60  max_pkt_size: 60
      frags: 0  delay: 0  clone_skb: 1000000  ifname: eth1
      flows: 0 flowlen: 0
-     dst_min: 10.10.11.2  dst_max: 
-     src_min:   src_max: 
+     dst_min: 10.10.11.2  dst_max:
+     src_min:   src_max:
      src_mac: 00:00:00:00:00:00  dst_mac: 00:04:23:AC:FD:82
      udp_src_min: 9  udp_src_max: 9  udp_dst_min: 9  udp_dst_max: 9
-     src_mac_count: 0  dst_mac_count: 0 
-     Flags: 
+     src_mac_count: 0  dst_mac_count: 0
+     Flags:
 Current:
      pkts-sofar: 10000000  errors: 39664
      started: 1103053986245187us  stopped: 1103053999346329us idle: 880401us
@@ -95,7 +95,7 @@ Examples:
                          To select queue 1 of a given device,
                          use queue_map_min=1 and queue_map_max=1
 
- pgset "src_mac_count 1" Sets the number of MACs we'll range through.  
+ pgset "src_mac_count 1" Sets the number of MACs we'll range through.
                          The 'minimum' MAC is what you set with srcmac.
 
  pgset "dst_mac_count 1" Sets the number of MACs we'll range through.
@@ -104,7 +104,7 @@ Examples:
  pgset "flag [name]"     Set a flag to determine behaviour.  Current flags
                          are: IPSRC_RND #IP Source is random (between min/max),
                               IPDST_RND, UDPSRC_RND,
-                              UDPDST_RND, MACSRC_RND, MACDST_RND 
+                              UDPDST_RND, MACSRC_RND, MACDST_RND
                               MPLS_RND, VID_RND, SVID_RND
                               QUEUE_MAP_RND # queue map random
                               QUEUE_MAP_CPU # queue map mirrors smp_processor_id()
@@ -159,21 +159,21 @@ Example scripts
 
 A collection of small tutorial scripts for pktgen is in examples dir.
 
-pktgen.conf-1-1                  # 1 CPU 1 dev 
+pktgen.conf-1-1                  # 1 CPU 1 dev
 pktgen.conf-1-2                  # 1 CPU 2 dev
-pktgen.conf-2-1                  # 2 CPU's 1 dev 
+pktgen.conf-2-1                  # 2 CPU's 1 dev
 pktgen.conf-2-2                  # 2 CPU's 2 dev
-pktgen.conf-1-1-rdos             # 1 CPU 1 dev w. route DoS 
+pktgen.conf-1-1-rdos             # 1 CPU 1 dev w. route DoS
 pktgen.conf-1-1-ip6              # 1 CPU 1 dev ipv6
 pktgen.conf-1-1-ip6-rdos         # 1 CPU 1 dev ipv6  w. route DoS
 pktgen.conf-1-1-flows            # 1 CPU 1 dev multiple flows.
 
-Run in shell: ./pktgen.conf-X-Y It does all the setup including sending. 
+Run in shell: ./pktgen.conf-X-Y It does all the setup including sending.
 
 
 Interrupt affinity
 ===================
-Note when adding devices to a specific CPU there good idea to also assign 
+Note when adding devices to a specific CPU there good idea to also assign
 /proc/irq/XX/smp_affinity so the TX-interrupts gets bound to the same CPU.
 as this reduces cache bouncing when freeing skb's.
 
@@ -205,7 +205,7 @@ delay
 src_mac_count
 dst_mac_count
 
-pkt_size 
+pkt_size
 min_pkt_size
 max_pkt_size
 

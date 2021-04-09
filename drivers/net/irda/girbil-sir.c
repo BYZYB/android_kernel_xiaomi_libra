@@ -10,12 +10,12 @@
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
  *
  *     Copyright (c) 1999 Dag Brattli, All Rights Reserved.
- *     
+ *
  *     This program is free software; you can redistribute it and/or
  *     modify it under the terms of the GNU General Public License as
  *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- * 
+ *
  *     Neither Dag Brattli nor University of Tromsø admit liability nor
  *     provide warranty for any of this software. This material is
  *     provided "AS-IS" and at no charge.
@@ -161,7 +161,7 @@ static int girbil_change_speed(struct sir_dev *dev, unsigned speed)
 			break;
 		}
 		control[1] = GIRBIL_LOAD;
-	
+
 		/* Write control bytes */
 		sirdev_raw_write(dev, control, 2);
 

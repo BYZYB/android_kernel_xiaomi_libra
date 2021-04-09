@@ -82,7 +82,7 @@ int sound_install_audiodrv(int vers, char *name, struct audio_driver *driver,
 		return -(ENOMEM);
 	}
 	init_waitqueue_head(&op->in_sleeper);
-	init_waitqueue_head(&op->out_sleeper);	
+	init_waitqueue_head(&op->out_sleeper);
 	init_waitqueue_head(&op->poll_sleeper);
 	if (driver_size < sizeof(struct audio_driver))
 		memset((char *) d, 0, sizeof(struct audio_driver));
@@ -123,10 +123,10 @@ int sound_install_mixer(int vers, char *name, struct mixer_operations *driver,
 		printk(KERN_ERR "Sound: Incompatible mixer driver for %s\n", name);
 		return -EINVAL;
 	}
-	
+
 	/* FIXME: This leaks a mixer_operations struct every time its called
 	   until you unload sound! */
-	   
+
 	op = (struct mixer_operations *) (sound_mem_blocks[sound_nblocks] = vzalloc(sizeof(struct mixer_operations)));
 	sound_nblocks++;
 	if (sound_nblocks >= MAX_MEM_BLOCKS)
@@ -157,7 +157,7 @@ void sound_unload_audiodev(int dev)
 EXPORT_SYMBOL(sound_unload_audiodev);
 
 static int sound_alloc_audiodev(void)
-{ 
+{
 	int i = register_sound_dsp(&oss_sound_fops, -1);
 	if(i==-1)
 		return i;

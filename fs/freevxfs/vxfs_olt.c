@@ -27,7 +27,7 @@
  * SUCH DAMAGE.
  */
 
-/* 
+/*
  * Veritas filesystem driver - object location table support.
  */
 #include <linux/fs.h>
@@ -50,7 +50,7 @@ static inline void
 vxfs_get_ilist(struct vxfs_oltilist *ilistp, struct vxfs_sb_info *infp)
 {
 	BUG_ON(infp->vsi_iext);
-	infp->vsi_iext = ilistp->olt_iext[0]; 
+	infp->vsi_iext = ilistp->olt_iext[0];
 }
 
 static inline u_long
@@ -108,7 +108,7 @@ vxfs_read_olt(struct super_block *sbp, u_long bsize)
 	while (oaddr < eaddr) {
 		struct vxfs_oltcommon	*ocp =
 			(struct vxfs_oltcommon *)oaddr;
-		
+
 		switch (ocp->olt_type) {
 		case VXFS_OLT_FSHEAD:
 			vxfs_get_fshead((struct vxfs_oltfshead *)oaddr, infp);

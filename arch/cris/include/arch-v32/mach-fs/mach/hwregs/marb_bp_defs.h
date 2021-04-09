@@ -6,7 +6,7 @@
  *   file:           ../../inst/memarb/rtl/guinness/marb_top.r
  *     id:           <not found>
  *     last modfied: Fri Nov  7 15:36:04 2003
- * 
+ *
  *   by /n/asic/projects/guinness/design/top/inst/rdesc/rdes2c ../../rtl/global.rmap ../../mod/modreg.rmap -base 0xb0000000 ../../inst/memarb/rtl/guinness/marb_top.r
  *      id: $Id: marb_bp_defs.h,v 1.1 2007/02/13 11:55:30 starvik Exp $
  * Any changes here will be lost.

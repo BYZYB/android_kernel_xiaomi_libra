@@ -28,7 +28,7 @@
  *  kgdb usage notes:
  *  -----------------
  *
- * If you select CONFIG_ETRAX_KGDB in the configuration, the kernel will be 
+ * If you select CONFIG_ETRAX_KGDB in the configuration, the kernel will be
  * built with different gcc flags: "-g" is added to get debug infos, and
  * "-fomit-frame-pointer" is omitted to make debugging easier. Since the
  * resulting kernel will be quite big (approx. > 7 MB), it will be stripped
@@ -121,7 +121,7 @@
  *  call to kgdb_init() is necessary in order to allow any breakpoints
  *  or error conditions to be properly intercepted and reported to gdb.
  *  Two, a breakpoint needs to be generated to begin communication.  This
- *  is most easily accomplished by a call to breakpoint(). 
+ *  is most easily accomplished by a call to breakpoint().
  *
  *    The following gdb commands are supported:
  *
@@ -217,9 +217,9 @@ struct register_image
 
         unsigned short   p4;   /* 0x42 16-bit zero-register */
 	unsigned short  ccr;   /* 0x44 Condition code register */
-	
+
 	unsigned int    mof;   /* 0x46 Multiply overflow register */
-	
+
         unsigned int     p8;   /* 0x4A 32-bit zero-register */
 	unsigned int    ibr;   /* 0x4E Interrupt base register */
 	unsigned int    irp;   /* 0x52 Interrupt return pointer */
@@ -449,7 +449,7 @@ static char*
 gdb_cris_strcpy (char *s1, const char *s2)
 {
 	char *s = s1;
-	
+
 	for (s = s1; (*s++ = *s2++) != '\0'; )
 		;
 	return (s1);
@@ -460,7 +460,7 @@ static int
 gdb_cris_strlen (const char *s)
 {
 	const char *sc;
-	
+
 	for (sc = s; *sc != '\0'; sc++)
 		;
 	return (sc - s);
@@ -472,7 +472,7 @@ gdb_cris_memchr (const void *s, int c, int n)
 {
 	const unsigned char uc = c;
 	const unsigned char *su;
-	
+
 	for (su = s; 0 < n; ++su, --n)
 		if (*su == uc)
 			return ((void *)su);
@@ -487,16 +487,16 @@ gdb_cris_strtol (const char *s, char **endptr, int base)
 	char *s1;
 	char *sd;
 	int x = 0;
-	
+
 	for (s1 = (char*)s; (sd = gdb_cris_memchr(hex_asc, *s1, base)) != NULL; ++s1)
 		x = x * base + (sd - hex_asc);
-        
+
         if (endptr)
         {
                 /* Unconverted suffix is stored in endptr unless endptr is NULL. */
                 *endptr = s1;
         }
-        
+
 	return x;
 }
 
@@ -509,7 +509,7 @@ copy_registers (registers *dptr, registers *sptr, int n)
 {
 	unsigned char *dreg;
 	unsigned char *sreg;
-	
+
 	for (dreg = (unsigned char*)dptr, sreg = (unsigned char*)sptr; n > 0; n--)
 		*dreg++ = *sreg++;
 }
@@ -523,7 +523,7 @@ copy_registers_from_stack (int thread_id, registers *regptr)
 	int j;
 	stack_registers *s = (stack_registers *)stack_list[thread_id];
 	unsigned int *d = (unsigned int *)regptr;
-	
+
 	for (j = 13; j >= 0; j--)
 		*d++ = s->r[j];
 	regptr->sp = (unsigned int)stack_list[thread_id];
@@ -540,7 +540,7 @@ copy_registers_to_stack (int thread_id, registers *regptr)
 	int i;
 	stack_registers *d = (stack_registers *)stack_list[thread_id];
 	unsigned int *s = (unsigned int *)regptr;
-	
+
 	for (i = 0; i < 14; i++) {
 		d->r[i] = *s++;
 	}
@@ -568,7 +568,7 @@ write_register (int regno, char *val)
 		status = E02;
 	}
         else if (regno == CCR) {
-		/* 16 bit register with complex offset. (P4 is read-only, P6 is not implemented, 
+		/* 16 bit register with complex offset. (P4 is read-only, P6 is not implemented,
                    and P7 (MOF) is 32 bits in ETRAX 100LX. */
 		hex2mem ((unsigned char *)&(current_reg->ccr) + (regno-CCR) * sizeof(unsigned short),
 			 val, sizeof(unsigned short));
@@ -577,7 +577,7 @@ write_register (int regno, char *val)
 		/* 32 bit register with complex offset.  (P8 has been taken care of.) */
 		hex2mem ((unsigned char *)&(current_reg->ibr) + (regno-IBR) * sizeof(unsigned int),
 			 val, sizeof(unsigned int));
-	} 
+	}
         else {
 		/* Do not support nonexisting or unimplemented registers (P2, P3, and P6). */
 		status = E05;
@@ -594,7 +594,7 @@ write_stack_register (int thread_id, int regno, char *valptr)
 	int status = SUCCESS;
 	stack_registers *d = (stack_registers *)stack_list[thread_id];
 	unsigned int val;
-	
+
 	hex2mem ((unsigned char *)&val, valptr, sizeof(unsigned int));
 	if (regno >= R0 && regno < SP) {
 		d->r[regno] = val;
@@ -683,7 +683,7 @@ mem2hex(char *buf, unsigned char *mem, int count)
 {
 	int i;
 	int ch;
-        
+
         if (mem == NULL) {
                 /* Bogus read from m0. FIXME: What constitutes a valid address? */
                 for (i = 0; i < count; i++) {
@@ -697,7 +697,7 @@ mem2hex(char *buf, unsigned char *mem, int count)
 			buf = hex_byte_pack(buf, ch);
                 }
         }
-        
+
         /* Terminate properly. */
 	*buf = '\0';
 	return (buf);
@@ -770,7 +770,7 @@ getpacket (char *buffer)
 			count = count + 1;
 		}
 		buffer[count] = '\0';
-		
+
 		if (ch == '#') {
 			xmitcsum = hex (getDebugChar ()) << 4;
 			xmitcsum += hex (getDebugChar ());
@@ -803,7 +803,7 @@ putpacket(char *buffer)
 	int checksum;
 	int runlen;
 	int encode;
-	
+
 	do {
 		char *src = buffer;
 		putDebugChar ('$');
@@ -864,7 +864,7 @@ stub_is_stopped(int sigval)
 
 	unsigned int reg_cont;
 	int status;
-        
+
 	/* Send trap type (converted to signal) */
 
 	*ptr++ = 'T';
@@ -874,12 +874,12 @@ stub_is_stopped(int sigval)
 	 * PC, frame pointer and stack pointer here. Other registers will be
 	 * explicitly asked for. But for now, send all.
 	 */
-	
+
 	for (regno = R0; regno <= USP; regno++) {
 		/* Store n...:r...; for the registers in the buffer. */
 
                 status = read_register (regno, &reg_cont);
-                
+
 		if (status == SUCCESS) {
 			ptr = hex_byte_pack(ptr, regno);
                         *ptr++ = ':';
@@ -888,7 +888,7 @@ stub_is_stopped(int sigval)
                                       register_size[regno]);
                         *ptr++ = ';';
                 }
-                
+
 	}
 
 #ifdef PROCESS_SUPPORT
@@ -942,7 +942,7 @@ handle_exception (int sigval)
 				   Registers are in the internal order for GDB, and the bytes
 				   in a register  are in the same order the machine uses.
 				   Failure: void. */
-				
+
 				{
 #ifdef PROCESS_SUPPORT
 					/* Use the special register content in the executing thread. */
@@ -957,7 +957,7 @@ handle_exception (int sigval)
 #endif
 				}
 				break;
-				
+
 			case 'G':
 				/* Write registers. GXX..XX
 				   Each byte of register data  is described by two hex digits.
@@ -976,7 +976,7 @@ handle_exception (int sigval)
 #endif
 				gdb_cris_strcpy (remcomOutBuffer, "OK");
 				break;
-				
+
 			case 'P':
 				/* Write register. Pn...=r...
 				   Write register n..., hex value without 0x, with value r...,
@@ -1016,7 +1016,7 @@ handle_exception (int sigval)
 					}
 				}
 				break;
-				
+
 			case 'm':
 				/* Read from memory. mAA..AA,LLLL
 				   AA..AA is the address and LLLL is the length.
@@ -1028,11 +1028,11 @@ handle_exception (int sigval)
                                         char *suffix;
 					unsigned char *addr = (unsigned char *)gdb_cris_strtol(&remcomInBuffer[1],
                                                                                                &suffix, 16);                                        int length = gdb_cris_strtol(suffix+1, 0, 16);
-                                        
+
                                         mem2hex(remcomOutBuffer, addr, length);
                                 }
 				break;
-				
+
 			case 'X':
 				/* Write to memory. XAA..AA,LLLL:XX..XX
 				   AA..AA is the start address,  LLLL is the number of bytes, and
@@ -1065,7 +1065,7 @@ handle_exception (int sigval)
 					}
 				}
 				break;
-				
+
 			case 'c':
 				/* Continue execution. cAA..AA
 				   AA..AA is the address where execution is resumed. If AA..AA is
@@ -1077,19 +1077,19 @@ handle_exception (int sigval)
 				}
 				enableDebugIRQ();
 				return;
-				
+
 			case 's':
 				/* Step. sAA..AA
 				   AA..AA is the address where execution is resumed. If AA..AA is
 				   omitted, resume at the present address. Success: return to the
 				   executing thread. Failure: will never know.
-				   
+
 				   Should never be invoked. The single-step is implemented on
 				   the host side. If ever invoked, it is an internal error E04. */
 				gdb_cris_strcpy (remcomOutBuffer, error_message[E04]);
 				putpacket (remcomOutBuffer);
 				return;
-				
+
 			case '?':
 				/* The last signal which caused a stop. ?
 				   Success: SAA, where AA is the signal number.
@@ -1099,14 +1099,14 @@ handle_exception (int sigval)
 				remcomOutBuffer[2] = hex_asc_lo(sigval);
 				remcomOutBuffer[3] = 0;
 				break;
-				
+
 			case 'D':
 				/* Detach from host. D
 				   Success: OK, and return to the executing thread.
 				   Failure: will never know */
 				putpacket ("OK");
 				return;
-				
+
 			case 'k':
 			case 'r':
 				/* kill request or reset request.
@@ -1114,7 +1114,7 @@ handle_exception (int sigval)
 				   Failure: will never know. */
 				kill_restart ();
 				break;
-				
+
 			case 'C':
 			case 'S':
 			case '!':
@@ -1143,7 +1143,7 @@ handle_exception (int sigval)
 						gdb_cris_strcpy (remcomOutBuffer, "OK");
 				}
 				break;
-								
+
 			case 'H':
 				/* Set thread for subsequent operations: Hct
 				   c = 'c' for thread used in step and continue;
@@ -1179,7 +1179,7 @@ handle_exception (int sigval)
 					}
 				}
 				break;
-				
+
 			case 'q':
 			case 'Q':
 				/* Query of general interest. qXXXX
@@ -1188,7 +1188,7 @@ handle_exception (int sigval)
 					int pos;
 					int nextpos;
 					int thread_id;
-					
+
 					switch (remcomInBuffer[1]) {
 						case 'C':
 							/* Identify the remote current thread. */
@@ -1242,7 +1242,7 @@ handle_exception (int sigval)
 				}
 				break;
 #endif /* PROCESS_SUPPORT */
-				
+
 			default:
 				/* The stub should ignore other request and send an empty
 				   response ($#<checksum>). This way we can extend the protocol and GDB
@@ -1475,7 +1475,7 @@ kgdb_init(void)
 
         /* breakpoint handler is now set in irq.c */
 	set_int_vector(8, kgdb_handle_serial);
-	
+
 	enableDebugIRQ();
 }
 

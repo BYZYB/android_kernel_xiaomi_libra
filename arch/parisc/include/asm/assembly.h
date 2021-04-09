@@ -100,7 +100,7 @@
 	ldil    L%(__PAGE_OFFSET), \grphys
 	sub     \grvirt, \grphys, \grphys
 	.endm
-	
+
 	.macro  tovirt  grphys, grvirt
 	ldil    L%(__PAGE_OFFSET), \grvirt
 	add     \grphys, \grvirt, \grvirt
@@ -110,7 +110,7 @@
 	ldil    L%(__PAGE_OFFSET), %r1
 	sub     \gr, %r1, \gr
 	.endm
-	
+
 	.macro  tovirt_r1  gr
 	ldil    L%(__PAGE_OFFSET), %r1
 	add     \gr, %r1, \gr

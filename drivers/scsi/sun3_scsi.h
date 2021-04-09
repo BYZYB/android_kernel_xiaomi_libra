@@ -122,7 +122,7 @@ struct sun3_dma_regs {
 	unsigned short udc_addr; /* uda dma addr reg (obio only) */
 	unsigned short fifo_data; /* fifo data reg, holds extra byte on
 				     odd dma reads */
-	unsigned short fifo_count; 
+	unsigned short fifo_count;
 	unsigned short csr; /* control/status reg */
 	unsigned short bpack_hi; /* vme only */
 	unsigned short bpack_lo; /* vme only */
@@ -141,7 +141,7 @@ struct sun3_udc_regs {
 };
 
 /* addresses of the udc registers */
-#define UDC_MODE 0x38 
+#define UDC_MODE 0x38
 #define UDC_CSR 0x2e /* command/status */
 #define UDC_CHN_HI 0x26 /* chain high word */
 #define UDC_CHN_LO 0x22 /* chain lo word */
@@ -187,11 +187,11 @@ struct sun3_udc_regs {
 #define CSR_SEND 0x8 /* 1 = send  0 = recv */
 #define CSR_FIFO 0x2 /* reset fifo */
 #define CSR_INTR 0x4 /* interrupt enable */
-#define CSR_SCSI 0x1 
+#define CSR_SCSI 0x1
 
 #define VME_DATA24 0x3d00
 
-// debugging printk's, taken from atari_scsi.h 
+// debugging printk's, taken from atari_scsi.h
 /* Debugging printk definitions:
  *
  *  ARB  -> arbitration

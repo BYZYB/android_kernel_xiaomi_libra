@@ -105,7 +105,7 @@ update_interval	The interval at which the chip will update readings.
 in[0-*]_min	Voltage min value.
 		Unit: millivolt
 		RW
-		
+
 in[0-*]_lcrit	Voltage critical min value.
 		Unit: millivolt
 		RW
@@ -116,7 +116,7 @@ in[0-*]_lcrit	Voltage critical min value.
 in[0-*]_max	Voltage max value.
 		Unit: millivolt
 		RW
-		
+
 in[0-*]_crit	Voltage critical max value.
 		Unit: millivolt
 		RW
@@ -175,7 +175,7 @@ cpu[0-*]_vid	CPU core reference voltage.
 		RO
 		Not always correct.
 
-vrm		Voltage Regulator Module version number. 
+vrm		Voltage Regulator Module version number.
 		RW (but changing it should no more be necessary)
 		Originally the VRM standard version multiplied by 10, but now
 		an arbitrary number, as not all standards have a version

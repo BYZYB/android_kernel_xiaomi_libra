@@ -217,7 +217,7 @@ without being preceded by the make code is a flag for a key matrix error).
                         ;  position report
                         ;  where y=1, mouse key press causes absolute report
                         ;  and x=1, mouse key release causes absolute report
-                        ; mss=100, mouse buttons act like keys 
+                        ; mss=100, mouse buttons act like keys
 
 This command sets how the ikbd should treat the buttons on the mouse. The
 default mouse button action mode is %00000000, the buttons are treated as part
@@ -242,7 +242,7 @@ were keyboard keys.
     XLSB
     YMSB                ; Y maximum (in scaled mouse clicks)
     YLSB
-	
+
 Set absolute mouse position maintenance. Resets the ikbd maintained X and Y
 coordinates.
 In this mode, the value of the internally maintained coordinates does NOT wrap
@@ -534,7 +534,7 @@ This command allows the host to command the execution of a subroutine in the
 ikbd controller memory.
 
 9.27 STATUS INQUIRIES
-	
+
     Status commands are formed by inclusively ORing 0x80 with the
     relevant SET command.
 

@@ -81,7 +81,7 @@ void yaffs2_find_oldest_dirty_seq(struct yaffs_dev *dev)
 /*
  * yaffs_clear_oldest_dirty_seq()
  * Called when a block is erased or marked bad. (ie. when its seq_number
- * becomes invalid). If the value matches the oldest then we clear 
+ * becomes invalid). If the value matches the oldest then we clear
  * dev->oldest_dirty_seq to force its recomputation.
  */
 void yaffs2_clear_oldest_dirty_seq(struct yaffs_dev *dev,

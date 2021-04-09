@@ -672,7 +672,7 @@ void StaRateAdaptive87SE(struct net_device *dev)
 	/* 1 Test Upgrading Tx Rate
 	 * Sometimes the cause of the low throughput (high retry rate) is the compatibility between the AP and NIC.
 	 * To test if the upper rate may cause lower retry rate, this mechanism randomly occurs to test upgrading tx rate.
-	 */ 
+	 */
 	if (!bTryUp && !bTryDown && (priv->TryupingCount == 0) && (priv->TryDownCountLowData == 0)
 		&& priv->CurrentOperaRate != priv->ieee80211->current_network.HighestOperaRate && priv->FailTxRateCount < 2) {
 		if (jiffies % (CurrRetryRate + 101) == 0) {
@@ -702,7 +702,7 @@ void StaRateAdaptive87SE(struct net_device *dev)
 			if (priv->CurrentOperaRate == 22)
 				bUpdateInitialGain = true;
 
-			/* 
+			/*
 			 * The difference in throughput between 48Mbps and 36Mbps is 8M.
 			 * So, we must be careful in this rate scale. Isaiah 2008-02-15.
 			 */
@@ -781,8 +781,8 @@ void StaRateAdaptive87SE(struct net_device *dev)
 			priv->TryDownCountLowData--;
 	}
 
-	/* 
- 	 * Keep the Tx fail rate count to equal to 0x15 at most. 
+	/*
+ 	 * Keep the Tx fail rate count to equal to 0x15 at most.
 	 * Reduce the fail count at least to 10 sec if tx rate is tending stable.
 	 */
 	if (priv->FailTxRateCount >= 0x15 ||
@@ -904,7 +904,7 @@ void SwAntennaDiversityRxOk8185(struct net_device *dev, u8 SignalStrength)
 	} else { /* Initialization case. */
 		priv->AdRxSignalStrength = SignalStrength;
 	}
-	
+
 	if (priv->LastRxPktAntenna) /* Main antenna. */
 		priv->AdMainAntennaRxOkCnt++;
 	else	 /* Aux antenna. */

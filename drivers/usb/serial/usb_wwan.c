@@ -751,7 +751,7 @@ int usb_wwan_suspend(struct usb_serial *serial, pm_message_t message)
 
 	spin_lock_irq(&intfdata->susp_lock);
 	if (PMSG_IS_AUTO(message)) {
-		if (intfdata->in_flight || 
+		if (intfdata->in_flight ||
                     pm_runtime_autosuspend_expiration(&serial->dev->dev)) {
 			spin_unlock_irq(&intfdata->susp_lock);
 			return -EBUSY;

@@ -82,7 +82,7 @@
 #define TBID_ISTAT_S      24
 
 /* Privilege needed to access a segment is indicated by the next bit.
-   
+
    This bit is set to mirror the current privilege level when starting a
    search for a segment - setting it yourself toggles the automatically
    generated state which is only useful to emulate unprivileged behaviour
@@ -281,11 +281,11 @@ typedef struct _tbidual_tag_ {
    currently in use by non general purpose code. The state of the __TBIExtCtx
    variable in the static space of the thread forms an extension of the base
    context of the thread.
-   
+
    If ( __TBIExtCtx.Ctx.SaveMask == 0 ) then pExt is assumed to be NULL and
    the empty state of  __TBIExtCtx is represented by the fact that
    TBICTX.SaveMask does not have the bit TBICTX_XEXT_BIT set.
-   
+
    If ( __TBIExtCtx.Ctx.SaveMask != 0 ) then pExt should point at a suitably
    sized extended context save area (usually at the end of the stack space
    allocated by the current routine). This space should allow for the
@@ -304,9 +304,9 @@ typedef union _tbiextctx_tag_ {
 #endif
         short SaveMask;         /* Flag bits for state saved */
         PTBIDUAL pExt;          /* AX[2] state saved first plus Xxxx state */
-    
+
     } Ctx;
-    
+
 } TBIEXTCTX, *PTBIEXTCTX;
 
 /* Automatic registration of extended context save for __TBINestInts */
@@ -366,18 +366,18 @@ extern TBIEXTCTX __TBIExtCtx;
         ADD     A0StP,A0StP,#SaveSize   ; setup/use A0FrP to access locals
         MOVT    D1xxx,#SaveMask         ; TBICTX_XEXT_BIT MUST be set
         SETL    [A1GbP+#OG(___TBIExtCtx)],D0xxx,D1xxx
-        
+
     NB: OG(___TBIExtCtx) is a special case supported for SETL/GETL operations
         on 64-bit sizes structures only, other accesses must be based on use
-        of OGA(___TBIExtCtx). 
+        of OGA(___TBIExtCtx).
 
    At exit of routine-
-   
+
         MOV     D0xxx,#0                ; Clear extended context save state
         MOV     D1xxx,#0
         SETL    [A1GbP+#OG(___TBIExtCtx)],D0xxx,D1xxx
         SUB     A0StP,A0StP,#SaveSize   ; If original A0StP required
-        
+
     NB: Both the setting and clearing of the whole __TBIExtCtx MUST be done
         atomically in one 64-bit write operation.
 
@@ -386,18 +386,18 @@ extern TBIEXTCTX __TBIExtCtx;
    performed however (assuming __TBINestInts has already been called earlier
    on) then the following logic will correctly call __TBICtxSave if required
    and clear out the currently selected background task-
-   
+
         if ( __TBIExtCtx.Ctx.SaveMask & TBICTX_XEXT_BIT )
         {
             / * Store extended states in pCtx * /
             State.Sig.SaveMask |= __TBIExtCtx.Ctx.SaveMask;
-        
+
             (void) __TBICtxSave( State, (void *) __TBIExtCtx.Ctx.pExt );
             __TBIExtCtx.Val   = 0;
         }
-        
+
     and when restoring task states call __TBICtxRestore-
-    
+
         / * Restore state from pCtx * /
         State.Sig.pCtx     = pCtx;
         State.Sig.SaveMask = pCtx->SaveMask;
@@ -406,10 +406,10 @@ extern TBIEXTCTX __TBIExtCtx;
         {
             / * Restore extended states from pCtx * /
             __TBIExtCtx.Val = pCtx->Ext.Val;
-            
+
             (void) __TBICtxRestore( State, (void *) __TBIExtCtx.Ctx.pExt );
-        }   
-   
+        }
+
  */
 
 /* Critical thread state save area */
@@ -431,11 +431,11 @@ typedef struct _tbictx_tag_ {
     TBIDUAL AX[2];
     TBIEXTCTX Ext;
     TBIDUAL AX3[TBICTX_AX_REGS-3];
-    
+
     /* Any CBUF state to be restored by a handler return must be stored here.
        Other extended state can be stored anywhere - see __TBICtxSave and
        __TBICtxRestore. */
-    
+
 } TBICTX, *PTBICTX;
 
 #ifdef TBI_FASTINT_1_4
@@ -498,7 +498,7 @@ typedef struct _tbictxextcb0_tag_ {
     unsigned long CBFlags, CBAddr;
     /* 64-bit data */
     TBIDUAL CBData;
-    
+
 } TBICTXEXTCB0, *PTBICTXEXTCB0;
 
 /* Read pipeline state saved on later cores after single catch buffer slot */
@@ -506,35 +506,35 @@ typedef struct _tbictxextrp6_tag_ {
     /* RPMask is TXSTATUS_RPMASK_BITS only, reserved is undefined */
     unsigned long RPMask, Reserved0;
     TBIDUAL CBData[6];
-    
+
 } TBICTXEXTRP6, *PTBICTXEXTRP6;
 
 /* Extended thread state save areas - 8 DU register pairs */
 typedef struct _tbictxextbb8_tag_ {
     /* Remaining Data unit registers in 64-bit pairs */
     TBIDUAL UX[8];
-    
+
 } TBICTXEXTBB8, *PTBICTXEXTBB8;
 
 /* Extended thread state save areas - 3 AU register pairs */
 typedef struct _tbictxextbb3_tag_ {
     /* Remaining Address unit registers in 64-bit pairs */
     TBIDUAL UX[3];
-    
+
 } TBICTXEXTBB3, *PTBICTXEXTBB3;
 
 /* Extended thread state save areas - 4 AU register pairs or 4 FX pairs */
 typedef struct _tbictxextbb4_tag_ {
     /* Remaining Address unit or FPU registers in 64-bit pairs */
     TBIDUAL UX[4];
-    
+
 } TBICTXEXTBB4, *PTBICTXEXTBB4;
 
 /* Extended thread state save areas - Hardware loop states (max 2) */
 typedef struct _tbictxexthl2_tag_ {
     /* Hardware looping register states */
     TBIDUAL Start, End, Count;
-    
+
 } TBICTXEXTHL2, *PTBICTXEXTHL2;
 
 /* Extended thread state save areas - DSP register states */
@@ -547,7 +547,7 @@ typedef struct _tbictxexttdp_tag_ {
     TBIDUAL PReg[4];
     /* Modulo region size, padded to 64-bits */
     int CurrMRSIZE, Reserved0;
-    
+
 } TBICTXEXTTDP, *PTBICTXEXTTDP;
 
 /* Extended thread state save areas - DSP register states including DSP RAM */
@@ -564,7 +564,7 @@ typedef struct _tbictxexttdpr_tag_ {
     unsigned long Tmplt[16];
     /* Modulo address region size and DSP RAM module region sizes */
     int CurrMRSIZE, CurrDRSIZE;
-    
+
 } TBICTXEXTTDPR, *PTBICTXEXTTDPR;
 
 #ifdef TBI_1_4
@@ -593,10 +593,10 @@ typedef struct _tbictxextfpu_tag_ {
 
     /* TXMODE bits related to FPU */
     short ModeFpu;
-    
+
     /* FPU Even/Odd register states */
     TBIDUAL FX[4];
-   
+
     /* if CfgFpu & TBICTX_CFGFPU_FX16_BIT  -> 1 then TBICTXEXTBB4 holds FX.8-15 */
     /* if CfgFpu & TBICTX_CFGFPU_NOACF_BIT -> 0 then TBICTXEXTFPACC holds state */
 } TBICTXEXTFPU, *PTBICTXEXTFPU;
@@ -605,7 +605,7 @@ typedef struct _tbictxextfpu_tag_ {
 typedef struct _tbictxextfpacc_tag_ {
     /* FPU accumulator register state - three 64-bit parts */
     TBIDUAL FAcc32[3];
-    
+
 } TBICTXEXTFPACC, *PTBICTXEXTFPACC;
 #endif
 
@@ -618,7 +618,7 @@ typedef union _tbires_tag_ {
     long long Val;
 
     /* Parameter of a fnSigs or __TBICtx* call */
-    struct _tbires_sig_tag_ { 
+    struct _tbires_sig_tag_ {
         /* TXMASK[I] bits zeroed upto and including current trigger level */
         unsigned short TrigMask;
         /* Control bits for handlers - see PTBIAPIFN documentation below */
@@ -636,13 +636,13 @@ typedef union _tbires_tag_ {
     } Thrd;
 
     /* Parameter and Result of a __TBISwitch call */
-    struct _tbires_switch_tag_ { 
+    struct _tbires_switch_tag_ {
         /* Parameter passed across context switch */
         void *pPara;
         /* Thread context of other Thread includng restore flags */
         PTBICTX pCtx;
     } Switch;
-    
+
     /* For extended S/W events only */
     struct _tbires_ccb_tag_ {
         void *pCCB;
@@ -668,43 +668,43 @@ typedef union _tbires_tag_ {
 #ifndef __ASSEMBLY__
 /* Prototype for all signal handler functions, called via ___TBISyncTrigger or
    ___TBIASyncTrigger.
-   
+
    State.Sig.TrigMask will indicate the bits set within TXMASKI at
           the time of the handler call that have all been cleared to prevent
           nested interrupt occuring immediately.
-   
+
    State.Sig.SaveMask is a bit-mask which will be set to Zero when a trigger
           occurs at background level and TBICTX_CRIT_BIT and optionally
           TBICTX_CBUF_BIT when a trigger occurs at interrupt level.
-          
+
           TBICTX_CBUF_BIT reflects the state of TXSTATUS_CBMARKER_BIT for
           the interrupted background thread.
-   
+
    State.Sig.pCtx will point at a TBICTX structure generated to hold the
           critical state of the interrupted thread at interrupt level and
           should be set to NULL when called at background level.
-        
+
    Triggers will indicate the status of TXSTAT or TXSTATI sampled by the
           code that called the handler.
-          
+
    InstOrSWSId is defined firstly as 'Inst' if the SigNum is TBID_SIGNUM_SWx
           and hold the actual SWITCH instruction detected, secondly if SigNum
           is TBID_SIGNUM_SWS the 'SWSId' is defined to hold the Id of the
           software signal detected, in other cases the value of this
           parameter is undefined.
-   
+
    pTBI   points at the PTBI structure related to the thread and processing
           level involved.
 
    TBIRES return value at both processing levels is similar in terms of any
           changes that the handler makes. By default the State argument value
           passed in should be returned.
-          
+
       Sig.TrigMask value is bits to OR back into TXMASKI when the handler
           completes to enable currently disabled interrupts.
-          
+
       Sig.SaveMask value is ignored.
-   
+
       Sig.pCtx is ignored.
 
  */
@@ -899,7 +899,7 @@ typedef volatile struct _tbistr_tag_ {
 #define TBI_INTSOR( Bits )                                              do {\
     int __TT = 0; TBI_INTSX(__TT);                                          \
     __TT |= (Bits); TBI_INTSX(__TT);                             } while (0)
-    
+
 #define TBI_INTSAND( Bits )                                             do {\
     int __TT = 0; TBI_INTSX(__TT);                                          \
     __TT &= (Bits); TBI_INTSX(__TT);                             } while (0)
@@ -908,7 +908,7 @@ typedef volatile struct _tbistr_tag_ {
 #define TBI_DEFRICTRLSOR( Bits )                                        do {\
     int __TT = TBI_GETREG( CT.20 );                                         \
     __TT |= (Bits); TBI_SETREG( CT.20, __TT);                    } while (0)
-    
+
 #define TBI_DEFRICTRLSAND( Bits )                                       do {\
     int __TT = TBI_GETREG( TXDEFR );                                        \
     __TT &= (Bits); TBI_SETREG( CT.20, __TT);                    } while (0)
@@ -917,7 +917,7 @@ typedef volatile struct _tbistr_tag_ {
 #define TBI_TRIGSOR( Bits )                                             do {\
     int __TT = TBI_GETREG( TXMASK );                                        \
     __TT |= (Bits); TBI_SETREG( TXMASK, __TT);                   } while (0)
-    
+
 #define TBI_TRIGSAND( Bits )                                            do {\
     int __TT = TBI_GETREG( TXMASK );                                        \
     __TT &= (Bits); TBI_SETREG( TXMASK, __TT);                   } while (0)
@@ -957,7 +957,7 @@ TBIRES __TBIThrdPrivId( void );
    Id implies whether Int or Background root block is required */
 PTBI __TBI( int Id );
 
-/* Try to set Mask bit using the spin-lock protocol, return 0 if fails and 
+/* Try to set Mask bit using the spin-lock protocol, return 0 if fails and
    new state if succeeds */
 int __TBIPoll( PTBISPIN pLock, int Mask );
 
@@ -1065,20 +1065,20 @@ void *__TBIDspramRestoreB (short DspramSizes, void *pExt);
    any number of extended state bits X??? including XCBF can be specified to
    force a nested state save call to __TBICtxSave before the current routine
    continues. (In the latter case __TBICtxRestore should be called to restore
-   any extended states before the background thread of execution is resumed) 
-   
+   any extended states before the background thread of execution is resumed)
+
    By default (no X??? bits specified in SaveMask) this routine performs a
    sub-call to __TBICtxSave with the pExt and State parameters specified IF
    some triggers could be serviced while the current interrupt handler
    executes and the hardware catch buffer is actually dirty. In this case
    this routine provides the XCBF bit in State.Sig.SaveMask to force the
    __TBICtxSave to extract the current catch state.
-   
+
    The NoNestMask parameter should normally indicate that the same or lower
    triggers than those provoking the current handler call should not be
    serviced in nested calls, zero may be specified if all possible interrupts
    are to be allowed.
-   
+
    The TBIRES.Sig value returned will be similar to the State parameter
    specified with the XCBF bit ORed into it's SaveMask if a context save was
    required and fewer bits set in it's TrigMask corresponding to the same/lower
@@ -1124,7 +1124,7 @@ int __TBITrigsX( int NewMask );
    Wait value should either be zero to disable the timer concerned or be in
    the recommended TBI_TIMERWAIT_* range to specify the delay required before
    the first timer trigger occurs.
-      
+
    The TBID_ISTAT_BIT of the Id parameter similar effects all other timer
    support functions (see below). */
 void __TBITimerCtrl( int Id, int Wait );
@@ -1154,7 +1154,7 @@ const TBISTR *__TBIFindStr( const TBISTR *pStart,
    it's length. Value returned may not be a string pointer if the
    translation value is really some other type, 64-bit alignment of the return
    pointer is guaranteed so almost any type including a structure could be
-   located with this routine. */ 
+   located with this routine. */
 const void *__TBITransStr( const char *pStr, int Len );
 
 
@@ -1257,7 +1257,7 @@ extern const char __TBISigNames[];
 #define TBI_SIGNAME_SCALE   4
 #define TBI_SIGNAME_SCALE_S 2
 
-#define TBI_1_3 
+#define TBI_1_3
 
 #ifdef TBI_1_3
 
@@ -1308,7 +1308,7 @@ extern const char __TBISigNames[];
 #endif /* TBI_4_0 */
 #endif /* ifndef __ASSEMBLY__ */
 
-/* 
+/*
  * Calculate linear PC value from real PC and Minim mode control, the LSB of
  * the result returned indicates if address compression has occured.
  */
@@ -1394,7 +1394,7 @@ void __TBIMMUCacheFlush( const void *pStart, int Bytes, int SegType );
  * logic discarding the code or data and avoids write-thru bandwidth in
  * data areas. Code mappings are selected by specifying TBID_SEGTYPE_TEXT
  * for SegType, otherwise data mappings are created.
- * 
+ *
  * Mode supplied should always contain the VALID bit and WINx selection data.
  * Data areas will be mapped read-only if the WRITE bit is not added.
  *

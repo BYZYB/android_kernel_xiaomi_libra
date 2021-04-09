@@ -1892,7 +1892,7 @@ end_repeat_nmi:
 	je 1f
 	movq %r12, %cr2
 1:
-	
+
 	testl %ebx,%ebx				/* swapgs needed? */
 	jnz nmi_restore
 nmi_swapgs:

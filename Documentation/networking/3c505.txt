@@ -8,7 +8,7 @@ linked statically into the kernel, you must either use an "ether="
 statement on the command line, or change the definition of ELP_DMA in 3c505.h.
 
 The driver will warn you if it has to fall back on the compiled in
-default DMA channel. 
+default DMA channel.
 
 If no base address is given at boot time, the driver will autoprobe
 ports 0x300, 0x280 and 0x310 (in that order).  If no IRQ is given, the driver

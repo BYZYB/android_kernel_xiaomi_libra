@@ -830,7 +830,7 @@ struct journal_s
 	 * j_checkpoint_mutex.  [j_checkpoint_mutex]
 	 */
 	struct buffer_head	*j_chkpt_bhs[JBD2_NR_BATCH];
-	
+
 	/*
 	 * Journal head: identifies the first unused block in the journal.
 	 * [j_state_lock]

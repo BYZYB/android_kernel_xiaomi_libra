@@ -93,7 +93,7 @@ We keep a set of control flags
 
 Frames are queued for output by tcp_write. We do our best to send the frames
 off immediately if possible, but otherwise queue and compute the body
-checksum in the copy. 
+checksum in the copy.
 
 When a write is done we try to clear any pending events and piggy back them.
 If the window is full we queue full sized frames. On the first timeout in
@@ -102,5 +102,5 @@ zero window we split this.
 On a timer we walk the retransmit list to send any retransmits, update the
 backoff timers etc. A change of route table stamp causes a change of header
 and recompute. We add any new tcp level headers and refinish the checksum
-before sending. 
+before sending.
 

@@ -101,7 +101,7 @@ csum_tcpudp_nofold(__be32 saddr, __be32 daddr, unsigned short len,
 	: "r" (sum), "r" (daddr), "r" (saddr), "r" (len), "Ir" (htons(proto))
 	: "cc");
 	return sum;
-}	
+}
 /*
  * computes the checksum of the TCP/UDP pseudo-header
  * returns a 16-bit checksum, already complemented

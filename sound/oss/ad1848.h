@@ -9,7 +9,7 @@
 
 #define AD1848_REROUTE(oldctl, newctl) \
                 ad1848_control(AD1848_MIXER_REROUTE, ((oldctl)<<8)|(newctl))
-		
+
 
 int ad1848_init(char *name, struct resource *ports, int irq, int dma_playback,
 	int dma_capture, int share_dma, int *osp, struct module *owner);

@@ -88,7 +88,7 @@ struct ctlr_info {
 
 	struct pci_dev *pci_dev;    /* NULL if EISA */
 	__u32	board_id;
-	char	*product_name;	
+	char	*product_name;
 
 	void __iomem *vaddr;
 	unsigned long paddr;

@@ -133,7 +133,7 @@ static inline void xics_set_base_cppr(unsigned char cppr)
 static inline unsigned char xics_cppr_top(void)
 {
 	struct xics_cppr *os_cppr = &__get_cpu_var(xics_cppr);
-	
+
 	return os_cppr->stack[os_cppr->index];
 }
 

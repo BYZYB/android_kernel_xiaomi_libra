@@ -74,7 +74,7 @@ slb_exit_skip_ ## num:
 	UNBOLT_SLB_ENTRY(0)
 	UNBOLT_SLB_ENTRY(1)
 	UNBOLT_SLB_ENTRY(2)
-	
+
 #else
 #error unknown number of bolted entries
 #endif
@@ -155,7 +155,7 @@ slb_do_enter:
 	REBOLT_SLB_ENTRY(0)
 	REBOLT_SLB_ENTRY(1)
 	REBOLT_SLB_ENTRY(2)
-	
+
 #else
 #error unknown number of bolted entries
 #endif

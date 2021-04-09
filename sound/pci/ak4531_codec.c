@@ -44,13 +44,13 @@ static void snd_ak4531_proc_init(struct snd_card *card, struct snd_ak4531 *ak453
 /*
  *
  */
- 
+
 #if 0
 
 static void snd_ak4531_dump(struct snd_ak4531 *ak4531)
 {
 	int idx;
-	
+
 	for (idx = 0; idx < 0x19; idx++)
 		printk(KERN_DEBUG "ak4531 0x%x: 0x%x\n",
 		       idx, ak4531->regs[idx]);
@@ -86,7 +86,7 @@ static int snd_ak4531_info_single(struct snd_kcontrol *kcontrol, struct snd_ctl_
 	uinfo->value.integer.max = mask;
 	return 0;
 }
- 
+
 static int snd_ak4531_get_single(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_ak4531 *ak4531 = snd_kcontrol_chip(kcontrol);
@@ -153,7 +153,7 @@ static int snd_ak4531_info_double(struct snd_kcontrol *kcontrol, struct snd_ctl_
 	uinfo->value.integer.max = mask;
 	return 0;
 }
- 
+
 static int snd_ak4531_get_double(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_ak4531 *ak4531 = snd_kcontrol_chip(kcontrol);
@@ -228,7 +228,7 @@ static int snd_ak4531_info_input_sw(struct snd_kcontrol *kcontrol, struct snd_ct
 	uinfo->value.integer.max = 1;
 	return 0;
 }
- 
+
 static int snd_ak4531_get_input_sw(struct snd_kcontrol *kcontrol, struct snd_ctl_elem_value *ucontrol)
 {
 	struct snd_ak4531 *ak4531 = snd_kcontrol_chip(kcontrol);
@@ -471,7 +471,7 @@ void snd_ak4531_resume(struct snd_ak4531 *ak4531)
  * /proc interface
  */
 
-static void snd_ak4531_proc_read(struct snd_info_entry *entry, 
+static void snd_ak4531_proc_read(struct snd_info_entry *entry,
 				 struct snd_info_buffer *buffer)
 {
 	struct snd_ak4531 *ak4531 = entry->private_data;

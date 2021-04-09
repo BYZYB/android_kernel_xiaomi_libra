@@ -1752,7 +1752,7 @@ static struct pci_driver donauboe_pci_driver = {
 	.probe		= toshoboe_open,
 	.remove		= toshoboe_close,
 	.suspend	= toshoboe_gotosleep,
-	.resume		= toshoboe_wakeup 
+	.resume		= toshoboe_wakeup
 };
 
 static int __init

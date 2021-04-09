@@ -86,11 +86,11 @@ int main (int argc, char *argv[])
 		exit(1);
 	}
 
-	
+
 	printf("cpu %d currently at %d MHz and %d mV\n",
 			cpu,
 			find_freq_from_fid(fid),
 			find_millivolts_from_vid(vid));
-	
+
 	return 0;
 }

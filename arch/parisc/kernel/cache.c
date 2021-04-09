@@ -10,7 +10,7 @@
  * Cache and TLB management
  *
  */
- 
+
 #include <linux/init.h>
 #include <linux/kernel.h>
 #include <linux/mm.h>
@@ -56,7 +56,7 @@ flush_data_cache(void)
 {
 	on_each_cpu(flush_data_cache_local, NULL, 1);
 }
-void 
+void
 flush_instruction_cache(void)
 {
 	on_each_cpu(flush_instruction_cache_local, NULL, 1);
@@ -99,7 +99,7 @@ show_cache_info(struct seq_file *m)
 {
 	char buf[32];
 
-	seq_printf(m, "I-cache\t\t: %ld KB\n", 
+	seq_printf(m, "I-cache\t\t: %ld KB\n",
 		cache_info.ic_size/1024 );
 	if (cache_info.dc_loop != 1)
 		snprintf(buf, 32, "%lu-way associative", cache_info.dc_loop);
@@ -113,13 +113,13 @@ show_cache_info(struct seq_file *m)
 		cache_info.dt_size,
 		cache_info.dt_conf.tc_sh ? " - shared with ITLB":""
 	);
-		
+
 #ifndef CONFIG_PA20
 	/* BTLB - Block TLB */
 	if (btlb_info.max_size==0) {
 		seq_printf(m, "BTLB\t\t: not supported\n" );
 	} else {
-		seq_printf(m, 
+		seq_printf(m,
 		"BTLB fixed\t: max. %d pages, pagesize=%d (%dMB)\n"
 		"BTLB fix-entr.\t: %d instruction, %d data (%d combined)\n"
 		"BTLB var-entr.\t: %d instruction, %d data (%d combined)\n",
@@ -127,7 +127,7 @@ show_cache_info(struct seq_file *m)
 		btlb_info.max_size>>8,
 		btlb_info.fixed_range_info.num_i,
 		btlb_info.fixed_range_info.num_d,
-		btlb_info.fixed_range_info.num_comb, 
+		btlb_info.fixed_range_info.num_comb,
 		btlb_info.variable_range_info.num_i,
 		btlb_info.variable_range_info.num_d,
 		btlb_info.variable_range_info.num_comb
@@ -136,7 +136,7 @@ show_cache_info(struct seq_file *m)
 #endif
 }
 
-void __init 
+void __init
 parisc_cache_init(void)
 {
 	if (pdc_cache_info(&cache_info) < 0)
@@ -208,7 +208,7 @@ parisc_cache_init(void)
 		split_tlb = 1;
 	}
 
-	/* "New and Improved" version from Jim Hull 
+	/* "New and Improved" version from Jim Hull
 	 *	(1 << (cc_block-1)) * (cc_line << (4 + cnf.cc_shift))
 	 * The following CAFL_STRIDE is an optimized version, see
 	 * http://lists.parisc-linux.org/pipermail/parisc-linux/2004-June/023625.html
@@ -363,7 +363,7 @@ void __init parisc_setup_cache_timing(void)
 	/* Racy, but if we see an intermediate value, it's ok too... */
 	parisc_cache_flush_threshold = size * alltime / rangetime;
 
-	parisc_cache_flush_threshold = (parisc_cache_flush_threshold + L1_CACHE_BYTES - 1) &~ (L1_CACHE_BYTES - 1); 
+	parisc_cache_flush_threshold = (parisc_cache_flush_threshold + L1_CACHE_BYTES - 1) &~ (L1_CACHE_BYTES - 1);
 	if (!parisc_cache_flush_threshold)
 		parisc_cache_flush_threshold = FLUSH_THRESHOLD;
 

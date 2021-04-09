@@ -269,7 +269,7 @@ int midi_synth_ioctl(int dev, unsigned int cmd, void __user *arg)
 		if (__copy_to_user(arg, synth_devs[dev]->info, sizeof(struct synth_info)))
 			return -EFAULT;
 		return 0;
-		
+
 	case SNDCTL_SYNTH_MEMAVL:
 		return 0x7fffffff;
 
@@ -439,7 +439,7 @@ midi_synth_open(int dev, int mode)
 	inc = &midi_devs[orig_dev]->in_info;
 
 	/* save_flags(flags);
-	cli(); 
+	cli();
 	don't know against what irqhandler to protect*/
 	inc->m_busy = 0;
 	inc->m_state = MST_INIT;

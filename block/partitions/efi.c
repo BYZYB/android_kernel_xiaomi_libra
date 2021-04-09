@@ -34,7 +34,7 @@
  * - Ported to 2.5.7-pre1 and 2.5.7-dj2
  * - Applied patch to avoid fault in alternate header handling
  * - cleaned up find_valid_gpt
- * - On-disk structure and copy in memory is *always* LE now - 
+ * - On-disk structure and copy in memory is *always* LE now -
  *   swab fields as needed
  * - remove print_gpt_header()
  * - only use first max_p partition entries, to keep the kernel minor number
@@ -51,7 +51,7 @@
  * - moved le_efi_guid_to_cpus() back into this file.  GPT is the only
  *   thing that keeps EFI GUIDs on disk.
  * - Changed gpt structure names and members to be simpler and more Linux-like.
- * 
+ *
  * Wed Oct 17 2001 Matt Domsch <Matt_Domsch@dell.com>
  * - Removed CONFIG_DEVFS_VOLUMES_UUID code entirely per Martin Wilck
  *
@@ -76,7 +76,7 @@
  *
  * Wed Jun  6 2001 Martin Wilck <Martin.Wilck@Fujitsu-Siemens.com>
  * - added devfs volume UUID support (/dev/volumes/uuids) for
- *   mounting file systems by the partition GUID. 
+ *   mounting file systems by the partition GUID.
  *
  * Tue Dec  5 2000 Matt Domsch <Matt_Domsch@dell.com>
  * - Moved crc32() to linux/lib, added efi_crc32().
@@ -120,7 +120,7 @@ __setup("gpt", force_gpt_fn);
  * @len - length of buf
  *
  * Description: Returns EFI-style CRC32 value for @buf
- * 
+ *
  * This function uses the little endian Ethernet polynomial
  * but seeds the function with ~0, and xor's with ~0 at the end.
  * Note, the EFI Specification, v1.02, has a reference to
@@ -135,7 +135,7 @@ efi_crc32(const void *buf, unsigned long len)
 /**
  * last_lba(): return number of last logical block of device
  * @bdev: block device
- * 
+ *
  * Description: Returns last LBA value on success, 0 on error.
  * This is stored (by sd and ide-geometry) in
  *  the part[0] entry for this disk, and is the number of
@@ -220,7 +220,7 @@ static size_t read_lba(struct parsed_partitions *state,
  * alloc_read_gpt_entries(): reads partition entries from disk
  * @state
  * @gpt - GPT header
- * 
+ *
  * Description: Returns ptes on success,  NULL on error.
  * Allocates space for PTEs based on information found in @gpt.
  * Notes: remember to free pte when you're done!
@@ -256,7 +256,7 @@ static gpt_entry *alloc_read_gpt_entries(struct parsed_partitions *state,
  * alloc_read_gpt_header(): Allocates GPT header, reads into it from disk
  * @state
  * @lba is the Logical Block Address of the partition table
- * 
+ *
  * Description: returns GPT header on success, NULL on error.   Allocates
  * and fills a GPT header starting at @ from @state->bdev.
  * Note: remember to free gpt when finished with it.
@@ -420,7 +420,7 @@ is_pte_valid(const gpt_entry *pte, const u64 lastlba)
  * @lastlba is the last LBA number
  * Description: Returns nothing.  Sanity checks pgpt and agpt fields
  * and prints warnings on discrepancies.
- * 
+ *
  */
 static void
 compare_gpts(gpt_header *pgpt, gpt_header *agpt, u64 lastlba)
@@ -577,7 +577,7 @@ static int find_valid_gpt(struct parsed_partitions *state, gpt_header **gpt,
                 kfree(agpt);
                 kfree(aptes);
                 if (!good_agpt) {
-                        printk(KERN_WARNING 
+                        printk(KERN_WARNING
 			       "Alternate GPT is invalid, "
                                "using primary GPT.\n");
                 }
@@ -588,7 +588,7 @@ static int find_valid_gpt(struct parsed_partitions *state, gpt_header **gpt,
                 *ptes = aptes;
                 kfree(pgpt);
                 kfree(pptes);
-                printk(KERN_WARNING 
+                printk(KERN_WARNING
                        "Primary GPT is invalid, using alternate GPT.\n");
                 return 1;
         }

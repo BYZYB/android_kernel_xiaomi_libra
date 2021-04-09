@@ -223,7 +223,7 @@ static int camelot_prepare(struct snd_pcm_substream *substream)
 
 	pr_debug("PCM data: addr 0x%08ulx len %d\n",
 		 (u32)runtime->dma_addr, runtime->dma_bytes);
- 
+
 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
 		BRGREG(BRGATXSAR) = (unsigned long)runtime->dma_area;
 		BRGREG(BRGATXTCR) = runtime->dma_bytes;

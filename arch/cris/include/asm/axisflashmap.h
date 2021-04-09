@@ -1,12 +1,12 @@
 #ifndef __ASM_AXISFLASHMAP_H
 #define __ASM_AXISFLASHMAP_H
 
-/* Bootblock parameters are stored at 0xc000 and has the FLASH_BOOT_MAGIC 
+/* Bootblock parameters are stored at 0xc000 and has the FLASH_BOOT_MAGIC
  * as start, it ends with 0xFFFFFFFF */
 #define FLASH_BOOT_MAGIC 0xbeefcace
 #define BOOTPARAM_OFFSET 0xc000
 /* apps/bootblocktool is used to read and write the parameters,
- * and it has nothing to do with the partition table. 
+ * and it has nothing to do with the partition table.
  */
 
 #define PARTITION_TABLE_OFFSET 10

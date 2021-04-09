@@ -317,7 +317,7 @@ END_FTR_SECTION_IFCLR(CPU_FTR_UNALIGNED_LD_STD)
 	addi	r4,r4,8
 	bdnz	91b
 93:	beqlr
-	mtctr	r5	
+	mtctr	r5
 92:	stb	r0,0(r4)
 	addi	r4,r4,1
 	bdnz	92b
@@ -356,7 +356,7 @@ END_FTR_SECTION_IFCLR(CPU_FTR_UNALIGNED_LD_STD)
 186:
 187:
 188:
-189:	
+189:
 194:
 195:
 196:
@@ -432,7 +432,7 @@ END_FTR_SECTION_IFCLR(CPU_FTR_UNALIGNED_LD_STD)
 	.llong	90b,190b
 	.llong	91b,191b
 	.llong	92b,192b
-	
+
 	.text
 
 /*

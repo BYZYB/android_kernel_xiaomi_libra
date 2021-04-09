@@ -21,7 +21,7 @@
 
 #include <mach/platform.h>
 
-/* 
+/*
  *  IRQ interrupts definitions are the same as the INT definitions
  *  held within platform.h
  */
@@ -60,7 +60,7 @@
 #define IRQ_VICSOURCE31		(IRQ_VIC_START + INT_VICSOURCE31)
 #define IRQ_VIC_END		(IRQ_VIC_START + 31)
 
-/* 
+/*
  *  FIQ interrupts definitions are the same as the INT definitions.
  */
 #define FIQ_WDOGINT		INT_WDOGINT

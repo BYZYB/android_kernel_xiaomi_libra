@@ -15,7 +15,7 @@ The tmscsim driver
 1. Purpose and history
 ----------------------
 The tmscsim driver supports PCI SCSI Host Adapters based on the AM53C974
-chip. AM53C974 based SCSI adapters include: 
+chip. AM53C974 based SCSI adapters include:
  Tekram DC390, DC390T
  Dawicontrol 2974
  QLogic Fast! PCI Basic
@@ -29,8 +29,8 @@ scsi = SCSI driver, m = AMD (?) as opposed to w for the DC390W/U/F
 tmscsiw, which supported DC390W/U/F adapters. It's not maintained any more,
 as the ncr53c8xx is perfectly supporting these adapters since some time.
 
-The driver first appeared in April 1996, exclusively supported the DC390 
-and has been enhanced since then in various steps. In May 1998 support for 
+The driver first appeared in April 1996, exclusively supported the DC390
+and has been enhanced since then in various steps. In May 1998 support for
 general AM53C974 based adapters and some possibilities to configure it were
 added. The non-DC390 support works by assuming some values for the data
 normally taken from the DC390 EEPROM. See below (chapter 5) for details.
@@ -38,7 +38,7 @@ normally taken from the DC390 EEPROM. See below (chapter 5) for details.
 When using the DC390, the configuration is still be done using the DC390
 BIOS setup. The DC390 EEPROM is read and used by the driver, any boot or
 module parameters (chapter 5) are ignored! However, you can change settings
-dynamically, as described in chapter 4. 
+dynamically, as described in chapter 4.
 
 For a more detailed description of the driver's history, see the first lines
 of tmscsim.c.
@@ -46,7 +46,7 @@ The numbering scheme isn't consistent. The first versions went from 1.00 to
 1.12, then 1.20a to 1.20t. Finally I decided to use the ncr53c8xx scheme. So
 the next revisions will be 2.0a to 2.0X (stable), 2.1a to 2.1X (experimental),
 2.2a to 2.2X (stable, again) etc. (X = anything between a and z.) If I send
-fixes to people for testing, I create intermediate versions with a digit 
+fixes to people for testing, I create intermediate versions with a digit
 appended, e.g. 2.0c3.
 
 
@@ -62,7 +62,7 @@ supplied Makefile.
 
  If you got an old kernel (pre 2.1.127, pre 2.0.37p1) with an old version of
  this driver: Get dc390-21125-20b.diff.gz or dc390-2036p21-20b1.diff.gz from
- my web page and apply the patch. Apply further patches to upgrade to the 
+ my web page and apply the patch. Apply further patches to upgrade to the
  latest version of the driver.
 
  If you want to do it manually, you should copy the files (dc390.h,
@@ -98,7 +98,7 @@ So take at least the following measures:
   or just print it with:
   fdisk -l | lpr
 * make sure you are able to boot Linux (e.g. from floppy disk using InitRD)
-  if your SCSI disk gets corrupted. You can use 
+  if your SCSI disk gets corrupted. You can use
   ftp://student.physik.uni-dortmund.de/pub/linux/kernel/bootdisk.gz
 
 One more warning: I used to overclock my PCI bus to 41.67 MHz. My Tekram
@@ -108,7 +108,7 @@ MHz PCI bus works for me, though, but I don't recommend using higher clocks
 than the 33.33 MHz being in the PCI spec.
 
 If you want to share the IRQ with another device and the driver refuses to
-do so, you might succeed with changing the DC390_IRQ type in tmscsim.c to 
+do so, you might succeed with changing the DC390_IRQ type in tmscsim.c to
 IRQF_SHARED | IRQF_DISABLED.
 
 
@@ -126,12 +126,12 @@ IRQF_SHARED | IRQF_DISABLED.
  * Information via cat /proc/scsi/tmscsim/?
  * Dynamically configurable by writing to /proc/scsi/tmscsim/?
  * Dynamic allocation of resources
- * SMP support: Locking on io_request lock (Linux 2.1/2.2) or adapter 
+ * SMP support: Locking on io_request lock (Linux 2.1/2.2) or adapter
     specific locks (Linux 2.5?)
  * Uniform source code for Linux-2.x.y
  * Support for dyn. addition/removal of devices via add/remove-single-device
-   (Try: echo "scsi add-single-device C B T U" >/proc/scsi/scsi 
-    C = Controller, B = Bus, T = Target SCSI ID, U = Unit SCSI LUN.) 
+   (Try: echo "scsi add-single-device C B T U" >/proc/scsi/scsi
+    C = Controller, B = Bus, T = Target SCSI ID, U = Unit SCSI LUN.)
     Use with care!
  * Try to use the partition table for the determination of the mapping
 
@@ -174,15 +174,15 @@ Idx is the device index (just a consecutive number for the driver), ID and
 LUN are the SCSI ID and LUN, Prty means Parity checking, Sync synchronous
 negotiation, DsCn Disconnection, SndS Send Start command on startup (not
 used by the driver) and TagQ Tagged Command Queueing. NegoPeriod and
-SyncSpeed are somehow redundant, because they are reciprocal values 
+SyncSpeed are somehow redundant, because they are reciprocal values
 (1 / 112 ns = 8.9 MHz). At least in theory. The driver is able to adjust the
 NegoPeriod more accurate (4ns) than the SyncSpeed (1 / 25ns). I don't know
 if certain devices will have problems with this discrepancy. Max. speed is
-10 MHz corresp. to a min. NegoPeriod of 100 ns. 
+10 MHz corresp. to a min. NegoPeriod of 100 ns.
 (The driver allows slightly higher speeds if the devices (Ultra SCSI) accept
 it, but that's out of adapter spec, on your own risk and unlikely to improve
-performance. You're likely to crash your disks.) 
-SyncOffs is the offset used for synchronous negotiations; max. is 15. 
+performance. You're likely to crash your disks.)
+SyncOffs is the offset used for synchronous negotiations; max. is 15.
 The last values are only shown, if Sync is enabled. (NegoPeriod is still
 displayed in brackets to show the values which will be used after enabling
 Sync.)
@@ -195,9 +195,9 @@ If you want to change a setting, you can do that by writing to
 You don't have to care about capitalisation. The driver will accept space,
 tab, comma, = and : as separators.
 
-There are three kinds of changes: 
+There are three kinds of changes:
 
-(1) Change driver settings: 
+(1) Change driver settings:
     You type the names of the parameters and the params following it.
     Example:
      echo "MaxLUN=8 seltimeout 200" >/proc/scsi/tmscsim/0
@@ -208,7 +208,7 @@ There are three kinds of changes:
 
 (2) Change device settings: You write a config line to the driver. The Nr
     must match the ID and LUN given. If you give "-" as parameter, it is
-    ignored and the corresponding setting won't be changed. 
+    ignored and the corresponding setting won't be changed.
     You can use "y" or "n" instead of "Yes" and "No" if you want to.
     You don't need to specify a full line. The driver automatically performs
     an INQUIRY on the device if necessary to check if it is capable to operate
@@ -217,7 +217,7 @@ There are three kinds of changes:
      echo "0 0 0 y y y - y - 10 " >/proc/scsi/tmscsim/0
      echo "3 5 0 y n y " >/proc/scsi/tmscsim/0
 
-    To give a short explanation of the first example: 
+    To give a short explanation of the first example:
     The first three numbers, "0 0 0" (Device index 0, SCSI ID 0, SCSI LUN 0),
     select the device to which the following parameters apply. Note that it
     would be sufficient to use the index or both SCSI ID and LUN, but I chose
@@ -263,8 +263,8 @@ But you may want to override the settings prior to being able to change the
 driver configuration via /proc/scsi/tmscsim/?.
 If you do have another AM53C974 based adapter, that's even the only
 possibility to adjust settings before you are able to write to the
-/proc/scsi/tmscsim/? pseudo-file, e.g. if you want to use another 
-adapter ID than 7.  
+/proc/scsi/tmscsim/? pseudo-file, e.g. if you want to use another
+adapter ID than 7.
 (BTW, the log message "DC390: No EEPROM found!" is normal without a DC390.)
 For this purpose, you can pass options to the driver before it is initialised
 by using kernel or module parameters. See lilo(8) or modprobe(1) manual
@@ -316,7 +316,7 @@ Each of the parameters is a number, containing the described information:
    *3	 0x08	    8	  Active Negation: Improves SCSI Bus noise immunity.
     4	 0x10	   16	  Immediate return on BIOS seek command. (Not used)
  (*)5	 0x20	   32	  Check for LUNs >= 1.
-  
+
   The default for LUN Check depends on CONFIG_SCSI_MULTI_LUN.
 
 * TaggedCmnds is a number indicating the maximum number of Tagged Commands.
@@ -364,16 +364,16 @@ Further investigation on these problems:
 
 * Driver hangs with sync readcdda (xcdroast) (most probably VIA PCI error)
 
-Known problems: 
+Known problems:
 Please see http://www.garloff.de/kurt/linux/dc390/problems.html
 
 * Changing the parameters of multi-lun by the tmscsim/? interface will
   cause problems, cause these settings are mostly per Target and not per LUN
   and should be updated accordingly. To be fixed for 2.0d24.
-* CDRs (eg Yam CRW4416) not recognized, because some buggy devices don't 
+* CDRs (eg Yam CRW4416) not recognized, because some buggy devices don't
   recover from a SCSI reset in time. Use a higher delay or don't issue
   a SCSI bus reset on driver initialization. See problems page.
-  For the CRW4416S, this seems to be solved with firmware 1.0g (reported by 
+  For the CRW4416S, this seems to be solved with firmware 1.0g (reported by
   Jean-Yves Barbier).
 * TEAC CD-532S not being recognized. (Works with 1.11).
 * Scanners (eg. Astra UMAX 1220S) don't work: Disable Sync Negotiation.
@@ -399,10 +399,10 @@ Please see http://www.garloff.de/kurt/linux/dc390/problems.html
 -------------------------------------
 Whenever you have problems with the driver, you are invited to ask the
 author for help. However, I'd suggest reading the docs and trying to solve
-the problem yourself, first. 
-If you find something, which you believe to be a bug, please report it to me. 
+the problem yourself, first.
+If you find something, which you believe to be a bug, please report it to me.
 Please append the output of /proc/scsi/scsi, /proc/scsi/tmscsim/? and
-maybe the DC390 log messages to the report. 
+maybe the DC390 log messages to the report.
 
 Bug reports should be send to me (Kurt Garloff <dc390@garloff.de>) as well
 as to the linux-scsi list (<linux-scsi@vger.kernel.org>), as sometimes bugs
@@ -422,12 +422,12 @@ The latest version of the driver can be found at:
 
 8. Acknowledgements
 -------------------
-Thanks to Linus Torvalds, Alan Cox, the FSF people, the XFree86 team and 
+Thanks to Linus Torvalds, Alan Cox, the FSF people, the XFree86 team and
 all the others for the wonderful OS and software.
 Thanks to C.L. Huang and Philip Giang (Tekram) for the initial driver
 release and support.
 Thanks to Doug Ledford, Gérard Roudier for support with SCSI coding.
-Thanks to a lot of people (espec. Chiaki Ishikawa, Andreas Haumer, Hubert 
+Thanks to a lot of people (espec. Chiaki Ishikawa, Andreas Haumer, Hubert
 Tonneau) for intensively testing the driver (and even risking data loss
 doing this during early revisions).
 Recently, SuSE GmbH, Nuernberg, FRG, has been paying me for the driver
@@ -437,7 +437,7 @@ development and maintenance. Special thanks!
 9. Copyright
 ------------
  This driver is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by   
+ it under the terms of the GNU General Public License as published by
  the Free Software Foundation; version 2 of the License.
  If you want to use any later version of the GNU GPL, you will probably
  be allowed to, but you have to ask me and Tekram <erich@tekram.com.tw>

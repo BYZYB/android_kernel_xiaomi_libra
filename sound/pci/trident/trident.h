@@ -94,8 +94,8 @@ enum miscint_bits {
 #define LEGACY_DMAR0                0x00  // ADR0
 #define LEGACY_DMAR4                0x04  // CNT0
 #define LEGACY_DMAR6		    0x06  // CNT0 - High bits
-#define LEGACY_DMAR11               0x0b  // MOD 
-#define LEGACY_DMAR15               0x0f  // MMR 
+#define LEGACY_DMAR11               0x0b  // MOD
+#define LEGACY_DMAR15               0x0f  // MMR
 
 #define T4D_START_A		     0x80
 #define T4D_STOP_A		     0x84
@@ -238,7 +238,7 @@ enum serial_intf_ctrl_bits {
 	SI_AC97_SECONDARY_READY = 0x02000000,
 	SI_AC97_POWERDOWN = 0x04000000,
 };
-                                                                                                                                   
+
 /* PCM defaults */
 
 #define T4D_DEFAULT_PCM_VOL	10	/* 0 - 255 */
@@ -336,7 +336,7 @@ struct snd_4dwave {
 	int seq_client;
 
 	struct snd_trident_port seq_ports[4];
-	struct snd_trident_voice voices[64];	
+	struct snd_trident_voice voices[64];
 
 	int ChanSynthCount;		/* number of allocated synth channels */
 	int max_size;			/* maximum synth memory size in bytes */
@@ -373,9 +373,9 @@ struct snd_trident {
 	unsigned int spdif_pcm_bits;
 	struct snd_kcontrol *spdif_pcm_ctl;	/* S/PDIF settings */
 	unsigned int ac97_ctrl;
-        
+
         unsigned int ChanMap[2];	/* allocation map for hardware channels */
-        
+
         int ChanPCM;			/* max number of PCM channels */
 	int ChanPCMcnt;			/* actual number of PCM channels */
 

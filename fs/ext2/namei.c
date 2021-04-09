@@ -59,7 +59,7 @@ static struct dentry *ext2_lookup(struct inode * dir, struct dentry *dentry, uns
 {
 	struct inode * inode;
 	ino_t ino;
-	
+
 	if (dentry->d_name.len > EXT2_NAME_LEN)
 		return ERR_PTR(-ENAMETOOLONG);
 
@@ -84,7 +84,7 @@ struct dentry *ext2_get_parent(struct dentry *child)
 	if (!ino)
 		return ERR_PTR(-ENOENT);
 	return d_obtain_alias(ext2_iget(child->d_inode->i_sb, ino));
-} 
+}
 
 /*
  * By the time this is called, we already have created
@@ -92,7 +92,7 @@ struct dentry *ext2_get_parent(struct dentry *child)
  * is so far negative - it has no inode.
  *
  * If the create succeeds, we fill in the inode information
- * with d_instantiate(). 
+ * with d_instantiate().
  */
 static int ext2_create (struct inode * dir, struct dentry * dentry, umode_t mode, bool excl)
 {

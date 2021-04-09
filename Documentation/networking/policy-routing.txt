@@ -10,7 +10,7 @@ Classes
 	3. Weak TOS.
 	4. Metric. (should not be in kernel space, but they are)
 	5. Additional pruning rules. (not in kernel space).
-	
+
 	We have two special type of nodes:
 	REJECT - abort route lookup and return an error value.
 	THROW  - abort route lookup in this class.
@@ -79,7 +79,7 @@ Applications
 		[ metric METRIC ] [ reject ] ... (look at iproute utility)
 
 		or use route utility from current net-tools.
-		
+
 2.	Opposite case. Just forget all that you know about routing
 	tables. Every rule is supplied with its own gateway, device
 	info. record. This approach is not appropriate for automated
@@ -106,7 +106,7 @@ Applications
 	250 intra-area routes for 1st area
 	249 intra-area routes for 2nd area
 	etc.
-	
+
 	Rules:
 	iproute addrule class 253
 	iproute addrule class 252

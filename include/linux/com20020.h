@@ -1,6 +1,6 @@
 /*
  * Linux ARCnet driver - COM20020 chipset support - function declarations
- * 
+ *
  * Written 1997 by David Woodhouse.
  * Written 1994-1999 by Avery Pennarun.
  * Derived from skeleton.c by Donald Becker.

@@ -65,7 +65,7 @@ int __init omap_init_opp_table(struct omap_opp_def *opp_def,
 		}
 
 		if (!strncmp(opp_def->hwmod_name, "mpu", 3)) {
-			/* 
+			/*
 			 * All current OMAPs share voltage rail and
 			 * clock source, so CPU0 is used to represent
 			 * the MPU-SS.

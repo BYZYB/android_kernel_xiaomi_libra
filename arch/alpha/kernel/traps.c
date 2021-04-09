@@ -240,7 +240,7 @@ do_entIF(unsigned long type, struct pt_regs *regs)
 			const unsigned int *data
 			  = (const unsigned int *) regs->pc;
 			printk("Kernel bug at %s:%d\n",
-			       (const char *)(data[1] | (long)data[2] << 32), 
+			       (const char *)(data[1] | (long)data[2] << 32),
 			       data[0]);
 		}
 		die_if_kernel((type == 1 ? "Kernel Bug" : "Instruction fault"),
@@ -270,7 +270,7 @@ do_entIF(unsigned long type, struct pt_regs *regs)
 		info.si_trapno = 0;
 		send_sig_info(SIGTRAP, &info, current);
 		return;
-		
+
 	      case 2: /* gentrap */
 		info.si_addr = (void __user *) regs->pc;
 		info.si_trapno = regs->r16;
@@ -350,8 +350,8 @@ do_entIF(unsigned long type, struct pt_regs *regs)
 			   fault during the boot sequence and testing if
 			   we get the correct PC.  If not, we set a flag
 			   to correct it every time through.  */
-			regs->pc += opDEC_fix; 
-			
+			regs->pc += opDEC_fix;
+
 			/* EV4 does not implement anything except normal
 			   rounding.  Everything else will come here as
 			   an illegal instruction.  Emulate them.  */
@@ -395,7 +395,7 @@ do_entIF(unsigned long type, struct pt_regs *regs)
 	send_sig_info(SIGILL, &info, current);
 }
 
-/* There is an ifdef in the PALcode in MILO that enables a 
+/* There is an ifdef in the PALcode in MILO that enables a
    "kernel debugging entry point" as an unprivileged call_pal.
 
    We don't want to have anything to do with it, but unfortunately

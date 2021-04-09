@@ -200,7 +200,7 @@ PKnownBSS BSSpSearchBSSList(struct vnt_private *pDevice,
                 if (pSelect == NULL) {
                     pSelect = pCurrBSS;
                 } else {
-                    // compare RSSI, select the strongest signal 
+                    // compare RSSI, select the strongest signal
                     if (pCurrBSS->uRSSI < pSelect->uRSSI) {
                         pSelect = pCurrBSS;
                     }

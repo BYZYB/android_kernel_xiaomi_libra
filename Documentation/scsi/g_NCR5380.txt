@@ -55,7 +55,7 @@ modprobe g_NCR5380 ncr_irq=5 ncr_addr=0x350 ncr_5380=1
 modprobe g_NCR5380 ncr_irq=255 ncr_addr=0xc8000 ncr_53c400=1
   for a memory mapped NCR53C400 board with interrupts disabled.
 
-(255 should be specified for no or DMA interrupt, 254 to autoprobe for an 
+(255 should be specified for no or DMA interrupt, 254 to autoprobe for an
      IRQ line if overridden on the command line.)
 
 

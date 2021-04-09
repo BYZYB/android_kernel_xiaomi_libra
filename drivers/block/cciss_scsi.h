@@ -37,14 +37,14 @@
 		   out to be not scsi at all. */
 
 
-/* 
+/*
 
-If the upper scsi layer tries to track how many commands we have 
+If the upper scsi layer tries to track how many commands we have
 outstanding, it will be operating under the misapprehension that it is
 the only one sending us requests.  We also have the block interface,
 which is where most requests must surely come from, so the upper layer's
 notion of how many requests we have outstanding will be wrong most or
-all of the time. 
+all of the time.
 
 Note, the normal SCSI mid-layer error handling doesn't work well
 for this driver because 1) it takes the io_request_lock before

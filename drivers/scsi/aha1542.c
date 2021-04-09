@@ -914,7 +914,7 @@ static void __init aha1542_setup(char *str, int *ints)
 	setup_portbase = ints[0] >= 1 ? ints[1] : 0;	/* Preserve the default value.. */
 	setup_buson[setup_idx] = ints[0] >= 2 ? ints[2] : 7;
 	setup_busoff[setup_idx] = ints[0] >= 3 ? ints[3] : 5;
-	if (ints[0] >= 4) 
+	if (ints[0] >= 4)
 	{
 		int atbt = -1;
 		switch (ints[4]) {
@@ -1016,7 +1016,7 @@ static int __init aha1542_detect(struct scsi_host_template * tpnt)
 		for(indx = 0; indx < ARRAY_SIZE(bases); indx++) {
 			if(bases[indx])
 				continue;
-			pdev = pnp_find_dev(NULL, ISAPNP_VENDOR('A', 'D', 'P'), 
+			pdev = pnp_find_dev(NULL, ISAPNP_VENDOR('A', 'D', 'P'),
 				ISAPNP_FUNCTION(0x1542), pdev);
 			if(pdev==NULL)
 				break;
@@ -1039,7 +1039,7 @@ static int __init aha1542_detect(struct scsi_host_template * tpnt)
 
 			bases[indx] = pnp_port_start(pdev, 0);
 
-			/* The card can be queried for its DMA, we have 
+			/* The card can be queried for its DMA, we have
 			   the DMA set up that is enough */
 
 			printk(KERN_INFO "ISAPnP found an AHA1535 at I/O 0x%03X\n", bases[indx]);
@@ -1270,9 +1270,9 @@ static int aha1542_dev_reset(Scsi_Cmnd * SCpnt)
 	ccb[mbo].linkptr[0] = ccb[mbo].linkptr[1] = ccb[mbo].linkptr[2] = 0;
 	ccb[mbo].commlinkid = 0;
 
-	/* 
-	 * Now tell the 1542 to flush all pending commands for this 
-	 * target 
+	/*
+	 * Now tell the 1542 to flush all pending commands for this
+	 * target
 	 */
 	aha1542_out(SCpnt->device->host->io_port, &ahacmd, 1);
 
@@ -1283,7 +1283,7 @@ static int aha1542_dev_reset(Scsi_Cmnd * SCpnt)
 
 
 #ifdef ERIC_neverdef
-	/* 
+	/*
 	 * With the 1542 we apparently never get an interrupt to
 	 * acknowledge a device reset being sent.  Then again, Leonard
 	 * says we are doing this wrong in the first place...
@@ -1295,8 +1295,8 @@ static int aha1542_dev_reset(Scsi_Cmnd * SCpnt)
 	printk(KERN_WARNING "Sent BUS DEVICE RESET to target %d\n", SCpnt->target);
 
 	/*
-	 * Free the command block for all commands running on this 
-	 * target... 
+	 * Free the command block for all commands running on this
+	 * target...
 	 */
 	for (i = 0; i < AHA1542_MAILBOXES; i++) {
 		if (HOSTDATA(SCpnt->host)->SCint[i] &&
@@ -1319,7 +1319,7 @@ static int aha1542_bus_reset(Scsi_Cmnd * SCpnt)
 {
 	int i;
 
-	/* 
+	/*
 	 * This does a scsi reset for all devices on the bus.
 	 * In principle, we could also reset the 1542 - should
 	 * we do this?  Try this first, and we can add that later
@@ -1344,7 +1344,7 @@ static int aha1542_bus_reset(Scsi_Cmnd * SCpnt)
 	/*
 	 * Now try to pick up the pieces.  For all pending commands,
 	 * free any internal data structures, and basically clear things
-	 * out.  We do not try and restart any commands or anything - 
+	 * out.  We do not try and restart any commands or anything -
 	 * the strategy handler takes care of that crap.
 	 */
 	printk(KERN_WARNING "Sent BUS RESET to scsi host %d\n", SCpnt->device->host->host_no);
@@ -1383,7 +1383,7 @@ static int aha1542_host_reset(Scsi_Cmnd * SCpnt)
 {
 	int i;
 
-	/* 
+	/*
 	 * This does a scsi reset for all devices on the bus.
 	 * In principle, we could also reset the 1542 - should
 	 * we do this?  Try this first, and we can add that later
@@ -1413,7 +1413,7 @@ static int aha1542_host_reset(Scsi_Cmnd * SCpnt)
 	/*
 	 * Now try to pick up the pieces.  For all pending commands,
 	 * free any internal data structures, and basically clear things
-	 * out.  We do not try and restart any commands or anything - 
+	 * out.  We do not try and restart any commands or anything -
 	 * the strategy handler takes care of that crap.
 	 */
 	printk(KERN_WARNING "Sent BUS RESET to scsi host %d\n", SCpnt->device->host->host_no);
@@ -1539,7 +1539,7 @@ static int aha1542_old_reset(Scsi_Cmnd * SCpnt, unsigned int reset_flags)
 	 * See if a bus reset was suggested.
 	 */
 	if (reset_flags & SCSI_RESET_SUGGEST_BUS_RESET) {
-		/* 
+		/*
 		 * This does a scsi reset for all devices on the bus.
 		 * In principle, we could also reset the 1542 - should
 		 * we do this?  Try this first, and we can add that later
@@ -1672,11 +1672,11 @@ static struct scsi_host_template driver_template = {
 	.eh_bus_reset_handler	= aha1542_bus_reset,
 	.eh_host_reset_handler	= aha1542_host_reset,
 	.bios_param		= aha1542_biosparam,
-	.can_queue		= AHA1542_MAILBOXES, 
+	.can_queue		= AHA1542_MAILBOXES,
 	.this_id		= 7,
 	.sg_tablesize		= AHA1542_SCATTER,
 	.cmd_per_lun		= AHA1542_CMDLUN,
-	.unchecked_isa_dma	= 1, 
+	.unchecked_isa_dma	= 1,
 	.use_clustering		= ENABLE_CLUSTERING,
 };
 #include "scsi_module.c"

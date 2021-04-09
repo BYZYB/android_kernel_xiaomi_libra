@@ -317,7 +317,7 @@ int del_fast_timer(struct fast_timer * t)
 {
   unsigned long flags;
   int ret;
-  
+
   local_irq_save(flags);
   ret = detach_fast_timer(t);
   t->next = t->prev = NULL;

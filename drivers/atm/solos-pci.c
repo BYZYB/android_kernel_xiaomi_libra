@@ -304,10 +304,10 @@ static ssize_t solos_param_store(struct device *dev, struct device_attribute *at
 	else if (buflen == 5 && !strncmp(skb->data, "ERROR", 5))
 		ret = -EIO;
 	else {
-		/* We know we have enough space allocated for this; we allocated 
+		/* We know we have enough space allocated for this; we allocated
 		   it ourselves */
 		skb->data[buflen] = 0;
-	
+
 		dev_warn(&card->dev->dev, "Unexpected parameter response: '%s'\n",
 			 skb->data);
 		ret = -EIO;
@@ -321,7 +321,7 @@ static char *next_string(struct sk_buff *skb)
 {
 	int i = 0;
 	char *this = skb->data;
-	
+
 	for (i = 0; i < skb->len; i++) {
 		if (this[i] == '\n') {
 			this[i] = 0;
@@ -344,7 +344,7 @@ static char *next_string(struct sk_buff *skb)
  *     State		(version >= 1)
  *     LocalSNRMargin	(version >= 1)
  *     LocalLineAttn	(version >= 1)
- */       
+ */
 static int process_status(struct solos_card *card, int port, struct sk_buff *skb)
 {
 	char *str, *end, *state_str, *snr, *attn;
@@ -405,7 +405,7 @@ static int process_status(struct solos_card *card, int port, struct sk_buff *skb
 	dev_info(&card->dev->dev, "Port %d: %s @%d/%d kb/s%s%s%s%s\n",
 		 port, state_str, rate_down/1000, rate_up/1000,
 		 snr[0]?", SNR ":"", snr, attn[0]?", Attn ":"", attn);
-	
+
 	card->atmdev[port]->link_rate = rate_down / 424;
 	atm_dev_signal_change(card->atmdev[port], ATM_PHY_SIG_FOUND);
 
@@ -691,10 +691,10 @@ static int flash_upgrade(struct solos_card *card, int chip)
 	numblocks = fw->size / blocksize;
 	dev_info(&card->dev->dev, "Firmware size: %zd\n", fw->size);
 	dev_info(&card->dev->dev, "Number of blocks: %d\n", numblocks);
-	
+
 	dev_info(&card->dev->dev, "Changing FPGA to Update mode\n");
 	iowrite32(1, card->config_regs + FPGA_MODE);
-	(void) ioread32(card->config_regs + FPGA_MODE); 
+	(void) ioread32(card->config_regs + FPGA_MODE);
 
 	/* Set mode to Chip Erase */
 	if(chip == 0 || chip == 2)
@@ -1054,7 +1054,7 @@ static uint32_t fpga_tx(struct solos_card *card)
 	unsigned long flags;
 
 	spin_lock_irqsave(&card->tx_lock, flags);
-	
+
 	card_flags = ioread32(card->config_regs + FLAGS_ADDR);
 	/*
 	 * The queue lock is required for _writing_ to tx_mask, but we're
@@ -1235,10 +1235,10 @@ static int fpga_probe(struct pci_dev *dev, const struct pci_device_id *id)
 
 	if (reset) {
 		iowrite32(1, card->config_regs + FPGA_MODE);
-		data32 = ioread32(card->config_regs + FPGA_MODE); 
+		data32 = ioread32(card->config_regs + FPGA_MODE);
 
 		iowrite32(0, card->config_regs + FPGA_MODE);
-		data32 = ioread32(card->config_regs + FPGA_MODE); 
+		data32 = ioread32(card->config_regs + FPGA_MODE);
 	}
 
 	data32 = ioread32(card->config_regs + FPGA_VER);
@@ -1332,7 +1332,7 @@ static int fpga_probe(struct pci_dev *dev, const struct pci_device_id *id)
 	iowrite32(0, card->config_regs + IRQ_EN_ADDR);
 	free_irq(dev->irq, card);
 	tasklet_kill(&card->tlet);
-	
+
  out_unmap_both:
 	kfree(card->dma_bounce);
 	pci_set_drvdata(dev, NULL);
@@ -1421,7 +1421,7 @@ static void atm_remove(struct solos_card *card)
 			}
 			while ((skb = skb_dequeue(&card->tx_queue[i])))
 				dev_kfree_skb(skb);
- 
+
 		}
 	}
 }
@@ -1429,13 +1429,13 @@ static void atm_remove(struct solos_card *card)
 static void fpga_remove(struct pci_dev *dev)
 {
 	struct solos_card *card = pci_get_drvdata(dev);
-	
+
 	/* Disable IRQs */
 	iowrite32(0, card->config_regs + IRQ_EN_ADDR);
 
 	/* Reset FPGA */
 	iowrite32(1, card->config_regs + FPGA_MODE);
-	(void)ioread32(card->config_regs + FPGA_MODE); 
+	(void)ioread32(card->config_regs + FPGA_MODE);
 
 	if (card->fpga_version >= DMA_SUPPORTED)
 		sysfs_remove_group(&card->dev->dev.kobj, &gpio_attr_group);
@@ -1449,7 +1449,7 @@ static void fpga_remove(struct pci_dev *dev)
 
 	/* Release device from reset */
 	iowrite32(0, card->config_regs + FPGA_MODE);
-	(void)ioread32(card->config_regs + FPGA_MODE); 
+	(void)ioread32(card->config_regs + FPGA_MODE);
 
 	pci_iounmap(dev, card->buffers);
 	pci_iounmap(dev, card->config_regs);

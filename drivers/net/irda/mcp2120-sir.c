@@ -1,6 +1,6 @@
 /*********************************************************************
- *            
- *    
+ *
+ *
  * Filename:      mcp2120.c
  * Version:       1.0
  * Description:   Implementation for the MCP2120 (Microchip)
@@ -8,14 +8,14 @@
  * Author:        Felix Tang (tangf@eyetap.org)
  * Created at:    Sun Mar 31 19:32:12 EST 2002
  * Based on code by:   Dag Brattli <dagb@cs.uit.no>
- * 
+ *
  *     Copyright (c) 2002 Felix Tang, All Rights Reserved.
- *      
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- *  
+ *
  ********************************************************************/
 
 #include <linux/module.h>
@@ -138,7 +138,7 @@ static int mcp2120_change_speed(struct sir_dev *dev, unsigned speed)
 			break;
 		}
 		control[1] = MCP2120_COMMIT;
-	
+
 		/* Write control bytes */
 		sirdev_raw_write(dev, control, 2);
 		dev->speed = speed;
@@ -167,7 +167,7 @@ static int mcp2120_change_speed(struct sir_dev *dev, unsigned speed)
  * Function mcp2120_reset (driver)
  *
  *      This function resets the mcp2120 dongle.
- *      
+ *
  *      Info: -set RTS to reset mcp2120
  *            -set DTR to set mcp2120 software command mode
  *            -mcp2120 defaults to 9600 baud after reset
@@ -175,7 +175,7 @@ static int mcp2120_change_speed(struct sir_dev *dev, unsigned speed)
  *      Algorithm:
  *      0. Set RTS to reset mcp2120.
  *      1. Clear RTS and wait for device reset timer of 30 ms (max).
- *      
+ *
  */
 
 #define MCP2120_STATE_WAIT1_RESET	(SIRDEV_STATE_DONGLE_RESET+1)

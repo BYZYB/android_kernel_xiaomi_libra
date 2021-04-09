@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      af_irda.h
  * Version:       1.0
  * Description:   IrDA sockets declarations
@@ -8,19 +8,19 @@
  * Created at:    Tue Dec  9 21:13:12 1997
  * Modified at:   Fri Jan 28 13:16:32 2000
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
- * 
+ *
  *     Copyright (c) 1998-2000 Dag Brattli, All Rights Reserved.
  *     Copyright (c) 2000-2002 Jean Tourrilhes <jt@hpl.hp.com>
- *      
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- *  
+ *
  *     Neither Dag Brattli nor University of Tromsø admit liability nor
- *     provide warranty for any of this software. This material is 
+ *     provide warranty for any of this software. This material is
  *     provided "AS-IS" and at no charge.
- *     
+ *
  ********************************************************************/
 
 #ifndef AF_IRDA_H
@@ -48,7 +48,7 @@ struct irda_sock {
 	struct tsap_cb *tsap; /* TSAP used by this connection */
 	__u8 dtsap_sel;       /* remote TSAP address */
 	__u8 stsap_sel;       /* local TSAP address */
-	
+
 	__u32 max_sdu_size_rx;
 	__u32 max_sdu_size_tx;
 	__u32 max_data_size;

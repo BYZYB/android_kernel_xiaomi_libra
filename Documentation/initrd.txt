@@ -111,7 +111,7 @@ procedure should create the /initrd directory.
 If initrd will not be mounted in some cases, its content is still
 accessible if the following device has been created:
 
-# mknod /dev/initrd b 1 250 
+# mknod /dev/initrd b 1 250
 # chmod 400 /dev/initrd
 
 Second, the kernel has to be compiled with RAM disk support and with
@@ -303,7 +303,7 @@ Last not least, CD-ROM distributors may use it for better installation
 from CD, e.g. by using a boot floppy and bootstrapping a bigger RAM disk
 via initrd from CD; or by booting via a loader like LOADLIN or directly
 from the CD-ROM, and loading the RAM disk from CD without need of
-floppies. 
+floppies.
 
 
 Obsolete root change mechanism
@@ -322,7 +322,7 @@ such a directory exists on the new root file system.
 In order to use this mechanism, you do not have to specify the boot
 command options root, init, or rw. (If specified, they will affect
 the real root file system, not the initrd environment.)
-  
+
 If /proc is mounted, the "real" root device can be changed from within
 linuxrc by writing the number of the new root FS device to the special
 file /proc/sys/kernel/real-root-dev, e.g.

@@ -37,7 +37,7 @@ extern struct unwind_table_entry __stop___unwind[];
 static spinlock_t unwind_lock;
 /*
  * the kernel unwind block is not dynamically allocated so that
- * we can call unwind_init as early in the bootup process as 
+ * we can call unwind_init as early in the bootup process as
  * possible (before the slab allocator is initialized)
  */
 static struct unwind_table kernel_unwind_table __read_mostly;
@@ -49,9 +49,9 @@ find_unwind_entry_in_table(const struct unwind_table *table, unsigned long addr)
 	const struct unwind_table_entry *e = NULL;
 	unsigned long lo, hi, mid;
 
-	lo = 0; 
-	hi = table->length - 1; 
-	
+	lo = 0;
+	hi = table->length - 1;
+
 	while (lo <= hi) {
 		mid = (hi - lo) / 2 + lo;
 		e = &table->table[mid];
@@ -72,12 +72,12 @@ find_unwind_entry(unsigned long addr)
 	struct unwind_table *table;
 	const struct unwind_table_entry *e = NULL;
 
-	if (addr >= kernel_unwind_table.start && 
+	if (addr >= kernel_unwind_table.start &&
 	    addr <= kernel_unwind_table.end)
 		e = find_unwind_entry_in_table(&kernel_unwind_table, addr);
-	else 
+	else
 		list_for_each_entry(table, &unwind_tables, list) {
-			if (addr >= table->start && 
+			if (addr >= table->start &&
 			    addr <= table->end)
 				e = find_unwind_entry_in_table(table, addr);
 			if (e) {
@@ -96,7 +96,7 @@ unwind_table_init(struct unwind_table *table, const char *name,
 		  void *table_start, void *table_end)
 {
 	struct unwind_table_entry *start = table_start;
-	struct unwind_table_entry *end = 
+	struct unwind_table_entry *end =
 		(struct unwind_table_entry *)table_end - 1;
 
 	table->name = name;
@@ -109,7 +109,7 @@ unwind_table_init(struct unwind_table *table, const char *name,
 	INIT_LIST_HEAD(&table->list);
 
 	for (; start <= end; start++) {
-		if (start < end && 
+		if (start < end &&
 		    start->region_end > (start+1)->region_start) {
 			printk("WARNING: Out of order unwind entry! %p and %p\n", start, start+1);
 		}
@@ -134,7 +134,7 @@ unwind_table_sort(struct unwind_table_entry *start,
 }
 
 struct unwind_table *
-unwind_table_add(const char *name, unsigned long base_addr, 
+unwind_table_add(const char *name, unsigned long base_addr,
 		 unsigned long gp,
                  void *start, void *end)
 {
@@ -178,20 +178,20 @@ int unwind_init(void)
 
 	spin_lock_init(&unwind_lock);
 
-	printk("unwind_init: start = 0x%lx, end = 0x%lx, entries = %lu\n", 
+	printk("unwind_init: start = 0x%lx, end = 0x%lx, entries = %lu\n",
 	    start, stop,
 	    (stop - start) / sizeof(struct unwind_table_entry));
 
 	unwind_table_init(&kernel_unwind_table, "kernel", KERNEL_START,
-			  gp, 
+			  gp,
 			  &__start___unwind[0], &__stop___unwind[0]);
 #if 0
 	{
 		int i;
 		for (i = 0; i < 10; i++)
 		{
-			printk("region 0x%x-0x%x\n", 
-				__start___unwind[i].region_start, 
+			printk("region 0x%x-0x%x\n",
+				__start___unwind[i].region_start,
 				__start___unwind[i].region_end);
 		}
 	}
@@ -252,8 +252,8 @@ static void unwind_frame_regs(struct unwind_frame_info *info)
 				info->prev_sp = info->sp - CALLEE_SAVE_FRAME_SIZE;
 				info->prev_ip = *(unsigned long *)(info->prev_sp - RP_OFFSET);
 				dbg("_switch_to_ret @ %lx - setting "
-				    "prev_sp=%lx prev_ip=%lx\n", 
-				    info->ip, info->prev_sp, 
+				    "prev_sp=%lx prev_ip=%lx\n",
+				    info->ip, info->prev_sp,
 				    info->prev_ip);
 				return;
 			} else if (strcmp(symname, "ret_from_kernel_thread") == 0 ||
@@ -267,7 +267,7 @@ static void unwind_frame_regs(struct unwind_frame_info *info)
 		/* Since we are doing the unwinding blind, we don't know if
 		   we are adjusting the stack correctly or extracting the rp
 		   correctly. The rp is checked to see if it belongs to the
-		   kernel text section, if not we assume we don't have a 
+		   kernel text section, if not we assume we don't have a
 		   correct stack frame and we continue to unwind the stack.
 		   This is not quite correct, and will fail for loadable
 		   modules. */
@@ -277,7 +277,7 @@ static void unwind_frame_regs(struct unwind_frame_info *info)
 
 			info->prev_sp = sp - 64;
 			info->prev_ip = 0;
-			if (get_user(tmp, (unsigned long *)(info->prev_sp - RP_OFFSET))) 
+			if (get_user(tmp, (unsigned long *)(info->prev_sp - RP_OFFSET)))
 				break;
 			info->prev_ip = tmp;
 			sp = info->prev_sp;
@@ -287,20 +287,20 @@ static void unwind_frame_regs(struct unwind_frame_info *info)
 		info->rp = 0;
 
 		dbg("analyzing func @ %lx with no unwind info, setting "
-		    "prev_sp=%lx prev_ip=%lx\n", info->ip, 
+		    "prev_sp=%lx prev_ip=%lx\n", info->ip,
 		    info->prev_sp, info->prev_ip);
 	} else {
 		dbg("e->start = 0x%x, e->end = 0x%x, Save_SP = %d, "
-		    "Save_RP = %d, Millicode = %d size = %u\n", 
-		    e->region_start, e->region_end, e->Save_SP, e->Save_RP, 
+		    "Save_RP = %d, Millicode = %d size = %u\n",
+		    e->region_start, e->region_end, e->Save_SP, e->Save_RP,
 		    e->Millicode, e->Total_frame_size);
 
 		looking_for_rp = e->Save_RP;
 
-		for (npc = e->region_start; 
-		     (frame_size < (e->Total_frame_size << 3) || 
-		      looking_for_rp) && 
-		     npc < info->ip; 
+		for (npc = e->region_start;
+		     (frame_size < (e->Total_frame_size << 3) ||
+		      looking_for_rp) &&
+		     npc < info->ip;
 		     npc += 4) {
 
 			insn = *(unsigned int *)npc;
@@ -308,19 +308,19 @@ static void unwind_frame_regs(struct unwind_frame_info *info)
 			if ((insn & 0xffffc000) == 0x37de0000 ||
 			    (insn & 0xffe00000) == 0x6fc00000) {
 				/* ldo X(sp), sp, or stwm X,D(sp) */
-				frame_size += (insn & 0x1 ? -1 << 13 : 0) | 
+				frame_size += (insn & 0x1 ? -1 << 13 : 0) |
 					((insn & 0x3fff) >> 1);
 				dbg("analyzing func @ %lx, insn=%08x @ "
 				    "%lx, frame_size = %ld\n", info->ip,
 				    insn, npc, frame_size);
 			} else if ((insn & 0xffe00008) == 0x73c00008) {
 				/* std,ma X,D(sp) */
-				frame_size += (insn & 0x1 ? -1 << 13 : 0) | 
+				frame_size += (insn & 0x1 ? -1 << 13 : 0) |
 					(((insn >> 4) & 0x3ff) << 3);
 				dbg("analyzing func @ %lx, insn=%08x @ "
 				    "%lx, frame_size = %ld\n", info->ip,
 				    insn, npc, frame_size);
-			} else if (insn == 0x6bc23fd9) { 
+			} else if (insn == 0x6bc23fd9) {
 				/* stw rp,-20(sp) */
 				rpoffset = 20;
 				looking_for_rp = 0;
@@ -346,12 +346,12 @@ static void unwind_frame_regs(struct unwind_frame_info *info)
 		}
 
 		dbg("analyzing func @ %lx, setting prev_sp=%lx "
-		    "prev_ip=%lx npc=%lx\n", info->ip, info->prev_sp, 
+		    "prev_ip=%lx npc=%lx\n", info->ip, info->prev_sp,
 		    info->prev_ip, npc);
 	}
 }
 
-void unwind_frame_init(struct unwind_frame_info *info, struct task_struct *t, 
+void unwind_frame_init(struct unwind_frame_info *info, struct task_struct *t,
 		       struct pt_regs *regs)
 {
 	memset(info, 0, sizeof(struct unwind_frame_info));
@@ -361,7 +361,7 @@ void unwind_frame_init(struct unwind_frame_info *info, struct task_struct *t,
 	info->rp = regs->gr[2];
 	info->r31 = regs->gr[31];
 
-	dbg("(%d) Start unwind from sp=%08lx ip=%08lx\n", 
+	dbg("(%d) Start unwind from sp=%08lx ip=%08lx\n",
 	    t ? (int)t->pid : -1, info->sp, info->ip);
 }
 
@@ -398,8 +398,8 @@ int unwind_once(struct unwind_frame_info *next_frame)
 	next_frame->prev_sp = 0;
 	next_frame->prev_ip = 0;
 
-	dbg("(%d) Continue unwind to sp=%08lx ip=%08lx\n", 
-	    next_frame->t ? (int)next_frame->t->pid : -1, 
+	dbg("(%d) Continue unwind to sp=%08lx ip=%08lx\n",
+	    next_frame->t ? (int)next_frame->t->pid : -1,
 	    next_frame->sp, next_frame->ip);
 
 	return 0;
@@ -408,7 +408,7 @@ int unwind_once(struct unwind_frame_info *next_frame)
 int unwind_to_user(struct unwind_frame_info *info)
 {
 	int ret;
-	
+
 	do {
 		ret = unwind_once(info);
 	} while (!ret && !(info->ip & 3));

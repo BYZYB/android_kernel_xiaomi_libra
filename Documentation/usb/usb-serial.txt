@@ -11,7 +11,7 @@ INTRODUCTION
 CONFIGURATION
 
   Currently the driver can handle up to 256 different serial interfaces at
-  one time. 
+  one time.
 
     The major number that the driver uses is 188 so to use the driver,
     create the following nodes:
@@ -28,7 +28,7 @@ CONFIGURATION
   When the device is connected and recognized by the driver, the driver
   will print to the system log, which node(s) the device has been bound
   to.
-  
+
 
 SPECIFIC DEVICES SUPPORTED
 
@@ -62,7 +62,7 @@ HandSpring Visor, Palm USB, and Clié USB driver
     This goes against the current documentation for pilot-xfer and other
     packages, but is the only way that it will work due to the hardware
     in the device.
-  
+
   When the device is connected, try talking to it on the second port
   (this is usually /dev/ttyUSB1 if you do not have any other usb-serial
   devices in the system.) The system log should tell you which port is
@@ -78,10 +78,10 @@ HandSpring Visor, Palm USB, and Clié USB driver
   try resetting the device, first a hot reset, and then a cold reset if
   necessary.  Some devices need this before they can talk to the USB port
   properly.
-  
+
   Devices that are not compiled into the kernel can be specified with module
   parameters.  e.g. modprobe visor vendor=0x54c product=0x66
-  
+
   There is a webpage and mailing lists for this portion of the driver at:
   http://sourceforge.net/projects/usbvisor/
 
@@ -135,7 +135,7 @@ PocketPC PDA Driver
   be used to flash the ROM, as well as the microP code..  so much for needing
   Toshiba's $350 serial cable for flashing!! :D
   NOTE: This has NOT been tested. Use at your own risk.
- 
+
   For any questions or problems with the driver, please contact Ganesh
   Varadarajan <ganesh@veritas.com>
 
@@ -165,14 +165,14 @@ Keyspan PDA Serial Adapter
      O_NONBLOCK, select()
 
   For any questions or problems with this driver, please contact Brian
-  Warner at warner@lothar.com 
+  Warner at warner@lothar.com
 
 
 Keyspan USA-series Serial Adapters
 
-  Single, Dual and Quad port adapters - driver uses Keyspan supplied 
+  Single, Dual and Quad port adapters - driver uses Keyspan supplied
   firmware and is being developed with their support.
-  
+
   Current status:
     The USA-18X, USA-28X, USA-19, USA-19W and USA-49W are supported and
     have been pretty thoroughly tested at various baud rates with 8-N-1
@@ -182,10 +182,10 @@ Keyspan USA-series Serial Adapters
     The USA-28 isn't yet supported though doing so should be pretty
     straightforward.  Contact the maintainer if you require this
     functionality.
-  
+
   More information is available at:
         http://www.carnationsoftware.com/carnation/Keyspan.html
-   
+
   For any questions or problems with this driver, please contact Hugh
   Blemings at hugh@misc.nu
 
@@ -215,14 +215,14 @@ Cypress M8 CY4601 Family Serial Driver
   part stable and has been tested on an smp machine. (dual p2)
 
     Chipsets supported under CY4601 family:
-	
+
 		CY7C63723, CY7C63742, CY7C63743, CY7C64013
 
     Devices supported:
 
 		-DeLorme's USB Earthmate GPS (SiRF Star II lp arch)
 		-Cypress HID->COM RS232 adapter
-	
+
 		Note: Cypress Semiconductor claims no affiliation with the
 			hid->com device.
 
@@ -236,7 +236,7 @@ Cypress M8 CY4601 Family Serial Driver
 	upon start init to this setting.  usbserial core provides the rest
 	of the termios settings, along with some custom termios so that the
 	output is in proper format and parsable.
-	
+
 	The device can be put into sirf mode by issuing NMEA command:
 		$PSRF100,<protocol>,<baud>,<databits>,<stopbits>,<parity>*CHECKSUM
 		$PSRF100,0,9600,8,1,0*0C
@@ -292,7 +292,7 @@ Belkin USB Serial Adapter F5U103
 
   Current status:
     The following have been tested and work:
-      Baud rate    300-230400               
+      Baud rate    300-230400
       Data bits    5-8
       Stop bits    1-2
       Parity       N,E,O,M,S
@@ -380,9 +380,9 @@ Inside Out Networks Edgeport Driver
 
 
 REINER SCT cyberJack pinpad/e-com USB chipcard reader
-   
+
   Interface to ISO 7816 compatible contactbased chipcards, e.g. GSM SIMs.
-  
+
   Current status:
     This is the kernel part of the driver for this USB card reader.
     There is also a user part for a CT-API driver available. A site
@@ -403,10 +403,10 @@ Prolific PL2303 Driver
 
   For any questions or problems with this driver, please contact Greg
   Kroah-Hartman at greg@kroah.com
-  
+
 
 KL5KUSB105 chipset / PalmConnect USB single-port adapter
-  
+
 Current status:
   The driver was put together by looking at the usb bus transactions
   done by Palm's driver under Windows, so a lot of functionality is
@@ -417,7 +417,7 @@ Current status:
   are supported, but handshaking (software or hardware) is not, which is
   why it is wise to cut down on the rate used is wise for large
   transfers until this is settled.
-  
+
 Options supported:
   If this driver is compiled as a module you can pass the following
   options to it:
@@ -464,8 +464,8 @@ Generic Serial driver
   interface does not provide any type of control messages sent to the
   device, and does not support any kind of device flow control. All that
   is required of your device is that it has at least one bulk in endpoint,
-  or one bulk out endpoint. 
-  
+  or one bulk out endpoint.
+
   To enable the generic driver to recognize your device, build the driver
   as a module and load it by the following invocation:
 	insmod usbserial vendor=0x#### product=0x####

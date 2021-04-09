@@ -5,7 +5,7 @@
 <book id="lk-hacking-guide">
  <bookinfo>
   <title>Unreliable Guide To Hacking The Linux Kernel</title>
-  
+
   <authorgroup>
    <author>
     <firstname>Rusty</firstname>
@@ -31,21 +31,21 @@
     version 2 of the License, or (at your option) any later
     version.
    </para>
-   
+
    <para>
     This program is distributed in the hope that it will be
     useful, but WITHOUT ANY WARRANTY; without even the implied
     warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
     See the GNU General Public License for more details.
    </para>
-   
+
    <para>
     You should have received a copy of the GNU General Public
     License along with this program; if not, write to the Free
     Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
     MA 02111-1307 USA
    </para>
-   
+
    <para>
     For more details see the file COPYING in the source
     distribution of Linux.
@@ -125,7 +125,7 @@
    We'll see a number of ways that the user context can block
    interrupts, to become truly non-preemptable.
   </para>
-  
+
   <sect1 id="basics-usercontext">
    <title>User Context</title>
 
@@ -144,17 +144,17 @@
    </note>
 
    <para>
-    In user context, the <varname>current</varname> pointer (indicating 
+    In user context, the <varname>current</varname> pointer (indicating
     the task we are currently executing) is valid, and
     <function>in_interrupt()</function>
     (<filename>include/linux/interrupt.h</filename>) is <returnvalue>false
-    </returnvalue>.  
+    </returnvalue>.
    </para>
 
    <caution>
     <para>
      Beware that if you have preemption or softirqs disabled
-     (see below), <function>in_interrupt()</function> will return a 
+     (see below), <function>in_interrupt()</function> will return a
      false positive.
     </para>
    </caution>
@@ -164,7 +164,7 @@
    <title>Hardware Interrupts (Hard IRQs)</title>
 
    <para>
-    Timer ticks, <hardware>network cards</hardware> and 
+    Timer ticks, <hardware>network cards</hardware> and
     <hardware>keyboard</hardware> are examples of real
     hardware which produce interrupts at any time.  The kernel runs
     interrupt handlers, which services the hardware.  The kernel
@@ -176,12 +176,12 @@
    </para>
 
    <para>
-    You can tell you are in a hardware interrupt, because 
-    <function>in_irq()</function> returns <returnvalue>true</returnvalue>.  
+    You can tell you are in a hardware interrupt, because
+    <function>in_irq()</function> returns <returnvalue>true</returnvalue>.
    </para>
    <caution>
     <para>
-     Beware that this will return a false positive if interrupts are disabled 
+     Beware that this will return a false positive if interrupts are disabled
      (see below).
     </para>
    </caution>
@@ -200,7 +200,7 @@
    <para>
     Much of the real interrupt handling work is done here.  Early in
     the transition to <acronym>SMP</acronym>, there were only 'bottom
-    halves' (BHs), which didn't take advantage of multiple CPUs.  Shortly 
+    halves' (BHs), which didn't take advantage of multiple CPUs.  Shortly
     after we switched from wind-up computers made of match-sticks and snot,
     we abandoned this limitation and switched to 'softirqs'.
    </para>
@@ -227,14 +227,14 @@
    <caution>
     <para>
      The name 'tasklet' is misleading: they have nothing to do with 'tasks',
-     and probably more to do with some bad vodka Alexey Kuznetsov had at the 
+     and probably more to do with some bad vodka Alexey Kuznetsov had at the
      time.
     </para>
    </caution>
 
    <para>
     You can tell you are in a softirq (or tasklet)
-    using the <function>in_softirq()</function> macro 
+    using the <function>in_softirq()</function> macro
     (<filename class="headerfile">include/linux/interrupt.h</filename>).
    </para>
    <caution>
@@ -314,7 +314,7 @@
   <programlisting>
 asmlinkage long sys_mycall(int arg)
 {
-        return 0; 
+        return 0;
 }
   </programlisting>
 
@@ -364,7 +364,7 @@ if (signal_pending(current))
   </para>
 
   <programlisting>
-cond_resched(); /* Will sleep */ 
+cond_resched(); /* Will sleep */
   </programlisting>
 
   <para>
@@ -465,7 +465,7 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
     </para>
    </note>
 
-   <!--- From the Lions book reader department --> 
+   <!--- From the Lions book reader department -->
 
    <note>
     <para>
@@ -484,7 +484,7 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
     /
     <function>put_user()</function>
     <filename class="headerfile">include/asm/uaccess.h</filename>
-   </title>  
+   </title>
 
    <para>
     <emphasis>[SLEEPS]</emphasis>
@@ -547,7 +547,7 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
       </para>
      </listitem>
     </varlistentry>
-    
+
     <varlistentry>
      <term>
       <constant>
@@ -563,7 +563,7 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
       </para>
      </listitem>
     </varlistentry>
-    
+
     <varlistentry>
      <term>
       <constant>
@@ -643,9 +643,9 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
     Do not use large values with them as you risk
     overflow - the helper function <function>mdelay()</function> is useful
     here, or consider <function>msleep()</function>.
-   </para> 
+   </para>
   </sect1>
- 
+
   <sect1 id="routines-endian">
    <title><function>cpu_to_be32()</function>/<function>be32_to_cpu()</function>/<function>cpu_to_le32()</function>/<function>le32_to_cpu()</function>
      <filename class="headerfile">include/asm/byteorder.h</filename>
@@ -666,7 +666,7 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
     other variation is the "in-situ" family, such as
     <function>cpu_to_be32s()</function>, which convert value referred
     to by the pointer, and return void.
-   </para> 
+   </para>
   </sect1>
 
   <sect1 id="routines-local-irqs">
@@ -700,7 +700,7 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
   <sect1 id="routines-processorids">
    <title><function>smp_processor_id</function>()
     <filename class="headerfile">include/asm/smp.h</filename></title>
-   
+
    <para>
     <function>get_cpu()</function> disables preemption (so you won't
     suddenly get moved to another CPU) and returns the current
@@ -727,7 +727,7 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
     is used to declare a function which is only required on exit: the
     function will be dropped if this file is not compiled as a module.
     See the header file for use. Note that it makes no sense for a function
-    marked with <type>__init</type> to be exported to modules with 
+    marked with <type>__init</type> to be exported to modules with
     <function>EXPORT_SYMBOL()</function> - this will break.
    </para>
 
@@ -761,7 +761,7 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
     called in user context with interrupts enabled, so it can sleep.
    </para>
   </sect1>
-  
+
   <sect1 id="routines-moduleexit">
    <title> <function>module_exit()</function>
     <filename class="headerfile">include/linux/init.h</filename> </title>
@@ -825,7 +825,7 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
 
   <sect1 id="queue-declaring">
    <title>Declaring</title>
-   
+
    <para>
     You declare a <type>wait_queue_head_t</type> using the
     <function>DECLARE_WAIT_QUEUE_HEAD()</function> macro, or using the
@@ -833,10 +833,10 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
     initialization code.
    </para>
   </sect1>
-  
+
   <sect1 id="queue-waitqueue">
    <title>Queuing</title>
-   
+
    <para>
     Placing yourself in the waitqueue is fairly complex, because you
     must put yourself in the queue before checking the condition.
@@ -856,16 +856,16 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
    one of the <function>wait_event()</function> family will do, or a
    loop around <function>schedule_timeout()</function>. If you choose
    to loop around <function>schedule_timeout()</function> remember
-   you must set the task state (with 
+   you must set the task state (with
    <function>set_current_state()</function>) on each iteration to avoid
    busy-looping.
    </para>
- 
+
   </sect1>
 
   <sect1 id="queue-waking">
    <title>Waking Up Queued Tasks</title>
-   
+
    <para>
     Call <function>wake_up()</function>
 
@@ -923,7 +923,7 @@ printk(KERN_INFO "my ip: %pI4\n", &amp;ipaddress);
    except return true if the bit was previously set; these are
    particularly useful for atomically setting flags.
   </para>
-  
+
   <para>
    It is possible to call these operations with bit indices greater
    than BITS_PER_LONG.  The resulting behavior is strange on big-endian
@@ -1127,7 +1127,7 @@ static struct block_device_operations opt_fops = {
 
   <sect1 id="conventions-cplusplus">
    <title>C++</title>
-   
+
    <para>
     Using C++ in the kernel is usually a bad idea, because the
     kernel does not provide the necessary runtime environment
@@ -1139,7 +1139,7 @@ static struct block_device_operations opt_fops = {
 
   <sect1 id="conventions-ifdef">
    <title>&num;if</title>
-   
+
    <para>
     It is generally considered cleaner to use macros in header files
     (or at the top of .c files) to abstract away functions rather than
@@ -1213,7 +1213,7 @@ static struct block_device_operations opt_fops = {
      implies a more-than-passing commitment to some part of the code.
     </para>
    </listitem>
-   
+
    <listitem>
     <para>
      Finally, don't forget to read <filename>Documentation/SubmittingPatches</filename>
@@ -1313,7 +1313,7 @@ C_LABEL(cputypvar_sun4m):
    <function>disable_irq()</function>, and Jes Sorensen and Andrea
    Arcangeli added caveats. Michael Elizabeth Chastain for checking
    and adding to the Configure section. <!-- Rusty insisted on this
-   bit; I didn't do it! --> Telsa Gwynne for teaching me DocBook. 
+   bit; I didn't do it! --> Telsa Gwynne for teaching me DocBook.
   </para>
  </chapter>
 </book>

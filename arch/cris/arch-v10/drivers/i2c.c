@@ -638,7 +638,7 @@ i2c_init(void)
 		return res;
 	}
 
-	*R_PORT_PB_I2C = port_pb_i2c_shadow |= 
+	*R_PORT_PB_I2C = port_pb_i2c_shadow |=
 		IO_STATE(R_PORT_PB_I2C, i2c_en,  on) |
 		IO_FIELD(R_PORT_PB_I2C, i2c_d,   1)  |
 		IO_FIELD(R_PORT_PB_I2C, i2c_clk, 1)  |
@@ -687,7 +687,7 @@ i2c_register(void)
 	}
 
 	printk(KERN_INFO "I2C driver v2.2, (c) 1999-2004 Axis Communications AB\n");
-	
+
 	return 0;
 }
 

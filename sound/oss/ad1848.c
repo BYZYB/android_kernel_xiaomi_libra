@@ -160,7 +160,7 @@ static ad1848_info adev_info[MAX_AUDIO_DEV];
 
 static struct {
      unsigned char flags;
-#define CAP_F_TIMER 0x01     
+#define CAP_F_TIMER 0x01
 } capabilities [10 /*devc->model */ ] = {
      {0}
     ,{0}           /* MD_1848  */
@@ -245,7 +245,7 @@ static void ad_write(ad1848_info * devc, int reg, int data)
 	else
 	{
 		int xreg, xra;
-		
+
 		xreg = (reg & 0xff) - 32;
 		xra = (((xreg & 0x0f) << 4) & 0xf0) | 0x08 | ((xreg & 0x10) >> 2);
 		outb(((unsigned char) (23 & 0xff) | devc->MCE_bit), io_Index_Addr(devc));
@@ -293,7 +293,7 @@ static void ad_mute(ad1848_info * devc)
 	/*
 	 * Save old register settings and mute output channels
 	 */
-	 
+
 	for (i = 6; i < 8; i++)
 	{
 		prev = devc->saved_regs[i] = ad_read(devc, i);
@@ -365,7 +365,7 @@ static int ad1848_set_recmask(ad1848_info * devc, int mask)
 			}
 		}
 	}
-	
+
 	n = 0;
 	for (i = 0; i < 32; i++)	/* Count selected device bits */
 		if (mask & (1 << i))
@@ -647,9 +647,9 @@ static void ad1848_mixer_reset(ad1848_info * devc)
 		if (devc->supported_devices & (1 << i))
 			ad1848_mixer_set(devc, i, devc->levels[i]);
 	}
-	
+
 	ad1848_set_recmask(devc, SOUND_MASK_MIC);
-	
+
 	devc->mixer_output_port = devc->levels[31] | AUDIO_HEADPHONE | AUDIO_LINE_OUT;
 
 	spin_lock_irqsave(&devc->lock,flags);
@@ -674,12 +674,12 @@ static int ad1848_mixer_ioctl(int dev, unsigned int cmd, void __user *arg)
 	ad1848_info *devc = mixer_devs[dev]->devc;
 	int val;
 
-	if (cmd == SOUND_MIXER_PRIVATE1) 
+	if (cmd == SOUND_MIXER_PRIVATE1)
 	{
 		if (get_user(val, (int __user *)arg))
 			return -EFAULT;
 
-		if (val != 0xffff) 
+		if (val != 0xffff)
 		{
 			unsigned long flags;
 			val &= (AUDIO_SPEAKER | AUDIO_HEADPHONE | AUDIO_LINE_OUT);
@@ -702,48 +702,48 @@ static int ad1848_mixer_ioctl(int dev, unsigned int cmd, void __user *arg)
 			return -EFAULT;
 		return(ad1848_control(AD1848_MIXER_REROUTE, val));
 	}
-	if (((cmd >> 8) & 0xff) == 'M') 
+	if (((cmd >> 8) & 0xff) == 'M')
 	{
 		if (_SIOC_DIR(cmd) & _SIOC_WRITE)
 		{
-			switch (cmd & 0xff) 
+			switch (cmd & 0xff)
 			{
 				case SOUND_MIXER_RECSRC:
 					if (get_user(val, (int __user *)arg))
 						return -EFAULT;
 					val = ad1848_set_recmask(devc, val);
 					break;
-				
+
 				default:
 					if (get_user(val, (int __user *)arg))
 						return -EFAULT;
 					val = ad1848_mixer_set(devc, cmd & 0xff, val);
 					break;
-			} 
+			}
 			return put_user(val, (int __user *)arg);
 		}
 		else
 		{
-			switch (cmd & 0xff) 
+			switch (cmd & 0xff)
 			{
 				/*
 				 * Return parameters
 				 */
-			    
+
 				case SOUND_MIXER_RECSRC:
 					val = devc->recmask;
 					break;
-				
+
 				case SOUND_MIXER_DEVMASK:
 					val = devc->supported_devices;
 					break;
-				
+
 				case SOUND_MIXER_STEREODEVS:
 					val = devc->supported_devices;
 					if (devc->model != MD_C930)
 						val &= ~(SOUND_MASK_SPEAKER | SOUND_MASK_IMIX);
 					break;
-				
+
 				case SOUND_MIXER_RECMASK:
 					val = devc->supported_rec_devices;
 					break;
@@ -1229,7 +1229,7 @@ static int ad1848_prepare_for_input(int dev, int bsize, int bcount)
 	/*
 	 * If mode >= 2 (CS4231), set I28. It's the capture format register.
 	 */
-	
+
 	if (devc->model != MD_1848)
 	{
 		old_fs = ad_read(devc, 28);
@@ -1238,7 +1238,7 @@ static int ad1848_prepare_for_input(int dev, int bsize, int bcount)
 		/*
 		 * Write to I28 starts resynchronization. Wait until it completes.
 		 */
-		
+
 		timeout = 0;
 		while (timeout < 100 && inb(devc->base) != 0x80)
 			timeout++;
@@ -1336,7 +1336,7 @@ static void ad1848_halt_input(int dev)
 
 	{
 		int             tmout;
-		
+
 		if(!isa_dma_bridge_buggy)
 		        disable_dma(audio_devs[dev]->dmap_in->dma);
 
@@ -1449,7 +1449,7 @@ static void ad1848_init_hw(ad1848_info * devc)
 
 	static int      init_values_b[] =
 	{
-		/* 
+		/*
 		   Values for the newer chips
 		   Some of the register initialization values were changed. In
 		   order to get rid of the click that preceded PCM playback,
@@ -1468,7 +1468,7 @@ static void ad1848_init_hw(ad1848_info * devc)
 	/*
 	 *	Select initialisation data
 	 */
-	 
+
 	init_values = init_values_a;
 	if(devc->model >= MD_4236)
 		init_values = init_values_b;
@@ -1484,7 +1484,7 @@ static void ad1848_init_hw(ad1848_info * devc)
 	{
 		if (devc->model == MD_1845_SSCAPE)
 			ad_write(devc, 12, ad_read(devc, 12) | 0x50);
-		else 
+		else
 			ad_write(devc, 12, ad_read(devc, 12) | 0x40);		/* Mode2 = enabled */
 
 		if (devc->model == MD_IWAVE)
@@ -1557,13 +1557,13 @@ int ad1848_detect(struct resource *ports, int *ad_flags, int *osp)
 			interwave = 1;
 			*ad_flags = 0;
 		}
-		
+
 		if (*ad_flags == 0x87654321)
 		{
 			sscape_flag = 1;
 			*ad_flags = 0;
 		}
-		
+
 		if (*ad_flags == 0x12345677)
 		{
 		    cs4248_flag = 1;
@@ -1605,7 +1605,7 @@ int ad1848_detect(struct resource *ports, int *ad_flags, int *osp)
 	/*
 	 * Wait for the device to stop initialization
 	 */
-	
+
 	DDB(printk("ad1848_detect() - step 0\n"));
 
 	for (i = 0; i < 10000000; i++)
@@ -1626,7 +1626,7 @@ int ad1848_detect(struct resource *ports, int *ad_flags, int *osp)
 		DDB(printk("ad1848 detect error - step A (%02x)\n", (int) inb(devc->base)));
 		return 0;
 	}
-	
+
 	/*
 	 * Test if it's possible to change contents of the indirect registers.
 	 * Registers 0 and 1 are ADC volume registers. The bit 0x10 is read only
@@ -1676,7 +1676,7 @@ int ad1848_detect(struct resource *ports, int *ad_flags, int *osp)
 		DDB(printk("ad1848 detect error - step D (%x)\n", tmp1));
 		return 0;
 	}
-	
+
 	/*
 	 * NOTE! Last 4 bits of the reg I12 tell the chip revision.
 	 *   0x01=RevB and 0x0A=RevC.
@@ -1741,7 +1741,7 @@ int ad1848_detect(struct resource *ports, int *ad_flags, int *osp)
 		 *
 		 *      Verify that setting I0 doesn't change I16.
 		 */
-		
+
 		DDB(printk("ad1848_detect() - step H\n"));
 		ad_write(devc, 16, 0);	/* Set I16 to known value */
 
@@ -1754,7 +1754,7 @@ int ad1848_detect(struct resource *ports, int *ad_flags, int *osp)
 				DDB(printk("ad1848 detect error - step H(%x)\n", tmp1));
 				return 0;
 			}
-			
+
 			/*
 			 * Verify that some bits of I25 are read only.
 			 */
@@ -1772,7 +1772,7 @@ int ad1848_detect(struct resource *ports, int *ad_flags, int *osp)
 
 				devc->chip_name = "CS4231";
 				devc->model = MD_4231;
-				
+
 				/*
 				 * It could be an AD1845 or CS4231A as well.
 				 * CS4231 and AD1845 report the same revision info in I25
@@ -1787,7 +1787,7 @@ int ad1848_detect(struct resource *ports, int *ad_flags, int *osp)
 				DDB(printk("ad1848_detect() - step J (%02x/%02x)\n", id, ad_read(devc, 25)));
 
                                 if ((id & 0xe7) == 0x80) {
-					/* 
+					/*
 					 * It must be a CS4231 or AD1845. The register I23 of
 					 * CS4231 is undefined and it appears to be read only.
 					 * AD1845 uses I23 for setting sample rate. Assume
@@ -1871,7 +1871,7 @@ int ad1848_detect(struct resource *ports, int *ad_flags, int *osp)
 						devc->chip_name = "CS4232";
 						devc->model = MD_4232;
 						break;
-				
+
 					case 0:
 						if ((id & 0xe0) == 0xa0)
 						{
@@ -2013,7 +2013,7 @@ int ad1848_init (char *name, struct resource *ports, int irq, int dma_playback,
 		kfree(portc);
 		return -1;
 	}
-	
+
 	audio_devs[my_dev]->portc = portc;
 	audio_devs[my_dev]->mixer_dev = -1;
 	if (owner)
@@ -2039,7 +2039,7 @@ int ad1848_init (char *name, struct resource *ports, int irq, int dma_playback,
 #ifndef CONFIG_SMP
 			int x;
 			unsigned char tmp = ad_read(devc, 16);
-#endif			
+#endif
 
 			devc->timer_ticks = 0;
 
@@ -2059,7 +2059,7 @@ int ad1848_init (char *name, struct resource *ports, int irq, int dma_playback,
 			}
 #else
 			devc->irq_ok = 1;
-#endif			
+#endif
 		}
 		else
 			devc->irq_ok = 1;	/* Couldn't test. assume it's OK */
@@ -2168,7 +2168,7 @@ void ad1848_unload(int io_base, int irq, int dma_playback, int dma_capture, int 
 			dev = devc->dev_no;
 		}
 	}
-		
+
 	if (devc != NULL)
 	{
 		kfree(audio_devs[dev]->portc);
@@ -2616,7 +2616,7 @@ void attach_ms_sound(struct address_info *hw_config, struct resource *ports, str
 		hw_config->slots[0] = ad1848_init("MS Sound System", ports,
 						    hw_config->irq,
 						    hw_config->dma,
-						    hw_config->dma2, 0, 
+						    hw_config->dma2, 0,
 						    hw_config->osp,
 						    owner);
 		return;
@@ -3052,7 +3052,7 @@ static int __init setup_ad1848(char *str)
 {
         /* io, irq, dma, dma2, type */
 	int ints[6];
-	
+
 	str = get_options(str, ARRAY_SIZE(ints), ints);
 
 	io	= ints[1];
@@ -3064,6 +3064,6 @@ static int __init setup_ad1848(char *str)
 	return 1;
 }
 
-__setup("ad1848=", setup_ad1848);	
+__setup("ad1848=", setup_ad1848);
 #endif
 MODULE_LICENSE("GPL");

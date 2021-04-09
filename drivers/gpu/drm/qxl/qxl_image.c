@@ -54,7 +54,7 @@ qxl_image_create_helper(struct qxl_device *qdev,
 				  first) */
 	ret = qxl_alloc_bo_reserved(qdev, sizeof(*chunk) + height * chunk_stride,
 				    &chunk_bo);
-	
+
 	ptr = qxl_bo_kmap_atomic_page(qdev, chunk_bo, 0);
 	chunk = ptr;
 	chunk->data_size = height * chunk_stride;
@@ -102,7 +102,7 @@ qxl_image_create_helper(struct qxl_device *qdev,
 				while (remain > 0) {
 					page_base = out_offset & PAGE_MASK;
 					page_offset = offset_in_page(out_offset);
-					
+
 					size = min((int)(PAGE_SIZE - page_offset), remain);
 
 					ptr = qxl_bo_kmap_atomic_page(qdev, chunk_bo, page_base);

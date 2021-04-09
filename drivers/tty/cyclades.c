@@ -1032,7 +1032,7 @@ static void cyz_handle_tx(struct cyclades_port *info)
 
 	if (!char_count)
 		return;
-		
+
 	tty = tty_port_tty_get(&info->port);
 	if (tty == NULL)
 		goto ztxdone;

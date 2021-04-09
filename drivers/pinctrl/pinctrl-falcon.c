@@ -451,7 +451,7 @@ static int pinctrl_falcon_probe(struct platform_device *pdev)
 								   &res);
 		if (IS_ERR(falcon_info.membase[*bank]))
 			return PTR_ERR(falcon_info.membase[*bank]);
-		
+
 		avail = pad_r32(falcon_info.membase[*bank],
 					LTQ_PADC_AVAIL);
 		pins = fls(avail);

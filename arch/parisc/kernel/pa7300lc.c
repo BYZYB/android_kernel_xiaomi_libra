@@ -1,6 +1,6 @@
 /*
  *   linux/arch/parisc/kernel/pa7300lc.c
- *	- PA7300LC-specific functions	
+ *	- PA7300LC-specific functions
  *
  *   Copyright (C) 2000 Philipp Rumpf */
 

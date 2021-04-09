@@ -153,7 +153,7 @@ static struct s3c2410fb_display mini2440_lcd_cfg[] __initdata = {
 				   S3C2410_LCDCON5_INVVFRAME |
 				   S3C2410_LCDCON5_PWREN),
 	},
-	/* The VGA shield can outout at several resolutions. All share 
+	/* The VGA shield can outout at several resolutions. All share
 	 * the same timings, however, anything smaller than 1024x768
 	 * will only be displayed in the top left corner of a 1024x768
 	 * XGA output unless you add optional dip switches to the shield.

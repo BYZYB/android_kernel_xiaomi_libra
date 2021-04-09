@@ -527,7 +527,7 @@ static int extra_decode_xrpn(struct snd_midi_event *dev, unsigned char *buf,
 /*
  *  exports
  */
- 
+
 EXPORT_SYMBOL(snd_midi_event_new);
 EXPORT_SYMBOL(snd_midi_event_free);
 EXPORT_SYMBOL(snd_midi_event_reset_encode);

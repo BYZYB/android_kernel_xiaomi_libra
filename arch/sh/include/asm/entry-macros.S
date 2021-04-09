@@ -1,5 +1,5 @@
 ! entry.S macro define
-	
+
 	.macro	cli
 	stc	sr, r0
 	or	#0xf0, r0
@@ -28,7 +28,7 @@
 	shll2	\tmp
 	mov	r15, \ti
 	and	\tmp, \ti
-#endif	
+#endif
 	.endm
 
 #ifdef CONFIG_TRACE_IRQFLAGS

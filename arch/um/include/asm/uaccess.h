@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2002 Jeff Dike (jdike@karaya.com)
  * Licensed under the GPL
  */
@@ -138,7 +138,7 @@ extern int strnlen_user(const void __user *str, int len);
 		__private_ret = 0;					\
 	}								\
 	__private_ret;							\
-}) 
+})
 
 #define get_user(x, ptr) \
 ({ \

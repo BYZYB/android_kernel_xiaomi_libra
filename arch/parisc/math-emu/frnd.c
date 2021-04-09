@@ -75,7 +75,7 @@ sgl_frnd(sgl_floating_point *srcptr,
                 *dstptr = src;
                 return(NOEXCEPTION);
         }
-	/* 
+	/*
 	 * Need to round?
 	 */
 	if ((src_exponent -= SGL_BIAS) >= SGL_P - 1) {
@@ -102,13 +102,13 @@ sgl_frnd(sgl_floating_point *srcptr,
 			     break;
 			case ROUNDNEAREST:
 			     if (Sgl_isone_roundbit(src,src_exponent))
-			        if (Sgl_isone_stickybit(src,src_exponent) 
-				|| (Sgl_isone_lowmantissa(result))) 
+			        if (Sgl_isone_stickybit(src,src_exponent)
+				|| (Sgl_isone_lowmantissa(result)))
 					Sgl_increment(result);
-			} 
+			}
 		}
 		Sgl_leftshift(result,(SGL_P-1) - (src_exponent));
-		if (Sgl_isone_hiddenoverflow(result)) 
+		if (Sgl_isone_hiddenoverflow(result))
 			Sgl_set_exponent(result,src_exponent + (SGL_BIAS+1));
 		else Sgl_set_exponent(result,src_exponent + SGL_BIAS);
 	}
@@ -121,18 +121,18 @@ sgl_frnd(sgl_floating_point *srcptr,
 			/*  round result  */
 			switch (Rounding_mode()) {
 			case ROUNDPLUS:
-			     if (Sgl_iszero_sign(src)) 
+			     if (Sgl_iszero_sign(src))
 				Sgl_set_exponent(result,SGL_BIAS);
 			     break;
 			case ROUNDMINUS:
-			     if (Sgl_isone_sign(src)) 
+			     if (Sgl_isone_sign(src))
 				Sgl_set_exponent(result,SGL_BIAS);
 			     break;
 			case ROUNDNEAREST:
 			     if (src_exponent == -1)
 			        if (Sgl_isnotzero_mantissa(src))
 				   Sgl_set_exponent(result,SGL_BIAS);
-			} 
+			}
 		}
 	}
 	*dstptr = result;
@@ -141,7 +141,7 @@ sgl_frnd(sgl_floating_point *srcptr,
 		else Set_inexactflag();
 	}
 	return(NOEXCEPTION);
-} 
+}
 
 /*
  *  Double Floating-point Round to Integer
@@ -180,7 +180,7 @@ dbl_frnd(
                 Dbl_copytoptr(srcp1,srcp2,dstptr);
                 return(NOEXCEPTION);
         }
-	/* 
+	/*
 	 * Need to round?
 	 */
 	if ((src_exponent -= DBL_BIAS) >= DBL_P - 1) {
@@ -201,19 +201,19 @@ dbl_frnd(
 			/*  round result  */
 			switch (Rounding_mode()) {
 			case ROUNDPLUS:
-			     if (Dbl_iszero_sign(srcp1)) 
+			     if (Dbl_iszero_sign(srcp1))
 				Dbl_increment(resultp1,resultp2);
 			     break;
 			case ROUNDMINUS:
-			     if (Dbl_isone_sign(srcp1)) 
+			     if (Dbl_isone_sign(srcp1))
 				Dbl_increment(resultp1,resultp2);
 			     break;
 			case ROUNDNEAREST:
 			     if (Dbl_isone_roundbit(srcp1,srcp2,src_exponent))
-			      if (Dbl_isone_stickybit(srcp1,srcp2,src_exponent) 
-				  || (Dbl_isone_lowmantissap2(resultp2))) 
+			      if (Dbl_isone_stickybit(srcp1,srcp2,src_exponent)
+				  || (Dbl_isone_lowmantissap2(resultp2)))
 					Dbl_increment(resultp1,resultp2);
-			} 
+			}
 		}
 		Dbl_leftshift(resultp1,resultp2,(DBL_P-1) - (src_exponent));
 		if (Dbl_isone_hiddenoverflow(resultp1))
@@ -229,18 +229,18 @@ dbl_frnd(
 			/*  round result  */
 			switch (Rounding_mode()) {
 			case ROUNDPLUS:
-			     if (Dbl_iszero_sign(srcp1)) 
+			     if (Dbl_iszero_sign(srcp1))
 				Dbl_set_exponent(resultp1,DBL_BIAS);
 			     break;
 			case ROUNDMINUS:
-			     if (Dbl_isone_sign(srcp1)) 
+			     if (Dbl_isone_sign(srcp1))
 				Dbl_set_exponent(resultp1,DBL_BIAS);
 			     break;
 			case ROUNDNEAREST:
 			     if (src_exponent == -1)
 			        if (Dbl_isnotzero_mantissa(srcp1,srcp2))
 				   Dbl_set_exponent(resultp1,DBL_BIAS);
-			} 
+			}
 		}
 	}
 	Dbl_copytoptr(resultp1,resultp2,dstptr);

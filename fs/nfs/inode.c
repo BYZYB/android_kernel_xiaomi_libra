@@ -95,7 +95,7 @@ u64 nfs_compat_user_ino64(u64 fileid)
 {
 #ifdef CONFIG_COMPAT
 	compat_ulong_t ino;
-#else	
+#else
 	unsigned long ino;
 #endif
 
@@ -873,7 +873,7 @@ EXPORT_SYMBOL_GPL(nfs_revalidate_inode);
 static int nfs_invalidate_mapping(struct inode *inode, struct address_space *mapping)
 {
 	struct nfs_inode *nfsi = NFS_I(inode);
-	
+
 	if (mapping->nrpages != 0) {
 		int ret = invalidate_inode_pages2(mapping);
 		if (ret < 0)

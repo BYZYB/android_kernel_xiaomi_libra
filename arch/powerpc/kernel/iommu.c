@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2001 Mike Corrigan & Dave Engebretsen, IBM Corporation
- * 
- * Rewrite, cleanup, new allocation schemes, virtual merging: 
+ *
+ * Rewrite, cleanup, new allocation schemes, virtual merging:
  * Copyright (C) 2004 Olof Johansson, IBM Corporation
  *               and  Ben. Herrenschmidt, IBM Corporation
  *
@@ -11,12 +11,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
@@ -176,7 +176,7 @@ static unsigned long iommu_range_alloc(struct device *dev,
                                        unsigned long *handle,
                                        unsigned long mask,
                                        unsigned int align_order)
-{ 
+{
 	unsigned long n, end, start;
 	unsigned long limit;
 	int largealloc = npages > 15;
@@ -356,7 +356,7 @@ static bool iommu_free_check(struct iommu_table *tbl, dma_addr_t dma_addr,
 	    (entry < tbl->it_offset)) {
 		if (printk_ratelimit()) {
 			printk(KERN_INFO "iommu_free: invalid entry\n");
-			printk(KERN_INFO "\tentry     = 0x%lx\n", entry); 
+			printk(KERN_INFO "\tentry     = 0x%lx\n", entry);
 			printk(KERN_INFO "\tdma_addr  = 0x%llx\n", (u64)dma_addr);
 			printk(KERN_INFO "\tTable     = 0x%llx\n", (u64)tbl);
 			printk(KERN_INFO "\tbus#      = 0x%llx\n", (u64)tbl->it_busno);

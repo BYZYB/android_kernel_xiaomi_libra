@@ -26,7 +26,7 @@
 #include <sound/info.h>
 
 #ifdef CONFIG_SND_DEBUG
-static void snd_gf1_mem_info_read(struct snd_info_entry *entry, 
+static void snd_gf1_mem_info_read(struct snd_info_entry *entry,
 				  struct snd_info_buffer *buffer);
 #endif
 
@@ -285,7 +285,7 @@ int snd_gf1_mem_done(struct snd_gus_card * gus)
 }
 
 #ifdef CONFIG_SND_DEBUG
-static void snd_gf1_mem_info_read(struct snd_info_entry *entry, 
+static void snd_gf1_mem_info_read(struct snd_info_entry *entry,
 				  struct snd_info_buffer *buffer)
 {
 	struct snd_gus_card *gus;

@@ -17,27 +17,27 @@
 extern void tlb_init(void);
 
 /*
- * The kernel is already mapped with a kernel segment at kseg_c so 
+ * The kernel is already mapped with a kernel segment at kseg_c so
  * we don't need to map it with a page table. However head.S also
  * temporarily mapped it at kseg_4 so we should set up the ksegs again,
  * clear the TLB and do some other paging setup stuff.
  */
 
-void __init 
+void __init
 paging_init(void)
 {
 	int i;
 	unsigned long zones_size[MAX_NR_ZONES];
 
 	printk("Setting up paging and the MMU.\n");
-	
+
 	/* clear out the init_mm.pgd that will contain the kernel's mappings */
 
 	for(i = 0; i < PTRS_PER_PGD; i++)
 		swapper_pg_dir[i] = __pgd(0);
-	
+
 	/* make sure the current pgd table points to something sane
-	 * (even if it is most probably not used until the next 
+	 * (even if it is most probably not used until the next
 	 *  switch_mm)
 	 */
 
@@ -68,8 +68,8 @@ paging_init(void)
 
 	*R_MMU_KSEG = ( IO_STATE(R_MMU_KSEG, seg_f, seg  ) |  /* bootrom */
 			IO_STATE(R_MMU_KSEG, seg_e, page ) |
-			IO_STATE(R_MMU_KSEG, seg_d, page ) | 
-			IO_STATE(R_MMU_KSEG, seg_c, page ) |   
+			IO_STATE(R_MMU_KSEG, seg_d, page ) |
+			IO_STATE(R_MMU_KSEG, seg_c, page ) |
 			IO_STATE(R_MMU_KSEG, seg_b, seg  ) |  /* kernel reg area */
 #ifdef CONFIG_JULIETTE
 			IO_STATE(R_MMU_KSEG, seg_a, seg  ) |  /* ARTPEC etc. */
@@ -99,7 +99,7 @@ paging_init(void)
 #endif
 			    IO_FIELD(R_MMU_KBASE_HI, base_9, 0x9 ) |
 			    IO_FIELD(R_MMU_KBASE_HI, base_8, 0x8 ) );
-	
+
 	*R_MMU_KBASE_LO = ( IO_FIELD(R_MMU_KBASE_LO, base_7, 0x0 ) |
 			    IO_FIELD(R_MMU_KBASE_LO, base_6, 0x4 ) |
 			    IO_FIELD(R_MMU_KBASE_LO, base_5, 0x0 ) |
@@ -138,7 +138,7 @@ paging_init(void)
 			    IO_FIELD(R_MMU_KBASE_HI, base_a, 0x3 ) |
 			    IO_FIELD(R_MMU_KBASE_HI, base_9, 0x0 ) |
 			    IO_FIELD(R_MMU_KBASE_HI, base_8, 0x0 ) );
-	
+
 	*R_MMU_KBASE_LO = ( IO_FIELD(R_MMU_KBASE_LO, base_7, 0x0 ) |
 			    IO_FIELD(R_MMU_KBASE_LO, base_6, 0x0 ) |
 			    IO_FIELD(R_MMU_KBASE_LO, base_5, 0x0 ) |
@@ -150,7 +150,7 @@ paging_init(void)
 #endif
 
 	*R_MMU_CONTEXT = ( IO_FIELD(R_MMU_CONTEXT, page_id, 0 ) );
-	
+
 	/* The MMU has been enabled ever since head.S but just to make
 	 * it totally obvious we do it here as well.
 	 */
@@ -158,7 +158,7 @@ paging_init(void)
 	*R_MMU_CTRL = ( IO_STATE(R_MMU_CTRL, inv_excp, enable ) |
 			IO_STATE(R_MMU_CTRL, acc_excp, enable ) |
 			IO_STATE(R_MMU_CTRL, we_excp,  enable ) );
-	
+
 	*R_MMU_ENABLE = IO_STATE(R_MMU_ENABLE, mmu_enable, enable);
 
 	/*
@@ -192,28 +192,28 @@ paging_init(void)
 static int
 __init init_ioremap(void)
 {
-  
+
 	/* Give the external I/O-port addresses their values */
 
 #ifdef CONFIG_CRIS_LOW_MAP
 	/* Simply a linear map (see the KSEG map above in paging_init) */
-	port_cse1_addr = (volatile unsigned long *)(MEM_CSE1_START | 
+	port_cse1_addr = (volatile unsigned long *)(MEM_CSE1_START |
 	                                            MEM_NON_CACHEABLE);
 	port_csp0_addr = (volatile unsigned long *)(MEM_CSP0_START |
 	                                            MEM_NON_CACHEABLE);
 	port_csp4_addr = (volatile unsigned long *)(MEM_CSP4_START |
 	                                            MEM_NON_CACHEABLE);
 #else
-	/* Note that nothing blows up just because we do this remapping 
-	 * it's ok even if the ports are not used or connected 
-	 * to anything (or connected to a non-I/O thing) */        
+	/* Note that nothing blows up just because we do this remapping
+	 * it's ok even if the ports are not used or connected
+	 * to anything (or connected to a non-I/O thing) */
 	port_cse1_addr = (volatile unsigned long *)
 	  ioremap((unsigned long)(MEM_CSE1_START | MEM_NON_CACHEABLE), 16);
 	port_csp0_addr = (volatile unsigned long *)
 	  ioremap((unsigned long)(MEM_CSP0_START | MEM_NON_CACHEABLE), 16);
 	port_csp4_addr = (volatile unsigned long *)
 	  ioremap((unsigned long)(MEM_CSP4_START | MEM_NON_CACHEABLE), 16);
-#endif	
+#endif
 	return 0;
 }
 
@@ -243,7 +243,7 @@ flush_etrax_cacherange(void *startadr, int length)
 /* Due to a bug in Etrax100(LX) all versions, receiving DMA buffers
  * will occasionally corrupt certain CPU writes if the DMA buffers
  * happen to be hot in the cache.
- * 
+ *
  * As a workaround, we have to flush the relevant parts of the cache
  * before (re) inserting any receiving descriptor into the DMA HW.
  */

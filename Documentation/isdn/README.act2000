@@ -16,20 +16,20 @@ Setting up the DIP switches for the IBM Active 2000 ISDN card:
 
      S1  S2  S3  S4  Base-port
      on  on  on  on  0x0200 (Factory default)
-     off on  on  on  0x0240 
-     on  off on  on  0x0280 
-     off off on  on  0x02c0 
-     on  on  off on  0x0300 
-     off on  off on  0x0340 
-     on  off off on  0x0380 
+     off on  on  on  0x0240
+     on  off on  on  0x0280
+     off off on  on  0x02c0
+     on  on  off on  0x0300
+     off on  off on  0x0340
+     on  off off on  0x0380
      on  on  on  off 0xcfe0
-     off on  on  off 0xcfa0 
-     on  off on  off 0xcf60 
-     off off on  off 0xcf20 
-     on  on  off off 0xcee0 
-     off on  off off 0xcea0 
-     on  off off off 0xce60 
-     off off off off Card disabled 
+     off on  on  off 0xcfa0
+     on  off on  off 0xcf60
+     off off on  off 0xcf20
+     on  on  off off 0xcee0
+     off on  off off 0xcea0
+     on  off off off 0xce60
+     off off off off Card disabled
 
 IRQ is configured by software. Possible values are:
 
@@ -61,7 +61,7 @@ Driver built into the kernel:
 
   which means: Autoprobe for an ISA card, use next free IRQ, let the
   ISDN linklevel fill the IdString (usually "line0" for the first card).
- 
+
   If you like to use more than one card, you can use the program
   "actctrl" from the utility-package to configure additional cards.
 

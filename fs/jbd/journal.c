@@ -1321,7 +1321,7 @@ int journal_destroy(journal_t *journal)
 {
 	int err = 0;
 
-	
+
 	/* Wait for the commit thread to wake up and die. */
 	journal_kill_thread(journal);
 

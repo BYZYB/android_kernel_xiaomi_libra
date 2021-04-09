@@ -567,7 +567,7 @@ masked_##_H##interrupt:					\
 	GET_SCRATCH0(r13);				\
 	##_H##rfid;					\
 	b	.
-	
+
 	MASKED_INTERRUPT()
 	MASKED_INTERRUPT(H)
 

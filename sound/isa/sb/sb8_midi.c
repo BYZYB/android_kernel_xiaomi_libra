@@ -19,7 +19,7 @@
  * --
  *
  * Sun May  9 22:54:38 BST 1999 George David Morrison <gdm@gedamo.demon.co.uk>
- *   Fixed typo in snd_sb8dsp_midi_new_device which prevented midi from 
+ *   Fixed typo in snd_sb8dsp_midi_new_device which prevented midi from
  *   working.
  *
  * Sun May 11 12:34:56 UTC 2003 Clemens Ladisch <clemens@ladisch.de>
@@ -40,7 +40,7 @@ irqreturn_t snd_sb8dsp_midi_interrupt(struct snd_sb *chip)
 
 	if (!chip)
 		return IRQ_NONE;
-	
+
 	rmidi = chip->rmidi;
 	if (!rmidi) {
 		inb(SBP(chip, DATA_AVAIL));	/* ack interrupt */
@@ -218,7 +218,7 @@ static void snd_sb8dsp_midi_output_timer(unsigned long data)
 	spin_lock_irqsave(&chip->open_lock, flags);
 	chip->midi_timer.expires = 1 + jiffies;
 	add_timer(&chip->midi_timer);
-	spin_unlock_irqrestore(&chip->open_lock, flags);	
+	spin_unlock_irqrestore(&chip->open_lock, flags);
 	snd_sb8dsp_midi_output_write(substream);
 }
 

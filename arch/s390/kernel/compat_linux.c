@@ -2,12 +2,12 @@
  *  S390 version
  *    Copyright IBM Corp. 2000
  *    Author(s): Martin Schwidefsky (schwidefsky@de.ibm.com),
- *               Gerhard Tonn (ton@de.ibm.com)   
+ *               Gerhard Tonn (ton@de.ibm.com)
  *               Thomas Spatzier (tspat@de.ibm.com)
  *
  *  Conversion between 31bit and 64bit native syscalls.
  *
- * Heavily inspired by the 32-bit Sparc compat code which is 
+ * Heavily inspired by the 32-bit Sparc compat code which is
  * Copyright (C) 1997,1998 Jakub Jelinek (jj@sunsite.mff.cuni.cz)
  * Copyright (C) 1997 David S. Miller (davem@caip.rutgers.edu)
  *
@@ -16,9 +16,9 @@
 
 #include <linux/kernel.h>
 #include <linux/sched.h>
-#include <linux/fs.h> 
-#include <linux/mm.h> 
-#include <linux/file.h> 
+#include <linux/fs.h>
+#include <linux/mm.h>
+#include <linux/file.h>
 #include <linux/signal.h>
 #include <linux/resource.h>
 #include <linux/times.h>
@@ -61,7 +61,7 @@
 u32 psw32_user_bits = PSW32_MASK_DAT | PSW32_MASK_IO | PSW32_MASK_EXT |
 		      PSW32_DEFAULT_KEY | PSW32_MASK_BASE | PSW32_MASK_MCHECK |
 		      PSW32_MASK_PSTATE | PSW32_ASC_HOME;
- 
+
 /* For this source file, we want overflow handling. */
 
 #undef high2lowuid
@@ -358,7 +358,7 @@ struct stat64_emu31 {
 	u32             st_ctime;
 	u32             __pad8;     /* will be high 32 bits of ctime someday */
 	unsigned long   st_ino;
-};	
+};
 
 static int cp_stat64(struct stat64_emu31 __user *ubuf, struct kstat *stat)
 {
@@ -381,7 +381,7 @@ static int cp_stat64(struct stat64_emu31 __user *ubuf, struct kstat *stat)
 	tmp.st_mtime = (u32)stat->mtime.tv_sec;
 	tmp.st_ctime = (u32)stat->ctime.tv_sec;
 
-	return copy_to_user(ubuf,&tmp,sizeof(tmp)) ? -EFAULT : 0; 
+	return copy_to_user(ubuf,&tmp,sizeof(tmp)) ? -EFAULT : 0;
 }
 
 asmlinkage long sys32_stat64(const char __user * filename, struct stat64_emu31 __user * statbuf)
@@ -462,7 +462,7 @@ asmlinkage long sys32_mmap2(struct mmap_arg_struct_emu31 __user *arg)
 asmlinkage long sys32_read(unsigned int fd, char __user * buf, size_t count)
 {
 	if ((compat_ssize_t) count < 0)
-		return -EINVAL; 
+		return -EINVAL;
 
 	return sys_read(fd, buf, count);
 }
@@ -470,7 +470,7 @@ asmlinkage long sys32_read(unsigned int fd, char __user * buf, size_t count)
 asmlinkage long sys32_write(unsigned int fd, const char __user * buf, size_t count)
 {
 	if ((compat_ssize_t) count < 0)
-		return -EINVAL; 
+		return -EINVAL;
 
 	return sys_write(fd, buf, count);
 }

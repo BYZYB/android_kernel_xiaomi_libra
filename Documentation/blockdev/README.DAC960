@@ -550,7 +550,7 @@ DAC960#0: Rebuild in Progress: Logical Drive 0 (/dev/rd/c0d0) 63% completed
 DAC960#0: Rebuild in Progress: Logical Drive 0 (/dev/rd/c0d0) 94% completed
 DAC960#0: Rebuild in Progress: Logical Drive 1 (/dev/rd/c0d1) 94% completed
 
-Finally, the rebuild completes successfully.  The driver logs the status of the 
+Finally, the rebuild completes successfully.  The driver logs the status of the
 logical and physical drives and the rebuild completion:
 
 DAC960#0: Rebuild Completed Successfully
@@ -685,7 +685,7 @@ DAC960#0: Rebuild in Progress: Logical Drive 0 (/dev/rd/c0d0) 76% completed
 DAC960#0: Rebuild in Progress: Logical Drive 1 (/dev/rd/c0d1) 66% completed
 DAC960#0: Rebuild in Progress: Logical Drive 1 (/dev/rd/c0d1) 84% completed
 
-Finally, the rebuild completes successfully.  The driver logs the status of the 
+Finally, the rebuild completes successfully.  The driver logs the status of the
 logical and physical drives and the rebuild completion:
 
 DAC960#0: Rebuild Completed Successfully

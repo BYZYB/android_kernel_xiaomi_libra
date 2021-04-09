@@ -575,7 +575,7 @@ static int clcdfb_probe(struct amba_device *dev, const struct amba_id *id)
 	if (ret)
 		goto free_fb;
 
-	ret = clcdfb_register(fb); 
+	ret = clcdfb_register(fb);
 	if (ret == 0) {
 		amba_set_drvdata(dev, fb);
 		goto out;

@@ -68,7 +68,7 @@
    device dependent and vary between MJPEG/MPEG/WAVELET/... devices. (!!!!)
    ----------------------------------------------------------------------------
 */
-
+
 
 /* ========================================== */
 /* description of the videocodec_io structure */
@@ -115,7 +115,7 @@
 		the calls include frame numbers and flags (even/odd/...)
 		if needed and a flag which allows blocking until its ready
 */
-
+
 /* ============== */
 /* user interface */
 /* ============== */
@@ -135,7 +135,7 @@ M                       zr36055[0] 0001 0000c001 00000000 (zr36050[0])
 M                       zr36055[1] 0001 0000c001 00000000 (zr36050[1])
 
 */
-
+
 
 /* =============================================== */
 /* special defines for the videocodec_io structure */
@@ -214,7 +214,7 @@ M                       zr36055[1] 0001 0000c001 00000000 (zr36050[1])
 /*  -> used in get_image, put_image                                        */
 #define CODEC_TRANSFER_KERNEL 0	/* use "memcopy" */
 #define CODEC_TRANSFER_USER   1	/* use "to/from_user" */
-
+
 
 /* ========================= */
 /* the structures itself ... */
@@ -328,7 +328,7 @@ struct videocodec_master {
 			  __u16 reg,
 			  __u32 value);
 };
-
+
 
 /* ================================================= */
 /* function prototypes of the master/slave interface */

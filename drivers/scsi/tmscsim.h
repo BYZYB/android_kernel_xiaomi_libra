@@ -391,7 +391,7 @@ u8	xx2;
 #define PARITY_ERR		BIT5
 #define COUNT_2_ZERO		BIT4
 #define GROUP_CODE_VALID	BIT3
-#define SCSI_PHASE_MASK 	(BIT2+BIT1+BIT0) 
+#define SCSI_PHASE_MASK 	(BIT2+BIT1+BIT0)
 /* BIT2: MSG phase; BIT1: C/D physe; BIT0: I/O phase */
 
 /*; Interrupt Status Reg.(+14H) (r) */
@@ -487,7 +487,7 @@ u8	xx2;
 ;==========================================================
 ; SCSI Chip register address offset
 ;==========================================================
-;Registers are rw unless declared otherwise 
+;Registers are rw unless declared otherwise
 */
 #define CtcReg_Low	0x00	/* r	curr. transfer count */
 #define CtcReg_Mid	0x04	/* r */
@@ -499,7 +499,7 @@ u8	xx2;
 #define Sync_Period	0x18	/* w */
 #define Sync_Offset	0x1C	/* w */
 #define Clk_Factor	0x24	/* w */
-#define CtrlReg1	0x20	
+#define CtrlReg1	0x20
 #define CtrlReg2	0x2C
 #define CtrlReg3	0x30
 #define CtrlReg4	0x34

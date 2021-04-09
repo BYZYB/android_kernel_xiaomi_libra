@@ -10,7 +10,7 @@
  *
  *   Copyright (c) 2002 by Takashi Iwai <tiwai@suse.de>
  *
- *   Many codes borrowed from audio.c by 
+ *   Many codes borrowed from audio.c by
  *	    Alan Cox (alan@lxorguk.ukuu.org.uk)
  *	    Thomas Sailer (sailer@ife.ee.ethz.ch)
  *
@@ -53,7 +53,7 @@
 					  smaller gives lower latencies.
 					*/
 #define USX2Y_NRPACKS_VARIABLE y	/* If your system works ok with this module's parameter
-					   nrpacks set to 1, you might as well comment 
+					   nrpacks set to 1, you might as well comment
 					   this #define out, and thereby produce smaller, faster code.
 					   You'd also set USX2Y_NRPACKS to 1 then.
 					*/
@@ -166,7 +166,7 @@ static int usX2Y_urb_play_prepare(struct snd_usX2Y_substream *subs,
 			/* set the buffer pointer */
 			urb->transfer_buffer = runtime->dma_area + subs->hwptr * usX2Y->stride;
 			if ((subs->hwptr += count) >= runtime->buffer_size)
-			subs->hwptr -= runtime->buffer_size;			
+			subs->hwptr -= runtime->buffer_size;
 		}
 	else
 		urb->transfer_buffer = subs->tmpbuf;
@@ -495,7 +495,7 @@ static int usX2Y_urbs_start(struct snd_usX2Y_substream *subs)
 				urb->iso_frame_desc[pack].offset = subs->maxpacksize * pack;
 				urb->iso_frame_desc[pack].length = subs->maxpacksize;
 			}
-			urb->transfer_buffer_length = subs->maxpacksize * nr_of_packs(); 
+			urb->transfer_buffer_length = subs->maxpacksize * nr_of_packs();
 			if ((err = usb_submit_urb(urb, GFP_ATOMIC)) < 0) {
 				snd_printk (KERN_ERR "cannot submit datapipe for urb %d, err = %d\n", i, err);
 				err = -EPIPE;
@@ -649,7 +649,7 @@ static struct s_c2 SetRate48000[] =
 static void i_usX2Y_04Int(struct urb *urb)
 {
 	struct usX2Ydev *usX2Y = urb->context;
-	
+
 	if (urb->status)
 		snd_printk(KERN_ERR "snd_usX2Y_04Int() urb->status=%i\n", urb->status);
 	if (0 == --usX2Y->US04->len)
@@ -907,7 +907,7 @@ static int snd_usX2Y_pcm_close(struct snd_pcm_substream *substream)
 }
 
 
-static struct snd_pcm_ops snd_usX2Y_pcm_ops = 
+static struct snd_pcm_ops snd_usX2Y_pcm_ops =
 {
 	.open =		snd_usX2Y_pcm_open,
 	.close =	snd_usX2Y_pcm_close,
@@ -1001,7 +1001,7 @@ static int usX2Y_audio_stream_new(struct snd_card *card, int playback_endpoint, 
 int usX2Y_audio_create(struct snd_card *card)
 {
 	int err = 0;
-	
+
 	INIT_LIST_HEAD(&usX2Y(card)->pcm_list);
 
 	if (0 > (err = usX2Y_audio_stream_new(card, 0xA, 0x8)))

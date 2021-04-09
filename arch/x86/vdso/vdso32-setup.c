@@ -238,7 +238,7 @@ void enable_sep_cpu(void)
 	wrmsr(MSR_IA32_SYSENTER_CS, __KERNEL_CS, 0);
 	wrmsr(MSR_IA32_SYSENTER_ESP, tss->x86_tss.sp1, 0);
 	wrmsr(MSR_IA32_SYSENTER_EIP, (unsigned long) ia32_sysenter_target, 0);
-	put_cpu();	
+	put_cpu();
 }
 
 static struct vm_area_struct gate_vma;

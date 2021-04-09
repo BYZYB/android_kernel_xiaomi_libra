@@ -1,4 +1,4 @@
-// 
+//
 //  Copyright(c) by Benny Sjostrand (benny@hostmobility.com)
 //
 //  This program is free software; you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 
 //
 // This code runs inside the DSP (cs4610, cs4612, cs4624, or cs4630),
-// to compile it you need a tool named SPASM 3.0 and DSP code owned by 
+// to compile it you need a tool named SPASM 3.0 and DSP code owned by
 // Cirrus Logic(R). The SPASM program will generate a object file (cwcdma.osp),
 // the "ospparser"  tool will genereate the cwcdma.h file it's included from
 // the cs46xx_lib.c file.
@@ -30,7 +30,7 @@
 // SCB (DMA from host) to any other SCB. This is useful for AC3 through SPDIF.
 // SRC (source rate converters) task always alters the samples in somehow,
 // however it's from 48khz -> 48khz.
-// The alterations are not audible, but AC3 wont work. 
+// The alterations are not audible, but AC3 wont work.
 //
 //        ...
 //         |
@@ -79,7 +79,7 @@ void DMAReader()
   execChild();
   r2 = r0->dma_subListPtr;
   r1 = r0->nextSCB;
-	
+
   rsConfig01 = r2->strmRsConfig;
   // Load rsConfig for input buffer
 
@@ -99,7 +99,7 @@ void DMAReader()
   r4 = r0->dma_outBufPtr;
 
   rsa0 = r2->strmBufPtr;
-  // rsa0 = input buffer pointer                        
+  // rsa0 = input buffer pointer
 
   for (i = r5; i >= 0; --i)
     after {
@@ -122,7 +122,7 @@ void DMAReader()
             // having those "nop"'s (Benny)
 
       rsa0?reqDMA = r2;
-      // Trigger DMA transfer on input stream, 
+      // Trigger DMA transfer on input stream,
       // if needed to replenish input buffer
 
       nop;
@@ -156,7 +156,7 @@ void DMAReader()
   goto execSibling_2ind1 // takes 6 cycles
     after {
       r98 = r2->thisSPB:entryPoint;
-      // Load child routine entry and data address 
+      // Load child routine entry and data address
 
       r1 = r9;
       // r9 is r2->thisSPB

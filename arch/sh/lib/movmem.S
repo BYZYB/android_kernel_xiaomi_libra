@@ -42,7 +42,7 @@ Boston, MA 02110-1301, USA.  */
 	.balign	4
 	.global	__movmem
 	.global __movstr
-	.set __movstr, __movmem	
+	.set __movstr, __movmem
 	/* This would be a lot simpler if r6 contained the byte count
 	   minus 64, and we wouldn't be called here for a byte count of 64.  */
 __movmem:

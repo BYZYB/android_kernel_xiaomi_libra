@@ -5,7 +5,7 @@
 <book id="DoingIO">
  <bookinfo>
   <title>Bus-Independent Device Accesses</title>
-  
+
   <authorgroup>
    <author>
     <firstname>Matthew</firstname>
@@ -43,21 +43,21 @@
      version 2 of the License, or (at your option) any later
      version.
    </para>
-      
+
    <para>
      This program is distributed in the hope that it will be
      useful, but WITHOUT ANY WARRANTY; without even the implied
      warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
      See the GNU General Public License for more details.
    </para>
-      
+
    <para>
      You should have received a copy of the GNU General Public
      License along with this program; if not, write to the Free
      Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
      MA 02111-1307 USA
    </para>
-      
+
    <para>
      For more details see the file COPYING in the source
      distribution of Linux.
@@ -79,7 +79,7 @@
   <chapter id="bugs">
      <title>Known Bugs And Assumptions</title>
   <para>
-	None.	
+	None.
   </para>
   </chapter>
 
@@ -95,7 +95,7 @@
 	have some method of discovering devices.  The PCI bus walk is a
 	good example of such a scheme.	This document does not cover how
 	to receive such an address, but assumes you are starting with one.
-	Physical addresses are of type unsigned long. 
+	Physical addresses are of type unsigned long.
       </para>
 
       <para>
@@ -146,9 +146,9 @@
 
       <para>
 	The read and write functions are defined to be ordered. That is the
-	compiler is not permitted to reorder the I/O sequence. When the 
+	compiler is not permitted to reorder the I/O sequence. When the
 	ordering can be compiler optimised, you can use <function>
-	__readb</function> and friends to indicate the relaxed ordering. Use 
+	__readb</function> and friends to indicate the relaxed ordering. Use
 	this with care.
       </para>
 

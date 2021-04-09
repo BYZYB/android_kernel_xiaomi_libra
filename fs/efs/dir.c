@@ -49,7 +49,7 @@ static int efs_readdir(struct file *filp, void *dirent, filldir_t filldir) {
 			break;
 		}
 
-		dirblock = (struct efs_dir *) bh->b_data; 
+		dirblock = (struct efs_dir *) bh->b_data;
 
 		if (be16_to_cpu(dirblock->magic) != EFS_DIRBLK_MAGIC) {
 			printk(KERN_ERR "EFS: readdir(): invalid directory block\n");

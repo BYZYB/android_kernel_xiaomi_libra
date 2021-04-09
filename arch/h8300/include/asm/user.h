@@ -42,7 +42,7 @@ struct user_regs_struct {
 	long pc;
 };
 
-	
+
 /* When the kernel dumps core, it starts by dumping the user struct -
    this will be used by gdb to figure out where the data and stack segments
    are within the file, and what virtual addresses to use. */

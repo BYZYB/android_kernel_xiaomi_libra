@@ -64,7 +64,7 @@ void arch_cpu_idle(void)
 void machine_restart(char * __unused)
 {
 	local_irq_disable();
-	__asm__("jmp @@0"); 
+	__asm__("jmp @@0");
 }
 
 void machine_halt(void)

@@ -55,7 +55,7 @@
 
 /*
  * Debugging bitflags: each option can be enabled individually.
- * 
+ *
  * Note: only debug flags included in the ARCNET_DEBUG_MAX define will
  *   actually be available.  GCC will (at least, GCC 2.7.0 will) notice
  *   lines using a BUGLVL not in ARCNET_DEBUG_MAX and automatically optimize
@@ -267,13 +267,13 @@ struct arcnet_local {
 	 * situations in which we (for example) want to pre-load a transmit
 	 * buffer, or start receiving while we copy a received packet to
 	 * memory.
-	 * 
+	 *
 	 * The rules: only the interrupt handler is allowed to _add_ buffers to
 	 * the queue; thus, this doesn't require a lock.  Both the interrupt
 	 * handler and the transmit function will want to _remove_ buffers, so
 	 * we need to handle the situation where they try to do it at the same
 	 * time.
-	 * 
+	 *
 	 * If next_buf == first_free_buf, the queue is empty.  Since there are
 	 * only four possible buffers, the queue should never be full.
 	 */

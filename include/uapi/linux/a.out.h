@@ -65,7 +65,7 @@ enum machine_type {
 #define NMAGIC 0410
 /* Code indicating demand-paged executable.  */
 #define ZMAGIC 0413
-/* This indicates a demand-paged executable with the header in the text. 
+/* This indicates a demand-paged executable with the header in the text.
    The first page is unmapped to help trap NULL pointer references */
 #define QMAGIC 0314
 
@@ -158,7 +158,7 @@ enum machine_type {
 #if !defined (N_BSSADDR)
 #define N_BSSADDR(x) (N_DATADDR(x) + (x).a_data)
 #endif
-
+
 #if !defined (N_NLIST_DECLARED)
 struct nlist {
   union {
@@ -231,7 +231,7 @@ struct nlist {
 
 /* This is output from LD.  */
 #define N_SETV	0x1C		/* Pointer to set vector in data area.  */
-
+
 #if !defined (N_RELOCATION_INFO_DECLARED)
 /* This structure describes a single relocation to be performed.
    The text-relocation section of the file is a vector of these structures,

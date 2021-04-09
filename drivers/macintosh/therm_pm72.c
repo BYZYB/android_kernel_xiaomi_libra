@@ -6,7 +6,7 @@
  *
  * Maintained by: Benjamin Herrenschmidt
  *                <benh@kernel.crashing.org>
- * 
+ *
  *
  * The algorithm used is the PID control algorithm, used the same
  * way the published Darwin code does, using the same values that
@@ -243,7 +243,7 @@ struct fcu_fan_table	fcu_fans[] = {
 	 */
 	[CPUA_PUMP_RPM_INDEX] = {
 		.loc	= "CPU A PUMP",
-		.type	= FCU_FAN_RPM,		
+		.type	= FCU_FAN_RPM,
 		.id	= FCU_FAN_ABSENT_ID,
 	},
 	[CPUB_PUMP_RPM_INDEX] = {
@@ -501,7 +501,7 @@ static int set_rpm_fan(int fan_index, int rpm)
 
 	if (fcu_fans[fan_index].type != FCU_FAN_RPM)
 		return -EINVAL;
-	id = fcu_fans[fan_index].id; 
+	id = fcu_fans[fan_index].id;
 	if (id == FCU_FAN_ABSENT_ID)
 		return -EINVAL;
 
@@ -529,7 +529,7 @@ static int get_rpm_fan(int fan_index, int programmed)
 
 	if (fcu_fans[fan_index].type != FCU_FAN_RPM)
 		return -EINVAL;
-	id = fcu_fans[fan_index].id; 
+	id = fcu_fans[fan_index].id;
 	if (id == FCU_FAN_ABSENT_ID)
 		return -EINVAL;
 
@@ -560,7 +560,7 @@ static int set_pwm_fan(int fan_index, int pwm)
 
 	if (fcu_fans[fan_index].type != FCU_FAN_PWM)
 		return -EINVAL;
-	id = fcu_fans[fan_index].id; 
+	id = fcu_fans[fan_index].id;
 	if (id == FCU_FAN_ABSENT_ID)
 		return -EINVAL;
 
@@ -585,7 +585,7 @@ static int get_pwm_fan(int fan_index)
 
 	if (fcu_fans[fan_index].type != FCU_FAN_PWM)
 		return -EINVAL;
-	id = fcu_fans[fan_index].id; 
+	id = fcu_fans[fan_index].id;
 	if (id == FCU_FAN_ABSENT_ID)
 		return -EINVAL;
 
@@ -657,7 +657,7 @@ static int read_eeprom(int cpu, struct mpu_data *out)
 	}
 	memcpy(out, data, sizeof(struct mpu_data));
 	of_node_put(np);
-	
+
 	return 0;
 }
 
@@ -693,7 +693,7 @@ static void fetch_cpu_pumps_minmax(void)
 	state0->pump_max = state1->pump_max = pump_max;
 }
 
-/* 
+/*
  * Now, unfortunately, sysfs doesn't give us a nice void * we could
  * pass around to the attribute functions, so we don't really have
  * choice but implement a bunch of them...
@@ -839,7 +839,7 @@ static int do_read_one_cpu_values(struct cpu_pid_state *state, s32 *temp, s32 *p
 static void do_cpu_pid(struct cpu_pid_state *state, s32 temp, s32 power)
 {
 	s32 power_target, integral, derivative, proportional, adj_in_target, sval;
-	s64 integ_p, deriv_p, prop_p, sum; 
+	s64 integ_p, deriv_p, prop_p, sum;
 	int i;
 
 	/* Calculate power target value (could be done once for all)
@@ -855,7 +855,7 @@ static void do_cpu_pid(struct cpu_pid_state *state, s32 temp, s32 power)
 	state->cur_power = (state->cur_power + 1) % state->count_power;
 	state->power_history[state->cur_power] = power;
 	state->error_history[state->cur_power] = power_target - power;
-	
+
 	/* If first loop, fill the history table */
 	if (state->first) {
 		for (i = 0; i < (state->count_power - 1); i++) {
@@ -865,7 +865,7 @@ static void do_cpu_pid(struct cpu_pid_state *state, s32 temp, s32 power)
 		}
 		for (i = 0; i < (CPU_TEMP_HISTORY_SIZE - 1); i++) {
 			state->cur_temp = (state->cur_temp + 1) % CPU_TEMP_HISTORY_SIZE;
-			state->temp_history[state->cur_temp] = temp;			
+			state->temp_history[state->cur_temp] = temp;
 		}
 		state->first = 0;
 	}
@@ -983,7 +983,7 @@ static void do_monitor_cpu_combined(void)
 		state0->mpu.rmaxn_exhaust_fan;
 	pump = min(pump, state0->pump_max);
 	pump = max(pump, state0->pump_min);
-	
+
  do_set_fans:
 	/* We copy values from state 0 to state 1 for /sysfs */
 	state1->rpm = state0->rpm;
@@ -1197,7 +1197,7 @@ static int init_processor_state(struct cpu_pid_state *state, int index)
 	return 0;
  fail:
 	state->monitor = NULL;
-	
+
 	return -ENODEV;
 }
 
@@ -1232,7 +1232,7 @@ static void dispose_processor_state(struct cpu_pid_state *state)
 static void do_monitor_backside(struct backside_pid_state *state)
 {
 	s32 temp, integral, derivative, fan_min;
-	s64 integ_p, deriv_p, prop_p, sum; 
+	s64 integ_p, deriv_p, prop_p, sum;
 	int i, rc;
 
 	if (--state->ticks != 0)
@@ -1260,7 +1260,7 @@ static void do_monitor_backside(struct backside_pid_state *state)
 	state->cur_sample = (state->cur_sample + 1) % BACKSIDE_PID_HISTORY_SIZE;
 	state->sample_history[state->cur_sample] = temp;
 	state->error_history[state->cur_sample] = temp - backside_params.input_target;
-	
+
 	/* If first loop, fill the history table */
 	if (state->first) {
 		for (i = 0; i < (BACKSIDE_PID_HISTORY_SIZE - 1); i++) {
@@ -1399,14 +1399,14 @@ static void dispose_backside_state(struct backside_pid_state *state)
 
 	state->monitor = NULL;
 }
- 
+
 /*
  * Drives bay fan control loop
  */
 static void do_monitor_drives(struct drives_pid_state *state)
 {
 	s32 temp, integral, derivative;
-	s64 integ_p, deriv_p, prop_p, sum; 
+	s64 integ_p, deriv_p, prop_p, sum;
 	int i, rc;
 
 	if (--state->ticks != 0)
@@ -1435,7 +1435,7 @@ static void do_monitor_drives(struct drives_pid_state *state)
 	state->cur_sample = (state->cur_sample + 1) % DRIVES_PID_HISTORY_SIZE;
 	state->sample_history[state->cur_sample] = temp;
 	state->error_history[state->cur_sample] = temp - DRIVES_PID_INPUT_TARGET;
-	
+
 	/* If first loop, fill the history table */
 	if (state->first) {
 		for (i = 0; i < (DRIVES_PID_HISTORY_SIZE - 1); i++) {
@@ -1946,7 +1946,7 @@ static int create_control_loops(void)
 	DBG("all control loops up !\n");
 
 	return 0;
-	
+
  fail:
 	DBG("failure creating control loops, disposing\n");
 
@@ -2075,7 +2075,7 @@ static int therm_pm72_remove(struct i2c_client *client)
 		dispose_control_loops();
 		u3_0 = NULL;
 	}
-	
+
 	if (u3_1 != NULL && !strcmp(adapter->name, "u3 1")) {
 		DBG("lost U3-1, detaching FCU\n");
 		detach_fcu();
@@ -2230,7 +2230,7 @@ static int fcu_of_remove(struct platform_device* dev)
 	return 0;
 }
 
-static const struct of_device_id fcu_match[] = 
+static const struct of_device_id fcu_match[] =
 {
 	{
 	.type		= "fcu",
@@ -2239,7 +2239,7 @@ static const struct of_device_id fcu_match[] =
 };
 MODULE_DEVICE_TABLE(of, fcu_match);
 
-static struct platform_driver fcu_of_platform_driver = 
+static struct platform_driver fcu_of_platform_driver =
 {
 	.driver = {
 		.name = "temperature",

@@ -610,7 +610,7 @@ void scsi_log_completion(struct scsi_cmnd *cmd, int disposition)
 				printk("FAILED\n");
 				break;
 			case TIMEOUT_ERROR:
-				/* 
+				/*
 				 * If called via scsi_times_out.
 				 */
 				printk("TIMEOUT\n");
@@ -643,7 +643,7 @@ void scsi_log_completion(struct scsi_cmnd *cmd, int disposition)
 void scsi_cmd_get_serial(struct Scsi_Host *host, struct scsi_cmnd *cmd)
 {
 	cmd->serial_number = host->cmd_serial_number++;
-	if (cmd->serial_number == 0) 
+	if (cmd->serial_number == 0)
 		cmd->serial_number = host->cmd_serial_number++;
 }
 EXPORT_SYMBOL(scsi_cmd_get_serial);
@@ -676,7 +676,7 @@ int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
 
 	/* Check to see if the scsi lld made this device blocked. */
 	if (unlikely(scsi_device_blocked(cmd->device))) {
-		/* 
+		/*
 		 * in blocked state, the command is just put back on
 		 * the device queue.  The suspend state has already
 		 * blocked the queue so future requests should not
@@ -695,7 +695,7 @@ int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
 		goto out;
 	}
 
-	/* 
+	/*
 	 * If SCSI-2 or lower, store the LUN value in cmnd.
 	 */
 	if (cmd->device->scsi_level <= SCSI_2 &&
@@ -962,7 +962,7 @@ int scsi_track_queue_full(struct scsi_device *sdev, int depth)
 		scsi_adjust_queue_depth(sdev, 0, sdev->host->cmd_per_lun);
 		return -1;
 	}
-	
+
 	if (sdev->ordered_tags)
 		scsi_adjust_queue_depth(sdev, MSG_ORDERED_TAG, depth);
 	else

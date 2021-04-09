@@ -474,7 +474,7 @@ static int read_from_bdev_async(struct zram *zram, struct bio_vec *bvec,
 	} else {
 		bio->bi_rw = parent->bi_rw;
 		bio->bi_private = parent;
-		bio->bi_end_io = zram_page_end_io; 
+		bio->bi_end_io = zram_page_end_io;
 	}
 
 	submit_bio(READ, bio);
@@ -571,7 +571,7 @@ static int write_to_bdev(struct zram *zram, struct bio_vec *bvec,
 	} else {
 		bio->bi_rw = parent->bi_rw;
 		bio->bi_private = parent;
-		bio->bi_end_io = zram_page_end_io; 
+		bio->bi_end_io = zram_page_end_io;
 	}
 
 	submit_bio(WRITE, bio);

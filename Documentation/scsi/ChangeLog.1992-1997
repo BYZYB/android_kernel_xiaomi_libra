@@ -95,7 +95,7 @@ Wed Jul 19 09:18:28 1995  Michael Neuffer  <neuffer@goofy.zdv.uni-mainz.de>
 	* scsi.c (scsi_proc_info): Added, to support /proc/scsi/scsi.
 	(scan_scsis): Added some 'spaghetti' code to allow scanning for
 	single devices.
-	
+
 
 Thu Jun 20 15:20:27 1995  Michael Neuffer  <neuffer@goofy.zdv.uni-mainz.de>
 

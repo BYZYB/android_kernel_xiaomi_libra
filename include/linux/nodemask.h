@@ -44,7 +44,7 @@
  *
  * int first_node(mask)			Number lowest set bit, or MAX_NUMNODES
  * int next_node(node, mask)		Next node past 'node', or MAX_NUMNODES
- * int first_unset_node(mask)		First node not set in mask, or 
+ * int first_unset_node(mask)		First node not set in mask, or
  *					MAX_NUMNODES.
  *
  * nodemask_t nodemask_of_node(node)	Return nodemask with bit 'node' set

@@ -21,7 +21,7 @@ Supported chips:
   * SMSC EMC6D100, SMSC EMC6D101
     Prefix: 'emc6d100'
     Addresses scanned: I2C 0x2c, 0x2d, 0x2e
-    Datasheet: http://www.smsc.com/media/Downloads_Public/discontinued/6d100.pdf 
+    Datasheet: http://www.smsc.com/media/Downloads_Public/discontinued/6d100.pdf
   * SMSC EMC6D102
     Prefix: 'emc6d102'
     Addresses scanned: I2C 0x2c, 0x2d, 0x2e

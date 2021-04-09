@@ -93,7 +93,7 @@ int prom_getproplen(phandle node, const char *prop)
 
 	if((!node) || (!prop))
 		return -1;
-		
+
 	spin_lock_irqsave(&prom_lock, flags);
 	ret = prom_nodeops->no_proplen(node, prop);
 	restore_current();
@@ -241,7 +241,7 @@ phandle prom_finddevice(char *name)
 		for (d = nbuf; *s != 0 && *s != '@' && *s != '/';)
 			*d++ = *s++;
 		*d = 0;
-		
+
 		node = prom_searchsiblings(node, nbuf);
 		if (!node)
 			return 0;
@@ -298,7 +298,7 @@ phandle prom_inst2pkg(int inst)
 {
 	phandle node;
 	unsigned long flags;
-	
+
 	spin_lock_irqsave(&prom_lock, flags);
 	node = (*romvec->pv_v2devops.v2_inst2pkg)(inst);
 	restore_current();

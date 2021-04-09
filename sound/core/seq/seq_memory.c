@@ -363,7 +363,7 @@ __error:
 	snd_seq_cell_free(cell);
 	return err;
 }
-  
+
 
 /* poll wait */
 int snd_seq_pool_poll_wait(struct snd_seq_pool *pool, struct file *file,
@@ -438,7 +438,7 @@ int snd_seq_pool_done(struct snd_seq_pool *pool)
 
 	while (atomic_read(&pool->counter) > 0)
 		schedule_timeout_uninterruptible(1);
-	
+
 	/* release all resources */
 	spin_lock_irqsave(&pool->lock, flags);
 	ptr = pool->ptr;
@@ -475,7 +475,7 @@ struct snd_seq_pool *snd_seq_pool_new(int poolsize)
 	atomic_set(&pool->counter, 0);
 	pool->closing = 0;
 	init_waitqueue_head(&pool->output_sleep);
-	
+
 	pool->size = poolsize;
 
 	/* init statistics */

@@ -5,7 +5,7 @@
  */
 
 #ifndef _NETROM_H
-#define _NETROM_H 
+#define _NETROM_H
 
 #include <linux/netrom.h>
 #include <linux/list.h>

@@ -102,10 +102,10 @@ static struct net_device * __init ipddp_init(void)
 
 	/* Let the user now what mode we are in */
 	if(ipddp_mode == IPDDP_ENCAP)
-		printk("%s: Appletalk-IP Encap. mode by Bradford W. Johnson <johns393@maroon.tc.umn.edu>\n", 
+		printk("%s: Appletalk-IP Encap. mode by Bradford W. Johnson <johns393@maroon.tc.umn.edu>\n",
 			dev->name);
 	if(ipddp_mode == IPDDP_DECAP)
-		printk("%s: Appletalk-IP Decap. mode by Jay Schulist <jschlst@samba.org>\n", 
+		printk("%s: Appletalk-IP Decap. mode by Jay Schulist <jschlst@samba.org>\n",
 			dev->name);
 
         return dev;
@@ -140,7 +140,7 @@ static netdev_tx_t ipddp_xmit(struct sk_buff *skb, struct net_device *dev)
         our_addr = atalk_find_dev_addr(rt->dev);
 
 	if(ipddp_mode == IPDDP_DECAP)
-		/* 
+		/*
 		 * Pull off the excess room that should not be there.
 		 * This is due to a hard-header problem. This is the
 		 * quick fix for now though, till it breaks.

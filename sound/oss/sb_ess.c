@@ -39,7 +39,7 @@
  *								This works for playback, but results in
  *								recording problems for high samplerates. I
  *								fixed this by removing ess_calc_best_speed ()
- *								and just doing what the documentation says. 
+ *								and just doing what the documentation says.
  * Andy Sloane   (Jun  4 1999): Stole some code from ALSA to fix the playback
  * andy@guildsoftware.com		speed on ES1869, ES1879, ES1887, and ES1888.
  * 								1879's were previously ignored by this driver;
@@ -63,7 +63,7 @@
  * ESS detection isn't full proof (yet). If it fails an additional module
  * parameter esstype can be specified to be one of the following:
  * -1, 0, 688, 1688, 1868, 1869, 1788, 1887, 1888
- * -1 means: mimic 2.0 behaviour, 
+ * -1 means: mimic 2.0 behaviour,
  *  0 means: auto detect.
  *   others: explicitly specify chip
  * -1 is default, cause auto detect still doesn't work.
@@ -385,10 +385,10 @@ static void ess_common_speed (sb_devc *devc, int *speedp, int *divp)
 		}
 	} else if(devc->caps & SB_CAP_ES18XX_RATE) {
 		if (devc->submodel == SUBMDL_ES1888) {
-			ess_calc_best_speed(397700, 128, 795500, 256, 
+			ess_calc_best_speed(397700, 128, 795500, 256,
 						&div, speedp);
 		} else {
-			ess_calc_best_speed(ES18XX_CLOCK1, 128, ES18XX_CLOCK2, 256, 
+			ess_calc_best_speed(ES18XX_CLOCK1, 128, ES18XX_CLOCK2, 256,
 						&div, speedp);
 		}
 	} else {
@@ -1209,7 +1209,7 @@ FKS_test (devc);
 /* APPARENTLY NOT 1869 AND 1887
 		case SUBMDL_ES1869:
 		case SUBMDL_ES1887:
-*/		
+*/
 		case SUBMDL_ES1888:
 			devc->caps |= SB_CAP_ES18XX_RATE;
 			break;

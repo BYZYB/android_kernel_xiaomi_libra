@@ -74,7 +74,7 @@ ENTRY(hpux_gateway_page)
 	STREG   %r0, TASK_PT_ORIG_R28(%r1)     /* don't prohibit restarts */
 	STREG   %r29, TASK_PT_GR29(%r1)         /* 8th argument */
 	STREG	%r31, TASK_PT_GR31(%r1)		/* preserve syscall return ptr */
-	
+
 	ldo	TASK_PT_FR0(%r1), %r27		/* save fpregs from the kernel */
 	save_fp	%r27				/* or potential task switch  */
 

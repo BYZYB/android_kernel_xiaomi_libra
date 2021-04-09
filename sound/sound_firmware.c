@@ -63,7 +63,7 @@ static int do_mod_firmware_load(const char *fn, char **fp)
  *	Caution: This API is not recommended. Firmware should be loaded via
  *	request_firmware.
  */
- 
+
 int mod_firmware_load(const char *fn, char **fp)
 {
 	int r;

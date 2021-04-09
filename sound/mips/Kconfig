@@ -13,7 +13,7 @@ config SND_SGI_O2
 	tristate "SGI O2 Audio"
 	depends on SGI_IP32
         help
-                Sound support for the SGI O2 Workstation. 
+                Sound support for the SGI O2 Workstation.
 
 config SND_SGI_HAL2
         tristate "SGI HAL2 Audio"

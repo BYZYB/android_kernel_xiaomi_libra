@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      irtty-sir.c
  * Version:       2.0
  * Description:   IrDA line discipline implementation
@@ -10,21 +10,21 @@
  * Modified by:   Martin Diehl <mad@mdiehl.de>
  * Sources:       slip.c by Laurence Culhane,   <loz@holmes.demon.co.uk>
  *                          Fred N. van Kempen, <waltje@uwalt.nl.mugnet.org>
- * 
+ *
  *     Copyright (c) 1998-2000 Dag Brattli,
  *     Copyright (c) 2002 Martin Diehl,
  *     All Rights Reserved.
- *      
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- *  
+ *
  *     Neither Dag Brattli nor University of Tromsø admit liability nor
- *     provide warranty for any of this software. This material is 
+ *     provide warranty for any of this software. This material is
  *     provided "AS-IS" and at no charge.
- *     
- ********************************************************************/    
+ *
+ ********************************************************************/
 
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -101,7 +101,7 @@ static void irtty_wait_until_sent(struct sir_dev *dev)
 	}
 }
 
-/* 
+/*
  *  Function irtty_change_speed (dev, speed)
  *
  *    Change the speed of the serial port.
@@ -202,13 +202,13 @@ static int irtty_do_write(struct sir_dev *dev, const unsigned char *ptr, size_t 
 
 /* irda line discipline callbacks */
 
-/* 
+/*
  *  Function irtty_receive_buf( tty, cp, count)
  *
  *    Handle the 'receiver data ready' interrupt.  This function is called
  *    by the 'tty_io' module in the kernel when a block of IrDA data has
  *    been received, which can now be decapsulated and delivered for
- *    further processing 
+ *    further processing
  *
  * calling context depends on underlying driver and tty->port->low_latency!
  * for example (low_latency: 1 / 0):
@@ -217,7 +217,7 @@ static int irtty_do_write(struct sir_dev *dev, const unsigned char *ptr, size_t 
  */
 
 static void irtty_receive_buf(struct tty_struct *tty, const unsigned char *cp,
-			      char *fp, int count) 
+			      char *fp, int count)
 {
 	struct sir_dev *dev;
 	struct sirtty_cb *priv = tty->disc_data;
@@ -236,10 +236,10 @@ static void irtty_receive_buf(struct tty_struct *tty, const unsigned char *cp,
 	}
 
 	for (i = 0; i < count; i++) {
-		/* 
+		/*
 		 *  Characters received with a parity error, etc?
 		 */
- 		if (fp && *fp++) { 
+ 		if (fp && *fp++) {
 			IRDA_DEBUG(0, "Framing or parity error!\n");
 			sirdev_receive(dev, NULL, 0);	/* notify sir_dev (updating stats) */
 			return;
@@ -256,7 +256,7 @@ static void irtty_receive_buf(struct tty_struct *tty, const unsigned char *cp,
  *    more packets to send, we send them here.
  *
  */
-static void irtty_write_wakeup(struct tty_struct *tty) 
+static void irtty_write_wakeup(struct tty_struct *tty)
 {
 	struct sirtty_cb *priv = tty->disc_data;
 
@@ -283,7 +283,7 @@ static inline void irtty_stop_receiver(struct tty_struct *tty, int stop)
 	mutex_lock(&tty->termios_mutex);
 	old_termios = tty->termios;
 	cflag = tty->termios.c_cflag;
-	
+
 	if (stop)
 		cflag &= ~CREAD;
 	else
@@ -401,7 +401,7 @@ static int irtty_ioctl(struct tty_struct *tty, struct file *file, unsigned int c
 	case IRTTY_IOCGET:
 		IRDA_ASSERT(dev->netdev != NULL, return -1;);
 
-		memset(&info, 0, sizeof(info)); 
+		memset(&info, 0, sizeof(info));
 		strncpy(info.name, dev->netdev->name, sizeof(info.name)-1);
 
 		if (copy_to_user((void __user *)arg, &info, sizeof(info)))
@@ -415,14 +415,14 @@ static int irtty_ioctl(struct tty_struct *tty, struct file *file, unsigned int c
 }
 
 
-/* 
+/*
  *  Function irtty_open(tty)
  *
  *    This function is called by the TTY module when the IrDA line
  *    discipline is called for.  Because we are sure the tty line exists,
- *    we only have to link it to a free IrDA channel.  
+ *    we only have to link it to a free IrDA channel.
  */
-static int irtty_open(struct tty_struct *tty) 
+static int irtty_open(struct tty_struct *tty)
 {
 	struct sir_dev *dev;
 	struct sirtty_cb *priv;
@@ -436,7 +436,7 @@ static int irtty_open(struct tty_struct *tty)
 		tty->ops->stop(tty);
 
 	tty_driver_flush_buffer(tty);
-	
+
 	/* apply mtt override */
 	sir_tty_drv.qos_mtt_bits = qos_mtt_bits;
 
@@ -477,14 +477,14 @@ out:
 	return ret;
 }
 
-/* 
+/*
  *  Function irtty_close (tty)
  *
  *    Close down a IrDA channel. This means flushing out any pending queues,
  *    and then restoring the TTY line discipline to what it was before it got
- *    hooked to IrDA (which usually is TTY again).  
+ *    hooked to IrDA (which usually is TTY again).
  */
-static void irtty_close(struct tty_struct *tty) 
+static void irtty_close(struct tty_struct *tty)
 {
 	struct sirtty_cb *priv = tty->disc_data;
 
@@ -551,7 +551,7 @@ static int __init irtty_sir_init(void)
 	return err;
 }
 
-static void __exit irtty_sir_cleanup(void) 
+static void __exit irtty_sir_cleanup(void)
 {
 	int err;
 

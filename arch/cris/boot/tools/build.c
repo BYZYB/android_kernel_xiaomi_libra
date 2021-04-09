@@ -165,12 +165,12 @@ int main(int argc, char ** argv)
 	if ((*(unsigned short *)(buf+510)) != (unsigned short)intel_short(0xAA55))
 		die("Boot block hasn't got boot flag (0xAA55)");
 	buf[508] = (char) minor_root;
-	buf[509] = (char) major_root;	
+	buf[509] = (char) major_root;
 	i=write(1,buf,512);
 	if (i!=512)
 		die("Write call failed");
 	close (id);
-	
+
 	if ((id=open(argv[2],O_RDONLY,0))<0)
 		die("Unable to open 'setup'");
 	if (read(id,buf,MINIX_HEADER) != MINIX_HEADER)
@@ -227,7 +227,7 @@ int main(int argc, char ** argv)
 			die("Write call failed");
 		i += c;
 	}
-	
+
 	if ((id=open(argv[3],O_RDONLY,0))<0)
 		die("Unable to open 'system'");
 #ifndef __BFD__
@@ -262,7 +262,7 @@ int main(int argc, char ** argv)
 		if (l > sizeof(buf))
 			l = sizeof(buf);
 		if ((n=read(id, buf, l)) != l) {
-			if (n == -1) 
+			if (n == -1)
 				perror(argv[1]);
 			else
 				fprintf(stderr, "Unexpected EOF\n");

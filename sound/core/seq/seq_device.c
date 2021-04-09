@@ -120,7 +120,7 @@ static void snd_seq_device_info(struct snd_info_entry *entry,
 	mutex_unlock(&ops_mutex);
 }
 #endif
- 
+
 /*
  * load all registered drivers (called from seq_clientmgr.c)
  */
@@ -215,12 +215,12 @@ int snd_seq_device_new(struct snd_card *card, int device, char *id, int argsize,
 	mutex_unlock(&ops->reg_mutex);
 
 	unlock_driver(ops);
-	
+
 	if ((err = snd_device_new(card, SNDRV_DEV_SEQUENCER, dev, &dops)) < 0) {
 		snd_seq_device_free(dev);
 		return err;
 	}
-	
+
 	if (result)
 		*result = dev;
 

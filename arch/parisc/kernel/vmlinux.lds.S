@@ -24,12 +24,12 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 #include <asm-generic/vmlinux.lds.h>
-/* needed for the processor specific cache alignment size */	
+/* needed for the processor specific cache alignment size */
 #include <asm/cache.h>
 #include <asm/page.h>
 #include <asm/asm-offsets.h>
 #include <asm/thread_info.h>
-	
+
 /* ld script to make hppa Linux kernel */
 #ifndef CONFIG_64BIT
 OUTPUT_FORMAT("elf32-hppa-linux")
@@ -126,10 +126,10 @@ SECTIONS
 	/* Linkage tables */
 	.opd : {
 		*(.opd)
-	} PROVIDE (__gp = .); 
+	} PROVIDE (__gp = .);
 	.plt : {
 		*(.plt)
-	} 
+	}
 	.dlt : {
 		*(.dlt)
 	}

@@ -265,7 +265,7 @@ structures to access any of the five channels' gains.
 		*left = gp->min_gain + gp->gain_step * lg;
 		*right = gp->min_gain + gp->gain_step * rg;
 		return 0;
-	}	
+	}
 
 And here is the corresponding routine to set a channel's gain in dB.
 

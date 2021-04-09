@@ -71,7 +71,7 @@ EXPORT_SYMBOL(alpha_fp_emul);
 EXPORT_SYMBOL(__copy_user);
 EXPORT_SYMBOL(__do_clear_user);
 
-/* 
+/*
  * SMP-specific symbols.
  */
 

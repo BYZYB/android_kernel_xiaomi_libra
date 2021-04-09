@@ -608,7 +608,7 @@ unw_access_pr (struct unw_frame_info *info, unsigned long *val, int write)
 }
 EXPORT_SYMBOL(unw_access_pr);
 
-
+
 /* Routines to manipulate the state stack.  */
 
 static inline void
@@ -673,7 +673,7 @@ free_state_stack (struct unw_reg_state *rs)
 	}
 	rs->next = NULL;
 }
-
+
 /* Unwind decoder routines */
 
 static enum unw_register_index __attribute_const__
@@ -1197,7 +1197,7 @@ desc_spill_sprel_p (unsigned char qp, unw_word t, unsigned char abreg, unw_word 
 
 #include "unwind_decoder.c"
 
-
+
 /* Unwind scripts. */
 
 static inline unw_hash_index_t

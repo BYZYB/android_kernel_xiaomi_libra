@@ -271,7 +271,7 @@ entDbg:
 	mov	$sp, $16
 	jsr	$31, do_entDbg
 .end entDbg
-
+
 /*
  * The system call entry point is special.  Most importantly, it looks
  * like a function call to userspace as far as clobbered registers.  We
@@ -458,7 +458,7 @@ $strace_error:
 	mov	$31, $26	/* tell "ret_from_sys_call" we can restart */
 	br	ret_from_sys_call
 .end strace
-
+
 /*
  * Save and restore the switch stack -- aka the balance of the user context.
  */
@@ -559,7 +559,7 @@ undo_switch_stack:
 	lda	$sp, SWITCH_STACK_SIZE($sp)
 	ret	$31, ($1), 1
 .end undo_switch_stack
-
+
 /*
  * The meat of the context switch code.
  */
@@ -607,7 +607,7 @@ ret_from_kernel_thread:
 	br	$31, ret_to_user
 .end ret_from_kernel_thread
 
-
+
 /*
  * Special system calls.  Most of these are special in that they either
  * have to play switch_stack games or in some way use the pt_regs struct.

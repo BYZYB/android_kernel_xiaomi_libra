@@ -425,7 +425,7 @@ Let's take a look at it:
 189 {
 190         struct sigqueue *q = NULL;
 191         struct user_struct *user;
-192 
+192
 193         /*
 194          * We won't get problems with the target's UID changing under us
 195          * because changing it requires RCU be used, and if t != current, the
@@ -446,7 +446,7 @@ Let's take a look at it:
 210                 q->flags = 0;
 211                 q->user = user;
 212         }
-213 
+213
 214         return q;
 215 }
 
@@ -535,7 +535,7 @@ initialized. This is the beginning of the struct:
 41         int si_signo;
 42         int si_errno;
 43         int si_code;
-44                 
+44
 45         union {
 ..
 92         } _sifields;
@@ -557,7 +557,7 @@ and _sifields. We can now get a fuller picture of the memory dump:
         /        _--------------------=> (padding)
        |        /        _------------=> _sifields(._kill._pid)
        |       |        /        _----=> _sifields(._kill._uid)
-       |       |       |        / 
+       |       |       |        /
 -------|-------|-------|-------|
 80000000000000000000000000000000000000000088ffff0000000000000000
  i i i i u u u u i i i i i i i i u u u u u u u u u u u u u u u u
@@ -646,7 +646,7 @@ they are:
 	also to other functions that end up calling one of these) to indicate
 	that the allocation should not be tracked because it would lead to
 	a false positive report. This is a "big hammer" way of silencing
-	kmemcheck; after all, even if the false positive pertains to 
+	kmemcheck; after all, even if the false positive pertains to
 	particular field in a struct, for example, we will now lose the
 	ability to find (real) errors in other parts of the same struct.
 

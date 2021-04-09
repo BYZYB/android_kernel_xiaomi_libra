@@ -21,10 +21,7 @@ extra-$(CONFIG_VDSO) += vdso.lds
 CPPFLAGS_vdso.lds += -P -C -U$(ARCH)
 
 CFLAGS_REMOVE_vdso.o = -pg
-
-# Force -O2 to avoid libgcc dependencies
-CFLAGS_REMOVE_vgettimeofday.o = -pg -Os
-CFLAGS_vgettimeofday.o = -O2
+CFLAGS_REMOVE_vgettimeofday.o = -pg
 
 # Disable gcov, kasan, ubsan and kcov profiling for VDSO code
 GCOV_PROFILE := n

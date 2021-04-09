@@ -27,7 +27,7 @@ obj-$(CONFIG_NF_NAT_SNMP_BASIC) += nf_nat_snmp_basic.o
 # NAT protocols (nf_nat)
 obj-$(CONFIG_NF_NAT_PROTO_GRE) += nf_nat_proto_gre.o
 
-# generic IP tables 
+# generic IP tables
 obj-$(CONFIG_IP_NF_IPTABLES) += ip_tables.o
 
 # the three instances of ip_tables

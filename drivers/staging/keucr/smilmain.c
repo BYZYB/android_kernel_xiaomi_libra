@@ -669,7 +669,7 @@ int Check_D_MediaFmt(struct us_data *us)
 		ErrCode = ERR_UnknownMedia;
 		return(ERROR);
 	}
-	
+
 	//usleep(56*1024);
 	if (Search_D_CIS(us))
 	{

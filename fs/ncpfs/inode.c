@@ -174,7 +174,7 @@ static void ncp_update_attrs(struct inode *inode, struct ncp_entry_info *nwinfo)
 		size = le32_to_cpu(nwi->dataStreamSize);
 		i_size_write(inode, size);
 #ifdef CONFIG_NCPFS_EXTRAS
-		if ((server->m.flags & (NCP_MOUNT_EXTRAS|NCP_MOUNT_SYMLINKS)) 
+		if ((server->m.flags & (NCP_MOUNT_EXTRAS|NCP_MOUNT_SYMLINKS))
 		 && (nwi->attributes & aSHARED)) {
 			switch (nwi->attributes & (aHIDDEN|aSYSTEM)) {
 				case aHIDDEN:
@@ -226,7 +226,7 @@ static void ncp_set_attr(struct inode *inode, struct ncp_entry_info *nwinfo)
 	struct ncp_server *server = NCP_SERVER(inode);
 
 	NCP_FINFO(inode)->flags = 0;
-	
+
 	ncp_update_attrs(inode, nwinfo);
 
 	DDPRINTK("ncp_read_inode: inode->i_mode = %u\n", inode->i_mode);
@@ -251,7 +251,7 @@ static const struct inode_operations ncp_symlink_inode_operations = {
 /*
  * Get a new inode.
  */
-struct inode * 
+struct inode *
 ncp_iget(struct super_block *sb, struct ncp_entry_info *info)
 {
 	struct inode *inode;
@@ -395,7 +395,7 @@ static int ncp_parse_options(struct ncp_mount_data_kernel *data, char *options) 
 	data->dir_mode = NCP_DEFAULT_DIR_MODE;
 	data->info_fd = -1;
 	data->mounted_vol[0] = 0;
-	
+
 	while ((optval = ncp_getopt("ncpfs", &options, ncp_opts, NULL, &optarg, &optint)) != 0) {
 		ret = optval;
 		if (ret < 0)
@@ -448,7 +448,7 @@ static int ncp_parse_options(struct ncp_mount_data_kernel *data, char *options) 
 					goto err;
 				version = optint;
 				break;
-			
+
 		}
 	}
 	return 0;
@@ -544,7 +544,7 @@ static int ncp_fill_super(struct super_block *sb, void *raw_data, int silent)
 	sock = SOCKET_I(sock_inode);
 	if (!sock)
 		goto out_fput;
-		
+
 	if (sock->type == SOCK_STREAM)
 		default_bufsize = 0xF000;
 	else
@@ -568,7 +568,7 @@ static int ncp_fill_super(struct super_block *sb, void *raw_data, int silent)
 
 	server->ncp_filp = ncp_filp;
 	server->ncp_sock = sock;
-	
+
 	if (data.info_fd != -1) {
 		struct socket *info_sock;
 
@@ -684,11 +684,11 @@ static int ncp_fill_super(struct super_block *sb, void *raw_data, int silent)
 	{
 		if (options != NCP_DEFAULT_OPTIONS)
 		{
-			if (ncp_negotiate_size_and_options(server, 
+			if (ncp_negotiate_size_and_options(server,
 				default_bufsize,
-				options & 2, 
+				options & 2,
 				&(server->buffer_size), &options) != 0)
-				
+
 			{
 				goto out_disconnect;
 			}
@@ -698,7 +698,7 @@ static int ncp_fill_super(struct super_block *sb, void *raw_data, int silent)
 			server->sign_wanted = 1;
 		ncp_unlock_server(server);
 	}
-	else 
+	else
 #endif	/* CONFIG_NCPFS_PACKET_SIGNING */
 	if (ncp_negotiate_buffersize(server, default_bufsize,
   				     &(server->buffer_size)) != 0)
@@ -764,7 +764,7 @@ out_bdi:
 	bdi_destroy(&server->bdi);
 out_fput:
 	/* 23/12/1998 Marcin Dalecki <dalecki@cs.net.pl>:
-	 * 
+	 *
 	 * The previously used put_filp(ncp_filp); was bogus, since
 	 * it doesn't perform proper unlocking.
 	 */
@@ -821,7 +821,7 @@ static int ncp_statfs(struct dentry *dentry, struct kstatfs *buf)
 	struct super_block *sb = dentry->d_sb;
 	int err;
 	__u8 dh;
-	
+
 	d = sb->s_root;
 	if (!d) {
 		goto dflt;
@@ -913,7 +913,7 @@ int ncp_notify_change(struct dentry *dentry, struct iattr *attr)
 	info_mask = 0;
 	memset(&info, 0, sizeof(info));
 
-#if 1 
+#if 1
         if ((attr->ia_valid & ATTR_MODE) != 0)
         {
 		umode_t newmode = attr->ia_mode;
@@ -923,7 +923,7 @@ int ncp_notify_change(struct dentry *dentry, struct iattr *attr)
                 if (S_ISDIR(inode->i_mode)) {
                 	newmode &= server->m.dir_mode;
 		} else {
-#ifdef CONFIG_NCPFS_EXTRAS			
+#ifdef CONFIG_NCPFS_EXTRAS
 			if (server->m.flags & NCP_MOUNT_EXTRAS) {
 				/* any non-default execute bit set */
 				if (newmode & ~server->m.file_mode & S_IXUGO)
@@ -933,7 +933,7 @@ int ncp_notify_change(struct dentry *dentry, struct iattr *attr)
 					info.attributes |= aSHARED;
 			} else
 #endif
-				newmode &= server->m.file_mode;			
+				newmode &= server->m.file_mode;
                 }
                 if (newmode & S_IWUGO)
                 	info.attributes &= ~(aRONLY|aRENAMEINHIBIT|aDELETEINHIBIT);
@@ -952,7 +952,7 @@ int ncp_notify_change(struct dentry *dentry, struct iattr *attr)
 			{
 				/* mark partial success */
 				struct iattr tmpattr;
-				
+
 				tmpattr.ia_valid = ATTR_MODE;
 				tmpattr.ia_mode = attr->ia_mode;
 
@@ -1021,7 +1021,7 @@ int ncp_notify_change(struct dentry *dentry, struct iattr *attr)
 			} else
 				goto out;
 		}
-#ifdef CONFIG_NCPFS_STRONG		
+#ifdef CONFIG_NCPFS_STRONG
 		if ((!result) && (info_mask & DM_ATTRIBUTES))
 			NCP_FINFO(inode)->nwattr = info.attributes;
 #endif

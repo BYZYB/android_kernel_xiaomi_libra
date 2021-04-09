@@ -606,7 +606,7 @@
 
 	/* Misc non-contiguous registers */
 
-	/* icache & dcache will enable later 
+	/* icache & dcache will enable later
 	   drop IMEM_CONTROL, DMEM_CONTROL pop
 	*/
 	FP = I0;

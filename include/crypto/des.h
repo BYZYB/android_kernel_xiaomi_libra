@@ -1,4 +1,4 @@
-/* 
+/*
  * DES & Triple DES EDE Cipher Algorithms.
  */
 

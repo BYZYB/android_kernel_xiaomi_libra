@@ -267,7 +267,7 @@ recv_secondary_console_msg(void)
 			cp1 = (char *) &cpu->ipc_buffer[11];
 			cp2 = buf;
 			strcpy(cp2, cp1);
-			
+
 			while ((cp2 = strchr(cp2, '\r')) != 0) {
 				*cp2 = ' ';
 				if (cp2[1] == '\n')
@@ -291,7 +291,7 @@ secondary_cpu_start(int cpuid, struct task_struct *idle)
 	struct percpu_struct *cpu;
 	struct pcb_struct *hwpcb, *ipcb;
 	unsigned long timeout;
-	  
+
 	cpu = (struct percpu_struct *)
 		((char*)hwrpb
 		 + hwrpb->processor_offset
@@ -486,18 +486,18 @@ smp_cpus_done(unsigned int max_cpus)
 	int cpu;
 	unsigned long bogosum = 0;
 
-	for(cpu = 0; cpu < NR_CPUS; cpu++) 
+	for(cpu = 0; cpu < NR_CPUS; cpu++)
 		if (cpu_online(cpu))
 			bogosum += cpu_data[cpu].loops_per_jiffy;
-	
+
 	printk(KERN_INFO "SMP: Total of %d processors activated "
 	       "(%lu.%02lu BogoMIPS).\n",
-	       num_online_cpus(), 
+	       num_online_cpus(),
 	       (bogosum + 2500) / (500000/HZ),
 	       ((bogosum + 2500) / (5000/HZ)) % 100);
 }
 
-
+
 void
 smp_percpu_timer_interrupt(struct pt_regs *regs)
 {
@@ -532,7 +532,7 @@ setup_profiling_timer(unsigned int multiplier)
 	return -EINVAL;
 }
 
-
+
 static void
 send_ipi_message(const struct cpumask *to_whom, enum ipi_message_type operation)
 {

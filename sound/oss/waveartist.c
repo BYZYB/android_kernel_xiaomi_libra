@@ -425,7 +425,7 @@ waveartist_output_block(int dev, unsigned long buf, int __count, int intrflag)
 	wavnc_port_info	*portc = (wavnc_port_info *) audio_devs[dev]->portc;
 	wavnc_info	*devc = (wavnc_info *) audio_devs[dev]->devc;
 	unsigned long	flags;
-	unsigned int	count = __count; 
+	unsigned int	count = __count;
 
 	if (debug_flg & DEBUG_OUT)
 		printk("waveartist: output block, buf=0x%lx, count=0x%x...\n",
@@ -1464,7 +1464,7 @@ static void __exit unload_waveartist(struct address_info *hw)
  */
 
 #include <asm/hardware/dec21285.h>
- 
+
 #define	VNC_TIMER_PERIOD (HZ/4)	//check slider 4 times/sec
 
 #define	MIXER_PRIVATE3_RESET	0x53570000
@@ -1503,7 +1503,7 @@ vnc_mute_lout(wavnc_info *devc)
 		right |= 1;
 	}
 	waveartist_cmd3(devc, WACMD_SET_MIXER, left, right);
-		
+
 }
 
 static int
@@ -1526,7 +1526,7 @@ vnc_volume_slider(wavnc_info *devc)
 	*CSR_TIMER1_CNTL = 0;
 
 	spin_unlock_irqrestore(&waveartist_lock,flags);
-	
+
 	volume = 0x00ffffff - *CSR_TIMER1_VALUE;
 
 
@@ -2003,9 +2003,9 @@ static int __init setup_waveartist(char *str)
 {
 	/* io, irq, dma, dma2 */
 	int ints[5];
-	
+
 	str = get_options(str, ARRAY_SIZE(ints), ints);
-	
+
 	io	= ints[1];
 	irq	= ints[2];
 	dma	= ints[3];

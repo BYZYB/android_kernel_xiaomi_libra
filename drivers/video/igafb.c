@@ -18,7 +18,7 @@
 /******************************************************************************
 
   TODO:
-       Despite of IGA Card has advanced graphic acceleration, 
+       Despite of IGA Card has advanced graphic acceleration,
        initial version is almost dummy and does not support it.
        Support for video modes and acceleration must be added
        together with accelerated X-Windows driver implementation.
@@ -150,7 +150,7 @@ struct fb_var_screeninfo default_var_1280x1024 __initdata = {
 	.xres_virtual	= 1280,
 	.yres_virtual	= 1024,
 	.bits_per_pixel	= 8,
-	.red		= {0, 8, 0 }, 
+	.red		= {0, 8, 0 },
 	.green		= {0, 8, 0 },
 	.blue		= {0, 8, 0 },
 	.height		= -1,
@@ -170,7 +170,7 @@ struct fb_var_screeninfo default_var_1280x1024 __initdata = {
  *   Memory-mapped I/O functions for Sparc PCI
  *
  * On sparc we happen to access I/O with memory mapped functions too.
- */ 
+ */
 #define pci_inb(par, reg)        readb(par->io_base+(reg))
 #define pci_outb(par, val, reg)  writeb(val, par->io_base+(reg))
 
@@ -192,7 +192,7 @@ static inline void iga_outb(struct iga_par *par, unsigned char val,
 
 /*
  *  Very important functionality for the JavaEngine1 computer:
- *  make screen border black (usign special IGA registers) 
+ *  make screen border black (usign special IGA registers)
  */
 static void iga_blank_border(struct iga_par *par)
 {
@@ -296,11 +296,11 @@ static int igafb_setcolreg(unsigned regno, unsigned red, unsigned green,
 	if (regno < 16) {
 		switch (info->var.bits_per_pixel) {
 		case 16:
-			((u16*)(info->pseudo_palette))[regno] = 
+			((u16*)(info->pseudo_palette))[regno] =
 				(regno << 10) | (regno << 5) | regno;
 			break;
 		case 24:
-			((u32*)(info->pseudo_palette))[regno] = 
+			((u32*)(info->pseudo_palette))[regno] =
 				(regno << 16) | (regno << 8) | regno;
 		break;
 		case 32:
@@ -330,7 +330,7 @@ static struct fb_ops igafb_ops = {
 
 static int __init iga_init(struct fb_info *info, struct iga_par *par)
 {
-        char vramsz = iga_inb(par, IGA_EXT_CNTRL, IGA_IDX_EXT_BUS_CNTL) 
+        char vramsz = iga_inb(par, IGA_EXT_CNTRL, IGA_IDX_EXT_BUS_CNTL)
 		                                         & MEM_SIZE_ALIAS;
 	int video_cmap_len;
 
@@ -347,9 +347,9 @@ static int __init iga_init(struct fb_info *info, struct iga_par *par)
                 break;
         }
 
-        if (info->var.bits_per_pixel > 8) 
+        if (info->var.bits_per_pixel > 8)
                 video_cmap_len = 16;
-        else 
+        else
                 video_cmap_len = 256;
 
 	info->fbops = &igafb_ops;
@@ -361,10 +361,10 @@ static int __init iga_init(struct fb_info *info, struct iga_par *par)
 		return 0;
 
 	printk("fb%d: %s frame buffer device at 0x%08lx [%dMB VRAM]\n",
-	       info->node, info->fix.id, 
+	       info->node, info->fix.id,
 	       par->frame_buffer_phys, info->fix.smem_len >> 20);
 
-	iga_blank_border(par); 
+	iga_blank_border(par);
 	return 1;
 }
 
@@ -394,7 +394,7 @@ static int __init igafb_init(void)
 	}
 	/* We leak a reference here but as it cannot be unloaded this is
 	   fine. If you write unload code remember to free it in unload */
-	
+
 	size = sizeof(struct iga_par) + sizeof(u32)*16;
 
 	info = framebuffer_alloc(size, &pdev->dev);
@@ -460,7 +460,7 @@ static int __init igafb_init(void)
 	 * We need two regions: for video memory and for I/O ports.
 	 * Later one can add region for video coprocessor registers.
 	 * However, mmap routine loops until size != 0, so we put
-	 * one additional region with size == 0. 
+	 * one additional region with size == 0.
 	 */
 
 	par->mmap_map = kzalloc(4 * sizeof(*par->mmap_map), GFP_ATOMIC);
@@ -538,9 +538,9 @@ static int __init igafb_init(void)
 	    /*
 	     * Add /dev/fb mmap values.
 	     */
-	    
+
 	    /* First region is for video memory */
-	    par->mmap_map[0].voff = 0x0;  
+	    par->mmap_map[0].voff = 0x0;
 	    par->mmap_map[0].poff = par->frame_buffer_phys & PAGE_MASK;
 	    par->mmap_map[0].size = info->fix.smem_len & PAGE_MASK;
 	    par->mmap_map[0].prot_mask = SRMMU_CACHE;

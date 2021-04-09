@@ -12,9 +12,9 @@
 #include <linux/ceph/auth.h>
 #include <linux/ceph/pagelist.h>
 
-/* 
- * Maximum object name size 
- * (must be at least as big as RBD_MAX_MD_NAME_LEN -- currently 100) 
+/*
+ * Maximum object name size
+ * (must be at least as big as RBD_MAX_MD_NAME_LEN -- currently 100)
  */
 #define MAX_OBJ_NAME_SIZE 100
 

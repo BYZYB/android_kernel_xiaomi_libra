@@ -1,6 +1,6 @@
 /********************************************************************
  Filename:      via-ircc.c
- Version:       1.0 
+ Version:       1.0
  Description:   Driver for the VIA VT8231/VT8233 IrDA chipsets
  Author:        VIA Technologies,inc
  Date  :	08/06/2003
@@ -30,13 +30,13 @@ F02 Oct/28/02: Add SB device ID for 3147 and 3177.
 2004-02-16: <sda@bdit.de>
 - Removed unneeded 'legacy' pci stuff.
 - Make sure SIR mode is set (hw_init()) before calling mode-dependent stuff.
-- On speed change from core, don't send SIR frame with new speed. 
+- On speed change from core, don't send SIR frame with new speed.
   Use current speed and change speeds later.
 - Make module-param dongle_id actually work.
-- New dongle_id 17 (0x11): TDFS4500. Single-ended SIR only. 
+- New dongle_id 17 (0x11): TDFS4500. Single-ended SIR only.
   Tested with home-grown PCB on EPIA boards.
 - Code cleanup.
-       
+
  ********************************************************************/
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -213,7 +213,7 @@ static int via_init_one(struct pci_dev *pcidev, const struct pci_device_id *id)
 			if (via_ircc_open(pcidev, &info, 0x3076) == 0)
 				rc=0;
 		} else
-			rc = -ENODEV; //IR not turn on	 
+			rc = -ENODEV; //IR not turn on
 	} else { //Not VT1211
 		IRDA_DEBUG(2, "%s(): Chipset = 3096\n", __func__);
 
@@ -264,7 +264,7 @@ static void __exit via_ircc_cleanup(void)
 	IRDA_DEBUG(3, "%s()\n", __func__);
 
 	/* Cleanup all instances of the driver */
-	pci_unregister_driver (&via_driver); 
+	pci_unregister_driver (&via_driver);
 }
 
 static const struct net_device_ops via_ircc_sir_ops = {
@@ -296,7 +296,7 @@ static int via_ircc_open(struct pci_dev *pdev, chipio_t *info, unsigned int id)
 
 	/* Allocate new instance of the driver */
 	dev = alloc_irdadev(sizeof(struct via_ircc_cb));
-	if (dev == NULL) 
+	if (dev == NULL)
 		return -ENOMEM;
 
 	self = netdev_priv(dev);
@@ -324,7 +324,7 @@ static int via_ircc_open(struct pci_dev *pdev, chipio_t *info, unsigned int id)
 		err = -ENODEV;
 		goto err_out1;
 	}
-	
+
 	/* Initialize QoS for this device */
 	irda_init_max_qos_capabilies(&self->qos);
 
@@ -456,7 +456,7 @@ static void via_remove_one(struct pci_dev *pdev)
  *
  *    Returns non-negative on success.
  *
- * Formerly via_ircc_setup 
+ * Formerly via_ircc_setup
  */
 static void via_hw_init(struct via_ircc_cb *self)
 {
@@ -540,7 +540,7 @@ static void via_ircc_change_dongle_speed(int iobase, int speed,
 	switch (dongle_id) {
 
 		/* Note: The dongle_id's listed here are derived from
-		 * nsc-ircc.c */ 
+		 * nsc-ircc.c */
 
 	case 0x08:		/* HP HSDL-2300, HP HSDL-3600/HSDL-3610 */
 		UseOneRX(iobase, ON);	// use one RX pin   RX1,RX2
@@ -629,7 +629,7 @@ static void via_ircc_change_dongle_speed(int iobase, int speed,
 		UseOneRX(iobase, ON);	//use ONE RX....RX1
 		InvertTX(iobase, OFF);
 		InvertRX(iobase, ON);	// invert RX pin
-	
+
 		EnRX2(iobase, ON);	//sir to rx2
 		EnGPIOtoRX2(iobase, OFF);
 
@@ -924,7 +924,7 @@ static int via_ircc_dma_xmit(struct via_ircc_cb *self, u16 iobase)
 /*
  * Function via_ircc_dma_xmit_complete (self)
  *
- *    The transfer of a frame in finished. This function will only be called 
+ *    The transfer of a frame in finished. This function will only be called
  *    by the interrupt handler
  *
  */
@@ -970,22 +970,22 @@ static int via_ircc_dma_xmit_complete(struct via_ircc_cb *self)
 		   __func__,
 		   self->tx_fifo.len, self->tx_fifo.ptr, self->tx_fifo.free);
 /* F01_S
-	// Any frames to be sent back-to-back? 
+	// Any frames to be sent back-to-back?
 	if (self->tx_fifo.len) {
-		// Not finished yet! 
+		// Not finished yet!
 	  	via_ircc_dma_xmit(self, iobase);
 		ret = FALSE;
-	} else { 
+	} else {
 F01_E*/
-	// Reset Tx FIFO info 
+	// Reset Tx FIFO info
 	self->tx_fifo.len = self->tx_fifo.ptr = self->tx_fifo.free = 0;
 	self->tx_fifo.tail = self->tx_buff.head;
 //F01   }
 
-	// Make sure we have room for more frames 
+	// Make sure we have room for more frames
 //F01   if (self->tx_fifo.free < (MAX_TX_WINDOW -1 )) {
-	// Not busy transmitting anymore 
-	// Tell the network layer, that we can accept more frames 
+	// Not busy transmitting anymore
+	// Tell the network layer, that we can accept more frames
 	netif_wake_queue(self->netdev);
 //F01   }
 	return ret;
@@ -1039,7 +1039,7 @@ static int via_ircc_dma_receive(struct via_ircc_cb *self)
  *
  *    Controller Finished with receiving frames,
  *    and this routine is call by ISR
- *    
+ *
  */
 static int via_ircc_dma_receive_complete(struct via_ircc_cb *self,
 					 int iobase)
@@ -1057,7 +1057,7 @@ static int via_ircc_dma_receive_complete(struct via_ircc_cb *self,
 		skb = dev_alloc_skb(len + 1);
 		if (skb == NULL)
 			return FALSE;
-		// Make sure IP header gets aligned 
+		// Make sure IP header gets aligned
 		skb_reserve(skb, 1);
 		skb_put(skb, len - 2);
 		if (self->chip_id == 0x3076) {
@@ -1070,7 +1070,7 @@ static int via_ircc_dma_receive_complete(struct via_ircc_cb *self,
 					    self->rx_buff.data[i];
 			}
 		}
-		// Move to next frame 
+		// Move to next frame
 		self->rx_buff.data += len;
 		self->netdev->stats.rx_bytes += len;
 		self->netdev->stats.rx_packets++;
@@ -1084,7 +1084,7 @@ static int via_ircc_dma_receive_complete(struct via_ircc_cb *self,
 	else {			//FIR mode
 		len = GetRecvByte(iobase, self);
 		if (len == 0)
-			return TRUE;	//interrupt only, data maybe move by RxT  
+			return TRUE;	//interrupt only, data maybe move by RxT
 		if (((len - 4) < 2) || ((len - 4) > 2048)) {
 			IRDA_DEBUG(1, "%s(): Trouble:len=%x,CurCount=%x,LastCount=%x..\n",
 				   __func__, len, RxCurCount(iobase, self),
@@ -1108,17 +1108,17 @@ static int via_ircc_dma_receive_complete(struct via_ircc_cb *self,
 		// It maybe have MAX_RX_WINDOW package receive by
 		// receive_complete before Timer IRQ
 /* F01_S
-          if (st_fifo->len < (MAX_RX_WINDOW+2 )) { 
+          if (st_fifo->len < (MAX_RX_WINDOW+2 )) {
 		  RXStart(iobase,ON);
 	  	  SetTimer(iobase,4);
 	  }
-	  else	  { 
+	  else	  {
 F01_E */
 		EnableRX(iobase, OFF);
 		EnRXDMA(iobase, OFF);
 		RXStart(iobase, OFF);
 //F01_S
-		// Put this entry back in fifo 
+		// Put this entry back in fifo
 		if (st_fifo->head > MAX_RX_WINDOW)
 			st_fifo->head = 0;
 		status = st_fifo->entries[st_fifo->head].status;
@@ -1144,7 +1144,7 @@ F01_E */
 		IRDA_DEBUG(2, "%s(): len=%x.rx_buff=%p\n", __func__,
 			   len - 4, self->rx_buff.data);
 
-		// Move to next frame 
+		// Move to next frame
 		self->rx_buff.data += len;
 		self->netdev->stats.rx_bytes += len;
 		self->netdev->stats.rx_packets++;
@@ -1190,7 +1190,7 @@ static int upload_rxdata(struct via_ircc_cb *self, int iobase)
 	st_fifo->len++;
 	if (st_fifo->tail > MAX_RX_WINDOW)
 		st_fifo->tail = 0;
-	// Move to next frame 
+	// Move to next frame
 	self->rx_buff.data += len;
 	self->netdev->stats.rx_bytes += len;
 	self->netdev->stats.rx_packets++;
@@ -1222,7 +1222,7 @@ static int RxTimerHandler(struct via_ircc_cb *self, int iobase)
 	st_fifo = &self->st_fifo;
 
 	if (CkRxRecv(iobase, self)) {
-		// if still receiving ,then return ,don't upload frame 
+		// if still receiving ,then return ,don't upload frame
 		self->RetryCount = 0;
 		SetTimer(iobase, 20);
 		self->RxDataReady++;
@@ -1234,7 +1234,7 @@ static int RxTimerHandler(struct via_ircc_cb *self, int iobase)
 	    ((st_fifo->pending_bytes + 2048) > self->rx_buff.truesize) ||
 	    (st_fifo->len >= (MAX_RX_WINDOW))) {
 		while (st_fifo->len > 0) {	//upload frame
-			// Put this entry back in fifo 
+			// Put this entry back in fifo
 			if (st_fifo->head > MAX_RX_WINDOW)
 				st_fifo->head = 0;
 			status = st_fifo->entries[st_fifo->head].status;
@@ -1259,7 +1259,7 @@ static int RxTimerHandler(struct via_ircc_cb *self, int iobase)
 			IRDA_DEBUG(2, "%s(): len=%x.head=%x\n", __func__,
 				   len - 4, st_fifo->head);
 
-			// Move to next frame 
+			// Move to next frame
 			self->rx_buff.data += len;
 			self->netdev->stats.rx_bytes += len;
 			self->netdev->stats.rx_packets++;
@@ -1382,7 +1382,7 @@ static irqreturn_t via_ircc_interrupt(int dummy, void *dev_id)
 //F01       if(!(IsFIROn(iobase)))  via_ircc_dma_receive(self);
 				via_ircc_dma_receive(self);
 			}
-		}		// No ERR     
+		}		// No ERR
 		else {		//ERR
 			IRDA_DEBUG(4, "%s(): RxIRQ ERR:iRxIntType=%x,HostIntType=%x,CurCount=%x,RxLastCount=%x_____\n",
 				   __func__, iRxIntType, iHostIntType,
@@ -1486,7 +1486,7 @@ static int via_ircc_net_open(struct net_device *dev)
 		return -EAGAIN;
 	}
 	/*
-	 * Always allocate the DMA channel after the IRQ, and clean up on 
+	 * Always allocate the DMA channel after the IRQ, and clean up on
 	 * failure.
 	 */
 	if (request_dma(self->io.dma, dev->name)) {
@@ -1517,9 +1517,9 @@ static int via_ircc_net_open(struct net_device *dev)
 	/* Ready to play! */
 	netif_start_queue(dev);
 
-	/* 
+	/*
 	 * Open new IrLAP layer instance, now that everything should be
-	 * initialized properly 
+	 * initialized properly
 	 */
 	sprintf(hwname, "VIA @ 0x%x", iobase);
 	self->irlap = irlap_open(dev, &self->qos, hwname);

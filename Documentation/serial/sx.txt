@@ -14,7 +14,7 @@
       product, please contact devices@BitWizard.nl for a quote.
 
       (History)
-      There used to be an SI driver by Simon Allan. This is a complete 
+      There used to be an SI driver by Simon Allan. This is a complete
       rewrite  from scratch. Just a few lines-of-code have been snatched.
 
       (Sources)
@@ -36,10 +36,10 @@
       License along with this program; if not, write to the Free
       Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139,
       USA.
-      
+
       (Addendum)
       I'd appreciate it that if you have fixes, that you send them
-      to me first. 
+      to me first.
 
 
 Introduction
@@ -63,7 +63,7 @@ The firmware load needs a "misc" device, so you'll need to enable the
 "Support for user misc device modules" in your kernel configuration.
 The misc device needs to be called "/dev/specialix_sxctl". It needs
 misc major 10, and minor number 167 (assigned by HPA). The section
-on creating device files below also creates this device. 
+on creating device files below also creates this device.
 
 After loading the sx.o module into your kernel, the driver will report
 the number of cards detected, but because it doesn't have any
@@ -97,7 +97,7 @@ interrupts would be better if you have most of the ports idle. Using
 timer-based polling is better if your card almost always has work to
 do. You save the separate interrupt in that case.
 
-In any case, it doesn't really matter all that much. 
+In any case, it doesn't really matter all that much.
 
 The most common problem with interrupts is that for ISA cards in a PCI
 system the BIOS has to be told to configure that interrupt as "legacy
@@ -150,43 +150,43 @@ You can specify several parameters:
 
 	sx_poll: number of jiffies between timer-based polls.
 
-		Set this to "0" to disable timer based polls. 
+		Set this to "0" to disable timer based polls.
                 Initialization of cards without a working interrupt
                 will fail.
 
-		Set this to "1" if you want a polling driver. 
+		Set this to "1" if you want a polling driver.
 		(on Intel: 100 polls per second). If you don't use
-                fast baud rates, you might consider a value like "5". 
+                fast baud rates, you might consider a value like "5".
                 (If you don't know how to do the math, use 1).
 
-	sx_slowpoll: Number of jiffies between timer-based polls. 
- 		Set this to "100" to poll once a second. 
+	sx_slowpoll: Number of jiffies between timer-based polls.
+ 		Set this to "100" to poll once a second.
 		This should get the card out of a stall if the driver
                 ever misses an interrupt. I've never seen this happen,
-                and if it does, that's a bug. Tell me. 
+                and if it does, that's a bug. Tell me.
 
-	sx_maxints: Number of interrupts to request from the card. 
+	sx_maxints: Number of interrupts to request from the card.
 		The card normally limits interrupts to about 100 per
 		second to offload the host CPU. You can increase this
 		number to reduce latency on the card a little.
 		Note that if you give a very high number you can overload
-		your CPU as well as the CPU on the host card. This setting 
-		is inaccurate and not recommended for SI cards (But it 
-		works). 
+		your CPU as well as the CPU on the host card. This setting
+		is inaccurate and not recommended for SI cards (But it
+		works).
 
-	sx_irqmask: The mask of allowable IRQs to use. I suggest you set 
-		this to 0 (disable IRQs all together) and use polling if 
+	sx_irqmask: The mask of allowable IRQs to use. I suggest you set
+		this to 0 (disable IRQs all together) and use polling if
 		the assignment of IRQs becomes problematic. This is defined
-		as the sum of (1 << irq) 's that you want to allow. So 
+		as the sum of (1 << irq) 's that you want to allow. So
 		sx_irqmask of 8 (1 << 3) specifies that only irq 3 may
-		be used by the SX driver. If you want to specify to the 
+		be used by the SX driver. If you want to specify to the
 		driver: "Either irq 11 or 12 is ok for you to use", then
-		specify (1 << 11) | (1 << 12) = 0x1800 . 
+		specify (1 << 11) | (1 << 12) = 0x1800 .
 
-	sx_debug: You can enable different sorts of debug traces with this. 
+	sx_debug: You can enable different sorts of debug traces with this.
 		At "-1" all debugging traces are active. You'll get several
-		times more debugging output than you'll get characters 
-		transmitted. 
+		times more debugging output than you'll get characters
+		transmitted.
 
 
 Baud rates
@@ -227,7 +227,7 @@ cd /dev
 t=0
 mknod specialix_sxctl c 10 167
 while [ $t -lt 64 ]
-  do 
+  do
   echo -n "$t "
   mknod ttyX$t c 32 $t
   mknod cux$t  c 33 $t
@@ -240,7 +240,7 @@ ps > /dev/null
 
 This creates 64 devices. If you have more, increase the constant on
 the line with "while". The devices start at 0, as is customary on
-Linux. Specialix seems to like starting the numbering at 1. 
+Linux. Specialix seems to like starting the numbering at 1.
 
 If your system doesn't come with these devices pre-installed, bug your
 linux-vendor about this. They should have these devices
@@ -258,22 +258,22 @@ switch to RIO).
 
 
   Fixed bugs and restrictions:
-	- Hangup processing.  
+	- Hangup processing.
 	  -- Done.
 
-	- the write path in generic_serial (lockup / oops). 
+	- the write path in generic_serial (lockup / oops).
 	  -- Done (Ugly: not the way I want it. Copied from serial.c).
 
         - write buffer isn't flushed at close.
-	  -- Done. I still seem to lose a few chars at close. 
+	  -- Done. I still seem to lose a few chars at close.
 	     Sorry. I think that this is a firmware issue. (-> Specialix)
 
 	- drain hardware before  changing termios
-	- Change debug on the fly. 
+	- Change debug on the fly.
 	- ISA free irq -1. (no firmware loaded).
-	- adding c8000 as a probe address. Added warning. 
+	- adding c8000 as a probe address. Added warning.
 	- Add a RAMtest for the RAM on the card.c
-        - Crash when opening a port "way" of the number of allowed ports. 
+        - Crash when opening a port "way" of the number of allowed ports.
           (for example opening port 60 when there are only 24 ports attached)
 	- Sometimes the use-count strays a bit. After a few hours of
           testing the use count is sometimes "3". If you are not like
@@ -281,7 +281,7 @@ switch to RIO).
           appreciate an Email. Possibly fixed. Tell me if anyone still
           sees this.
 	- TAs don't work right if you don't connect all the modem control
-	  signals. SXDCs do. T225 firmware problem -> Specialix. 
+	  signals. SXDCs do. T225 firmware problem -> Specialix.
 	  (Mostly fixed now, I think. Tell me if you encounter this!)
 
   Bugs & restrictions:

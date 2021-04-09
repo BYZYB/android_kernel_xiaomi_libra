@@ -39,8 +39,8 @@ int ncp_make_open(struct inode *inode, int right)
 	}
 
 	DPRINTK("ncp_make_open: opened=%d, volume # %u, dir entry # %u\n",
-		atomic_read(&NCP_FINFO(inode)->opened), 
-		NCP_FINFO(inode)->volNumber, 
+		atomic_read(&NCP_FINFO(inode)->opened),
+		NCP_FINFO(inode)->volNumber,
 		NCP_FINFO(inode)->dirEntNum);
 	error = -EACCES;
 	mutex_lock(&NCP_FINFO(inode)->open_mutex);
@@ -146,7 +146,7 @@ ncp_file_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
 
 		error = ncp_read_bounce(NCP_SERVER(inode),
 			 	NCP_FINFO(inode)->file_handle,
-				pos, to_read, buf, &read_this_time, 
+				pos, to_read, buf, &read_this_time,
 				freepage, freelen);
 		if (error) {
 			error = -EIO;	/* NW errno -> Linux errno */
@@ -169,7 +169,7 @@ ncp_file_read(struct file *file, char __user *buf, size_t count, loff_t *ppos)
 	DPRINTK("ncp_file_read: exit %s/%s\n",
 		dentry->d_parent->d_name.name, dentry->d_name.name);
 outrel:
-	ncp_inode_close(inode);		
+	ncp_inode_close(inode);
 	return already_read ? already_read : error;
 }
 
@@ -209,7 +209,7 @@ ncp_file_write(struct file *file, const char __user *buf, size_t count, loff_t *
 	if (pos + count > inode->i_sb->s_maxbytes) {
 		count = inode->i_sb->s_maxbytes - pos;
 	}
-	
+
 	if (!count)
 		return 0;
 	errno = ncp_make_open(inode, O_WRONLY);
@@ -240,7 +240,7 @@ ncp_file_write(struct file *file, const char __user *buf, size_t count, loff_t *
 			errno = -EFAULT;
 			break;
 		}
-		if (ncp_write_kernel(NCP_SERVER(inode), 
+		if (ncp_write_kernel(NCP_SERVER(inode),
 		    NCP_FINFO(inode)->file_handle,
 		    pos, to_write, bouncebuffer, &written_this_time) != 0) {
 			errno = -EIO;
@@ -267,7 +267,7 @@ ncp_file_write(struct file *file, const char __user *buf, size_t count, loff_t *
 	DPRINTK("ncp_file_write: exit %s/%s\n",
 		dentry->d_parent->d_name.name, dentry->d_name.name);
 outrel:
-	ncp_inode_close(inode);		
+	ncp_inode_close(inode);
 	return already_written ? already_written : errno;
 }
 

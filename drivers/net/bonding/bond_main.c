@@ -4958,7 +4958,7 @@ static int __net_init bond_net_init(struct net *net)
 
 	bond_create_proc_dir(bn);
 	bond_create_sysfs(bn);
-	
+
 	return 0;
 }
 

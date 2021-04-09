@@ -109,9 +109,9 @@ Running Lguest:
   Then use --tunnet=bridge:lg0 when launching the guest.
 
   See:
-  
+
     http://www.linuxfoundation.org/collaborate/workgroups/networking/bridge
-    
+
   for general information on how to get bridging to work.
 
 - Random number generation. Using the --rng option will provide a

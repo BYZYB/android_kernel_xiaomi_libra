@@ -129,7 +129,7 @@ $exitout:
 
 $exitin:
 	/* A stupid byte-by-byte zeroing of the rest of the output
-	   buffer.  This cures security holes by never leaving 
+	   buffer.  This cures security holes by never leaving
 	   random kernel data around to be copied elsewhere.  */
 
 	mov $0,$1

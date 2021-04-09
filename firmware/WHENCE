@@ -363,7 +363,7 @@ Source: dsp56k/bootstrap.asm
 
 Licence: GPLv2 or later
 
-DSP56001 assembler, possibly buildable with a56 from 
+DSP56001 assembler, possibly buildable with a56 from
 http://www.zdomain.com/a56.html
 
 --------------------------------------------------------------------------

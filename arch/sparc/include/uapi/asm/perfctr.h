@@ -1,5 +1,5 @@
 /*----------------------------------------
-  PERFORMANCE INSTRUMENTATION  
+  PERFORMANCE INSTRUMENTATION
   Guillaume Thouvenin           08/10/98
   David S. Miller               10/06/98
   ---------------------------------------*/

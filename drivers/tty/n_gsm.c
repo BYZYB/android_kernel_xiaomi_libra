@@ -968,7 +968,7 @@ static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
 	unsigned long flags;
 	int sweep;
 
-	if (dlci->constipated) 
+	if (dlci->constipated)
 		return;
 
 	spin_lock_irqsave(&dlci->gsm->tx_lock, flags);
@@ -2917,7 +2917,7 @@ static int gsmtty_install(struct tty_driver *driver, struct tty_struct *tty)
 		return -EL2HLT;
 	/* If DLCI 0 is not yet fully open return an error. This is ok from a locking
 	   perspective as we don't have to worry about this if DLCI0 is lost */
-	if (gsm->dlci[0] && gsm->dlci[0]->state != DLCI_OPEN) 
+	if (gsm->dlci[0] && gsm->dlci[0]->state != DLCI_OPEN)
 		return -EL2NSYNC;
 	dlci = gsm->dlci[line];
 	if (dlci == NULL) {

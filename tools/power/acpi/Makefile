@@ -1,7 +1,7 @@
 PROG= acpidump
 SRCS=	acpidump.c
 KERNEL_INCLUDE := ../../../include
-CFLAGS += -s -D_LINUX -DDEFINE_ALTERNATE_TYPES -I$(KERNEL_INCLUDE) 
+CFLAGS += -s -D_LINUX -DDEFINE_ALTERNATE_TYPES -I$(KERNEL_INCLUDE)
 
 all: acpidump
 $(PROG) : $(SRCS)
@@ -9,7 +9,7 @@ $(PROG) : $(SRCS)
 
 CLEANFILES= $(PROG)
 
-clean : 
+clean :
 	rm -f $(CLEANFILES) $(patsubst %.c,%.o, $(SRCS)) *~
 
 install :

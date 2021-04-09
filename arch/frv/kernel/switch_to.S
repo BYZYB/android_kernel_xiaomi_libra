@@ -70,7 +70,7 @@ __switch_to:
 	ldi.p		@(gr8,#__THREAD_USER),gr8
 	call		save_user_regs
 	or		gr22,gr22,gr8
-	
+
 	# retrieve the new context
 	sethi.p		%hi(__kernel_frame0_ptr),gr6
 	setlo		%lo(__kernel_frame0_ptr),gr6

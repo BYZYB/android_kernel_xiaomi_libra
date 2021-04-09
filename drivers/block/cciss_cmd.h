@@ -76,13 +76,13 @@ typedef union _u64bit
 } u64bit;
 
 /* Type defs used in the following structs */
-#define QWORD vals32 
+#define QWORD vals32
 
 /* STRUCTURES */
 #define CISS_MAX_PHYS_LUN	1024
 /* SCSI-3 Cmmands */
 
-#pragma pack(1)	
+#pragma pack(1)
 
 #define CISS_INQUIRY 0x12
 /* Date returned */
@@ -101,7 +101,7 @@ typedef struct _ReportLUNdata_struct
   BYTE LUN[CISS_MAX_LUN][8];
 } ReportLunData_struct;
 
-#define CCISS_READ_CAPACITY 0x25 /* Read Capacity */ 
+#define CCISS_READ_CAPACITY 0x25 /* Read Capacity */
 typedef struct _ReadCapdata_struct
 {
   BYTE total_size[4];	/* Total size in blocks */
@@ -199,11 +199,11 @@ typedef struct _CommandList_struct {
   RequestBlock_struct      Request;
   ErrDescriptor_struct     ErrDesc;
   SGDescriptor_struct      SG[MAXSGENTRIES];
-	/* information associated with the command */ 
+	/* information associated with the command */
   __u32			   busaddr; /* physical address of this record */
-  ErrorInfo_struct * 	   err_info; /* pointer to the allocated mem */ 
+  ErrorInfo_struct * 	   err_info; /* pointer to the allocated mem */
   int			   ctlr;
-  int			   cmd_type; 
+  int			   cmd_type;
   long			   cmdindex;
   struct list_head list;
   struct request *	   rq;
@@ -265,5 +265,5 @@ struct TransTable_struct {
   u32 RepQAddr0High32;
 };
 
-#pragma pack()	 
+#pragma pack()
 #endif /* CCISS_CMD_H */

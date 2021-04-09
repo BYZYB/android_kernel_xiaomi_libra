@@ -104,7 +104,7 @@ void pdacf_dump(struct snd_pdacf *chip)
 static int pdacf_reset(struct snd_pdacf *chip, int powerdown)
 {
 	u16 val;
-	
+
 	val = pdacf_reg_read(chip, PDAUDIOCF_REG_SCR);
 	val |= PDAUDIOCF_PDN;
 	val &= ~PDAUDIOCF_RECORD;		/* for sure */
@@ -143,7 +143,7 @@ static void pdacf_proc_read(struct snd_info_entry * entry,
 	snd_iprintf(buffer, "PDAudioCF\n\n");
 	tmp = pdacf_reg_read(chip, PDAUDIOCF_REG_SCR);
 	snd_iprintf(buffer, "FPGA revision      : 0x%x\n", PDAUDIOCF_FPGAREV(tmp));
-	                                   
+
 }
 
 static void pdacf_proc_init(struct snd_pdacf *chip)
@@ -220,7 +220,7 @@ int snd_pdacf_ak4117_create(struct snd_pdacf *chip)
 	val &= ~PDAUDIOCF_TESTDATASEL;
 #endif
 	pdacf_reg_write(chip, PDAUDIOCF_REG_TCR, val);
-	
+
 	/* setup the FPGA to match AK4117 setup */
 	val = pdacf_reg_read(chip, PDAUDIOCF_REG_SCR);
 	val &= ~(PDAUDIOCF_CLKDIV0 | PDAUDIOCF_CLKDIV1);		/* use 24.576Mhz clock */
@@ -265,7 +265,7 @@ void snd_pdacf_powerdown(struct snd_pdacf *chip)
 int snd_pdacf_suspend(struct snd_pdacf *chip)
 {
 	u16 val;
-	
+
 	snd_power_change_state(chip->card, SNDRV_CTL_POWER_D3hot);
 	snd_pcm_suspend_all(chip->pcm);
 	/* disable interrupts, but use direct write to preserve old register value in chip->regmap */

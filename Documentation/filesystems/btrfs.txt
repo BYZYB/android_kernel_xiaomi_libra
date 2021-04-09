@@ -59,7 +59,7 @@ Unless otherwise specified, all options default to off.
 
 	check_int enables the integrity checker module, which examines all
 	block write requests to ensure on-disk consistency, at a large
-	memory and CPU cost.  
+	memory and CPU cost.
 
 	check_int_data includes extent data in the integrity checks, and
 	implies the check_int option.
@@ -101,7 +101,7 @@ Unless otherwise specified, all options default to off.
 	Debugging option to be more verbose in some ENOSPC conditions.
 
   fatal_errors=<action>
-	Action to take when encountering a fatal error: 
+	Action to take when encountering a fatal error:
 	  "bug" - BUG() on a fatal error.  This is the default.
 	  "panic" - panic() on a fatal error.
 
@@ -119,7 +119,7 @@ Unless otherwise specified, all options default to off.
 
   max_inline=<bytes>
 	Specify the maximum amount of space, in bytes, that can be inlined in
-	a metadata B-tree leaf.  The value is specified in bytes, optionally 
+	a metadata B-tree leaf.  The value is specified in bytes, optionally
 	with a K, M, or G suffix, case insensitive.  In practice, this value
 	is limited by the root sector size, with some space unavailable due
 	to leaf headers.  For a 4k sectorsize, max inline data is ~3900 bytes.
@@ -151,7 +151,7 @@ Unless otherwise specified, all options default to off.
 
   recovery
 	Enable autorecovery attempts if a bad tree root is found at mount time.
-	Currently this scans a list of several previous tree roots and tries to 
+	Currently this scans a list of several previous tree roots and tries to
 	use the first readable.
 
  skip_balance
@@ -193,13 +193,13 @@ Unless otherwise specified, all options default to off.
 	This allows mounting of subvolumes which are not in the root of the mounted
 	filesystem.
 	You can use "btrfs subvolume show " to see the object ID for a subvolume.
-	
+
   thread_pool=<number>
 	The number of worker threads to allocate.  The default number is equal
 	to the number of CPUs + 2, or 8, whichever is smaller.
 
   user_subvol_rm_allowed
-	Allow subvolumes to be deleted by a non-root user. Use with caution. 
+	Allow subvolumes to be deleted by a non-root user. Use with caution.
 
 MAILING LIST
 ============

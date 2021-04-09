@@ -57,7 +57,7 @@ void reiserfs_evict_inode(struct inode *inode)
 		/* Do quota update inside a transaction for journaled quotas. We must do that
 		 * after delete_object so that quota updates go into the same transaction as
 		 * stat data deletion */
-		if (!err) 
+		if (!err)
 			dquot_free_inode(inode);
 
 		if (journal_end(&th, inode->i_sb, jbegin_count))
@@ -2153,7 +2153,7 @@ int reiserfs_truncate_file(struct inode *inode, int update_timestamps)
 		error = err2;
   		goto out;
 	}
-	
+
 	if (update_timestamps) {
 		error = remove_save_link(inode, 1 /* truncate */);
 		if (error)

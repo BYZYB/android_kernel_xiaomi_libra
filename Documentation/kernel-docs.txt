@@ -13,32 +13,32 @@
    The need for a document like this one became apparent in the
    linux-kernel mailing list as the same questions, asking for pointers
    to information, appeared again and again.
-   
+
    Fortunately, as more and more people get to GNU/Linux, more and more
    get interested in the Kernel. But reading the sources is not always
    enough. It is easy to understand the code, but miss the concepts, the
    philosophy and design decisions behind this code.
-   
+
    Unfortunately, not many documents are available for beginners to
    start. And, even if they exist, there was no "well-known" place which
    kept track of them. These lines try to cover this lack. All documents
    available on line known by the author are listed, while some reference
    books are also mentioned.
-   
+
    PLEASE, if you know any paper not listed here or write a new document,
    send me an e-mail, and I'll include a reference to it here. Any
    corrections, ideas or comments are also welcomed.
-   
+
    The papers that follow are listed in no particular order. All are
    cataloged with the following fields: the document's "Title", the
    "Author"/s, the "URL" where they can be found, some "Keywords" helpful
    when searching for specific topics, and a brief "Description" of the
    Document.
-   
+
    Enjoy!
-   
+
      ON-LINE DOCS:
-       
+
      * Title: "Linux Device Drivers, Third Edition"
        Author: Jonathan Corbet, Alessandro Rubini, Greg Kroah-Hartman
        URL: http://lwn.net/Kernel/LDD3/
@@ -193,7 +193,7 @@
        "Writing a network device driver for Linux is fundamentally
        simple---most of the complexity (other than talking to the
        hardware) involves managing network packets in memory".
-       
+
      * Title: "Writing Linux Device Drivers"
        Author: Michael K. Johnson.
        URL: http://users.evitech.fi/~tk/rtos/writing_linux_device_d.html
@@ -203,7 +203,7 @@
        Description: Introductory 50-minutes (sic) tutorial on writing
        device drivers. 12 pages written by the same author of the "Kernel
        Hackers' Guide" which give a very good overview of the topic.
-       
+
      * Title: "The Venus kernel interface"
        Author: Peter J. Braam.
        URL:
@@ -267,7 +267,7 @@
      * Title: "Kernel API changes from 2.0 to 2.2"
        Author: Richard Gooch.
        URL:
-       http://www.linuxhq.com/guides/LKMPG/node28.html 
+       http://www.linuxhq.com/guides/LKMPG/node28.html
        Keywords: 2.2, changes.
        Description: Kernel functions/structures/variables which changed
        from 2.0.x to 2.2.x.
@@ -277,7 +277,7 @@
        Keywords: 2.4, changes.
        Description: Kernel functions/structures/variables which changed
        from 2.2.x to 2.4.x.
-       
+
      * Title: "Linux Kernel Module Programming Guide"
        Author: Ori Pomerantz.
        URL: http://tldp.org/LDP/lkmpg/2.6/html/index.html
@@ -285,7 +285,7 @@
        interrupt handlers .
        Description: Very nice 92 pages GPL book on the topic of modules
        programming. Lots of examples.
-       
+
      * Title: "I/O Event Handling Under Linux"
        Author: Richard Gooch.
        Keywords: IO, I/O, select(2), poll(2), FDs, aio_read(2), readiness
@@ -297,7 +297,7 @@
        (have data ready to be read or are ready for writing). Ideally you
        want a mechanism that is scalable. This means a large number of
        inactive FDs cost very little in memory and CPU time to manage".
-       
+
      * Title: "The Kernel Hacking HOWTO"
        Author: Various Talented People, and Rusty.
        Location: in kernel tree, Documentation/DocBook/kernel-hacking.tmpl
@@ -314,7 +314,7 @@
        understanding of what the kernel is, and how it is used. It was
        originally written for the 2.3 kernels, but nearly all of it
        applies to 2.2 too; 2.0 is slightly different".
-       
+
      * Title: "Writing an ALSA Driver"
        Author: Takashi Iwai <tiwai@suse.de>
        URL: http://www.alsa-project.org/~iwai/writing-an-alsa-driver/index.html
@@ -322,7 +322,7 @@
        Description: Advanced Linux Sound Architecture for developers,
        both at kernel and user-level sides. ALSA is the Linux kernel
        sound architecture in the 2.6 kernel version.
-       
+
      * Title: "Programming Guide for Linux USB Device Drivers"
        Author: Detlef Fliegl.
        URL: http://usb.in.tum.de/usbdoc/
@@ -348,7 +348,7 @@
        Description: From the introduction: "This glossary is intended as
        a brief description of some of the acronyms and terms you may hear
        during discussion of the Linux kernel".
-       
+
      * Title: "Linux Kernel Locking HOWTO"
        Author: Various Talented People, and Rusty.
        Location: in kernel tree, Documentation/DocBook/kernel-locking.tmpl
@@ -383,7 +383,7 @@
 
      * Title: "Porting Device Drivers To Linux 2.2: part II"
        Author: Alan Cox.
-       URL: http://www.linux-mag.com/id/238 
+       URL: http://www.linux-mag.com/id/238
        Keywords: ports, porting.
        Description: Second part on porting from 2.0 to 2.2 kernels.
 
@@ -467,7 +467,7 @@
        device till they are delivered to applications. The studied kernel
        code is from 2.2.14 version. Provides code for a working packet
        dropper example.
-       
+
      * Title: "Get those boards talking under Linux."
        Author: Alex Ivchenko.
        URL: http://www.edn.com/article/CA46968.html
@@ -479,7 +479,7 @@
        interrupt handling.
        Notes: Two-parts article. Part II is at
        URL: http://www.edn.com/article/CA46998.html
-       
+
      * Title: "Linux PCMCIA Programmer's Guide"
        Author: David Hinds.
        URL: http://pcmcia-cs.sourceforge.net/ftp/doc/PCMCIA-PROG.html
@@ -496,7 +496,7 @@
        Keywords: knfsd, nfsd, NFS, RPC, lockd, mountd, statd.
        Description: The title says it all.
        Notes: Covers knfsd's version 1.4.7 (patch against 2.2.7 kernel).
-       
+
      * Title: "A Linux vm README"
        Author: Kanoj Sarcar.
        URL: http://kos.enix.org/pub/linux-vmm.html
@@ -504,7 +504,7 @@
        cache, swap cache, kswapd.
        Description: Telegraphic, short descriptions and definitions
        relating the Linux virtual memory implementation.
-       
+
      * Title: "(nearly) Complete Linux Loadable Kernel Modules. The
        definitive guide for hackers, virus coders and system
        administrators."
@@ -518,16 +518,16 @@
        avoid all those abuses.
        Notes: For 2.0.x kernels. Gives guidances to port it to 2.2.x
        kernels.
-       
+
      BOOKS: (Not on-line)
-   
+
      * Title: "Linux Device Drivers"
        Author: Alessandro Rubini.
        Publisher: O'Reilly & Associates.
        Date: 1998.
        Pages: 439.
        ISBN: 1-56592-292-1
-       
+
      * Title: "Linux Device Drivers, 2nd Edition"
        Author: Alessandro Rubini and Jonathan Corbet.
        Publisher: O'Reilly & Associates.
@@ -552,14 +552,14 @@
        Publisher: Addison-Wesley.
        Date: 1997.
        ISBN: 0-201-33143-8 (second edition)
-       
+
      * Title: "The Design of the UNIX Operating System"
        Author: Maurice J. Bach.
        Publisher: Prentice Hall.
        Date: 1986.
        Pages: 471.
        ISBN: 0-13-201757-1
-       
+
      * Title: "The Design and Implementation of the 4.3 BSD UNIX
        Operating System"
        Author: Samuel J. Leffler, Marshall Kirk McKusick, Michael J.
@@ -567,7 +567,7 @@
        Publisher: Addison-Wesley.
        Date: 1989 (reprinted with corrections on October, 1990).
        ISBN: 0-201-06196-1
-       
+
      * Title: "The Design and Implementation of the 4.4 BSD UNIX
        Operating System"
        Author: Marshall Kirk McKusick, Keith Bostic, Michael J. Karels,
@@ -575,7 +575,7 @@
        Publisher: Addison-Wesley.
        Date: 1996.
        ISBN: 0-201-54979-4
-       
+
      * Title: "Programmation Linux 2.0 API systeme et fonctionnement du
        noyau"
        Author: Remy Card, Eric Dumas, Franck Mevel.
@@ -708,7 +708,7 @@
        try irc.openprojects.net or irc.<country>.openprojects.net as your
        server and then /join #kernelnewbies". It also hosts articles,
        documents, FAQs...
-       
+
      * Name: "linux-kernel mailing list archives and search engines"
        URL: http://vger.kernel.org/vger-lists.html
        URL: http://www.uwsg.indiana.edu/hypermail/linux/kernel/index.html
@@ -720,5 +720,5 @@
        Description: Some of the linux-kernel mailing list archivers. If
        you have a better/another one, please let me know.
      _________________________________________________________________
-   
+
    Document last updated on Sat 2005-NOV-19

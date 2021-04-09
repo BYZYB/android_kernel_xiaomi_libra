@@ -47,18 +47,18 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
 			break;
 		case R_H8_PCREL16:
 			v -= (unsigned long)loc + 2;
-			if ((Elf32_Sword)v > 0x7fff || 
+			if ((Elf32_Sword)v > 0x7fff ||
 			    (Elf32_Sword)v < -(Elf32_Sword)0x8000)
 				goto overflow;
-			else 
+			else
 				*(unsigned short *)loc = v;
 			break;
 		case R_H8_PCREL8:
 			v -= (unsigned long)loc + 1;
-			if ((Elf32_Sword)v > 0x7f || 
+			if ((Elf32_Sword)v > 0x7f ||
 			    (Elf32_Sword)v < -(Elf32_Sword)0x80)
 				goto overflow;
-			else 
+			else
 				*(unsigned char *)loc = v;
 			break;
 		default:

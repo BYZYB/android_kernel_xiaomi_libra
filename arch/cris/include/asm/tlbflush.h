@@ -25,7 +25,7 @@ extern void __flush_tlb_page(struct vm_area_struct *vma,
 #ifdef CONFIG_SMP
 extern void flush_tlb_all(void);
 extern void flush_tlb_mm(struct mm_struct *mm);
-extern void flush_tlb_page(struct vm_area_struct *vma, 
+extern void flush_tlb_page(struct vm_area_struct *vma,
 			   unsigned long addr);
 #else
 #define flush_tlb_all __flush_tlb_all

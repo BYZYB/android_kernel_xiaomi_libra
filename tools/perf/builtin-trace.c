@@ -86,7 +86,7 @@ static struct thread_trace *thread__trace(struct thread *thread)
 
 	if (thread->priv == NULL)
 		thread->priv = thread_trace__new();
-		
+
 	if (thread->priv == NULL)
 		goto fail;
 

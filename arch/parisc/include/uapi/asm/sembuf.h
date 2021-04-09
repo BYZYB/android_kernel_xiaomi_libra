@@ -1,7 +1,7 @@
 #ifndef _PARISC_SEMBUF_H
 #define _PARISC_SEMBUF_H
 
-/* 
+/*
  * The semid64_ds structure for parisc architecture.
  * Note extra padding because this structure is passed back and forth
  * between kernel and user space.

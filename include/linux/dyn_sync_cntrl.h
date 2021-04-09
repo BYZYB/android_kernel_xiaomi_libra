@@ -1,8 +1,8 @@
-/* 
+/*
  * Dynamic sync control driver definitions (V2)
- * 
+ *
  * by andip71 (alias Lord Boeffla)
- * 
+ *
  */
 
 #define DYN_FSYNC_ACTIVE_DEFAULT true

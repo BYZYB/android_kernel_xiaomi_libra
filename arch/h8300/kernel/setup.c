@@ -6,7 +6,7 @@
  *  Copyright (C) 1998,1999  D. Jeff Dionne <jeff@lineo.ca>
  *  Copyright (C) 1998       Kenneth Albanowski <kjahds@kjahds.com>
  *  Copyright (C) 1995       Hamish Macdonald
- *  Copyright (C) 2000       Lineo Inc. (www.lineo.com) 
+ *  Copyright (C) 2000       Lineo Inc. (www.lineo.com)
  *  Copyright (C) 2001 	     Lineo, Inc. <www.lineo.com>
  *
  *  H8/300 porting Yoshinori Sato <ysato@users.sourceforge.jp>
@@ -113,16 +113,16 @@ void __init setup_arch(char **cmdline_p)
 	memory_end -= STUBSIZE;
 #endif
 #else
-	if ((memory_end < CONFIG_BLKDEV_RESERVE_ADDRESS) && 
+	if ((memory_end < CONFIG_BLKDEV_RESERVE_ADDRESS) &&
 	    (memory_end > CONFIG_BLKDEV_RESERVE_ADDRESS))
 	    /* overlap userarea */
-	    memory_end = CONFIG_BLKDEV_RESERVE_ADDRESS; 
+	    memory_end = CONFIG_BLKDEV_RESERVE_ADDRESS;
 #endif
 
 	init_mm.start_code = (unsigned long) _stext;
 	init_mm.end_code = (unsigned long) _etext;
 	init_mm.end_data = (unsigned long) _edata;
-	init_mm.brk = (unsigned long) 0; 
+	init_mm.brk = (unsigned long) 0;
 
 #if (defined(CONFIG_H8300H_SIM) || defined(CONFIG_H8S_SIM)) && defined(CONFIG_GDB_MAGICPRINT)
 	register_console((struct console *)&gdb_console);
@@ -153,7 +153,7 @@ void __init setup_arch(char **cmdline_p)
 	boot_command_line[COMMAND_LINE_SIZE-1] = 0;
 
 #ifdef DEBUG
-	if (strlen(*cmdline_p)) 
+	if (strlen(*cmdline_p))
 		printk(KERN_DEBUG "Command line: '%s'\n", *cmdline_p);
 #endif
 

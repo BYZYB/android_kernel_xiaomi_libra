@@ -27,7 +27,7 @@
  *		as published by the Free Software Foundation; either version
  *		2 of the License, or (at your option) any later version.
  */
- 
+
 /* Revised by Kenneth Albanowski for m68knommu. Basic problem: unaligned access kills, so most
    of the assembly has to go. */
 

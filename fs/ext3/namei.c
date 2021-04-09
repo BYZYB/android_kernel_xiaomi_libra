@@ -2275,7 +2275,7 @@ retry:
 		 * lock which ranks below transaction start (and it can also
 		 * wait for journal commit if we are running out of space). So
 		 * we have to stop transaction now and restart it when symlink
-		 * contents is written. 
+		 * contents is written.
 		 *
 		 * To keep fs consistent in case of crash, we have to put inode
 		 * to orphan list in the mean time.

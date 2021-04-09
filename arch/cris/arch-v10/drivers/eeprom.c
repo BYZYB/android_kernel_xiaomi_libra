@@ -70,7 +70,7 @@ struct eeprom_type
 					   (up to 10ms for some models) */
   unsigned long usec_delay_step; /* For adaptive algorithm */
   int adapt_state; /* 1 = To high , 0 = Even, -1 = To low */
-  
+
   /* this one is to keep the read/write operations atomic */
   struct mutex lock;
   int retry_cnt_addr; /* Used to keep track of number of retries for
@@ -126,7 +126,7 @@ int __init eeprom_init(void)
            eeprom_name, EEPROM_MAJOR_NR);
     return -1;
   }
-  
+
   printk("EEPROM char device v0.3, (c) 2000 Axis Communications AB\n");
 
   /*
@@ -142,7 +142,7 @@ int __init eeprom_init(void)
   eeprom.usec_delay_writecycles = INITIAL_WRITEDELAY_US;
   eeprom.usec_delay_step = 128;
   eeprom.adapt_state = 0;
-  
+
 #ifdef CONFIG_ETRAX_I2C_EEPROM_PROBE
   i2c_start();
   i2c_outbyte(0x80);
@@ -151,13 +151,13 @@ int __init eeprom_init(void)
     /* It's not 8k.. */
     int success = 0;
     unsigned char buf_2k_start[16];
-    
+
     /* Im not sure this will work... :) */
     /* assume 2kB, if failure go for 16kB */
     /* Test with 16kB settings.. */
     /* If it's a 2kB EEPROM and we address it outside it's range
      * it will mirror the address space:
-     * 1. We read two locations (that are mirrored), 
+     * 1. We read two locations (that are mirrored),
      *    if the content differs * it's a 16kB EEPROM.
      * 2. if it doesn't differ - write different value to one of the locations,
      *    check the other - if content still is the same it's a 2k EEPROM,
@@ -166,10 +166,10 @@ int __init eeprom_init(void)
 #define LOC1 8
 #define LOC2 (0x1fb) /*1fb, 3ed, 5df, 7d1 */
 
-   /* 2k settings */  
+   /* 2k settings */
     i2c_stop();
     eeprom.size = EEPROM_2KB;
-    eeprom.select_cmd = 0xA0;   
+    eeprom.select_cmd = 0xA0;
     eeprom.sequential_write_pagesize = 16;
     if( eeprom_read_buf( 0, buf_2k_start, 16 ) == 16 )
     {
@@ -177,12 +177,12 @@ int __init eeprom_init(void)
     }
     else
     {
-      printk(KERN_INFO "%s: Failed to read in 2k mode!\n", eeprom_name);  
+      printk(KERN_INFO "%s: Failed to read in 2k mode!\n", eeprom_name);
     }
-    
+
     /* 16k settings */
     eeprom.size = EEPROM_16KB;
-    eeprom.select_cmd = 0xA0;   
+    eeprom.select_cmd = 0xA0;
     eeprom.sequential_write_pagesize = 64;
 
     {
@@ -191,14 +191,14 @@ int __init eeprom_init(void)
       {
         if( eeprom_read_buf(LOC1, loc1, 4) == 4)
         {
-          D(printk("0 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n", 
+          D(printk("0 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n",
                    LOC1, loc1, LOC2, loc2));
 #if 0
           if (memcmp(loc1, loc2, 4) != 0 )
           {
             /* It's 16k */
             printk(KERN_INFO "%s: 16k detected in step 1\n", eeprom_name);
-            eeprom.size = EEPROM_16KB;     
+            eeprom.size = EEPROM_16KB;
             success = 1;
           }
           else
@@ -212,18 +212,18 @@ int __init eeprom_init(void)
               /* If 2k EEPROM this write will actually write 10 bytes
                * from pos 0
                */
-              D(printk("1 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n", 
+              D(printk("1 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n",
                        LOC1, loc1, LOC2, loc2));
               if( eeprom_read_buf(LOC1, tmp, 4) == 4)
               {
-                D(printk("2 loc1: (%i) '%4.4s' tmp '%4.4s'\n", 
+                D(printk("2 loc1: (%i) '%4.4s' tmp '%4.4s'\n",
                          LOC1, loc1, tmp));
                 if (memcmp(loc1, tmp, 4) != 0 )
                 {
                   printk(KERN_INFO "%s: read and write differs! Not 16kB\n",
                          eeprom_name);
                   loc1[0] = ~loc1[0];
-                  
+
                   if (eeprom_write_buf(LOC1, loc1, 1) == 1)
                   {
                     success = 1;
@@ -232,12 +232,12 @@ int __init eeprom_init(void)
                   {
                     printk(KERN_INFO "%s: Restore 2k failed during probe,"
                            " EEPROM might be corrupt!\n", eeprom_name);
-                    
+
                   }
                   i2c_stop();
                   /* Go to 2k mode and write original data */
                   eeprom.size = EEPROM_2KB;
-                  eeprom.select_cmd = 0xA0;   
+                  eeprom.select_cmd = 0xA0;
                   eeprom.sequential_write_pagesize = 16;
                   if( eeprom_write_buf(0, buf_2k_start, 16) == 16)
                   {
@@ -247,16 +247,16 @@ int __init eeprom_init(void)
                     printk(KERN_INFO "%s: Failed to write back 2k start!\n",
                            eeprom_name);
                   }
-                  
+
                   eeprom.size = EEPROM_2KB;
                 }
               }
-                
+
               if(!success)
               {
                 if( eeprom_read_buf(LOC2, loc2, 1) == 1)
                 {
-                  D(printk("0 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n", 
+                  D(printk("0 loc1: (%i) '%4.4s' loc2 (%i) '%4.4s'\n",
                            LOC1, loc1, LOC2, loc2));
                   if (memcmp(loc1, loc2, 4) == 0 )
                   {
@@ -272,10 +272,10 @@ int __init eeprom_init(void)
                     {
                       printk(KERN_INFO "%s: Restore 2k failed during probe,"
                              " EEPROM might be corrupt!\n", eeprom_name);
-                      
+
                     }
-                    
-                    eeprom.size = EEPROM_2KB;     
+
+                    eeprom.size = EEPROM_2KB;
                   }
                   else
                   {
@@ -293,7 +293,7 @@ int __init eeprom_init(void)
                       printk(KERN_INFO "%s: Restore 16k failed during probe,"
                              " EEPROM might be corrupt!\n", eeprom_name);
                     }
-                    
+
                     eeprom.size = EEPROM_16KB;
                   }
                 }
@@ -304,7 +304,7 @@ int __init eeprom_init(void)
         if (!success)
         {
           printk(KERN_INFO "%s: Probing failed!, using 2KB!\n", eeprom_name);
-          eeprom.size = EEPROM_2KB;               
+          eeprom.size = EEPROM_2KB;
         }
       } /* read */
     }
@@ -357,7 +357,7 @@ int __init eeprom_init(void)
    case (EEPROM_16KB):
      printk("%s: " EETEXT " i2c compatible 16kB eeprom.\n", eeprom_name);
      eeprom.sequential_write_pagesize = 64;
-     eeprom.select_cmd = 0xA0;     
+     eeprom.select_cmd = 0xA0;
      break;
    default:
      eeprom.size = 0;
@@ -365,7 +365,7 @@ int __init eeprom_init(void)
      break;
   }
 
-  
+
 
   eeprom_disable_write_protect();
 
@@ -399,7 +399,7 @@ static loff_t eeprom_lseek(struct file * file, loff_t offset, int orig)
  *  orig 1: relative from current position
  *  orig 2: position from last eeprom address
  */
-  
+
   switch (orig)
   {
    case 0:
@@ -418,10 +418,10 @@ static loff_t eeprom_lseek(struct file * file, loff_t offset, int orig)
   /* truncate position */
   if (file->f_pos < 0)
   {
-    file->f_pos = 0;    
+    file->f_pos = 0;
     return(-EOVERFLOW);
   }
-  
+
   if (file->f_pos >= eeprom.size)
   {
     file->f_pos = eeprom.size - 1;
@@ -453,18 +453,18 @@ static ssize_t eeprom_read(struct file * file, char * buf, size_t count, loff_t 
   {
     return -EFAULT;
   }
-  
+
   if (mutex_lock_interruptible(&eeprom.lock))
     return -EINTR;
 
   page = (unsigned char) (p >> 8);
-  
+
   if(!eeprom_address(p))
   {
     printk(KERN_INFO "%s: Read failed to address the eeprom: "
            "0x%08X (%i) page: %i\n", eeprom_name, (int)p, (int)p, page);
     i2c_stop();
-    
+
     /* don't forget to wake them up */
     mutex_unlock(&eeprom.lock);
     return -EFAULT;
@@ -487,7 +487,7 @@ static ssize_t eeprom_read(struct file * file, char * buf, size_t count, loff_t 
 
   /* go on with the actual read */
   read = read_from_eeprom( buf, count);
-  
+
   if(read > 0)
   {
     *off += read;
@@ -526,8 +526,8 @@ static ssize_t eeprom_write(struct file * file, const char * buf, size_t count,
     restart = 0;
     written = 0;
     p = *off;
-   
-    
+
+
     while( (written < count) && (p < eeprom.size))
     {
       /* address the eeprom */
@@ -536,12 +536,12 @@ static ssize_t eeprom_write(struct file * file, const char * buf, size_t count,
         printk(KERN_INFO "%s: Write failed to address the eeprom: "
                "0x%08X (%i) \n", eeprom_name, (int)p, (int)p);
         i2c_stop();
-        
+
         /* don't forget to wake them up */
         mutex_unlock(&eeprom.lock);
         return -EFAULT;
       }
-#ifdef EEPROM_ADAPTIVE_TIMING      
+#ifdef EEPROM_ADAPTIVE_TIMING
       /* Adaptive algorithm to adjust timing */
       if (eeprom.retry_cnt_addr > 0)
       {
@@ -586,7 +586,7 @@ static ssize_t eeprom_write(struct file * file, const char * buf, size_t count,
         /* To High (or good) now */
         D(printk("<D=%i d=%i\n",
                eeprom.usec_delay_writecycles, eeprom.usec_delay_step));
-        
+
         if (eeprom.adapt_state < 0)
         {
           /* To High before */
@@ -594,7 +594,7 @@ static ssize_t eeprom_write(struct file * file, const char * buf, size_t count,
           {
             eeprom.usec_delay_step *= 2;
             eeprom.usec_delay_step--;
-            
+
             if (eeprom.usec_delay_writecycles > eeprom.usec_delay_step)
             {
               eeprom.usec_delay_writecycles -= eeprom.usec_delay_step;
@@ -613,7 +613,7 @@ static ssize_t eeprom_write(struct file * file, const char * buf, size_t count,
             eeprom.usec_delay_step /= 2;
             eeprom.usec_delay_step--;
           }
-          
+
           eeprom.adapt_state = -1;
         }
 
@@ -632,7 +632,7 @@ static ssize_t eeprom_write(struct file * file, const char * buf, size_t count,
       /* write until we hit a page boundary or count */
       do
       {
-        i2c_outbyte(buf[written]);        
+        i2c_outbyte(buf[written]);
         if(!i2c_getack())
         {
           restart=1;
@@ -641,7 +641,7 @@ static ssize_t eeprom_write(struct file * file, const char * buf, size_t count,
           break;
         }
         written++;
-        p++;        
+        p++;
       } while( written < count && ( p % eeprom.sequential_write_pagesize ));
 
       /* end write cycle */
@@ -683,13 +683,13 @@ static int eeprom_address(unsigned long addr)
 
     if(eeprom.size == EEPROM_16KB)
     {
-      i2c_outbyte( eeprom.select_cmd ); 
+      i2c_outbyte( eeprom.select_cmd );
       i2c_getack();
-      i2c_outbyte(page); 
+      i2c_outbyte(page);
     }
     else
     {
-      i2c_outbyte( eeprom.select_cmd | (page << 1) ); 
+      i2c_outbyte( eeprom.select_cmd | (page << 1) );
     }
     if(!i2c_getack())
     {
@@ -698,12 +698,12 @@ static int eeprom_address(unsigned long addr)
       /* Must have a delay here.. 500 works, >50, 100->works 5th time*/
       i2c_delay(MAX_WRITEDELAY_US / EEPROM_RETRIES * i);
       /* The chip needs up to 10 ms from write stop to next start */
-     
+
     }
     else
     {
       i2c_outbyte(offset);
-      
+
       if(!i2c_getack())
       {
         /* retry */
@@ -712,9 +712,9 @@ static int eeprom_address(unsigned long addr)
       else
         break;
     }
-  }    
+  }
 
-  
+
   eeprom.retry_cnt_addr = i;
   D(printk("%i\n", eeprom.retry_cnt_addr));
   if(eeprom.retry_cnt_addr == EEPROM_RETRIES)
@@ -732,7 +732,7 @@ static int read_from_eeprom(char * buf, int count)
   int i, read=0;
 
   for(i = 0; i < EEPROM_RETRIES; i++)
-  {    
+  {
     if(eeprom.size == EEPROM_16KB)
     {
       i2c_outbyte( eeprom.select_cmd | 1 );
@@ -743,17 +743,17 @@ static int read_from_eeprom(char * buf, int count)
       break;
     }
   }
-  
+
   if(i == EEPROM_RETRIES)
   {
     printk(KERN_INFO "%s: failed to read from eeprom\n", eeprom_name);
     i2c_stop();
-    
+
     return -EFAULT;
   }
 
   while( (read < count))
-  {    
+  {
     if (put_user(i2c_inbyte(), &buf[read++]))
     {
       i2c_stop();
@@ -825,7 +825,7 @@ static void eeprom_disable_write_protect(void)
       DBP_SAVE(ax_printf("Get ack returns false 53\n"));
     }
     i2c_stop();
-    
+
     /* Step 3 Set BP1, BP0, and/or WPEN bits (write 00000110 to address 1FFFh */
     i2c_start();
     i2c_outbyte(0xbe);
@@ -844,7 +844,7 @@ static void eeprom_disable_write_protect(void)
       DBP_SAVE(ax_printf("Get ack returns false 58\n"));
     }
     i2c_stop();
-    
+
     /* Write protect disabled */
   }
 }

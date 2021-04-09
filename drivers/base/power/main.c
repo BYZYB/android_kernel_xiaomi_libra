@@ -1353,7 +1353,7 @@ static int __device_suspend(struct device *dev, pm_message_t state, bool async)
 
 	if (dev->power.syscore)
 		goto Complete;
-	
+
 	dpm_wd_set(&wd, dev);
 
 	device_lock(dev);

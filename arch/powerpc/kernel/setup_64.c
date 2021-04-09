@@ -1,5 +1,5 @@
 /*
- * 
+ *
  * Common boot and setup code.
  *
  * Copyright (C) 2001 PPC64 Team, IBM Corp
@@ -369,7 +369,7 @@ static void __init initialize_cache_info(void)
 
 
 /*
- * Do some initial setup of the system.  The parameters are those which 
+ * Do some initial setup of the system.  The parameters are those which
  * were passed in from the bootloader.
  */
 void __init setup_system(void)

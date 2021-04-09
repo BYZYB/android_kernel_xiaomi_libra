@@ -31,7 +31,7 @@ STATUS/OWNERSHIP
 4. DONE (w/caveats) as part of "new" zcache; per cleancache performance
     feedback see https://lkml.org/lkml/2011/8/17/351, in
     staging/zcache for 3.9; dependent on proposed mm patch, see
-    https://lkml.org/lkml/2012/1/25/300 
+    https://lkml.org/lkml/2012/1/25/300
 5. DONE as part of "new" zcache; performance tuning only,
     in staging/zcache for 3.9; dependent on frontswap patch
     merged in 3.7 (33c2a174)

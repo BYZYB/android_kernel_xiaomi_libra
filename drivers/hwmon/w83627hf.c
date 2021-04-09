@@ -606,7 +606,7 @@ static ssize_t store_regs_in_min0(struct device *dev, struct device_attribute *a
 		return err;
 
 	mutex_lock(&data->update_lock);
-	
+
 	if ((data->vrm_ovt & 0x01) &&
 		(w83627thf == data->type || w83637hf == data->type
 		 || w83687thf == data->type))
@@ -639,7 +639,7 @@ static ssize_t store_regs_in_max0(struct device *dev, struct device_attribute *a
 	if ((data->vrm_ovt & 0x01) &&
 		(w83627thf == data->type || w83637hf == data->type
 		 || w83687thf == data->type))
-		
+
 		/* use VRM9 calculation */
 		data->in_max[0] =
 			clamp_val(((val * 100) - 70000 + 244) / 488, 0, 255);
@@ -1747,7 +1747,7 @@ static void w83627hf_init_device(struct platform_device *pdev)
 
 	/* Read VRM & OVT Config only once */
 	if (type == w83627thf || type == w83637hf || type == w83687thf) {
-		data->vrm_ovt = 
+		data->vrm_ovt =
 			w83627hf_read_value(data, W83627THF_REG_VRM_OVT_CFG);
 	}
 

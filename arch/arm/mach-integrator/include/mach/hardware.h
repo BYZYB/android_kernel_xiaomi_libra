@@ -28,7 +28,7 @@
  * Where in virtual memory the IO devices (timers, system controllers
  * and so on)
  */
-#define IO_BASE			0xF0000000                 // VA of IO 
+#define IO_BASE			0xF0000000                 // VA of IO
 #define IO_SIZE			0x0B000000                 // How much?
 #define IO_START		INTEGRATOR_HDR_BASE        // PA of IO
 

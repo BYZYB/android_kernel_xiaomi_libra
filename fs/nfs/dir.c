@@ -7,7 +7,7 @@
  *
  * 10 Apr 1996	Added silly rename for unlink	--okir
  * 28 Sep 1996	Improved directory cache --okir
- * 23 Aug 1997  Claus Heine claus@momo.math.rwth-aachen.de 
+ * 23 Aug 1997  Claus Heine claus@momo.math.rwth-aachen.de
  *              Re-implemented silly rename for unlink, newly implemented
  *              silly rename for nfs_rename() following the suggestions
  *              of Olaf Kirch (okir) found in this file.
@@ -701,7 +701,7 @@ int readdir_search_pagecache(nfs_readdir_descriptor_t *desc)
 /*
  * Once we've found the start of the dirent within a page: fill 'er up...
  */
-static 
+static
 int nfs_do_filldir(nfs_readdir_descriptor_t *desc, void *dirent,
 		   filldir_t filldir)
 {
@@ -1675,7 +1675,7 @@ EXPORT_SYMBOL_GPL(nfs_rmdir);
 
 /*
  * Remove a file after making sure there are no pending writes,
- * and after checking that the file has only one user. 
+ * and after checking that the file has only one user.
  *
  * We invalidate the attribute cache and free the inode prior to the operation
  * to avoid possible races if the server reuses the inode.
@@ -1685,7 +1685,7 @@ static int nfs_safe_remove(struct dentry *dentry)
 	struct inode *dir = dentry->d_parent->d_inode;
 	struct inode *inode = dentry->d_inode;
 	int error = -EBUSY;
-		
+
 	dfprintk(VFS, "NFS: safe_remove(%s/%s)\n",
 		dentry->d_parent->d_name.name, dentry->d_name.name);
 
@@ -1846,7 +1846,7 @@ EXPORT_SYMBOL_GPL(nfs_link);
  * file in old_dir will go away when the last process iput()s the inode.
  *
  * FIXED.
- * 
+ *
  * It actually works quite well. One needs to have the possibility for
  * at least one ".nfs..." file in each directory the file ever gets
  * moved or linked to which happens automagically with the new

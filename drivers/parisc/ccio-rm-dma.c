@@ -4,7 +4,7 @@
  *	"Real Mode" operation refers to U2/Uturn chip operation. The chip
  *      can perform coherency checks w/o using the I/O MMU. That's all we
  *      need until support for more than 4GB phys mem is needed.
- * 
+ *
  *	This is the trivial case - basically what x86 does.
  *
  *	Drawbacks of using Real Mode are:
@@ -30,7 +30,7 @@
  *
  * Adopted for The Puffin Group's parisc-linux port by Grant Grundler.
  *	(C) Copyright 2000 Grant Grundler <grundler@puffin.external.hp.com>
- *	
+ *
  */
 
 #include <linux/types.h>
@@ -83,7 +83,7 @@ static void *ccio_alloc_consistent(struct pci_dev *dev, size_t size,
 				 dma_addr_t *handle)
 {
 	void *ret;
-	
+
 	ret = (void *)__get_free_pages(GFP_ATOMIC, get_order(size));
 
 	if (ret != NULL) {
@@ -92,7 +92,7 @@ static void *ccio_alloc_consistent(struct pci_dev *dev, size_t size,
 	}
 	return ret;
 }
-	
+
 static void ccio_free_consistent(struct pci_dev *dev, size_t size,
 			       void *vaddr, dma_addr_t handle)
 {

@@ -93,7 +93,7 @@ static struct drm_bus drm_usb_bus = {
 	.get_name = drm_usb_get_name,
 	.set_busid = drm_usb_set_busid,
 };
-    
+
 int drm_usb_init(struct drm_driver *driver, struct usb_driver *udriver)
 {
 	int res;

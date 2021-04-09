@@ -140,13 +140,13 @@ int vsprintf(char *buf, const char *fmt, va_list args)
 	                        /* 'z' support added 23/7/1999 S.H.    */
 				/* 'z' changed to 'Z' --davidm 1/25/99 */
 
-	
+
 	for (str=buf ; *fmt ; ++fmt) {
 		if (*fmt != '%') {
 			*str++ = *fmt;
 			continue;
 		}
-			
+
 		/* process flags */
 		flags = 0;
 		repeat:
@@ -158,7 +158,7 @@ int vsprintf(char *buf, const char *fmt, va_list args)
 				case '#': flags |= SPECIAL; goto repeat;
 				case '0': flags |= ZEROPAD; goto repeat;
 				}
-		
+
 		/* get field width */
 		field_width = -1;
 		if ('0' <= *fmt && *fmt <= '9')
@@ -176,7 +176,7 @@ int vsprintf(char *buf, const char *fmt, va_list args)
 		/* get the precision */
 		precision = -1;
 		if (*fmt == '.') {
-			++fmt;	
+			++fmt;
 			if ('0' <= *fmt && *fmt <= '9')
 				precision = skip_atoi(&fmt);
 			else if (*fmt == '*') {

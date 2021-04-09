@@ -254,7 +254,7 @@ unregister_device(void)
 {
 	mutex_lock(&register_mutex);
 	debug_printk(("device unregistered\n"));
-	if (snd_unregister_oss_device(SNDRV_OSS_DEVICE_TYPE_MUSIC, NULL, 0) < 0)		
+	if (snd_unregister_oss_device(SNDRV_OSS_DEVICE_TYPE_MUSIC, NULL, 0) < 0)
 		snd_printk(KERN_ERR "error unregister device music\n");
 	if (snd_unregister_oss_device(SNDRV_OSS_DEVICE_TYPE_SEQUENCER, NULL, 0) < 0)
 		snd_printk(KERN_ERR "error unregister device seq\n");

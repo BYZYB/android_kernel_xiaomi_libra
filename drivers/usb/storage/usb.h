@@ -54,7 +54,7 @@ struct us_data;
 struct scsi_cmnd;
 
 /*
- * Unusual device list definitions 
+ * Unusual device list definitions
  */
 
 struct us_unusual_dev {
@@ -125,7 +125,7 @@ struct us_data {
 	u8			max_lun;
 
 	u8			ifnum;		 /* interface number   */
-	u8			ep_bInterval;	 /* interrupt interval */ 
+	u8			ep_bInterval;	 /* interrupt interval */
 
 	/* function pointers for this device */
 	trans_cmnd		transport;	 /* transport function	   */

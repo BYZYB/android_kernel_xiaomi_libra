@@ -63,14 +63,14 @@ Replace the sample values as needed.
 
 2. LILO can also take input from a serial device. This is a very
    useful option. To tell LILO to use the serial port:
-   In lilo.conf (global section): 
+   In lilo.conf (global section):
 
    serial  = 1,9600n8 (ttyS1, 9600 bd, no parity, 8 bits)
 
 3. Adjust to kernel flags for the new kernel,
    again in lilo.conf (kernel section)
 
-   append = "console=ttyS1,9600" 
+   append = "console=ttyS1,9600"
 
 4. Make sure a getty runs on the serial port so that you can login to
    it once the system is done booting. This is done by adding a line

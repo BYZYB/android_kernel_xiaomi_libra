@@ -34,15 +34,15 @@ static const struct snd_pcm_hardware ep93xx_pcm_hardware = {
 				   SNDRV_PCM_INFO_MMAP_VALID	|
 				   SNDRV_PCM_INFO_INTERLEAVED	|
 				   SNDRV_PCM_INFO_BLOCK_TRANSFER),
-				   
+
 	.rates			= SNDRV_PCM_RATE_8000_192000,
 	.rate_min		= SNDRV_PCM_RATE_8000,
 	.rate_max		= SNDRV_PCM_RATE_192000,
-	
+
 	.formats		= (SNDRV_PCM_FMTBIT_S16_LE |
 				   SNDRV_PCM_FMTBIT_S24_LE |
 				   SNDRV_PCM_FMTBIT_S32_LE),
-	
+
 	.buffer_bytes_max	= 131072,
 	.period_bytes_min	= 32,
 	.period_bytes_max	= 32768,
@@ -132,11 +132,11 @@ static void ep93xx_pcm_free_dma_buffers(struct snd_pcm *pcm)
 	struct snd_dma_buffer *buf;
 	int stream;
 
-	for (stream = 0; stream < 2; stream++) {		
+	for (stream = 0; stream < 2; stream++) {
 		substream = pcm->streams[stream].substream;
 		if (!substream)
 			continue;
-		
+
 		buf = &substream->dma_buffer;
 		if (!buf->area)
 			continue;

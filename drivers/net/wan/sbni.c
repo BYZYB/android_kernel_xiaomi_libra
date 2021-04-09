@@ -20,7 +20,7 @@
  *	  - Driver was completely redesigned by Denis I.Timofeev,
  *	  - now PCI/Dual, ISA/Dual (with single interrupt line) models are
  *	  - supported
- *  3.3.0	Thu Feb 24 21:30:28 NOVT 2000 
+ *  3.3.0	Thu Feb 24 21:30:28 NOVT 2000
  *        - PCI cards support
  *  3.2.0	Mon Dec 13 22:26:53 NOVT 1999
  * 	  - Completely rebuilt all the packet storage system
@@ -29,11 +29,11 @@
  *  3.1.0	added balancing feature	(26 apr 1999)
  *  3.0.1	just fixed some bugs (14 apr 1999).
  *  3.0.0	Initial Revision, Yaroslav Polyakov (24 Feb 1999)
- *        - added pre-calculation for CRC, fixed bug with "len-2" frames, 
- *        - removed outbound fragmentation (MTU=1000), written CRC-calculation 
- *        - on asm, added work with hard_headers and now we have our own cache 
+ *        - added pre-calculation for CRC, fixed bug with "len-2" frames,
+ *        - removed outbound fragmentation (MTU=1000), written CRC-calculation
+ *        - on asm, added work with hard_headers and now we have our own cache
  *        - for them, optionally supported word-interchange on some chipsets,
- * 
+ *
  *	Known problem: this driver wasn't tested on multiprocessor machine.
  */
 
@@ -74,7 +74,7 @@ struct net_local {
 	spinlock_t	lock;
 	struct sk_buff  *rx_buf_p;		/* receive buffer ptr */
 	struct sk_buff  *tx_buf_p;		/* transmit buffer ptr */
-	
+
 	unsigned int	framelen;		/* current frame length */
 	unsigned int	maxframe;		/* maximum valid frame length */
 	unsigned int	state;
@@ -99,7 +99,7 @@ struct net_local {
 	unsigned long	cur_rxl_rcvd, prev_rxl_rcvd;
 
 	struct sbni_csr1	csr1;		/* current value of CSR1 */
-	struct sbni_in_stats	in_stats; 	/* internal statistics */ 
+	struct sbni_in_stats	in_stats; 	/* internal statistics */
 
 	struct net_device		*second;	/* for ISA/dual cards */
 
@@ -180,7 +180,7 @@ static iarr __initdata *dest[5] = { &io, &irq, &baud, &rxl, &mac };
 #endif
 
 /* A zero-terminated list of I/O addresses to be probed on ISA bus */
-static unsigned int  netcard_portlist[ ] __initdata = { 
+static unsigned int  netcard_portlist[ ] __initdata = {
 	0x210, 0x214, 0x220, 0x224, 0x230, 0x234, 0x240, 0x244, 0x250, 0x254,
 	0x260, 0x264, 0x270, 0x274, 0x280, 0x284, 0x290, 0x294, 0x2a0, 0x2a4,
 	0x2b0, 0x2b4, 0x2c0, 0x2c4, 0x2d0, 0x2d4, 0x2e0, 0x2e4, 0x2f0, 0x2f4,
@@ -336,7 +336,7 @@ sbni_pci_probe( struct net_device  *dev )
 		}
 		if( sbni_probe1( dev, pci_ioaddr, pci_irq_line ) ) {
 			SET_NETDEV_DEV(dev, &pdev->dev);
-			/* not the best thing to do, but this is all messed up 
+			/* not the best thing to do, but this is all messed up
 			   for hotplug systems anyway... */
 			pci_dev_put( pdev );
 			return  0;
@@ -431,7 +431,7 @@ sbni_probe1( struct net_device  *dev,  unsigned long  ioaddr,  int  irq )
 	nl->master = dev;
 	nl->link   = NULL;
 #endif
-   
+
 	sbni_cards[ num++ ] = dev;
 	return  dev;
 }
@@ -499,7 +499,7 @@ sbni_start_xmit( struct sk_buff  *skb,  struct net_device  *dev )
  * While next board driver is initialized, it scans this list. If one
  * has found dev with same irq and ioaddr different by 4 then it assumes
  * this board to be "master".
- */ 
+ */
 
 static irqreturn_t
 sbni_interrupt( int  irq,  void  *dev_id )
@@ -1036,7 +1036,7 @@ sbni_watchdog( unsigned long  arg )
 {
 	struct net_device  *dev = (struct net_device *) arg;
 	struct net_local   *nl  = netdev_priv(dev);
-	struct timer_list  *w   = &nl->watchdog; 
+	struct timer_list  *w   = &nl->watchdog;
 	unsigned long	   flags;
 	unsigned char	   csr0;
 
@@ -1061,7 +1061,7 @@ sbni_watchdog( unsigned long  arg )
 	} else
 		nl->state &= ~FL_LINE_DOWN;
 
-	outb( csr0 | RC_CHK, dev->base_addr + CSR0 ); 
+	outb( csr0 | RC_CHK, dev->base_addr + CSR0 );
 
 	init_timer( w );
 	w->expires	= jiffies + SBNI_TIMEOUT;
@@ -1151,7 +1151,7 @@ timeout_change_level( struct net_device  *dev )
 /* -------------------------------------------------------------------------- */
 
 /*
- *	Open/initialize the board. 
+ *	Open/initialize the board.
  */
 
 static int
@@ -1203,7 +1203,7 @@ handler_attached:
 	w->data		= (unsigned long) dev;
 	w->function	= sbni_watchdog;
 	add_timer( w );
-   
+
 	spin_unlock( &nl->lock );
 	return 0;
 }
@@ -1231,9 +1231,9 @@ sbni_close( struct net_device  *dev )
 	spin_lock( &nl->lock );
 
 	nl->second = NULL;
-	drop_xmit_queue( dev );	
+	drop_xmit_queue( dev );
 	netif_stop_queue( dev );
-   
+
 	del_timer( &nl->watchdog );
 
 	outb( 0, dev->base_addr + CSR0 );
@@ -1283,11 +1283,11 @@ sbni_card_probe( unsigned long  ioaddr )
 		csr0 &= ~EN_INT;
 		if( csr0 & BU_EMP )
 			csr0 |= EN_INT;
-      
+
 		if( VALID_DECODER & (1 << (csr0 >> 4)) )
 			return  0;
 	}
-   
+
 	return  -ENODEV;
 }
 
@@ -1304,7 +1304,7 @@ sbni_ioctl( struct net_device  *dev,  struct ifreq  *ifr,  int  cmd )
 	struct net_device  *slave_dev;
 	char  slave_name[ 8 ];
 #endif
-  
+
 	switch( cmd ) {
 	case  SIOCDEVGETINSTATS :
 		if (copy_to_user( ifr->ifr_data, &nl->in_stats,
@@ -1480,7 +1480,7 @@ int __init init_module( void )
 	int err;
 
 	while( num < SBNI_MAX_NUM_CARDS ) {
-		dev = alloc_netdev(sizeof(struct net_local), 
+		dev = alloc_netdev(sizeof(struct net_local),
 				   "sbni%d", sbni_devsetup);
 		if( !dev)
 			break;
@@ -1558,11 +1558,11 @@ calc_crc32( u32  crc,  u8  *p,  u32  len )
 {
 	register u32  _crc;
 	_crc = crc;
-	
+
 	__asm__ __volatile__ (
 		"xorl	%%ebx, %%ebx\n"
-		"movl	%2, %%esi\n" 
-		"movl	%3, %%ecx\n" 
+		"movl	%2, %%esi\n"
+		"movl	%3, %%ecx\n"
 		"movl	$crc32tab, %%edi\n"
 		"shrl	$2, %%ecx\n"
 		"jz	1f\n"
@@ -1585,7 +1585,7 @@ calc_crc32( u32  crc,  u8  *p,  u32  len )
 		"movb	%%al, %%bl\n"
 		"shrl	$8, %%eax\n"
 		"xorb	%%dl, %%bl\n"
-		"movb	%%dh, %%dl\n" 
+		"movb	%%dh, %%dl\n"
 		"xorl	(%%edi,%%ebx,4), %%eax\n"
 
 		"movb	%%al, %%bl\n"

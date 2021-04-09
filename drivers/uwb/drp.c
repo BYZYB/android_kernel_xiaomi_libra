@@ -29,19 +29,19 @@
 enum uwb_drp_conflict_action {
 	/* Reservation is maintained, no action needed */
 	UWB_DRP_CONFLICT_MANTAIN = 0,
-	
+
 	/* the device shall not transmit frames in conflicting MASs in
 	 * the following superframe. If the device is the reservation
 	 * target, it shall also set the Reason Code in its DRP IE to
 	 * Conflict in its beacon in the following superframe.
 	 */
 	UWB_DRP_CONFLICT_ACT1,
-	
+
 	/* the device shall not set the Reservation Status bit to ONE
 	 * and shall not transmit frames in conflicting MASs. If the
 	 * device is the reservation target, it shall also set the
 	 * Reason Code in its DRP IE to Conflict.
-	 */	
+	 */
 	UWB_DRP_CONFLICT_ACT2,
 
 	/* the device shall not transmit frames in conflicting MASs in
@@ -70,9 +70,9 @@ static void uwb_rc_set_drp_cmd_done(struct uwb_rc *rc, void *arg,
 	spin_lock_bh(&rc->rsvs_lock);
 	if (rc->set_drp_ie_pending > 1) {
 		rc->set_drp_ie_pending = 0;
-		uwb_rsv_queue_update(rc);	
+		uwb_rsv_queue_update(rc);
 	} else {
-		rc->set_drp_ie_pending = 0;	
+		rc->set_drp_ie_pending = 0;
 	}
 	spin_unlock_bh(&rc->rsvs_lock);
 }
@@ -114,7 +114,7 @@ int uwb_rc_send_all_drp_ie(struct uwb_rc *rc)
 			if (uwb_rsv_has_two_drp_ies(rsv) &&
 				(rsv->mv.companion_drp_ie != NULL)) {
 				mv = &rsv->mv;
-				num_bytes += mv->companion_drp_ie->hdr.length + 2;	
+				num_bytes += mv->companion_drp_ie->hdr.length + 2;
 			}
 		}
 	}
@@ -138,13 +138,13 @@ int uwb_rc_send_all_drp_ie(struct uwb_rc *rc)
 			memcpy(IEDataptr, rsv->drp_ie,
 			       rsv->drp_ie->hdr.length + 2);
 			IEDataptr += rsv->drp_ie->hdr.length + 2;
-			
+
 			if (uwb_rsv_has_two_drp_ies(rsv) &&
 				(rsv->mv.companion_drp_ie != NULL)) {
 				mv = &rsv->mv;
 				memcpy(IEDataptr, mv->companion_drp_ie,
 				       mv->companion_drp_ie->hdr.length + 2);
-				IEDataptr += mv->companion_drp_ie->hdr.length + 2;	
+				IEDataptr += mv->companion_drp_ie->hdr.length + 2;
 			}
 		}
 	}
@@ -152,7 +152,7 @@ int uwb_rc_send_all_drp_ie(struct uwb_rc *rc)
 	result = uwb_rc_cmd_async(rc, "SET-DRP-IE", &cmd->rccb, sizeof(*cmd) + num_bytes,
 				  UWB_RC_CET_GENERAL, UWB_RC_CMD_SET_DRP_IE,
 				  uwb_rc_set_drp_cmd_done, NULL);
-	
+
 	rc->set_drp_ie_pending = 1;
 
 	kfree(cmd);
@@ -175,8 +175,8 @@ static int evaluate_conflict_action(struct uwb_ie_drp *ext_drp_ie, int ext_beaco
 	int ext_tie_breaker = uwb_ie_drp_tiebreaker(ext_drp_ie);
 	int ext_status      = uwb_ie_drp_status(ext_drp_ie);
 	int ext_type        = uwb_ie_drp_type(ext_drp_ie);
-	
-	
+
+
 	/* [ECMA-368 2nd Edition] 17.4.6 */
 	if (ext_type == UWB_DRP_TYPE_PCA && our_type == UWB_DRP_TYPE_PCA) {
 		return UWB_DRP_CONFLICT_MANTAIN;
@@ -186,7 +186,7 @@ static int evaluate_conflict_action(struct uwb_ie_drp *ext_drp_ie, int ext_beaco
 	if (our_type == UWB_DRP_TYPE_ALIEN_BP) {
 		return UWB_DRP_CONFLICT_MANTAIN;
 	}
-	
+
 	/* [ECMA-368 2nd Edition] 17.4.6-2 */
 	if (ext_type == UWB_DRP_TYPE_ALIEN_BP) {
 		/* here we know our_type != UWB_DRP_TYPE_ALIEN_BP */
@@ -214,7 +214,7 @@ static int evaluate_conflict_action(struct uwb_ie_drp *ext_drp_ie, int ext_beaco
 	    our_beacon_slot >  ext_beacon_slot) {
 		return UWB_DRP_CONFLICT_MANTAIN;
 	}
-	
+
 	if (our_status == 0) {
 		if (our_tie_breaker == ext_tie_breaker) {
 			/* [ECMA-368 2nd Edition] 17.4.6-6a */
@@ -243,9 +243,9 @@ static int evaluate_conflict_action(struct uwb_ie_drp *ext_drp_ie, int ext_beaco
 	return UWB_DRP_CONFLICT_MANTAIN;
 }
 
-static void handle_conflict_normal(struct uwb_ie_drp *drp_ie, 
-				   int ext_beacon_slot, 
-				   struct uwb_rsv *rsv, 
+static void handle_conflict_normal(struct uwb_ie_drp *drp_ie,
+				   int ext_beacon_slot,
+				   struct uwb_rsv *rsv,
 				   struct uwb_mas_bm *conflicting_mas)
 {
 	struct uwb_rc *rc = rsv->rc;
@@ -262,7 +262,7 @@ static void handle_conflict_normal(struct uwb_ie_drp *drp_ie,
 			uwb_rsv_set_state(rsv, UWB_RSV_STATE_O_TO_BE_MOVED);
 			if (bow->can_reserve_extra_mases == false)
 				uwb_rsv_backoff_win_increment(rc);
-			
+
 			break;
 		case UWB_DRP_CONFLICT_ACT3:
 			uwb_rsv_backoff_win_increment(rc);
@@ -277,13 +277,13 @@ static void handle_conflict_normal(struct uwb_ie_drp *drp_ie,
 		switch(action) {
 		case UWB_DRP_CONFLICT_ACT2:
 		case UWB_DRP_CONFLICT_ACT3:
-			uwb_rsv_set_state(rsv, UWB_RSV_STATE_T_CONFLICT);	
+			uwb_rsv_set_state(rsv, UWB_RSV_STATE_T_CONFLICT);
 		default:
 			break;
 		}
 
 	}
-	
+
 }
 
 static void handle_conflict_expanding(struct uwb_ie_drp *drp_ie, int ext_beacon_slot,
@@ -294,7 +294,7 @@ static void handle_conflict_expanding(struct uwb_ie_drp *drp_ie, int ext_beacon_
 	struct uwb_drp_backoff_win *bow = &rc->bow;
 	struct uwb_rsv_move *mv = &rsv->mv;
 	int action;
-	
+
 	if (companion_only) {
 		/* status of companion is 0 at this point */
 		action = evaluate_conflict_action(drp_ie, ext_beacon_slot, rsv, 0);
@@ -308,7 +308,7 @@ static void handle_conflict_expanding(struct uwb_ie_drp *drp_ie, int ext_beacon_
 					uwb_rsv_backoff_win_increment(rc);
 				uwb_drp_avail_release(rsv->rc, &rsv->mv.companion_mas);
 			}
-		} else { /* rsv is target */			
+		} else { /* rsv is target */
 			switch(action) {
 			case UWB_DRP_CONFLICT_ACT2:
 			case UWB_DRP_CONFLICT_ACT3:
@@ -316,7 +316,7 @@ static void handle_conflict_expanding(struct uwb_ie_drp *drp_ie, int ext_beacon_
                                 /* send_drp_avail_ie = true; */
 			}
 		}
-	} else { /* also base part of the reservation is conflicting */		
+	} else { /* also base part of the reservation is conflicting */
 		if (uwb_rsv_is_owner(rsv)) {
 			uwb_rsv_backoff_win_increment(rc);
 			/* remove companion part */
@@ -335,7 +335,7 @@ static void handle_conflict_expanding(struct uwb_ie_drp *drp_ie, int ext_beacon_
 }
 
 static void uwb_drp_handle_conflict_rsv(struct uwb_rc *rc, struct uwb_rsv *rsv,
-					struct uwb_rc_evt_drp *drp_evt, 
+					struct uwb_rc_evt_drp *drp_evt,
 					struct uwb_ie_drp *drp_ie,
 					struct uwb_mas_bm *conflicting_mas)
 {
@@ -350,7 +350,7 @@ static void uwb_drp_handle_conflict_rsv(struct uwb_rc *rc, struct uwb_rsv *rsv,
 		} else {
 			if (bitmap_intersects(mv->companion_mas.bm, conflicting_mas->bm, UWB_NUM_MAS)) {
 				handle_conflict_expanding(drp_ie, drp_evt->beacon_slot_number,
-							  rsv, true, conflicting_mas);	
+							  rsv, true, conflicting_mas);
 			}
 		}
 	} else if (bitmap_intersects(rsv->mas.bm, conflicting_mas->bm, UWB_NUM_MAS)) {
@@ -359,17 +359,17 @@ static void uwb_drp_handle_conflict_rsv(struct uwb_rc *rc, struct uwb_rsv *rsv,
 }
 
 static void uwb_drp_handle_all_conflict_rsv(struct uwb_rc *rc,
-					    struct uwb_rc_evt_drp *drp_evt, 
+					    struct uwb_rc_evt_drp *drp_evt,
 					    struct uwb_ie_drp *drp_ie,
 					    struct uwb_mas_bm *conflicting_mas)
 {
 	struct uwb_rsv *rsv;
-	
+
 	list_for_each_entry(rsv, &rc->reservations, rc_node) {
-		uwb_drp_handle_conflict_rsv(rc, rsv, drp_evt, drp_ie, conflicting_mas);	
+		uwb_drp_handle_conflict_rsv(rc, rsv, drp_evt, drp_ie, conflicting_mas);
 	}
 }
-	
+
 /*
  * Based on the DRP IE, transition a target reservation to a new
  * state.
@@ -382,7 +382,7 @@ static void uwb_drp_process_target(struct uwb_rc *rc, struct uwb_rsv *rsv,
 	int status;
 	enum uwb_drp_reason reason_code;
 	struct uwb_mas_bm mas;
-	
+
 	status = uwb_ie_drp_status(drp_ie);
 	reason_code = uwb_ie_drp_reason_code(drp_ie);
 	uwb_drp_ie_to_bm(&mas, drp_ie);
@@ -399,7 +399,7 @@ static void uwb_drp_process_target(struct uwb_rc *rc, struct uwb_rsv *rsv,
 			/* drp_ie is companion */
 			if (!bitmap_equal(rsv->mas.bm, mas.bm, UWB_NUM_MAS))
 				/* stroke companion */
-				uwb_rsv_set_state(rsv, UWB_RSV_STATE_T_EXPANDING_ACCEPTED);	
+				uwb_rsv_set_state(rsv, UWB_RSV_STATE_T_EXPANDING_ACCEPTED);
 		} else {
 			if (!bitmap_equal(rsv->mas.bm, mas.bm, UWB_NUM_MAS)) {
 				if (uwb_drp_avail_reserve_pending(rc, &mas) == -EBUSY) {
@@ -419,7 +419,7 @@ static void uwb_drp_process_target(struct uwb_rc *rc, struct uwb_rsv *rsv,
 					uwb_rsv_set_state(rsv, UWB_RSV_STATE_T_ACCEPTED);
 				}
 			}
-			
+
 		}
 		break;
 
@@ -477,15 +477,15 @@ static void uwb_drp_process_owner(struct uwb_rc *rc, struct uwb_rsv *rsv,
 				if (bitmap_equal(mas.bm, rsv->mas.bm, UWB_NUM_MAS)) {
 					uwb_rsv_set_state(rsv, UWB_RSV_STATE_O_ESTABLISHED);
 				} else {
-					uwb_rsv_set_state(rsv, UWB_RSV_STATE_O_MODIFIED);	
+					uwb_rsv_set_state(rsv, UWB_RSV_STATE_O_MODIFIED);
 				}
 				break;
-				
+
 			case UWB_RSV_STATE_O_MOVE_REDUCING: /* shouldn' t be a problem */
 				if (bitmap_equal(mas.bm, rsv->mas.bm, UWB_NUM_MAS)) {
 					uwb_rsv_set_state(rsv, UWB_RSV_STATE_O_ESTABLISHED);
 				} else {
-					uwb_rsv_set_state(rsv, UWB_RSV_STATE_O_MOVE_REDUCING);	
+					uwb_rsv_set_state(rsv, UWB_RSV_STATE_O_MOVE_REDUCING);
 				}
 				break;
 			case UWB_RSV_STATE_O_MOVE_EXPANDING:
@@ -503,7 +503,7 @@ static void uwb_drp_process_owner(struct uwb_rc *rc, struct uwb_rsv *rsv,
 					uwb_rsv_set_state(rsv, UWB_RSV_STATE_O_MOVE_COMBINING);
 				break;
 			default:
-				break;	
+				break;
 			}
 			break;
 		default:
@@ -544,9 +544,9 @@ static void uwb_cnflt_update_work(struct work_struct *work)
 						     cnflt_update_work);
 	struct uwb_cnflt_alien *c;
 	struct uwb_rc *rc = cnflt->rc;
-	
+
 	unsigned long delay_us = UWB_MAS_LENGTH_US * UWB_MAS_PER_ZONE;
-	
+
 	mutex_lock(&rc->rsvs_mutex);
 
 	list_del(&cnflt->rc_node);
@@ -555,9 +555,9 @@ static void uwb_cnflt_update_work(struct work_struct *work)
 	bitmap_zero(rc->cnflt_alien_bitmap.bm, UWB_NUM_MAS);
 
 	list_for_each_entry(c, &rc->cnflt_alien_list, rc_node) {
-		bitmap_or(rc->cnflt_alien_bitmap.bm, rc->cnflt_alien_bitmap.bm, c->mas.bm, UWB_NUM_MAS);			
+		bitmap_or(rc->cnflt_alien_bitmap.bm, rc->cnflt_alien_bitmap.bm, c->mas.bm, UWB_NUM_MAS);
 	}
-	
+
 	queue_delayed_work(rc->rsv_workq, &rc->rsv_alien_bp_work, usecs_to_jiffies(delay_us));
 
 	kfree(cnflt);
@@ -582,10 +582,10 @@ static void uwb_drp_handle_alien_drp(struct uwb_rc *rc, struct uwb_ie_drp *drp_i
 	struct uwb_cnflt_alien *cnflt;
 	char buf[72];
 	unsigned long delay_us = UWB_MAS_LENGTH_US * UWB_MAS_PER_ZONE;
-	
+
 	uwb_drp_ie_to_bm(&mas, drp_ie);
 	bitmap_scnprintf(buf, sizeof(buf), mas.bm, UWB_NUM_MAS);
-	
+
 	list_for_each_entry(cnflt, &rc->cnflt_alien_list, rc_node) {
 		if (bitmap_equal(cnflt->mas.bm, mas.bm, UWB_NUM_MAS)) {
 			/* Existing alien BP reservation conflicting
@@ -608,7 +608,7 @@ static void uwb_drp_handle_alien_drp(struct uwb_rc *rc, struct uwb_ie_drp *drp_i
 
 	cnflt->rc = rc;
 	INIT_WORK(&cnflt->cnflt_update_work, uwb_cnflt_update_work);
-	
+
 	bitmap_copy(cnflt->mas.bm, mas.bm, UWB_NUM_MAS);
 
 	list_add_tail(&cnflt->rc_node, &rc->cnflt_alien_list);
@@ -617,17 +617,17 @@ static void uwb_drp_handle_alien_drp(struct uwb_rc *rc, struct uwb_ie_drp *drp_i
 	bitmap_or(rc->cnflt_alien_bitmap.bm, rc->cnflt_alien_bitmap.bm, mas.bm, UWB_NUM_MAS);
 
 	queue_delayed_work(rc->rsv_workq, &rc->rsv_alien_bp_work, usecs_to_jiffies(delay_us));
-	
+
 	/* start the timer */
 	uwb_cnflt_alien_stroke_timer(cnflt);
 }
 
 static void uwb_drp_process_not_involved(struct uwb_rc *rc,
-					 struct uwb_rc_evt_drp *drp_evt, 
+					 struct uwb_rc_evt_drp *drp_evt,
 					 struct uwb_ie_drp *drp_ie)
 {
 	struct uwb_mas_bm mas;
-	
+
 	uwb_drp_ie_to_bm(&mas, drp_ie);
 	uwb_drp_handle_all_conflict_rsv(rc, drp_evt, drp_ie, &mas);
 }
@@ -647,7 +647,7 @@ static void uwb_drp_process_involved(struct uwb_rc *rc, struct uwb_dev *src,
 		 */
 		return;
 	}
-	
+
 	/*
 	 * Do nothing with DRP IEs for reservations that have been
 	 * terminated.
@@ -656,12 +656,12 @@ static void uwb_drp_process_involved(struct uwb_rc *rc, struct uwb_dev *src,
 		uwb_rsv_set_state(rsv, UWB_RSV_STATE_NONE);
 		return;
 	}
-			
+
 	if (uwb_ie_drp_owner(drp_ie))
 		uwb_drp_process_target(rc, rsv, drp_ie, drp_evt);
 	else
 		uwb_drp_process_owner(rc, rsv, src, drp_ie, drp_evt);
-	
+
 }
 
 

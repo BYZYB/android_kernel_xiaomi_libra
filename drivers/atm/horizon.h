@@ -228,7 +228,7 @@
 /* TX status register */
 
 #define IDLE_CHANNELS_MASK                    0x00FF
-#define ABR_CELL_COUNT_REACHED_MULT           0x0100 
+#define ABR_CELL_COUNT_REACHED_MULT           0x0100
 #define ABR_CELL_COUNT_REACHED_MASK           0xFF
 
 /* RX config register */
@@ -404,7 +404,7 @@ typedef struct {
 } hrz_vcc;
 
 struct hrz_dev {
-  
+
   u32                 iobase;
   u32 *               membase;
 
@@ -434,7 +434,7 @@ struct hrz_dev {
   struct atm_dev *    atm_dev;
 
   u32                 last_vc;
-  
+
   int                 noof_spare_buffers;
   u16                 spare_buffers[SPARE_BUFFER_POOL_SIZE];
 
@@ -448,7 +448,7 @@ struct hrz_dev {
   spinlock_t       rate_lock;
   unsigned int     rx_avail;
   unsigned int     tx_avail;
-  
+
   // dev stats
   unsigned long    tx_cell_count;
   unsigned long    rx_cell_count;

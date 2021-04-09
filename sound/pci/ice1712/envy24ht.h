@@ -20,7 +20,7 @@
  *   along with this program; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  *
- */      
+ */
 
 #include <sound/control.h>
 #include <sound/ac97_codec.h>
@@ -45,7 +45,7 @@ enum {
 	ICE_EEP2_GPIO_STATE1,	/* 11 */
 	ICE_EEP2_GPIO_STATE2	/* 12 */
 };
-	
+
 /*
  *  Direct registers
  */
@@ -104,7 +104,7 @@ enum {
 
 #define VT1724_REG_MPU_FIFO_WM	0x0e	/*byte set the high/low watermarks for RX/TX fifos*/
 #define   VT1724_MPU_RX_FIFO	0x20	//1=rx fifo watermark 0=tx fifo watermark
-#define   VT1724_MPU_FIFO_MASK	0x1f	
+#define   VT1724_MPU_FIFO_MASK	0x1f
 
 #define VT1724_REG_I2C_DEV_ADDR	0x10	/* byte */
 #define   VT1724_I2C_WRITE		0x01	/* write direction */
@@ -116,7 +116,7 @@ enum {
 
 #define VT1724_REG_GPIO_DATA	0x14	/* word */
 #define VT1724_REG_GPIO_WRITE_MASK	0x16 /* word */
-#define VT1724_REG_GPIO_DIRECTION	0x18 /* dword? (3 bytes) 0=input 1=output. 
+#define VT1724_REG_GPIO_DIRECTION	0x18 /* dword? (3 bytes) 0=input 1=output.
 						bit3 - during reset used for Eeprom power-on strapping
 						if TESTEN# pin active, bit 2 always input*/
 #define VT1724_REG_POWERDOWN	0x1c
@@ -124,7 +124,7 @@ enum {
 #define VT1724_REG_GPIO_WRITE_MASK_22	0x1f /* byte write mask for GPIO 16:22 */
 
 
-/* 
+/*
  *  Professional multi-track direct control registers
  */
 

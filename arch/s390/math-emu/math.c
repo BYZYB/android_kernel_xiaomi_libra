@@ -97,7 +97,7 @@ int sysctl_ieee_emulation_warnings=1;
 static void display_emulation_not_implemented(struct pt_regs *regs, char *instr)
 {
         __u16 *location;
-        
+
 #ifdef CONFIG_SYSCTL
         if(sysctl_ieee_emulation_warnings)
 #endif
@@ -1635,19 +1635,19 @@ int math_emu_b3(__u8 *opcode, struct pt_regs * regs) {
                 [0x06] = emu_lxebr,[0x07] = emu_mxdbr,[0x08] = emu_kebr,
                 [0x09] = emu_cebr, [0x0a] = emu_aebr, [0x0b] = emu_sebr,
                 [0x0c] = emu_mdebr,[0x0d] = emu_debr, [0x0e] = emu_maebr,
-                [0x0f] = emu_msebr,[0x10] = emu_lpdbr,[0x11] = emu_lndbr, 
+                [0x0f] = emu_msebr,[0x10] = emu_lpdbr,[0x11] = emu_lndbr,
                 [0x12] = emu_ltdbr,[0x13] = emu_lcdbr,[0x14] = emu_sqebr,
                 [0x15] = emu_sqdbr,[0x16] = emu_sqxbr,[0x17] = emu_meebr,
                 [0x18] = emu_kdbr, [0x19] = emu_cdbr, [0x1a] = emu_adbr,
-                [0x1b] = emu_sdbr, [0x1c] = emu_mdbr, [0x1d] = emu_ddbr,  
+                [0x1b] = emu_sdbr, [0x1c] = emu_mdbr, [0x1d] = emu_ddbr,
                 [0x1e] = emu_madbr,[0x1f] = emu_msdbr,[0x40] = emu_lpxbr,
                 [0x41] = emu_lnxbr,[0x42] = emu_ltxbr,[0x43] = emu_lcxbr,
                 [0x44] = emu_ledbr,[0x45] = emu_ldxbr,[0x46] = emu_lexbr,
-                [0x47] = emu_fixbr,[0x48] = emu_kxbr, [0x49] = emu_cxbr,  
+                [0x47] = emu_fixbr,[0x48] = emu_kxbr, [0x49] = emu_cxbr,
                 [0x4a] = emu_axbr, [0x4b] = emu_sxbr, [0x4c] = emu_mxbr,
                 [0x4d] = emu_dxbr, [0x53] = emu_diebr,[0x57] = emu_fiebr,
                 [0x5b] = emu_didbr,[0x5f] = emu_fidbr,[0x84] = emu_sfpc,
-                [0x8c] = emu_efpc, [0x94] = emu_cefbr,[0x95] = emu_cdfbr, 
+                [0x8c] = emu_efpc, [0x94] = emu_cefbr,[0x95] = emu_cdfbr,
                 [0x96] = emu_cxfbr,[0x98] = emu_cfebr,[0x99] = emu_cfdbr,
                 [0x9a] = emu_cfxbr
         };
@@ -1883,7 +1883,7 @@ static void* calc_addr(struct pt_regs *regs, int rx, int rb, int disp)
         addr += (rb != 0) ? regs->gprs[rb] : 0;  /* + base  */
         return (void*) addr;
 }
-    
+
 int math_emu_ed(__u8 *opcode, struct pt_regs * regs) {
         int _fex = 0;
 
@@ -1972,7 +1972,7 @@ int math_emu_ed(__u8 *opcode, struct pt_regs * regs) {
                 break;
         }
         case 5: /* RXE format, double constant */
-                /* store double and load long double */ 
+                /* store double and load long double */
         {
                 __u64 *dxb, temp;
                 __u32 opc;
@@ -1991,7 +1991,7 @@ int math_emu_ed(__u8 *opcode, struct pt_regs * regs) {
                 break;
         }
         case 6: /* RXE format, float constant */
-                /* store float and load double */ 
+                /* store float and load double */
         {
                 __u32 *dxb, temp;
                 __u32 opc;
@@ -2007,7 +2007,7 @@ int math_emu_ed(__u8 *opcode, struct pt_regs * regs) {
                 break;
         }
         case 7: /* RXE format, float constant */
-                /* store float and load long double */ 
+                /* store float and load long double */
         {
                 __u32 *dxb, temp;
                 __u32 opc;

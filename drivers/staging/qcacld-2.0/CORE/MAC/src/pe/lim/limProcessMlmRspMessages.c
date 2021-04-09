@@ -3367,7 +3367,7 @@ void limProcessMlmAddBssRsp( tpAniSirGlobal pMac, tpSirMsgQ limMsgQ )
             {
                 vos_mem_free(pAddBssParams);
                 limMsgQ->bodyptr = NULL;
-            }           
+            }
         return;
     }
     /* update PE session Id*/

@@ -47,6 +47,6 @@ static void __exit exit_autofs4_fs(void)
 	unregister_filesystem(&autofs_fs_type);
 }
 
-module_init(init_autofs4_fs) 
+module_init(init_autofs4_fs)
 module_exit(exit_autofs4_fs)
 MODULE_LICENSE("GPL");

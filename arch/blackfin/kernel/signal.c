@@ -248,7 +248,7 @@ handle_signal(int sig, siginfo_t *info, struct k_sigaction *ka,
 	/* set up the stack frame */
 	if (setup_rt_frame(sig, ka, info, sigmask_to_save(), regs) < 0)
 		force_sigsegv(sig, current);
-	else 
+	else
 		signal_delivered(sig, info, ka, regs,
 				test_thread_flag(TIF_SINGLESTEP));
 }

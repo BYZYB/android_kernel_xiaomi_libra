@@ -454,7 +454,7 @@ pmac_halt(void)
 	pmac_power_off();
 }
 
-/* 
+/*
  * Early initialization.
  */
 static void __init pmac_init_early(void)

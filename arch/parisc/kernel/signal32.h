@@ -1,4 +1,4 @@
-/* 
+/*
  *    Copyright (C) 2001 Matthew Wilcox <willy at parisc-linux.org>
  *    Copyright (C) 2003 Carlos O'Donell <carlos at parisc-linux.org>
  *
@@ -81,10 +81,10 @@ struct compat_rt_sigframe {
 
 void sigset_32to64(sigset_t *s64, compat_sigset_t *s32);
 void sigset_64to32(compat_sigset_t *s32, sigset_t *s64);
-long restore_sigcontext32(struct compat_sigcontext __user *sc, 
+long restore_sigcontext32(struct compat_sigcontext __user *sc,
 		struct compat_regfile __user *rf,
 		struct pt_regs *regs);
-long setup_sigcontext32(struct compat_sigcontext __user *sc, 
+long setup_sigcontext32(struct compat_sigcontext __user *sc,
 		struct compat_regfile __user *rf,
 		struct pt_regs *regs, int in_syscall);
 

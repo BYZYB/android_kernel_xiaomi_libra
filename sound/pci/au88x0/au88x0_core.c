@@ -16,7 +16,7 @@
 
 /*
     Vortex core low level functions.
-	
+
  Author: Manuel Jander (mjander@users.sourceforge.cl)
  These functions are mainly the result of translations made
  from the original disassembly of the au88x0 binary drivers,
@@ -73,7 +73,7 @@
  06-06-2003 Buffer shifter bugfix. Mixer volume fix.
  07-12-2003 A3D routing finally fixed. Believed to be OK.
  25-03-2004 Many thanks to Claudia, for such valuable bug reports.
- 
+
 */
 
 #include "au88x0.h"
@@ -773,7 +773,7 @@ vortex_src_delWTD(vortex_t * vortex, unsigned char src, unsigned char ch)
 	return 1;
 }
 
- /*FIFO*/ 
+ /*FIFO*/
 
 static void
 vortex_fifo_clearadbdata(vortex_t * vortex, int fifo, int x)
@@ -966,7 +966,7 @@ vortex_fifo_setwtctrl(vortex_t * vortex, int fifo, int ctrl, int priority,
 	hwwrite(vortex->mmio, VORTEX_FIFO_WTCTRL + (fifo << 2), temp);
 	hwread(vortex->mmio, VORTEX_FIFO_WTCTRL + (fifo << 2));
 
-/*	
+/*
     do {
 		temp = hwread(vortex->mmio, VORTEX_FIFO_WTCTRL + (fifo << 2));
 		if (lifeboat++ > 0xbb8) {
@@ -974,8 +974,8 @@ vortex_fifo_setwtctrl(vortex_t * vortex, int fifo, int ctrl, int priority,
 			break;
 		}
     } while ((temp & FIFO_RDONLY)&&(temp & FIFO_VALID)&&(temp != 0xFFFFFFFF));
-	
-	
+
+
 	if (valid) {
 		if (temp & FIFO_VALID) {
 			temp = 0x40000;
@@ -1001,8 +1001,8 @@ vortex_fifo_setwtctrl(vortex_t * vortex, int fifo, int ctrl, int priority,
 		temp |= 0x00400000;
 		hwwrite(vortex->mmio, VORTEX_FIFO_WTCTRL + (fifo << 2), temp);
 		temp = hwread(vortex->mmio, VORTEX_FIFO_WTCTRL + (fifo << 2));
-		//((temp >> 6) & 0x3f) 
-		
+		//((temp >> 6) & 0x3f)
+
 		priority = 0;
 		if (((temp & 0x0fc0) ^ ((temp >> 6) & 0x0fc0)) & 0FFFFFFC0)
 			vortex_fifo_clearwtdata(vortex, fifo, FIFO_SIZE);
@@ -1014,7 +1014,7 @@ vortex_fifo_setwtctrl(vortex_t * vortex, int fifo, int ctrl, int priority,
 		temp = (temp & 0xffffffdf) | ((empty & 1) << 5);
 		hwwrite(vortex->mmio, VORTEX_FIFO_WTCTRL + (fifo << 2), temp);
 	}
-	
+
 	*/
 
 	/*
@@ -1996,7 +1996,7 @@ vortex_connect_codecrec(vortex_t * vortex, int en, unsigned char mixin0,
 static int resnum[VORTEX_RESOURCE_LAST] =
     { NR_ADB, NR_SRC, NR_MIXIN, NR_MIXOUT, NR_A3D };
 /*
- Checkout/Checkin resource of given type. 
+ Checkout/Checkin resource of given type.
  resmap: resource map to be used. If NULL means that we want to allocate
  a DMA resource (root of all other resources of a dma channel).
  out: Mean checkout if != 0. Else mean Checkin resource.
@@ -2095,7 +2095,7 @@ static void vortex_connect_default(vortex_t * vortex, int en)
 	// Connect DSP interface for SQ3500 turbo (not here i think...)
 
 	// Connect AC98 modem codec
-	
+
 }
 
 /*
@@ -2114,7 +2114,7 @@ vortex_adb_allocroute(vortex_t *vortex, int dma, int nr_ch, int dir,
 	stream_t *stream;
 	int i, en;
 	struct pcm_vol *p;
-	
+
 	if (dma >= 0) {
 		en = 0;
 		vortex_adb_checkinout(vortex,
@@ -2214,7 +2214,7 @@ vortex_adb_allocroute(vortex_t *vortex, int dma, int nr_ch, int dir,
 #ifndef CHIP_AU8820
 			if (stream->type == VORTEX_PCM_A3D) {
 				vortex_connection_adbdma_src(vortex, en,
-							     src[nr_ch - 1], 
+							     src[nr_ch - 1],
 								 dma,
 							     src[i]);
 				vortex_route(vortex, en, 0x11, ADB_SRCOUT(src[i]), ADB_A3DIN(a3d));
@@ -2669,8 +2669,8 @@ static void vortex_spdif_init(vortex_t * vortex, int spdif_sr, int spdif_mode)
 		break;
 
 	}
-	/* looks like the next 2 lines transfer a 16-bit value into 2 8-bit 
-	   registers. seems to be for the standard IEC/SPDIF initialization 
+	/* looks like the next 2 lines transfer a 16-bit value into 2 8-bit
+	   registers. seems to be for the standard IEC/SPDIF initialization
 	   stuff */
 	hwwrite(vortex->mmio, VORTEX_SPDIF_CFG0, this_38 & 0xffff);
 	hwwrite(vortex->mmio, VORTEX_SPDIF_CFG1, this_38 >> 0x10);

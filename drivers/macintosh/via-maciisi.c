@@ -10,7 +10,7 @@
  * Original sources (c) Alan Cox, Paul Mackerras, and others.
  *
  * Rewritten for Unified ADB by David Huggins-Daines <dhd@debian.org>
- * 
+ *
  * 7/13/2000- extensive changes by Andrew McPherson <andrew@macduff.dhs.org>
  * Works about 30% of the time now.
  */
@@ -144,7 +144,7 @@ maciisi_stfu(void)
 #endif
 		return;
 	}
-	
+
 	udelay(ADB_DELAY);
 	via[ACR] &= ~SR_OUT;
 	via[IER] = IER_CLR | SR_INT;
@@ -168,10 +168,10 @@ maciisi_stfu(void)
 #ifdef DEBUG_MACIISI_ADB
 			printk(KERN_DEBUG "maciisi_stfu: status %x timeout %d data %x\n",
 			       status, poll_timeout, tmp);
-#endif	
+#endif
 			if(via[B] & TREQ)
 				break;
-	
+
 			/* ACK on-off */
 			via[B] |= TACK;
 			udelay(ADB_DELAY);
@@ -183,7 +183,7 @@ maciisi_stfu(void)
 		udelay(ADB_DELAY);
 	}
 
-	via[IER] = IER_SET | SR_INT;	
+	via[IER] = IER_SET | SR_INT;
 }
 
 /* All specifically VIA-related initialization goes here */
@@ -191,7 +191,7 @@ static int
 maciisi_init_via(void)
 {
 	int	i;
-	
+
 	/* Set the lines up. We want TREQ as input TACK|TIP as output */
 	via[DIRB] = (via[DIRB] | TACK | TIP) & ~TREQ;
 	/* Shift register on input */
@@ -250,7 +250,7 @@ maciisi_send_request(struct adb_request* req, int sync)
 #endif
 
 	req->reply_expected = 1;
-	
+
 	i = maciisi_write(req);
 	if (i)
 	{
@@ -258,7 +258,7 @@ maciisi_send_request(struct adb_request* req, int sync)
 		 * maciisi_send_request. But if the transfer fails, it will be restarted
 		 * by maciisi_interrupt(). We use need_sync to tell maciisi_interrupt
 		 * when to sync a packet that it sends out.
-		 * 
+		 *
 		 * Suggestions on a better way to do this are welcome.
 		 */
 		if(i == -EBUSY && sync)
@@ -269,14 +269,14 @@ maciisi_send_request(struct adb_request* req, int sync)
 	}
 	if(sync)
 		maciisi_sync(req);
-	
+
 	return 0;
 }
 
 /* Poll the ADB chip until the request completes */
 static void maciisi_sync(struct adb_request *req)
 {
-	int count = 0; 
+	int count = 0;
 
 #ifdef DEBUG_MACIISI_ADB
 	printk(KERN_DEBUG "maciisi_sync called\n");
@@ -328,7 +328,7 @@ maciisi_write(struct adb_request* req)
 	req->sent = 0;
 	req->complete = 0;
 	req->reply_len = 0;
-	
+
 	local_irq_save(flags);
 
 	if (current_req) {
@@ -570,10 +570,10 @@ maciisi_interrupt(int irq, void* arg)
 		/* ACK on/off */
 		via[B] |= TACK;
 		udelay(ADB_DELAY);
-		via[B] &= ~TACK;	
+		via[B] &= ~TACK;
 		if (!(status & TREQ))
 			break; /* more stuff to deal with */
-		
+
 		/* end of frame */
 		via[B] &= ~TIP;
 		tmp = via[SR]; /* That's what happens in 2.2 */

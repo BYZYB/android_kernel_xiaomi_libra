@@ -51,7 +51,7 @@ static struct public_key_signature *mod_make_digest(enum pkey_hash_algo hash,
 	int ret;
 
 	pr_devel("==>%s()\n", __func__);
-	
+
 	/* Allocate the hashing algorithm we're going to need and find out how
 	 * big the hash operational data will be.
 	 */
@@ -246,5 +246,5 @@ error_free_pks:
 error_put_key:
 	key_put(key);
 	pr_devel("<==%s() = %d\n", __func__, ret);
-	return ret;	
+	return ret;
 }

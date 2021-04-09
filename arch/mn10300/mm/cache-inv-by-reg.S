@@ -86,7 +86,7 @@ mn10300_local_dcache_inv:
 	beq	mn10300_local_dcache_inv_end
 
 	invalidate_dcache 1
-	
+
 mn10300_local_dcache_inv_end:
 	ret	[],0
 	.size	mn10300_local_dcache_inv,.-mn10300_local_dcache_inv

@@ -39,9 +39,9 @@ index dc68cf1..9a53794 100644
 +		.amux = LINE1,
 +		} },
 +	},
- 
+
  };
- 
+
 @@ -7037,6 +7060,12 @@ struct pci_device_id saa7134_pci_tbl[] = {
  		.subdevice    = 0x0911,
  		.driver_data  = SAA7134_BOARD_SENSORAY811_911,
@@ -70,7 +70,7 @@ index 8fd24e7..0a849ea 100644
  			request_module("saa7134-alsa");
 @@ -557,8 +559,12 @@ static irqreturn_t saa7134_irq(int irq, void *dev_id)
  			saa7134_irq_vbi_done(dev,status);
- 
+
  		if ((report & SAA7134_IRQ_REPORT_DONE_RA2) &&
 -		    card_has_mpeg(dev))
 -			saa7134_irq_ts_done(dev,status);
@@ -80,7 +80,7 @@ index 8fd24e7..0a849ea 100644
 +			else
 +				saa7134_irq_ts_done(dev, status);
 +		}
- 
+
  		if (report & SAA7134_IRQ_REPORT_GPIO16) {
  			switch (dev->has_remote) {
 diff --git a/drivers/media/pci/saa7134/saa7134.h b/drivers/media/pci/saa7134/saa7134.h
@@ -92,7 +92,7 @@ index 62169dd..5fad39a 100644
  #define SAA7134_BOARD_ASUSTeK_PS3_100      190
  #define SAA7134_BOARD_HAWELL_HW_9004V1      191
 +#define SAA7134_BOARD_WIS_VOYAGER           192
- 
+
  #define SAA7134_MAXBOARDS 32
  #define SAA7134_INPUT_MAX 8
 @@ -364,6 +365,7 @@ enum saa7134_mpeg_type {
@@ -101,7 +101,7 @@ index 62169dd..5fad39a 100644
  	SAA7134_MPEG_DVB,
 +	SAA7134_MPEG_GO7007,
  };
- 
+
  enum saa7134_mpeg_ts_type {
 @@ -403,6 +405,7 @@ struct saa7134_board {
  #define card_has_radio(dev)   (NULL != saa7134_boards[dev->board].radio.name)
@@ -118,20 +118,20 @@ index 62169dd..5fad39a 100644
 +	void                       (*irq_ts_done)(struct saa7134_dev *dev,
 +						  unsigned long status);
  };
- 
+
  /* global device status */
 diff --git a/drivers/staging/media/go7007/Makefile b/drivers/staging/media/go7007/Makefile
 index 9c6ad4a..1b23689 100644
 --- a/drivers/staging/media/go7007/Makefile
 +++ b/drivers/staging/media/go7007/Makefile
 @@ -8,8 +8,7 @@ go7007-y := go7007-v4l2.o go7007-driver.o go7007-i2c.o go7007-fw.o \
- 
+
  s2250-y := s2250-board.o
- 
+
 -# Uncomment when the saa7134 patches get into upstream
 -#obj-$(CONFIG_VIDEO_SAA7134) += saa7134-go7007.o
 -#ccflags-$(CONFIG_VIDEO_SAA7134:m=y) += -Idrivers/media/pci/saa7134
 +obj-$(CONFIG_VIDEO_SAA7134) += saa7134-go7007.o
 +ccflags-$(CONFIG_VIDEO_SAA7134:m=y) += -Idrivers/media/pci/saa7134
- 
+
  ccflags-$(CONFIG_VIDEO_GO7007_LOADER:m=y) += -Idrivers/media/common

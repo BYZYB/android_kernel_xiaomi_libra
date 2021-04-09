@@ -21,22 +21,22 @@ static inline unsigned long
 __cls_set_class(unsigned long *clp, unsigned long cl)
 {
 	unsigned long old_cl;
- 
+
 	old_cl = *clp;
 	*clp = cl;
 	return old_cl;
 }
 
 static inline unsigned long
-cls_set_class(struct tcf_proto *tp, unsigned long *clp, 
+cls_set_class(struct tcf_proto *tp, unsigned long *clp,
 	unsigned long cl)
 {
 	unsigned long old_cl;
-	
+
 	tcf_tree_lock(tp);
 	old_cl = __cls_set_class(clp, cl);
 	tcf_tree_unlock(tp);
- 
+
 	return old_cl;
 }
 
@@ -152,7 +152,7 @@ struct tcf_ematch_ops;
 
 /**
  * struct tcf_ematch - extended match (ematch)
- * 
+ *
  * @matchid: identifier to allow userspace to reidentify a match
  * @flags: flags specifying attributes and the relation to other matches
  * @ops: the operations lookup table of the corresponding ematch module
@@ -200,7 +200,7 @@ static inline int tcf_em_early_end(struct tcf_ematch *em, int result)
 
 	return 0;
 }
-	
+
 /**
  * struct tcf_ematch_tree - ematch tree handle
  *
@@ -210,12 +210,12 @@ static inline int tcf_em_early_end(struct tcf_ematch *em, int result)
 struct tcf_ematch_tree {
 	struct tcf_ematch_tree_hdr hdr;
 	struct tcf_ematch *	matches;
-	
+
 };
 
 /**
  * struct tcf_ematch_ops - ematch module operations
- * 
+ *
  * @kind: identifier (kind) of this ematch module
  * @datalen: length of expected configuration data (optional)
  * @change: called during validation (optional)

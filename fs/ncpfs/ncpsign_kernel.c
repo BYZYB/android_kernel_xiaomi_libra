@@ -61,7 +61,7 @@ static void nwsign(char *r_data1, char *r_data2, char *outdata) {
  unsigned int data2[16];
  for (i=0;i<16;i++)
   data2[i]=GET_LE32(r_data2+(i<<2));
-#endif 
+#endif
  w0=GET_LE32(r_data1);
  w1=GET_LE32(r_data1+4);
  w2=GET_LE32(r_data1+8);

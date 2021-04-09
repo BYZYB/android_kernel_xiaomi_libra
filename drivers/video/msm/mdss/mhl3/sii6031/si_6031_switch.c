@@ -1,16 +1,16 @@
 /*
  * SIMG SiI6031 MHL-USB Switch driver
- * 
+ *
  * Copyright 2014 Silicon Image, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2
  * as published by the Free Software Foundation.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
+ *
  */
 #include <linux/kernel.h>
 #include <linux/types.h>
@@ -58,12 +58,12 @@ EXPORT_SYMBOL(sii_switch_to_mhl);
 int sii6031_gpio_init(void)
 {
 	int ret;
-	
+
 	printk("%s(): called\n", __func__);
 	ret = gpio_request_array(stark_gpio_ctrl, ARRAY_SIZE(stark_gpio_ctrl));
-	if (ret < 0) 
+	if (ret < 0)
 		printk("%s(): gpio_request_array failed, error code %d\n",__func__, ret);
-	
+
 	return ret;
 }
 
@@ -100,13 +100,13 @@ static int __devinit sii6031_probe(struct platform_device *pdev)
 
 	if(ret)
 		return -1;
-	
-	
+
+
 	ret = sii6031_gpio_init();
 
 	if(ret)
 		return -1;
-	
+
 
 	return 0;
 

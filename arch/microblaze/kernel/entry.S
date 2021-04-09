@@ -411,7 +411,7 @@ C_ENTRY(ret_from_trap):
 	bri	1b
 
 	/* Maybe handle a signal */
-5:	
+5:
 	andi	r11, r19, _TIF_SIGPENDING | _TIF_NOTIFY_RESUME;
 	beqi	r11, 4f;		/* Signals to handle, handle them */
 

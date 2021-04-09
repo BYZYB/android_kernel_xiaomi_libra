@@ -160,7 +160,7 @@ struct crush_map {
 	/* choose local attempts using a fallback permutation before
 	 * re-descent */
 	__u32 choose_local_fallback_tries;
-	/* choose attempts before giving up */ 
+	/* choose attempts before giving up */
 	__u32 choose_total_tries;
 	/* attempt chooseleaf inner descent once; on failure retry outer descent */
 	__u32 chooseleaf_descend_once;

@@ -3329,7 +3329,7 @@ __unregister_ftrace_function_probe(char *glob, struct ftrace_probe_ops *ops,
 		ftrace_free_entry(entry);
 	}
 	mutex_unlock(&ftrace_lock);
-		
+
  out_unlock:
 	mutex_unlock(&trace_probe_ops.regex_lock);
 	free_ftrace_hash(hash);

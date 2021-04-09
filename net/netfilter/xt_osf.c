@@ -295,7 +295,7 @@ xt_osf_match_packet(const struct sk_buff *skb, struct xt_action_param *p)
 					break;
 				case OSF_WSS_MSS:
 					/*
-					 * Some smart modems decrease mangle MSS to 
+					 * Some smart modems decrease mangle MSS to
 					 * SMART_MSS_2, so we check standard, decreased
 					 * and the one provided in the fingerprint MSS
 					 * values.

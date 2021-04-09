@@ -38,7 +38,7 @@ ___TBICtxFPUSave:
 	 * D1Ar5       - Scratch
 	 * D0Ar6       - Scratch
 	 */
-	
+
 	/* If the FPAC bit isnt set then there is nothing to do */
 	TSTT	D0Ar2,#TBICTX_FPAC_BIT
 	MOVZ	PC, D1RtP

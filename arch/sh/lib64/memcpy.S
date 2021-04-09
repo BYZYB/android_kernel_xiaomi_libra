@@ -61,7 +61,7 @@ L0:	ptrel r0,tr0
 	ptabs r18,tr1
 	add r3,r4,r6
 	blink tr0,r63
-	
+
 /* Rearranged to make cut2 safe */
 	.balign 8
 L4_7:	/* 4..7 byte memcpy cntd. */
@@ -95,7 +95,7 @@ L8_15:	/* 8..15 byte memcpy cntd. */
 	sthi.q r5, -1, r6
 	stlo.q r5, -8, r6
 	blink tr1,r63
-	
+
 	/* 2 or 3 byte memcpy */
 	ld.b r3,0,r0
 	ld.b r2,0,r63

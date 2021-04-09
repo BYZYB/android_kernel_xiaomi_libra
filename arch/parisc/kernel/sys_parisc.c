@@ -54,7 +54,7 @@ static unsigned long get_unshared_area(unsigned long addr, unsigned long len)
  *
  * The mapping is cacheline aligned, so there's no information in the bottom
  * few bits of the address.  We're looking for 10 bits (4MB / 4k), so let's
- * drop the bottom 8 bits and use bits 8-17.  
+ * drop the bottom 8 bits and use bits 8-17.
  */
 static int get_offset(struct address_space *mapping)
 {
@@ -141,7 +141,7 @@ asmlinkage long parisc_ftruncate64(unsigned int fd,
 	return sys_ftruncate(fd, (long)high << 32 | low);
 }
 
-/* stubs for the benefit of the syscall_table since truncate64 and truncate 
+/* stubs for the benefit of the syscall_table since truncate64 and truncate
  * are identical on LP64 */
 asmlinkage long sys_truncate64(const char __user * path, unsigned long length)
 {

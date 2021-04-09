@@ -1521,7 +1521,7 @@ static int digi_read_oob_callback(struct urb *urb)
 		rts = 0;
 		if (tty)
 			rts = tty->termios.c_cflag & CRTSCTS;
-		
+
 		if (tty && opcode == DIGI_CMD_READ_INPUT_SIGNALS) {
 			spin_lock(&priv->dp_port_lock);
 			/* convert from digi flags to termiox flags */

@@ -64,7 +64,7 @@ int show_cpuinfo(struct seq_file *m, void *v)
 		info = &cpu_info[revision];
 
 	return seq_printf(m,
-		       "processor\t: 0\n" 
+		       "processor\t: 0\n"
 		       "cpu\t\t: CRIS\n"
 		       "cpu revision\t: %lu\n"
 		       "cpu model\t: %s\n"

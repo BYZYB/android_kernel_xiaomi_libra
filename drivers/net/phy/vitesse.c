@@ -100,7 +100,7 @@ static int vsc824x_config_init(struct phy_device *phydev)
 static int vsc824x_ack_interrupt(struct phy_device *phydev)
 {
 	int err = 0;
-	
+
 	/*
 	 * Don't bother to ACK the interrupts if interrupts
 	 * are disabled.  The 824x cannot clear the interrupts

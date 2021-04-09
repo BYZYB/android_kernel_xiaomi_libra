@@ -69,8 +69,8 @@ int sb_audio_open(int dev, int mode)
 		((mode & OPEN_READ) && (mode & OPEN_WRITE));
 	sb_dsp_reset(devc);
 
-	/* At first glance this check isn't enough, some ESS chips might not 
-	 * have a RECLEV. However if they don't common_mixer_set will refuse 
+	/* At first glance this check isn't enough, some ESS chips might not
+	 * have a RECLEV. However if they don't common_mixer_set will refuse
 	 * cause devc->iomap has no register mapping for RECLEV
 	 */
 	if (devc->model == MDL_ESS) ess_mixer_reload (devc, SOUND_MIXER_RECLEV);
@@ -82,9 +82,9 @@ int sb_audio_open(int dev, int mode)
 	/* used anywhere else and therefore the DSP bits are *always* ON for   */
 	/* output and OFF for sampling.                                        */
 
-	if (devc->submodel == SUBMDL_ALS007) 
+	if (devc->submodel == SUBMDL_ALS007)
 	{
-		if (mode & OPEN_READ) 
+		if (mode & OPEN_READ)
 			sb_setmixer(devc,ALS007_OUTPUT_CTRL2,
 				sb_getmixer(devc,ALS007_OUTPUT_CTRL2) & 0xf9);
 		else
@@ -116,8 +116,8 @@ void sb_audio_close(int dev)
 		sound_close_dma(devc->dma16);
 
 	/* For ALS007, turn DSP output back on if closing the device for read */
-	
-	if ((devc->submodel == SUBMDL_ALS007) && (devc->opened & OPEN_READ)) 
+
+	if ((devc->submodel == SUBMDL_ALS007) && (devc->opened & OPEN_READ))
 	{
 		sb_setmixer(devc,ALS007_OUTPUT_CTRL2,
 			sb_getmixer(devc,ALS007_OUTPUT_CTRL2) | 0x06);
@@ -167,7 +167,7 @@ static void sb_set_input_parms(int dev, unsigned long buf, int count, int intrfl
 }
 
 /*
- * SB1.x compatible routines 
+ * SB1.x compatible routines
  */
 
 static void sb1_audio_output_block(int dev, unsigned long buf, int nr_bytes, int intrflag)
@@ -741,7 +741,7 @@ static void sb16_audio_output_block(int dev, unsigned long buf, int count,
  *	do enable the DMA in time you just get DMA timeouts and missing
  *	interrupts and stuff, so for now I've not bothered fixing this either.
  */
- 
+
 static void sb16_audio_start_input(int dev, unsigned long buf, int count, int intrflag)
 {
 	unsigned long   flags, cnt;
@@ -1086,7 +1086,7 @@ void sb_audio_init(sb_devc * devc, char *name, struct module *owner)
 
 	if (owner)
 			driver->owner = owner;
-	
+
 	if ((devc->dev = sound_install_audiodrv(AUDIO_DRIVER_VERSION,
 				name,driver, sizeof(struct audio_driver),
 				audio_flags, format_mask, devc,

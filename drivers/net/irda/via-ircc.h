@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      via-ircc.h
  * Version:       1.0
  * Description:   Driver for the VIA VT8231/VT8233 IrDA chipsets
@@ -22,8 +22,8 @@ this program; if not, write to the Free Software Foundation, Inc.,
 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
  * Comment:
- * jul/08/2002 : Rx buffer length should use Rx ring ptr.	
- * Oct/28/2002 : Add SB id for 3147 and 3177.	
+ * jul/08/2002 : Rx buffer length should use Rx ring ptr.
+ * Oct/28/2002 : Add SB id for 3147 and 3177.
  * jul/09/2002 : only implement two kind of dongle currently.
  * Oct/02/2002 : work on VT8231 and VT8233 .
  * Aug/06/2003 : change driver format to pci driver .

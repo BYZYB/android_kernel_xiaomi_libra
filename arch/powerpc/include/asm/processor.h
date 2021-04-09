@@ -101,8 +101,8 @@ extern struct task_struct *last_task_used_spe;
 /* 64-bit user address space is 46-bits (64TB user VM) */
 #define TASK_SIZE_USER64 (0x0000400000000000UL)
 
-/* 
- * 32-bit user address space is 4GB - 1 page 
+/*
+ * 32-bit user address space is 4GB - 1 page
  * (this 1 page is needed so referencing of 0xFFFFFFFF generates EFAULT
  */
 #define TASK_SIZE_USER32 (0x0000000100000000UL - (1*PAGE_SIZE))
@@ -448,7 +448,7 @@ extern void _nmask_and_or_msr(unsigned long nmask, unsigned long or_val);
 
 #ifdef CONFIG_PPC64
 /*
- * We handle most unaligned accesses in hardware. On the other hand 
+ * We handle most unaligned accesses in hardware. On the other hand
  * unaligned DMA can be very expensive on some ppc64 IO chips (it does
  * powers of 2 writes until it reaches sufficient alignment).
  *

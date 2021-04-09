@@ -3,8 +3,8 @@
 *      "swarm_cs4297a.c" --  Cirrus Logic-Crystal CS4297a linux audio driver.
 *
 *      Copyright (C) 2001  Broadcom Corporation.
-*      Copyright (C) 2000,2001  Cirrus Logic Corp.  
-*            -- adapted from drivers by Thomas Sailer, 
+*      Copyright (C) 2000,2001  Cirrus Logic Corp.
+*            -- adapted from drivers by Thomas Sailer,
 *            -- but don't bug him; Problems should go to:
 *            -- tom woller (twoller@crystal.cirrus.com) or
 *               (audio@crystal.cirrus.com).
@@ -39,10 +39,10 @@
 * Modification History
 * 08/20/00 trw - silence and no stopping DAC until release
 * 08/23/00 trw - added CS_DBG statements, fix interrupt hang issue on DAC stop.
-* 09/18/00 trw - added 16bit only record with conversion 
-* 09/24/00 trw - added Enhanced Full duplex (separate simultaneous 
+* 09/18/00 trw - added 16bit only record with conversion
+* 09/24/00 trw - added Enhanced Full duplex (separate simultaneous
 *                capture/playback rates)
-* 10/03/00 trw - fixed mmap (fixed GRECORD and the XMMS mmap test plugin  
+* 10/03/00 trw - fixed mmap (fixed GRECORD and the XMMS mmap test plugin
 *                libOSSm.so)
 * 10/11/00 trw - modified for 2.4.0-test9 kernel enhancements (NR_MAP removal)
 * 11/03/00 trw - fixed interrupt loss/stutter, added debug.
@@ -50,11 +50,11 @@
 * 11/10/00 trw - fixed SMP and capture spinlock hang.
 * 12/04/00 trw - cleaned up CSDEBUG flags and added "defaultorder" moduleparm.
 * 12/05/00 trw - fixed polling (myth2), and added underrun swptr fix.
-* 12/08/00 trw - added PM support. 
-* 12/14/00 trw - added wrapper code, builds under 2.4.0, 2.2.17-20, 2.2.17-8 
+* 12/08/00 trw - added PM support.
+* 12/14/00 trw - added wrapper code, builds under 2.4.0, 2.2.17-20, 2.2.17-8
 *		 (RH/Dell base), 2.2.18, 2.2.12.  cleaned up code mods by ident.
 * 12/19/00 trw - added PM support for 2.2 base (apm_callback). other PM cleanup.
-* 12/21/00 trw - added fractional "defaultorder" inputs. if >100 then use 
+* 12/21/00 trw - added fractional "defaultorder" inputs. if >100 then use
 *		 defaultorder-100 as power of 2 for the buffer size. example:
 *		 106 = 2^(106-100) = 2^6 = 64 bytes for the buffer size.
 *
@@ -99,13 +99,13 @@ static void start_dac(struct cs4297a_state *s);
 static void start_adc(struct cs4297a_state *s);
 #undef OSS_DOCUMENTED_MIXER_SEMANTICS
 
-// --------------------------------------------------------------------- 
+// ---------------------------------------------------------------------
 
 #define CS4297a_MAGIC           0xf00beef1
 
 // buffer order determines the size of the dma buffer for the driver.
-// under Linux, a smaller buffer allows more responsiveness from many of the 
-// applications (e.g. games).  A larger buffer allows some of the apps (esound) 
+// under Linux, a smaller buffer allows more responsiveness from many of the
+// applications (e.g. games).  A larger buffer allows some of the apps (esound)
 // to not underrun the dma buffer as easily.  As default, use 32k (order=3)
 // rather than 64k as some of the games work more responsively.
 // log base 2( buff sz = 32k).
@@ -228,10 +228,10 @@ typedef struct serdma_s {
         serdma_descr_t  *descrtab;
         serdma_descr_t  *descrtab_end;
         paddr_t          descrtab_phys;
-        
+
         serdma_descr_t  *descr_add;
         serdma_descr_t  *descr_rem;
-        
+
         u64  *dma_buf;           // buffer for DMA contents (frames)
         paddr_t          dma_buf_phys;
         u16  *sample_buf;		// tmp buffer for sample conversions
@@ -246,17 +246,17 @@ typedef struct serdma_s {
         unsigned hwptr, swptr;
         unsigned total_bytes;	// # bytes process since open.
         unsigned blocks;	// last returned blocks value GETOPTR
-        unsigned wakeup;	// interrupt occurred on block 
+        unsigned wakeup;	// interrupt occurred on block
         int count;
         unsigned underrun;	// underrun flag
-        unsigned error;	// over/underrun 
+        unsigned error;	// over/underrun
         wait_queue_head_t wait;
         wait_queue_head_t reg_wait;
-        // redundant, but makes calculations easier 
+        // redundant, but makes calculations easier
         unsigned fragsize;	// 2**fragshift..
         unsigned sbufsz;	// 2**buforder.
         unsigned fragsamples;
-        // OSS stuff 
+        // OSS stuff
         unsigned mapped:1;	// Buffer mapped in cs4297a_mmap()?
         unsigned ready:1;	// prog_dmabuf_dac()/adc() successful?
         unsigned endcleared:1;
@@ -267,16 +267,16 @@ typedef struct serdma_s {
 } serdma_t;
 
 struct cs4297a_state {
-	// magic 
+	// magic
 	unsigned int magic;
 
 	struct list_head list;
 
-	// soundcore stuff 
+	// soundcore stuff
 	int dev_audio;
 	int dev_mixer;
 
-	// hardware resources 
+	// hardware resources
 	unsigned int irq;
 
         struct {
@@ -287,7 +287,7 @@ struct cs4297a_state {
                 unsigned int rx_good;
         } stats;
 
-	// mixer registers 
+	// mixer registers
 	struct {
 		unsigned short vol[10];
 		unsigned int recsrc;
@@ -295,7 +295,7 @@ struct cs4297a_state {
 		unsigned short micpreamp;
 	} mix;
 
-	// wave stuff   
+	// wave stuff
 	struct properties {
 		unsigned fmt;
 		unsigned fmt_original;	// original requested format
@@ -369,19 +369,19 @@ static void cs_printioctl(unsigned int x)
 {
 	unsigned int i;
 	unsigned char vidx;
-	// Index of mixtable1[] member is Device ID 
+	// Index of mixtable1[] member is Device ID
 	// and must be <= SOUND_MIXER_NRDEVICES.
 	// Value of array member is index into s->mix.vol[]
 	static const unsigned char mixtable1[SOUND_MIXER_NRDEVICES] = {
-		[SOUND_MIXER_PCM] = 1,	// voice 
+		[SOUND_MIXER_PCM] = 1,	// voice
 		[SOUND_MIXER_LINE1] = 2,	// AUX
-		[SOUND_MIXER_CD] = 3,	// CD 
-		[SOUND_MIXER_LINE] = 4,	// Line 
+		[SOUND_MIXER_CD] = 3,	// CD
+		[SOUND_MIXER_LINE] = 4,	// Line
 		[SOUND_MIXER_SYNTH] = 5,	// FM
-		[SOUND_MIXER_MIC] = 6,	// Mic 
-		[SOUND_MIXER_SPEAKER] = 7,	// Speaker 
-		[SOUND_MIXER_RECLEV] = 8,	// Recording level 
-		[SOUND_MIXER_VOLUME] = 9	// Master Volume 
+		[SOUND_MIXER_MIC] = 6,	// Mic
+		[SOUND_MIXER_SPEAKER] = 7,	// Speaker
+		[SOUND_MIXER_RECLEV] = 8,	// Recording level
+		[SOUND_MIXER_VOLUME] = 9	// Master Volume
 	};
 
 	switch (x) {
@@ -574,7 +574,7 @@ static int ser_init(struct cs4297a_state *s)
 {
         int i;
 
-        CS_DBGOUT(CS_INIT, 2, 
+        CS_DBGOUT(CS_INIT, 2,
                   printk(KERN_INFO "cs4297a: Setting up serial parameters\n"));
 
         __raw_writeq(M_SYNCSER_CMD_RX_RESET | M_SYNCSER_CMD_TX_RESET, SS_CSR(R_SER_CMD));
@@ -660,9 +660,9 @@ static int init_serdma(serdma_t *dma)
         dma->sb_end = (u16 *)((void *)dma->sample_buf + dma->sbufsz);
         dma->fragsize = dma->sbufsz >> 1;
 
-        CS_DBGOUT(CS_INIT, 4, 
+        CS_DBGOUT(CS_INIT, 4,
                   printk(KERN_ERR "cs4297a: descrtab - %08x dma_buf - %x sample_buf - %x\n",
-                         (int)dma->descrtab, (int)dma->dma_buf, 
+                         (int)dma->descrtab, (int)dma->dma_buf,
                          (int)dma->sample_buf));
 
         return 0;
@@ -672,7 +672,7 @@ static int dma_init(struct cs4297a_state *s)
 {
         int i;
 
-        CS_DBGOUT(CS_INIT, 2, 
+        CS_DBGOUT(CS_INIT, 2,
                   printk(KERN_INFO "cs4297a: Setting up DMA\n"));
 
         if (init_serdma(&s->dma_adc) ||
@@ -687,7 +687,7 @@ static int dma_init(struct cs4297a_state *s)
         /* Initialize now - the descr/buffer pairings will never
            change... */
         for (i=0; i<DMA_DESCR; i++) {
-                s->dma_dac.descrtab[i].descr_a = M_DMA_SERRX_SOP | V_DMA_DSCRA_A_SIZE(1) | 
+                s->dma_dac.descrtab[i].descr_a = M_DMA_SERRX_SOP | V_DMA_DSCRA_A_SIZE(1) |
                         (s->dma_dac.dma_buf_phys + i*FRAME_BYTES);
                 s->dma_dac.descrtab[i].descr_b = V_DMA_DSCRB_PKT_SIZE(FRAME_BYTES);
                 s->dma_adc.descrtab[i].descr_a = V_DMA_DSCRA_A_SIZE(1) |
@@ -724,7 +724,7 @@ static int dma_init(struct cs4297a_state *s)
         while ((__raw_readq(SS_CSR(R_SER_STATUS)) & 0xf1) != 1)
                 ;
 
-        CS_DBGOUT(CS_INIT, 4, 
+        CS_DBGOUT(CS_INIT, 4,
                   printk(KERN_INFO "cs4297a: status: %08x\n",
                          (unsigned int)(__raw_readq(SS_CSR(R_SER_STATUS)) & 0xffffffff)));
 
@@ -775,7 +775,7 @@ static int serdma_reg_access(struct cs4297a_state *s, u64 data)
 
         CS_DBGOUT(CS_FUNCTION, 6,
                   printk(KERN_INFO "cs4297a: serdma_reg_access()-\n"));
-        
+
         return 0;
 }
 
@@ -888,10 +888,10 @@ static void start_adc(struct cs4297a_state *s)
 	     (signed) (s->dma_adc.sbufsz - 2 * s->dma_adc.fragsize))
 	    && s->dma_adc.ready) {
 		if (s->prop_adc.fmt & AFMT_S8 || s->prop_adc.fmt & AFMT_U8) {
-			// 
+			//
 			// now only use 16 bit capture, due to truncation issue
 			// in the chip, noticeable distortion occurs.
-			// allocate buffer and then convert from 16 bit to 
+			// allocate buffer and then convert from 16 bit to
 			// 8 bit for the user buffer.
 			//
 			s->prop_adc.fmt_original = s->prop_adc.fmt;
@@ -928,7 +928,7 @@ static void start_adc(struct cs4297a_state *s)
 }
 
 
-// call with spinlock held! 
+// call with spinlock held!
 static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
 {
 	int good_diff, diff, diff2;
@@ -939,7 +939,7 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
         serdma_t *d;
         serdma_descr_t *descr;
 
-	// update ADC pointer 
+	// update ADC pointer
         status = intflag ? __raw_readq(SS_CSR(R_SER_STATUS)) : 0;
 
 	if ((s->ena & FMODE_READ) || (status & (M_SYNCSER_RX_EOP_COUNT))) {
@@ -948,7 +948,7 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
                                      d->descrtab_phys) / sizeof(serdma_descr_t));
 
                 if (s->ena & FMODE_READ) {
-                        CS_DBGOUT(CS_FUNCTION, 2, 
+                        CS_DBGOUT(CS_FUNCTION, 2,
                                   printk(KERN_INFO "cs4297a: upd_rcv sw->hw->hw %x/%x/%x (int-%d)n",
                                          d->swptr, d->hwptr, hwptr, intflag));
                         /* Number of DMA buffers available for software: */
@@ -1026,7 +1026,7 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
                         if (!diff) {
                                 printk(KERN_ERR "cs4297a: RX full or empty?\n");
                         }
-                        
+
                         descr = &d->descrtab[d->swptr];
                         data_p = &d->dma_buf[d->swptr*4];
 
@@ -1066,13 +1066,13 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
                         } while (--diff);
                         d->hwptr = hwptr;
 
-                        CS_DBGOUT(CS_DESCR, 6, 
+                        CS_DBGOUT(CS_DESCR, 6,
                                   printk(KERN_INFO "cs4297a: hw/sw %x/%x\n", d->hwptr, d->swptr));
                 }
 
 		CS_DBGOUT(CS_PARMS, 8, printk(KERN_INFO
 			"cs4297a: cs4297a_update_ptr(): s=0x%.8x hwptr=%d total_bytes=%d count=%d \n",
-				(unsigned)s, d->hwptr, 
+				(unsigned)s, d->hwptr,
 				d->total_bytes, d->count));
 	}
 
@@ -1080,7 +1080,7 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
            case if s->ena has FMODE_WRITE on, but the client isn't
            doing writes */
 
-	// update DAC pointer 
+	// update DAC pointer
 	//
 	// check for end of buffer, means that we are going to wait for another interrupt
 	// to allow silence to fill the fifos on the part, to keep pops down to a minimum.
@@ -1113,9 +1113,9 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
 				//
 				CS_DBGOUT(CS_WAVE_WRITE, 6, printk(KERN_INFO
 					"cs4297a: cs4297a_update_ptr(): memset %d at 0x%.8x for %d size \n",
-						(unsigned)(s->prop_dac.fmt & 
-						(AFMT_U8 | AFMT_U16_LE)) ? 0x80 : 0, 
-						(unsigned)d->dma_buf, 
+						(unsigned)(s->prop_dac.fmt &
+						(AFMT_U8 | AFMT_U16_LE)) ? 0x80 : 0,
+						(unsigned)d->dma_buf,
 						d->ringsz));
 				memset(d->dma_buf, 0, d->ringsz * FRAME_BYTES);
 				if (d->count < 0) {
@@ -1146,7 +1146,7 @@ static void cs4297a_update_ptr(struct cs4297a_state *s, int intflag)
 		}
 		CS_DBGOUT(CS_PARMS, 8, printk(KERN_INFO
 			"cs4297a: cs4297a_update_ptr(): s=0x%.8x hwptr=%d total_bytes=%d count=%d \n",
-				(unsigned) s, d->hwptr, 
+				(unsigned) s, d->hwptr,
 				d->total_bytes, d->count));
 	}
 }
@@ -1161,19 +1161,19 @@ static int mixer_ioctl(struct cs4297a_state *s, unsigned int cmd,
 		SOUND_MASK_LINE, SOUND_MASK_VOLUME, 0, 0
 	};
 
-	// Index of mixtable1[] member is Device ID 
+	// Index of mixtable1[] member is Device ID
 	// and must be <= SOUND_MIXER_NRDEVICES.
 	// Value of array member is index into s->mix.vol[]
 	static const unsigned char mixtable1[SOUND_MIXER_NRDEVICES] = {
-		[SOUND_MIXER_PCM] = 1,	// voice 
+		[SOUND_MIXER_PCM] = 1,	// voice
 		[SOUND_MIXER_LINE1] = 2,	// AUX
-		[SOUND_MIXER_CD] = 3,	// CD 
-		[SOUND_MIXER_LINE] = 4,	// Line 
+		[SOUND_MIXER_CD] = 3,	// CD
+		[SOUND_MIXER_LINE] = 4,	// Line
 		[SOUND_MIXER_SYNTH] = 5,	// FM
-		[SOUND_MIXER_MIC] = 6,	// Mic 
-		[SOUND_MIXER_SPEAKER] = 7,	// Speaker 
-		[SOUND_MIXER_RECLEV] = 8,	// Recording level 
-		[SOUND_MIXER_VOLUME] = 9	// Master Volume 
+		[SOUND_MIXER_MIC] = 6,	// Mic
+		[SOUND_MIXER_SPEAKER] = 7,	// Speaker
+		[SOUND_MIXER_RECLEV] = 8,	// Recording level
+		[SOUND_MIXER_VOLUME] = 9	// Master Volume
 	};
 
 	static const unsigned mixreg[] = {
@@ -1235,7 +1235,7 @@ static int mixer_ioctl(struct cs4297a_state *s, unsigned int cmd,
                 return -EINVAL;
 	}
 	if (cmd == SOUND_MIXER_PRIVATE2) {
-		// enable/disable/query spatializer 
+		// enable/disable/query spatializer
 		if (get_user(val, (int *) arg))
 			return -EFAULT;
 		if (val != -1) {
@@ -1275,24 +1275,24 @@ static int mixer_ioctl(struct cs4297a_state *s, unsigned int cmd,
 		return -EINVAL;
 
 	// If ioctl has only the SIOC_READ bit(bit 31)
-	// on, process the only-read commands. 
+	// on, process the only-read commands.
 	if (_SIOC_DIR(cmd) == _SIOC_READ) {
 		switch (_IOC_NR(cmd)) {
-		case SOUND_MIXER_RECSRC:	// Arg contains a bit for each recording source 
+		case SOUND_MIXER_RECSRC:	// Arg contains a bit for each recording source
 			cs4297a_read_ac97(s, AC97_RECORD_SELECT,
 					 &temp1);
 			return put_user(mixer_src[temp1 & 7], (int *) arg);
 
-		case SOUND_MIXER_DEVMASK:	// Arg contains a bit for each supported device 
+		case SOUND_MIXER_DEVMASK:	// Arg contains a bit for each supported device
 			return put_user(SOUND_MASK_PCM | SOUND_MASK_LINE |
 					SOUND_MASK_VOLUME | SOUND_MASK_RECLEV,
                                         (int *) arg);
 
-		case SOUND_MIXER_RECMASK:	// Arg contains a bit for each supported recording source 
+		case SOUND_MIXER_RECMASK:	// Arg contains a bit for each supported recording source
 			return put_user(SOUND_MASK_LINE | SOUND_MASK_VOLUME,
                                         (int *) arg);
 
-		case SOUND_MIXER_STEREODEVS:	// Mixer channels supporting stereo 
+		case SOUND_MIXER_STEREODEVS:	// Mixer channels supporting stereo
 			return put_user(SOUND_MASK_PCM | SOUND_MASK_LINE |
 					SOUND_MASK_VOLUME | SOUND_MASK_RECLEV,
                                         (int *) arg);
@@ -1308,7 +1308,7 @@ static int mixer_ioctl(struct cs4297a_state *s, unsigned int cmd,
 			return put_user(s->mix.vol[vidx - 1], (int *) arg);
 		}
 	}
-	// If ioctl doesn't have both the SIOC_READ and 
+	// If ioctl doesn't have both the SIOC_READ and
 	// the SIOC_WRITE bit set, return invalid.
 	if (_SIOC_DIR(cmd) != (_SIOC_READ | _SIOC_WRITE))
 		return -EINVAL;
@@ -1319,7 +1319,7 @@ static int mixer_ioctl(struct cs4297a_state *s, unsigned int cmd,
 	// Isolate the command; it must be a write.
 	switch (_IOC_NR(cmd)) {
 
-	case SOUND_MIXER_RECSRC:	// Arg contains a bit for each recording source 
+	case SOUND_MIXER_RECSRC:	// Arg contains a bit for each recording source
 		if (get_user(val, (int *) arg))
 			return -EFAULT;
 		i = hweight32(val);	// i = # bits on in val.
@@ -1357,7 +1357,7 @@ static int mixer_ioctl(struct cs4297a_state *s, unsigned int cmd,
 		} else
 			rr = attentbl[(10 * r) / 100];	// Convert volume to attenuation.
 
-		if ((rl > 60) && (rr > 60))	// If both l & r are 'low',          
+		if ((rl > 60) && (rr > 60))	// If both l & r are 'low',
 			temp1 = 0x8000;	//  turn on the mute bit.
 		else
 			temp1 = 0;
@@ -1539,7 +1539,7 @@ static int mixer_ioctl(struct cs4297a_state *s, unsigned int cmd,
 }
 
 
-// --------------------------------------------------------------------- 
+// ---------------------------------------------------------------------
 
 static int cs4297a_open_mixdev(struct inode *inode, struct file *file)
 {
@@ -1609,7 +1609,7 @@ static const struct file_operations cs4297a_mixer_fops = {
 	.release	= cs4297a_release_mixdev,
 };
 
-// --------------------------------------------------------------------- 
+// ---------------------------------------------------------------------
 
 
 static int drain_adc(struct cs4297a_state *s, int nonblock)
@@ -1657,7 +1657,7 @@ static int drain_dac(struct cs4297a_state *s, int nonblock)
 }
 
 
-// --------------------------------------------------------------------- 
+// ---------------------------------------------------------------------
 
 static ssize_t cs4297a_read(struct file *file, char *buffer, size_t count,
 			   loff_t * ppos)
@@ -1706,7 +1706,7 @@ static ssize_t cs4297a_read(struct file *file, char *buffer, size_t count,
 		// if the amount of unread bytes from the current sw pointer to the
 		// end of the buffer is greater than the current total bytes that
 		// have not been read, then set the "cnt" (unread bytes) to the
-		// amount of unread bytes.  
+		// amount of unread bytes.
 
 		if (count_fr < cnt)
 			cnt = count_fr;
@@ -1715,7 +1715,7 @@ static ssize_t cs4297a_read(struct file *file, char *buffer, size_t count,
 		//
 		// if we are converting from 8/16 then we need to copy
 		// twice the number of 16 bit bytes then 8 bit bytes.
-		// 
+		//
 		if (s->conversion) {
 			if (cnt_by > (count * 2)) {
 				cnt = (count * 2) / FRAME_SAMPLE_BYTES;
@@ -1764,7 +1764,7 @@ static ssize_t cs4297a_read(struct file *file, char *buffer, size_t count,
 
                 /* Return the descriptors */
 		spin_lock_irqsave(&s->lock, flags);
-                CS_DBGOUT(CS_FUNCTION, 2, 
+                CS_DBGOUT(CS_FUNCTION, 2,
                           printk(KERN_INFO "cs4297a: upd_rcv sw->hw %x/%x\n", s->dma_adc.swptr, s->dma_adc.hwptr));
 		s->dma_adc.count -= cnt_by;
                 s->dma_adc.sb_swptr += cnt * 2;
@@ -1811,7 +1811,7 @@ static ssize_t cs4297a_write(struct file *file, const char *buffer,
                 u32 *t_tmpl;
                 u32 left, right;
                 int swap = (s->prop_dac.fmt == AFMT_S16_LE) || (s->prop_dac.fmt == AFMT_U16_LE);
-                
+
                 /* XXXXXX this is broken for BLOAT_FACTOR */
 		spin_lock_irqsave(&s->lock, flags);
 		if (d->count < 0) {
@@ -1945,7 +1945,7 @@ static unsigned int cs4297a_poll(struct file *file,
 		}
 	} else if (file->f_mode & FMODE_READ) {
 		if (s->dma_adc.mapped) {
-			if (s->dma_adc.count >= (signed) s->dma_adc.fragsize) 
+			if (s->dma_adc.count >= (signed) s->dma_adc.fragsize)
 				mask |= POLLIN | POLLRDNORM;
 		} else {
 			if (s->dma_adc.count > 0)
@@ -2091,7 +2091,7 @@ static int cs4297a_ioctl(struct file *file,
 
 		return put_user(val, (int *) arg);
 
-	case SNDCTL_DSP_GETFMTS:	// Returns a mask 
+	case SNDCTL_DSP_GETFMTS:	// Returns a mask
 		CS_DBGOUT(CS_IOCTL | CS_PARMS, 4, printk(KERN_INFO
 			"cs4297a: cs4297a_ioctl(): DSP_GETFMT val=0x%.8x\n",
 				 AFMT_S16_LE | AFMT_U16_LE | AFMT_S8 |
@@ -2133,7 +2133,7 @@ static int cs4297a_ioctl(struct file *file,
 				val = s->prop_adc.fmt_original;
 		}
 		CS_DBGOUT(CS_IOCTL | CS_PARMS, 4, printk(KERN_INFO
-		  "cs4297a: cs4297a_ioctl(): DSP_SETFMT return val=0x%.8x\n", 
+		  "cs4297a: cs4297a_ioctl(): DSP_SETFMT return val=0x%.8x\n",
 			val));
 		return put_user(val, (int *) arg);
 
@@ -2432,7 +2432,7 @@ static int cs4297a_locked_open(struct inode *inode, struct file *file)
 	VALIDATE_STATE(s);
 	file->private_data = s;
 
-	// wait for device to become free 
+	// wait for device to become free
 	if (!(file->f_mode & (FMODE_WRITE | FMODE_READ))) {
 		CS_DBGOUT(CS_FUNCTION | CS_OPEN | CS_ERROR, 2, printk(KERN_INFO
 			 "cs4297a: cs4297a_open(): Error - must open READ and/or WRITE\n"));
@@ -2444,7 +2444,7 @@ static int cs4297a_locked_open(struct inode *inode, struct file *file)
                         while (__raw_readq(SS_CSR(R_SER_DMA_DSCR_COUNT_TX)))
                                 ;
                 }
-          
+
 		mutex_lock(&s->open_sem_dac);
 		while (s->open_mode & FMODE_WRITE) {
 			if (file->f_flags & O_NONBLOCK) {
@@ -2628,7 +2628,7 @@ static int __init cs4297a_init(void)
 	int mdio_val;
 #endif
 
-	CS_DBGOUT(CS_INIT | CS_FUNCTION, 2, printk(KERN_INFO 
+	CS_DBGOUT(CS_INIT | CS_FUNCTION, 2, printk(KERN_INFO
 		"cs4297a: cs4297a_init_module()+ \n"));
 
 #ifndef CONFIG_BCM_CS4297A_CSWARM
@@ -2646,7 +2646,7 @@ static int __init cs4297a_init(void)
                 }
 
                 printk(KERN_INFO "cs4297a: serial port 1 switching to synchronous operation\n");
-                
+
                 /* Force the codec (on SWARM) to reset by clearing
                    GENO, preserving MDIO (no effect on CSWARM) */
                 __raw_writeq(mdio_val, KSEG1+A_MAC_REGISTER(2, R_MAC_MDIO));
@@ -2740,7 +2740,7 @@ static int __init cs4297a_init(void)
 
                 CS_DBGOUT(CS_INIT | CS_FUNCTION, 2,
                           printk(KERN_INFO "cs4297a: cs4297a_init_module()-\n"));
-                
+
                 return 0;
         }
 
@@ -2761,7 +2761,7 @@ static int __init cs4297a_init(void)
 static void __exit cs4297a_cleanup(void)
 {
         /*
-          XXXKW 
+          XXXKW
            disable_irq, free_irq
            drain DMA queue
            disable DMA
@@ -2772,12 +2772,12 @@ static void __exit cs4297a_cleanup(void)
 		  printk(KERN_INFO "cs4297a: cleanup_cs4297a() finished\n"));
 }
 
-// --------------------------------------------------------------------- 
+// ---------------------------------------------------------------------
 
 MODULE_AUTHOR("Kip Walker, Broadcom Corp.");
 MODULE_DESCRIPTION("Cirrus Logic CS4297a Driver for Broadcom SWARM board");
 
-// --------------------------------------------------------------------- 
+// ---------------------------------------------------------------------
 
 module_init(cs4297a_init);
 module_exit(cs4297a_cleanup);

@@ -171,7 +171,7 @@ void __init mcpm_smp_set_ops(void);
 
 #else
 
-/* 
+/*
  * asm-offsets.h causes trouble when included in .c files, and cacheflush.h
  * cannot be included in asm files.  Let's work around the conflict like this.
  */

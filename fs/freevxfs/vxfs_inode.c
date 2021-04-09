@@ -241,7 +241,7 @@ vxfs_iinit(struct inode *ip, struct vxfs_inode_info *vip)
 	ip->i_generation = vip->vii_gen;
 
 	ip->i_private = vip;
-	
+
 }
 
 /**

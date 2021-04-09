@@ -132,7 +132,7 @@ int __init platform_setup(void)
 	 * this board.
 	 */
 
-  	/* 
+  	/*
 	 * Presume all FooTech boards have the same broken timer,
 	 * and also presume that we've defined foo_timer_init to
 	 * do something useful.

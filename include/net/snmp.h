@@ -1,7 +1,7 @@
 /*
  *
  *		SNMP MIB entries for the IP subsystem.
- *		
+ *
  *		Alan Cox <gw4pts@gw4pts.ampr.org>
  *
  *		We don't chose to implement SNMP in the kernel (this would
@@ -15,7 +15,7 @@
  *		2 of the License, or (at your option) any later version.
  *
  */
- 
+
 #ifndef _SNMP_H
 #define _SNMP_H
 

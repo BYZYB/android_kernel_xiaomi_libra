@@ -1,25 +1,25 @@
 /*********************************************************************
- *                
+ *
  * Filename:      w83977af_ir.h
- * Version:       
- * Description:   
+ * Version:
+ * Description:
  * Status:        Experimental.
  * Author:        Paul VanderSpek
  * Created at:    Thu Nov 19 13:55:34 1998
  * Modified at:   Tue Jan 11 13:08:19 2000
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
- * 
+ *
  *     Copyright (c) 1998-2000 Dag Brattli, All Rights Reserved.
- *      
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- *  
+ *
  *     Neither Dag Brattli nor University of Tromsø admit liability nor
- *     provide warranty for any of this software. This material is 
+ *     provide warranty for any of this software. This material is
  *     provided "AS-IS" and at no charge.
- *     
+ *
  ********************************************************************/
 
 #ifndef W83977AF_IR_H
@@ -81,7 +81,7 @@
 #define HCR		0x04
 #define HCR_MODE_MASK	~(0xD0)
 #define HCR_SIR         0x60
-#define HCR_MIR_576  	0x20	
+#define HCR_MIR_576  	0x20
 #define HCR_MIR_1152	0x80
 #define HCR_FIR		0xA0
 #define HCR_EN_DMA	0x04
@@ -102,7 +102,7 @@
 #define ABHL            0x01 /* Advanced baud rate divisor latch (high byte) */
 
 #define ADCR1		0x02
-#define ADCR1_ADV_SL	0x01	
+#define ADCR1_ADV_SL	0x01
 #define ADCR1_D_CHSW	0x08	/* the specs are wrong. its bit 3, not 4 */
 #define ADCR1_DMA_F	0x02
 
@@ -134,7 +134,7 @@
 #define FS_FO_LST_FR    0x40 /* Frame lost */
 #define FS_FO_MX_LEX    0x10 /* Max frame len exceeded */
 #define FS_FO_PHY_ERR   0x08 /* Physical layer error */
-#define FS_FO_CRC_ERR   0x04 
+#define FS_FO_CRC_ERR   0x04
 #define FS_FO_RX_OV     0x02 /* Receive overrun */
 #define FS_FO_FSF_OV    0x01 /* Frame status FIFO overrun */
 #define FS_FO_ERR_MSK   0x5f /* Error mask */
@@ -172,10 +172,10 @@ struct w83977af_ir {
 	int tx_len;          /* Number of frames in tx_buff */
 
 	struct net_device *netdev; /* Yes! we are some kind of netdevice */
-	
+
 	struct irlap_cb    *irlap; /* The link layer we are binded to */
 	struct qos_info     qos;   /* QoS capabilities for this device */
-	
+
 	chipio_t io;               /* IrDA controller information */
 	iobuff_t tx_buff;          /* Transmit buffer */
 	iobuff_t rx_buff;          /* Receive buffer */
@@ -186,7 +186,7 @@ struct w83977af_ir {
 	 * will get you started. Check in nsc-ircc.c for a proper
 	 * locking strategy. - Jean II */
 	spinlock_t lock;           /* For serializing operations */
-	
+
 	__u32 new_speed;
 };
 

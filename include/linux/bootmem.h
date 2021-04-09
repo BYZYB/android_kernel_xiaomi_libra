@@ -21,7 +21,7 @@ extern unsigned long max_pfn;
 
 #ifndef CONFIG_NO_BOOTMEM
 /*
- * node_bootmem_map is a map pointer - the bits represent all physical 
+ * node_bootmem_map is a map pointer - the bits represent all physical
  * memory pages (including holes) on the node.
  */
 typedef struct bootmem_data {

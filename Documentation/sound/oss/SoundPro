@@ -74,7 +74,7 @@ butting heads with another device.
 If you do not see the chipset version message, and none of the other
 messages present in the system log are helpful, try adding 'debug=1'
 to the ad1848 parameters, email me the syslog results and I'll do
-my best to help. 
+my best to help.
 
 Lastly, if you're using modules and want to set up automatic module
 loading with kmod, the kernel module loader, here is the section I

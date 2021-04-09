@@ -19,7 +19,7 @@
 #include <linux/errno.h>
 #include <linux/printk.h>
 #include <linux/atomic.h>
- 
+
 /* Each escaped entry is prefixed by ESCAPE_CODE
  * then one of the following codes, then the
  * relevant data.
@@ -46,7 +46,7 @@ struct super_block;
 struct dentry;
 struct file_operations;
 struct pt_regs;
- 
+
 /* Operations structure to be filled in */
 struct oprofile_operations {
 	/* create any necessary configuration files in the oprofile fs.
@@ -85,7 +85,7 @@ struct oprofile_operations {
  * If an error occurs, the fields should be left untouched.
  */
 int oprofile_arch_init(struct oprofile_operations * ops);
- 
+
 /**
  * One-time exit/cleanup for the arch.
  */
@@ -130,19 +130,19 @@ int oprofilefs_create_file(struct super_block * sb, struct dentry * root,
 
 int oprofilefs_create_file_perm(struct super_block * sb, struct dentry * root,
 	char const * name, const struct file_operations * fops, int perm);
- 
+
 /** Create a file for read/write access to an unsigned long. */
 int oprofilefs_create_ulong(struct super_block * sb, struct dentry * root,
 	char const * name, ulong * val);
- 
+
 /** Create a file for read-only access to an unsigned long. */
 int oprofilefs_create_ro_ulong(struct super_block * sb, struct dentry * root,
 	char const * name, ulong * val);
- 
+
 /** Create a file for read-only access to an atomic_t. */
 int oprofilefs_create_ro_atomic(struct super_block * sb, struct dentry * root,
 	char const * name, atomic_t * val);
- 
+
 /** create a directory */
 struct dentry * oprofilefs_mkdir(struct super_block * sb, struct dentry * root,
 	char const * name);
@@ -176,7 +176,7 @@ void oprofile_put_buff(unsigned long *buf, unsigned int start,
 
 unsigned long oprofile_get_cpu_buffer_size(void);
 void oprofile_cpu_buffer_inc_smpl_lost(void);
- 
+
 /* cpu buffer functions */
 
 struct op_sample;

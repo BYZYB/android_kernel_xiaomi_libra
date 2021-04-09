@@ -95,7 +95,7 @@ int snd_seq_pool_delete(struct snd_seq_pool **pool);
 
 /* init memory */
 int snd_sequencer_memory_init(void);
-            
+
 /* release event memory */
 void snd_sequencer_memory_done(void);
 

@@ -1,7 +1,7 @@
 /*
 ** z2ram - Amiga pseudo-driver to access 16bit-RAM in ZorroII space
 **         as a block device, to be used as a RAM disk or swap space
-** 
+**
 ** Copyright (C) 1994 by Ingo Wilken (Ingo.Wilken@informatik.uni-oldenburg.de)
 **
 ** ++Geert: support for zorro_unused_z2ram, better range checking
@@ -116,7 +116,7 @@ get_z2ram( void )
 	if ( test_bit( i, zorro_unused_z2ram ) )
 	{
 	    z2_count++;
-	    z2ram_map[ z2ram_size++ ] = 
+	    z2ram_map[ z2ram_size++ ] =
 		ZTWO_VADDR( Z2RAM_START ) + ( i << Z2RAM_CHUNKSHIFT );
 	    clear_bit( i, zorro_unused_z2ram );
 	}
@@ -142,7 +142,7 @@ get_chipram( void )
 
 	z2ram_size++;
     }
-	
+
     return;
 }
 
@@ -191,13 +191,13 @@ static int z2_open(struct block_device *bdev, fmode_t mode)
 			vfree(vmalloc (size));
 		}
 
-		vaddr = (unsigned long) __ioremap (paddr, size, 
+		vaddr = (unsigned long) __ioremap (paddr, size,
 						   _PAGE_WRITETHRU);
 
 #else
 		vaddr = (unsigned long)z_remap_nocache_nonser(paddr, size);
 #endif
-		z2ram_map = 
+		z2ram_map =
 			kmalloc((size/Z2RAM_CHUNKSIZE)*sizeof(z2ram_map[0]),
 				GFP_KERNEL);
 		if ( z2ram_map == NULL )
@@ -236,7 +236,7 @@ static int z2_open(struct block_device *bdev, fmode_t mode)
 		get_chipram();
 
 		if ( z2ram_size != 0 )
-		    printk( KERN_INFO DEVICE_NAME 
+		    printk( KERN_INFO DEVICE_NAME
 			": using %iK Zorro II RAM and %iK Chip RAM (Total %dK)\n",
 			z2_count * Z2RAM_CHUNK1024,
 			chip_count * Z2RAM_CHUNK1024,
@@ -256,7 +256,7 @@ static int z2_open(struct block_device *bdev, fmode_t mode)
 		get_z2ram();
 
 		if ( z2ram_size != 0 )
-		    printk( KERN_INFO DEVICE_NAME 
+		    printk( KERN_INFO DEVICE_NAME
 			": using %iK of Zorro II RAM\n",
 			z2_count * Z2RAM_CHUNK1024 );
 
@@ -274,16 +274,16 @@ static int z2_open(struct block_device *bdev, fmode_t mode)
 		get_chipram();
 
 		if ( z2ram_size != 0 )
-		    printk( KERN_INFO DEVICE_NAME 
+		    printk( KERN_INFO DEVICE_NAME
 			": using %iK Chip RAM\n",
 			chip_count * Z2RAM_CHUNK1024 );
-		    
+
 	    break;
 
 	    default:
 		rc = -ENODEV;
 		goto err_out;
-	
+
 	    break;
 	}
 
@@ -338,7 +338,7 @@ static struct kobject *z2_find(dev_t dev, int *part, void *data)
 
 static struct request_queue *z2_queue;
 
-static int __init 
+static int __init
 z2_init(void)
 {
     int ret;
@@ -394,7 +394,7 @@ static void __exit z2_exit(void)
 
 	for ( j = 0 ; j < z2_count; j++ )
 	{
-	    set_bit( i++, zorro_unused_z2ram ); 
+	    set_bit( i++, zorro_unused_z2ram );
 	}
 
 	for ( j = 0 ; j < chip_count; j++ )
@@ -412,7 +412,7 @@ static void __exit z2_exit(void)
     }
 
     return;
-} 
+}
 
 module_init(z2_init);
 module_exit(z2_exit);

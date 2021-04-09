@@ -1209,7 +1209,7 @@ void cayman_ring_ib_execute(struct radeon_device *rdev, struct radeon_ib *ib)
 	if (ring->rptr_save_reg) {
 		uint32_t next_rptr = ring->wptr + 3 + 4 + 8;
 		radeon_ring_write(ring, PACKET3(PACKET3_SET_CONFIG_REG, 1));
-		radeon_ring_write(ring, ((ring->rptr_save_reg - 
+		radeon_ring_write(ring, ((ring->rptr_save_reg -
 					  PACKET3_SET_CONFIG_REG_START) >> 2));
 		radeon_ring_write(ring, next_rptr);
 	}
@@ -1221,7 +1221,7 @@ void cayman_ring_ib_execute(struct radeon_device *rdev, struct radeon_ib *ib)
 #endif
 			  (ib->gpu_addr & 0xFFFFFFFC));
 	radeon_ring_write(ring, upper_32_bits(ib->gpu_addr) & 0xFF);
-	radeon_ring_write(ring, ib->length_dw | 
+	radeon_ring_write(ring, ib->length_dw |
 			  (ib->vm ? (ib->vm->id << 24) : 0));
 
 	/* flush read cache over gart for this vmid */

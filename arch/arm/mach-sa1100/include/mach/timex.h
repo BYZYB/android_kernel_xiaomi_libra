@@ -3,7 +3,7 @@
  *
  * SA1100 architecture timex specifications
  *
- * Copyright (C) 1998 
+ * Copyright (C) 1998
  */
 
 /*

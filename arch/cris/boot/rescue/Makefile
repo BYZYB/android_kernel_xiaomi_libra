@@ -9,7 +9,7 @@
 # LD = gcc-cris -mlinux -march=v32 -nostdlib
 
 asflags-y += $(LINUXINCLUDE)
-ccflags-y += -Ofast $(LINUXINCLUDE)
+ccflags-y += $(LINUXINCLUDE)
 
 ifdef CONFIG_ETRAX_AXISFLASHMAP
 
@@ -52,4 +52,3 @@ $(obj)/kimagerescue.bin: $(obj)/kimagerescue.o
 	cat ktr.bin tmp2423 >kimagerescue_tmp.bin
 	dd if=kimagerescue_tmp.bin of=$(obj)/kimagerescue.bin bs=1 count=784
 	rm ktr.bin tmp2423 kimagerescue_tmp.bin
-

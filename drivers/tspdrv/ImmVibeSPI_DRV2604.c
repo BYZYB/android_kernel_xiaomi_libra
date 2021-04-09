@@ -603,13 +603,13 @@ static ssize_t drv2604_vib_level_store(struct device *dev,
                                        const char *buf, size_t count)
 {
     int rc, val;
-    
+
     rc = kstrtoint(buf, 10, &val);
     if (rc) {
         pr_err("%s: error getting level\n", __func__);
         return -EINVAL;
     }
-    
+
     if (val < MIN_VIBE_STRENGTH) {
         pr_err("%s: level %d not in range (%d - %d), using min.\n",
                __func__, val, MIN_VIBE_STRENGTH, MAX_VIBE_STRENGTH);
@@ -619,9 +619,9 @@ static ssize_t drv2604_vib_level_store(struct device *dev,
                __func__, val, MIN_VIBE_STRENGTH, MAX_VIBE_STRENGTH);
         val = MAX_VIBE_STRENGTH;
     }
-    
+
     vibe_strength = val;
-    
+
     return strnlen(buf, count);
 }
 
@@ -1110,7 +1110,7 @@ IMMVIBESPIAPI VibeStatus ImmVibeSPI_ForceOut_Initialize(void)
 		printk(KERN_ALERT"drv2604: fail to create timed output dev: pattern\n");
 		return VIBE_E_FAIL;
 	}
-    
+
     if (sysfs_create_group(&to_dev.dev->kobj, &timed_dev_attr_group)) {
         printk(KERN_ALERT"drv2604: fail to create strength tunables\n");
         return VIBE_E_FAIL;

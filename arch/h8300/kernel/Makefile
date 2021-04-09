@@ -9,4 +9,4 @@ obj-y := process.o traps.o ptrace.o irq.o \
          setup.o gpio.o syscalls.o \
 	 entry.o timer/
 
-obj-$(CONFIG_MODULES) += module.o h8300_ksyms.o 
+obj-$(CONFIG_MODULES) += module.o h8300_ksyms.o

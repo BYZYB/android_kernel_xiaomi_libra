@@ -198,7 +198,7 @@ static struct miscdevice nvram_dev = {
 static void __init nvram_print_partitions(char * label)
 {
 	struct nvram_partition * tmp_part;
-	
+
 	printk(KERN_WARNING "--------%s---------\n", label);
 	printk(KERN_WARNING "indx\t\tsig\tchks\tlen\tname\n");
 	list_for_each_entry(tmp_part, &nvram_partitions, partition) {
@@ -215,9 +215,9 @@ static int __init nvram_write_header(struct nvram_partition * part)
 {
 	loff_t tmp_index;
 	int rc;
-	
+
 	tmp_index = part->index;
-	rc = ppc_md.nvram_write((char *)&part->header, NVRAM_HEADER_LEN, &tmp_index); 
+	rc = ppc_md.nvram_write((char *)&part->header, NVRAM_HEADER_LEN, &tmp_index);
 
 	return rc;
 }
@@ -309,7 +309,7 @@ int __init nvram_remove_partition(const char *name, int sig,
 		} else
 			prev = part;
 	}
-	
+
 	return 0;
 }
 
@@ -353,7 +353,7 @@ loff_t __init nvram_create_partition(const char *name, int sig,
 	req_size += 1;
 	min_size += 1;
 
-	/* Find a free partition that will give us the maximum needed size 
+	/* Find a free partition that will give us the maximum needed size
 	   If can't find one that will give us the minimum size needed */
 	list_for_each_entry(part, &nvram_partitions, partition) {
 		if (part->header.signature != NVRAM_SIG_FREE)
@@ -372,7 +372,7 @@ loff_t __init nvram_create_partition(const char *name, int sig,
 	}
 	if (!size)
 		return -ENOSPC;
-	
+
 	/* Create our OS partition */
 	new_part = kmalloc(sizeof(*new_part), GFP_KERNEL);
 	if (!new_part) {
@@ -408,7 +408,7 @@ loff_t __init nvram_create_partition(const char *name, int sig,
 	} else {
 		list_del(&free_part->partition);
 		kfree(free_part);
-	} 
+	}
 
 	/* Clear the new partition */
 	for (tmp_index = new_part->index + NVRAM_HEADER_LEN;
@@ -420,7 +420,7 @@ loff_t __init nvram_create_partition(const char *name, int sig,
 			return rc;
 		}
 	}
-	
+
 	return new_part->index + NVRAM_HEADER_LEN;
 }
 
@@ -433,7 +433,7 @@ loff_t __init nvram_create_partition(const char *name, int sig,
 int nvram_get_partition_size(loff_t data_index)
 {
 	struct nvram_partition *part;
-	
+
 	list_for_each_entry(part, &nvram_partitions, partition) {
 		if (part->index + NVRAM_HEADER_LEN == data_index)
 			return (part->header.length - 1) * NVRAM_BLOCK_LEN;
@@ -477,7 +477,7 @@ int __init nvram_scan_partitions(void)
 	if (ppc_md.nvram_size == NULL || ppc_md.nvram_size() <= 0)
 		return -ENODEV;
 	total_size = ppc_md.nvram_size();
-	
+
 	header = kmalloc(NVRAM_HEADER_LEN, GFP_KERNEL);
 	if (!header) {
 		printk(KERN_ERR "nvram_scan_partitions: Failed kmalloc\n");
@@ -517,11 +517,11 @@ int __init nvram_scan_partitions(void)
 			printk(KERN_ERR "nvram_scan_partitions: kmalloc failed\n");
 			goto out;
 		}
-		
+
 		memcpy(&tmp_part->header, &phead, NVRAM_HEADER_LEN);
 		tmp_part->index = cur_index;
 		list_add_tail(&tmp_part->partition, &nvram_partitions);
-		
+
 		cur_index += phead.length * NVRAM_BLOCK_LEN;
 	}
 	err = 0;
@@ -538,7 +538,7 @@ int __init nvram_scan_partitions(void)
 static int __init nvram_init(void)
 {
 	int rc;
-	
+
 	BUILD_BUG_ON(NVRAM_BLOCK_LEN != 16);
 
 	if (ppc_md.nvram_size == NULL || ppc_md.nvram_size() <= 0)
@@ -549,7 +549,7 @@ static int __init nvram_init(void)
 		printk(KERN_ERR "nvram_init: failed to register device\n");
 		return rc;
 	}
-  	
+
   	return rc;
 }
 

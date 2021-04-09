@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      litelink.c
  * Version:       1.1
  * Description:   Driver for the Parallax LiteLink dongle
@@ -8,24 +8,24 @@
  * Created at:    Fri May  7 12:50:33 1999
  * Modified at:   Fri Dec 17 09:14:23 1999
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
- * 
+ *
  *     Copyright (c) 1999 Dag Brattli, All Rights Reserved.
- *     
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- * 
+ *
  *     This program is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  *     GNU General Public License for more details.
- * 
- *     You should have received a copy of the GNU General Public License 
- *     along with this program; if not, write to the Free Software 
- *     Foundation, Inc., 59 Temple Place, Suite 330, Boston, 
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with this program; if not, write to the Free Software
+ *     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *     MA 02111-1307 USA
- *     
+ *
  ********************************************************************/
 
 /*
@@ -106,8 +106,8 @@ static int litelink_close(struct sir_dev *dev)
 /*
  * Function litelink_change_speed (task)
  *
- *    Change speed of the Litelink dongle. To cycle through the available 
- *    baud rates, pulse RTS low for a few ms.  
+ *    Change speed of the Litelink dongle. To cycle through the available
+ *    baud rates, pulse RTS low for a few ms.
  */
 static int litelink_change_speed(struct sir_dev *dev, unsigned speed)
 {
@@ -188,7 +188,7 @@ static int litelink_reset(struct sir_dev *dev)
 }
 
 MODULE_AUTHOR("Dag Brattli <dagb@cs.uit.no>");
-MODULE_DESCRIPTION("Parallax Litelink dongle driver");	
+MODULE_DESCRIPTION("Parallax Litelink dongle driver");
 MODULE_LICENSE("GPL");
 MODULE_ALIAS("irda-dongle-5"); /* IRDA_LITELINK_DONGLE */
 

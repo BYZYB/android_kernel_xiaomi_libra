@@ -1,11 +1,11 @@
 /*
- * linux/drivers/video/stifb.c - 
- * Low level Frame buffer driver for HP workstations with 
+ * linux/drivers/video/stifb.c -
+ * Low level Frame buffer driver for HP workstations with
  * STI (standard text interface) video firmware.
  *
  * Copyright (C) 2001-2006 Helge Deller <deller@gmx.de>
  * Portions Copyright (C) 2001 Thomas Bogendoerfer <tsbogend@alpha.franken.de>
- * 
+ *
  * Based on:
  * - linux/drivers/video/artistfb.c -- Artist frame buffer driver
  *	Copyright (C) 2000 Philipp Rumpf <prumpf@tux.org>
@@ -14,7 +14,7 @@
  * - HP Xhp cfb-based X11 window driver for XFree86
  *	(c)Copyright 1992 Hewlett-Packard Co.
  *
- * 
+ *
  *  The following graphics display devices (NGLE family) are supported by this driver:
  *
  *  HPA4070A	known as "HCRX", a 1280x1024 color device with 8 planes
@@ -30,7 +30,7 @@
  *		supports 1280x1024 color displays with 8 planes.
  *  HP710G	same as HP710C, 1280x1024 grayscale only
  *  HP710L	same as HP710C, 1024x768 color only
- *  HP712	internal graphics support on HP9000s712 SPU, supports 640x480, 
+ *  HP712	internal graphics support on HP9000s712 SPU, supports 640x480,
  *		1024x768 or 1280x1024 color displays on 8 planes (Artist)
  *
  * This file is subject to the terms and conditions of the GNU General Public
@@ -91,7 +91,7 @@ typedef struct {
 	__s32	misc_video_end;
 } video_setup_t;
 
-typedef struct {                  
+typedef struct {
 	__s16	sizeof_ngle_data;
 	__s16	x_size_visible;	    /* visible screen dim in pixels  */
 	__s16	y_size_visible;
@@ -173,10 +173,10 @@ static int __initdata stifb_bpp_pref[MAX_STI_ROMS];
 #endif /* DEBUG_STIFB_REGS */
 
 
-#define ENABLE	1	/* for enabling/disabling screen */	
+#define ENABLE	1	/* for enabling/disabling screen */
 #define DISABLE 0
 
-#define NGLE_LOCK(fb_info)	do { } while (0) 
+#define NGLE_LOCK(fb_info)	do { } while (0)
 #define NGLE_UNLOCK(fb_info)	do { } while (0)
 
 static void
@@ -194,9 +194,9 @@ SETUP_HW(struct stifb_info *fb)
 
 static void
 SETUP_FB(struct stifb_info *fb)
-{	
+{
 	unsigned int reg10_value = 0;
-	
+
 	SETUP_HW(fb);
 	switch (fb->id)
 	{
@@ -206,15 +206,15 @@ SETUP_FB(struct stifb_info *fb)
 			reg10_value = 0x13601000;
 			break;
 		case S9000_ID_A1439A:
-			if (fb->info.var.bits_per_pixel == 32)						
+			if (fb->info.var.bits_per_pixel == 32)
 				reg10_value = 0xBBA0A000;
-			else 
+			else
 				reg10_value = 0x13601000;
 			break;
 		case S9000_ID_HCRX:
 			if (fb->info.var.bits_per_pixel == 32)
 				reg10_value = 0xBBA0A000;
-			else					
+			else
 				reg10_value = 0x13602000;
 			break;
 		case S9000_ID_TIMBER:
@@ -239,7 +239,7 @@ START_IMAGE_COLORMAP_ACCESS(struct stifb_info *fb)
 }
 
 static void
-WRITE_IMAGE_COLOR(struct stifb_info *fb, int index, int color) 
+WRITE_IMAGE_COLOR(struct stifb_info *fb, int index, int color)
 {
 	SETUP_HW(fb);
 	WRITE_WORD(((0x100+index)<<2), fb, REG_3);
@@ -247,30 +247,30 @@ WRITE_IMAGE_COLOR(struct stifb_info *fb, int index, int color)
 }
 
 static void
-FINISH_IMAGE_COLORMAP_ACCESS(struct stifb_info *fb) 
-{		
+FINISH_IMAGE_COLORMAP_ACCESS(struct stifb_info *fb)
+{
 	WRITE_WORD(0x400, fb, REG_2);
 	if (fb->info.var.bits_per_pixel == 32) {
 		WRITE_WORD(0x83000100, fb, REG_1);
 	} else {
 		if (fb->id == S9000_ID_ARTIST || fb->id == CRT_ID_VISUALIZE_EG)
 			WRITE_WORD(0x80000100, fb, REG_26);
-		else							
+		else
 			WRITE_WORD(0x80000100, fb, REG_1);
 	}
 	SETUP_FB(fb);
 }
 
 static void
-SETUP_RAMDAC(struct stifb_info *fb) 
+SETUP_RAMDAC(struct stifb_info *fb)
 {
 	SETUP_HW(fb);
 	WRITE_WORD(0x04000000, fb, 0x1020);
 	WRITE_WORD(0xff000000, fb, 0x1028);
 }
 
-static void 
-CRX24_SETUP_RAMDAC(struct stifb_info *fb) 
+static void
+CRX24_SETUP_RAMDAC(struct stifb_info *fb)
 {
 	SETUP_HW(fb);
 	WRITE_WORD(0x04000000, fb, 0x1000);
@@ -282,14 +282,14 @@ CRX24_SETUP_RAMDAC(struct stifb_info *fb)
 }
 
 #if 0
-static void 
+static void
 HCRX_SETUP_RAMDAC(struct stifb_info *fb)
 {
 	WRITE_WORD(0xffffffff, fb, REG_32);
 }
 #endif
 
-static void 
+static void
 CRX24_SET_OVLY_MASK(struct stifb_info *fb)
 {
 	SETUP_HW(fb);
@@ -310,7 +310,7 @@ ENABLE_DISABLE_DISPLAY(struct stifb_info *fb, int enable)
         WRITE_WORD(value, 	fb, 0x1038);
 }
 
-static void 
+static void
 CRX24_ENABLE_DISABLE_DISPLAY(struct stifb_info *fb, int enable)
 {
 	unsigned int value = enable ? 0x10000000 : 0x30000000;
@@ -321,11 +321,11 @@ CRX24_ENABLE_DISABLE_DISPLAY(struct stifb_info *fb, int enable)
 }
 
 static void
-ARTIST_ENABLE_DISABLE_DISPLAY(struct stifb_info *fb, int enable) 
+ARTIST_ENABLE_DISABLE_DISPLAY(struct stifb_info *fb, int enable)
 {
 	u32 DregsMiscVideo = REG_21;
 	u32 DregsMiscCtl = REG_27;
-	
+
 	SETUP_HW(fb);
 	if (enable) {
 	  WRITE_WORD(READ_WORD(fb, DregsMiscVideo) | 0x0A000000, fb, DregsMiscVideo);
@@ -340,7 +340,7 @@ ARTIST_ENABLE_DISABLE_DISPLAY(struct stifb_info *fb, int enable)
 	(READ_BYTE(fb, REG_16b3) - 1)
 
 #define HYPER_CONFIG_PLANES_24 0x00000100
-	
+
 #define IS_24_DEVICE(fb) \
 	(fb->deviceSpecificConfig & HYPER_CONFIG_PLANES_24)
 
@@ -463,15 +463,15 @@ SETUP_ATTR_ACCESS(struct stifb_info *fb, unsigned BufferNumber)
 }
 
 static void
-SET_ATTR_SIZE(struct stifb_info *fb, int width, int height) 
+SET_ATTR_SIZE(struct stifb_info *fb, int width, int height)
 {
-	/* REG_6 seems to have special values when run on a 
+	/* REG_6 seems to have special values when run on a
 	   RDI precisionbook parisc laptop (INTERNAL_EG_DX1024 or
 	   INTERNAL_EG_X1024).  The values are:
 		0x2f0: internal (LCD) & external display enabled
 		0x2a0: external display only
 		0x000: zero on standard artist graphic cards
-	*/ 
+	*/
 	WRITE_WORD(0x00000000, fb, REG_6);
 	WRITE_WORD((width<<16) | height, fb, REG_9);
 	WRITE_WORD(0x05000000, fb, REG_6);
@@ -479,7 +479,7 @@ SET_ATTR_SIZE(struct stifb_info *fb, int width, int height)
 }
 
 static void
-FINISH_ATTR_ACCESS(struct stifb_info *fb) 
+FINISH_ATTR_ACCESS(struct stifb_info *fb)
 {
 	SETUP_HW(fb);
 	WRITE_WORD(0x00000000, fb, REG_12);
@@ -492,7 +492,7 @@ elkSetupPlanes(struct stifb_info *fb)
 	SETUP_FB(fb);
 }
 
-static void 
+static void
 ngleSetupAttrPlanes(struct stifb_info *fb, int BufferNumber)
 {
 	SETUP_ATTR_ACCESS(fb, BufferNumber);
@@ -512,7 +512,7 @@ rattlerSetupPlanes(struct stifb_info *fb)
 	 * read mask register for overlay planes, not image planes).
 	 */
 	CRX24_SETUP_RAMDAC(fb);
-    
+
 	/* change fb->id temporarily to fool SETUP_FB() */
 	saved_id = fb->id;
 	fb->id = CRX24_OVERLAY_PLANES;
@@ -558,7 +558,7 @@ setNgleLutBltCtl(struct stifb_info *fb, int offsetWithinLut, int length)
 	lutBltCtl.all           = 0x80000000;
 	lutBltCtl.fields.length = length;
 
-	switch (fb->id) 
+	switch (fb->id)
 	{
 	case S9000_ID_A1439A:		/* CRX24 */
 		if (fb->var.bits_per_pixel == 8) {
@@ -569,12 +569,12 @@ setNgleLutBltCtl(struct stifb_info *fb, int offsetWithinLut, int length)
 			lutBltCtl.fields.lutOffset = 0 * 256;
 		}
 		break;
-		
+
 	case S9000_ID_ARTIST:
 		lutBltCtl.fields.lutType = NGLE_CMAP_INDEXED0_TYPE;
 		lutBltCtl.fields.lutOffset = 0 * 256;
 		break;
-		
+
 	default:
 		lutBltCtl.fields.lutType = NGLE_CMAP_INDEXED0_TYPE;
 		lutBltCtl.fields.lutOffset = 0;
@@ -589,7 +589,7 @@ setNgleLutBltCtl(struct stifb_info *fb, int offsetWithinLut, int length)
 #endif
 
 static NgleLutBltCtl
-setHyperLutBltCtl(struct stifb_info *fb, int offsetWithinLut, int length) 
+setHyperLutBltCtl(struct stifb_info *fb, int offsetWithinLut, int length)
 {
 	NgleLutBltCtl lutBltCtl;
 
@@ -626,7 +626,7 @@ static void hyperUndoITE(struct stifb_info *fb)
 
 	/* Hardware setup for full-depth write to "magic" location */
 	GET_FIFO_SLOTS(fb, nFreeFifoSlots, 7);
-	NGLE_QUICK_SET_DST_BM_ACCESS(fb, 
+	NGLE_QUICK_SET_DST_BM_ACCESS(fb,
 		BA(IndexedDcd, Otc04, Ots08, AddrLong,
 		BAJustPoint(0), BINovly, BAIndexBase(0)));
 	NGLE_QUICK_SET_IMAGE_BITMAP_OP(fb,
@@ -646,13 +646,13 @@ static void hyperUndoITE(struct stifb_info *fb)
 	NGLE_UNLOCK(fb);
 }
 
-static void 
+static void
 ngleDepth8_ClearImagePlanes(struct stifb_info *fb)
 {
 	/* FIXME! */
 }
 
-static void 
+static void
 ngleDepth24_ClearImagePlanes(struct stifb_info *fb)
 {
 	/* FIXME! */
@@ -668,7 +668,7 @@ ngleResetAttrPlanes(struct stifb_info *fb, unsigned int ctlPlaneReg)
 	NGLE_LOCK(fb);
 
 	GET_FIFO_SLOTS(fb, nFreeFifoSlots, 4);
-	NGLE_QUICK_SET_DST_BM_ACCESS(fb, 
+	NGLE_QUICK_SET_DST_BM_ACCESS(fb,
 				     BA(IndexedDcd, Otc32, OtsIndirect,
 					AddrLong, BAJustPoint(0),
 					BINattr, BAIndexBase(0)));
@@ -706,22 +706,22 @@ ngleResetAttrPlanes(struct stifb_info *fb, unsigned int ctlPlaneReg)
 	/**** Finally, set the Control Plane Register back to zero: ****/
 	GET_FIFO_SLOTS(fb, nFreeFifoSlots, 1);
 	NGLE_QUICK_SET_CTL_PLN_REG(fb, 0);
-	
+
 	NGLE_UNLOCK(fb);
 }
-    
+
 static void
 ngleClearOverlayPlanes(struct stifb_info *fb, int mask, int data)
 {
 	int nFreeFifoSlots = 0;
 	u32 packed_dst;
 	u32 packed_len;
-    
+
 	NGLE_LOCK(fb);
 
 	/* Hardware setup */
 	GET_FIFO_SLOTS(fb, nFreeFifoSlots, 8);
-	NGLE_QUICK_SET_DST_BM_ACCESS(fb, 
+	NGLE_QUICK_SET_DST_BM_ACCESS(fb,
 				     BA(IndexedDcd, Otc04, Ots08, AddrLong,
 					BAJustPoint(0), BINovly, BAIndexBase(0)));
 
@@ -729,23 +729,23 @@ ngleClearOverlayPlanes(struct stifb_info *fb, int mask, int data)
 
         NGLE_REALLY_SET_IMAGE_FG_COLOR(fb, data);
         NGLE_REALLY_SET_IMAGE_PLANEMASK(fb, mask);
-    
+
         packed_dst = 0;
         packed_len = (fb->info.var.xres << 16) | fb->info.var.yres;
         NGLE_SET_DSTXY(fb, packed_dst);
-    
-        /* Write zeroes to overlay planes */		       
+
+        /* Write zeroes to overlay planes */
 	NGLE_QUICK_SET_IMAGE_BITMAP_OP(fb,
 				       IBOvals(RopSrc, MaskAddrOffset(0),
 					       BitmapExtent08, StaticReg(0),
 					       DataDynamic, MaskOtc, BGx(0), FGx(0)));
-		       
+
         SET_LENXY_START_RECFILL(fb, packed_len);
 
 	NGLE_UNLOCK(fb);
 }
 
-static void 
+static void
 hyperResetPlanes(struct stifb_info *fb, int enable)
 {
 	unsigned int controlPlaneReg;
@@ -776,7 +776,7 @@ hyperResetPlanes(struct stifb_info *fb, int enable)
 	        ngleClearOverlayPlanes(fb, 0xff, 255);
 
 		/**************************************************
-		 ** Also need to counteract ITE settings 
+		 ** Also need to counteract ITE settings
 		 **************************************************/
 		hyperUndoITE(fb);
 		break;
@@ -796,13 +796,13 @@ hyperResetPlanes(struct stifb_info *fb, int enable)
 		ngleResetAttrPlanes(fb, controlPlaneReg);
 		break;
     	}
-	
+
 	NGLE_UNLOCK(fb);
 }
 
 /* Return pointer to in-memory structure holding ELK device-dependent ROM values. */
 
-static void 
+static void
 ngleGetDeviceRomData(struct stifb_info *fb)
 {
 #if 0
@@ -814,7 +814,7 @@ XXX: FIXME: !!!
 	char	*pCard8;
 	int	i;
 	char	*mapOrigin = NULL;
-    
+
 	int romTableIdx;
 
 	pPackedDevRomData = fb->ngle_rom;
@@ -881,7 +881,7 @@ SETUP_HCRX(struct stifb_info *fb)
 
 	/* Initialize Hyperbowl registers */
 	GET_FIFO_SLOTS(fb, nFreeFifoSlots, 7);
-	
+
 	if (IS_24_DEVICE(fb)) {
 		hyperbowl = (fb->info.var.bits_per_pixel == 32) ?
 			HYPERBOWL_MODE01_8_24_LUT0_TRANSPARENT_LUT1_OPAQUE :
@@ -890,9 +890,9 @@ SETUP_HCRX(struct stifb_info *fb)
 		/* First write to Hyperbowl must happen twice (bug) */
 		WRITE_WORD(hyperbowl, fb, REG_40);
 		WRITE_WORD(hyperbowl, fb, REG_40);
-		
+
 		WRITE_WORD(HYPERBOWL_MODE2_8_24, fb, REG_39);
-		
+
 		WRITE_WORD(0x014c0148, fb, REG_42); /* Set lut 0 to be the direct color */
 		WRITE_WORD(0x404c4048, fb, REG_43);
 		WRITE_WORD(0x034c0348, fb, REG_44);
@@ -961,7 +961,7 @@ stifb_setcolreg(u_int regno, u_int red, u_int green,
 				0,	/* Offset w/i LUT */
 				256);	/* Load entire LUT */
 		NGLE_BINC_SET_SRCADDR(fb,
-				NGLE_LONG_FB_ADDRESS(0, 0x100, 0)); 
+				NGLE_LONG_FB_ADDRESS(0, 0x100, 0));
 				/* 0x100 is same as used in WRITE_IMAGE_COLOR() */
 		START_COLORMAPLOAD(fb, lutBltCtl.all);
 		SETUP_FB(fb);
@@ -999,7 +999,7 @@ stifb_blank(int blank_mode, struct fb_info *info)
 		ENABLE_DISABLE_DISPLAY(fb, enable);
 		break;
 	}
-	
+
 	SETUP_FB(fb);
 	return 0;
 }
@@ -1013,15 +1013,15 @@ stifb_init_display(struct stifb_info *fb)
 
 	/* HCRX specific initialization */
 	SETUP_HCRX(fb);
-	
+
 	/*
 	if (id == S9000_ID_HCRX)
 		hyperInitSprite(fb);
 	else
 		ngleInitSprite(fb);
 	*/
-	
-	/* Initialize the image planes. */ 
+
+	/* Initialize the image planes. */
         switch (id) {
 	 case S9000_ID_HCRX:
 	    hyperResetPlanes(fb, ENABLE);
@@ -1093,7 +1093,7 @@ static int __init stifb_init_fb(struct sti_struct *sti, int bpp_pref)
 		printk(KERN_ERR "stifb: Could not allocate stifb structure\n");
 		return -ENODEV;
 	}
-	
+
 	info = &fb->info;
 
 	/* set struct to a known state */
@@ -1134,7 +1134,7 @@ static int __init stifb_init_fb(struct sti_struct *sti, int bpp_pref)
 			dev_name, fb->id);
 		goto out_err0;
 	}
-	
+
 	/* default to 8 bpp on most graphic chips */
 	bpp = 8;
 	xres = sti_onscreen_x(fb->sti);
@@ -1155,7 +1155,7 @@ static int __init stifb_init_fb(struct sti_struct *sti, int bpp_pref)
 		fb->id = S9000_ID_A1659A;
 		break;
 	case S9000_ID_TIMBER:	/* HP9000/710 Any (may be a grayscale device) */
-		if (strstr(dev_name, "GRAYSCALE") || 
+		if (strstr(dev_name, "GRAYSCALE") ||
 		    strstr(dev_name, "Grayscale") ||
 		    strstr(dev_name, "grayscale"))
 			var->grayscale = 1;
@@ -1194,16 +1194,16 @@ static int __init stifb_init_fb(struct sti_struct *sti, int bpp_pref)
 	case CRT_ID_VISUALIZE_EG:
 	case S9000_ID_ARTIST:	/* Artist */
 		break;
-	default: 
+	default:
 #ifdef FALLBACK_TO_1BPP
-	       	printk(KERN_WARNING 
+	       	printk(KERN_WARNING
 			"stifb: Unsupported graphics card (id=0x%08x) "
 				"- now trying 1bpp mode instead\n",
 			fb->id);
 		bpp = 1;	/* default to 1 bpp */
 		break;
 #else
-	       	printk(KERN_WARNING 
+	       	printk(KERN_WARNING
 			"stifb: Unsupported graphics card (id=0x%08x) "
 				"- skipping.\n",
 			fb->id);
@@ -1219,11 +1219,11 @@ static int __init stifb_init_fb(struct sti_struct *sti, int bpp_pref)
 	fix->line_length = (fb->sti->glob_cfg->total_x * bpp) / 8;
 	if (!fix->line_length)
 		fix->line_length = 2048; /* default */
-	
+
 	/* limit fbsize to max visible screen size */
 	if (fix->smem_len > yres*fix->line_length)
 		fix->smem_len = yres*fix->line_length;
-	
+
 	fix->accel = FB_ACCEL_NONE;
 
 	switch (bpp) {
@@ -1249,7 +1249,7 @@ static int __init stifb_init_fb(struct sti_struct *sti, int bpp_pref)
 	    default:
 		break;
 	}
-	
+
 	var->xres = var->xres_virtual = xres;
 	var->yres = var->yres_virtual = yres;
 	var->bits_per_pixel = bpp;
@@ -1271,7 +1271,7 @@ static int __init stifb_init_fb(struct sti_struct *sti, int bpp_pref)
 				fix->smem_start, fix->smem_start+fix->smem_len);
 		goto out_err2;
 	}
-		
+
 	if (!request_mem_region(fix->mmio_start, fix->mmio_len, "stifb mmio")) {
 		printk(KERN_ERR "stifb: cannot reserve sti mmio region 0x%04lx-0x%04lx\n",
 				fix->mmio_start, fix->mmio_start+fix->mmio_len);
@@ -1283,15 +1283,15 @@ static int __init stifb_init_fb(struct sti_struct *sti, int bpp_pref)
 
 	sti->info = info; /* save for unregister_framebuffer() */
 
-	printk(KERN_INFO 
+	printk(KERN_INFO
 	    "fb%d: %s %dx%d-%d frame buffer device, %s, id: %04x, mmio: 0x%04lx\n",
-		fb->info.node, 
+		fb->info.node,
 		fix->id,
-		var->xres, 
+		var->xres,
 		var->yres,
 		var->bits_per_pixel,
 		dev_name,
-		fb->id, 
+		fb->id,
 		fix->mmio_start);
 
 	return 0;
@@ -1320,7 +1320,7 @@ static int __init stifb_init(void)
 	struct sti_struct *sti;
 	struct sti_struct *def_sti;
 	int i;
-	
+
 #ifndef MODULE
 	char *option = NULL;
 
@@ -1332,7 +1332,7 @@ static int __init stifb_init(void)
 		printk(KERN_INFO "stifb: disabled by \"stifb=off\" kernel parameter\n");
 		return -ENXIO;
 	}
-	
+
 	def_sti = sti_get_rom(0);
 	if (def_sti) {
 		for (i = 1; i <= MAX_STI_ROMS; i++) {
@@ -1366,7 +1366,7 @@ stifb_cleanup(void)
 {
 	struct sti_struct *sti;
 	int i;
-	
+
 	for (i = 1; i <= MAX_STI_ROMS; i++) {
 		sti = sti_get_rom(i);
 		if (!sti)
@@ -1389,10 +1389,10 @@ int __init
 stifb_setup(char *options)
 {
 	int i;
-	
+
 	if (!options || !*options)
 		return 1;
-	
+
 	if (strncmp(options, "off", 3) == 0) {
 		stifb_disabled = 1;
 		options += 3;

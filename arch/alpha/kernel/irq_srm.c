@@ -56,7 +56,7 @@ init_srm_irqs(long max, unsigned long ignore_mask)
 	}
 }
 
-void 
+void
 srm_device_interrupt(unsigned long vector)
 {
 	int irq = (vector - 0x800) >> 4;

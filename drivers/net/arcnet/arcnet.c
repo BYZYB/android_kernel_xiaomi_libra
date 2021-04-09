@@ -1,6 +1,6 @@
 /*
  * Linux ARCnet driver - device-independent routines
- * 
+ *
  * Written 1997 by David Woodhouse.
  * Written 1994-1999 by Avery Pennarun.
  * Written 1999-2000 by Martin Mares <mj@ucw.cz>.
@@ -20,12 +20,12 @@
  * modified by SRC, incorporated herein by reference.
  *
  * **********************
- * 
+ *
  * The change log is now in a file called ChangeLog in this directory.
  *
  * Sources:
  *  - Crynwr arcnet.com/arcether.com packet drivers.
- *  - arcnet.c v0.00 dated 1/1/94 and apparently by 
+ *  - arcnet.c v0.00 dated 1/1/94 and apparently by
  *     Donald Becker - it didn't work :)
  *  - skeleton.c v0.05 dated 11/16/93 by Donald Becker
  *     (from Linux Kernel 1.1.45)
@@ -234,7 +234,7 @@ void arcnet_unregister_proto(struct ArcProto *proto)
 /*
  * Add a buffer to the queue.  Only the interrupt handler is allowed to do
  * this, unless interrupts are disabled.
- * 
+ *
  * Note: we don't check for a full queue, since there aren't enough buffers
  * to more than fill it.
  */
@@ -538,7 +538,7 @@ static int arcnet_header(struct sk_buff *skb, struct net_device *dev,
 }
 
 
-/* 
+/*
  * Rebuild the ARCnet hard header. This is called after an ARP (or in the
  * future other address resolution) has completed on this sk_buff. We now
  * let ARP fill in the destination field.
@@ -732,7 +732,7 @@ void arcnet_timeout(struct net_device *dev)
 	AINTMASK(0);
 	lp->intmask |= TXFREEflag|EXCNAKflag;
 	AINTMASK(lp->intmask);
-	
+
 	spin_unlock_irqrestore(&lp->lock, flags);
 
 	if (time_after(jiffies, lp->last_timeout + 10*HZ)) {
@@ -764,7 +764,7 @@ irqreturn_t arcnet_interrupt(int irq, void *dev_id)
 
 	lp = netdev_priv(dev);
 	BUG_ON(!lp);
-		
+
 	spin_lock(&lp->lock);
 
 	/*
@@ -794,7 +794,7 @@ irqreturn_t arcnet_interrupt(int irq, void *dev_id)
 		/*
 		 * RESET flag was enabled - card is resetting and if RX is
 		 * disabled, it's NOT because we just got a packet.
-		 * 
+		 *
 		 * The card is in an undefined state.  Clear it out and start over.
 		 */
 		if (status & RESETflag) {
@@ -805,14 +805,14 @@ irqreturn_t arcnet_interrupt(int irq, void *dev_id)
 			/* get out of the interrupt handler! */
 			break;
 		}
-		/* 
+		/*
 		 * RX is inhibited - we must have received something. Prepare to
 		 * receive into the next buffer.
-		 * 
+		 *
 		 * We don't actually copy the received packet from the card until
 		 * after the transmit handler runs (and possibly launches the next
 		 * tx); this should improve latency slightly if we get both types
-		 * of interrupts at once. 
+		 * of interrupts at once.
 		 */
 		recbuf = -1;
 		if (status & lp->intmask & NORXflag) {
@@ -988,7 +988,7 @@ irqreturn_t arcnet_interrupt(int irq, void *dev_id)
 	AINTMASK(0);
 	udelay(1);
 	AINTMASK(lp->intmask);
-	
+
 	spin_unlock(&lp->lock);
 	return retval;
 }

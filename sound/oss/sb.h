@@ -50,7 +50,7 @@
 				/* register assignment */
 #define SUBMDL_ALS100	43	/* ALS-100 allows sampling rates of up */
 				/* to 48kHz */
-				
+
 /*
  * Config flags
  */
@@ -93,7 +93,7 @@ typedef struct sb_devc {
 	   int base;
 	   int irq;
 	   int dma8, dma16;
-	   
+
 	   int pcibase;		/* For ESS Maestro etc */
 
 	/* State variables */
@@ -130,7 +130,7 @@ typedef struct sb_devc {
 	   int      trg_restart_16;
 
 	   unsigned char tconst;
-	
+
 	/* MIDI fields */
 	   int my_mididev;
 	   int input_opened;
@@ -143,7 +143,7 @@ typedef struct sb_devc {
 	   struct sb_module_options sbmo;	/* Module options */
 
 	} sb_devc;
-	
+
 /*
  *	PCI card types
  */
@@ -151,10 +151,10 @@ typedef struct sb_devc {
 #define	SB_PCI_ESSMAESTRO	1	/* ESS Maestro Legacy */
 #define	SB_PCI_YAMAHA		2	/* Yamaha Legacy */
 
-/* 
+/*
  *	Functions
  */
- 
+
 int sb_dsp_command (sb_devc *devc, unsigned char val);
 int sb_dsp_get_byte(sb_devc * devc);
 int sb_dsp_reset (sb_devc *devc);

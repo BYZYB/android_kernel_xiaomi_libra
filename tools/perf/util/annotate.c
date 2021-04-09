@@ -226,7 +226,7 @@ static int mov__parse(struct ins_operands *ops)
 	*s = '\0';
 	ops->source.raw = strdup(ops->raw);
 	*s = ',';
-	
+
 	if (ops->source.raw == NULL)
 		return -1;
 

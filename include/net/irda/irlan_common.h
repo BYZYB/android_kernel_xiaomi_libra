@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      irlan_common.h
  * Version:       0.8
  * Description:   IrDA LAN access layer
@@ -8,17 +8,17 @@
  * Created at:    Sun Aug 31 20:14:37 1997
  * Modified at:   Sun Oct 31 19:41:24 1999
  * Modified by:   Dag Brattli <dagb@cs.uit.no>
- * 
- *     Copyright (c) 1998-1999 Dag Brattli <dagb@cs.uit.no>, 
+ *
+ *     Copyright (c) 1998-1999 Dag Brattli <dagb@cs.uit.no>,
  *     All Rights Reserved.
- *     
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
  *
  *     Neither Dag Brattli nor University of Tromsø admit liability nor
- *     provide warranty for any of this software. This material is 
+ *     provide warranty for any of this software. This material is
  *     provided "AS-IS" and at no charge.
  *
  ********************************************************************/
@@ -119,11 +119,11 @@ struct irlan_client_cb {
 	struct tsap_cb *tsap_ctrl;
 	__u32 max_sdu_size;
 	__u8  max_header_size;
-	
+
 	int access_type;         /* Access type of provider */
 	__u8 reconnect_key[255];
 	__u8 key_len;
-	
+
 	__u16 recv_arb_val;
 	__u16 max_frame;
 	int filter_type;
@@ -144,7 +144,7 @@ struct irlan_client_cb {
  */
 struct irlan_provider_cb {
 	int state;
-	
+
 	struct tsap_cb *tsap_ctrl;
 	__u32 max_sdu_size;
 	__u8  max_header_size;
@@ -175,10 +175,10 @@ struct irlan_cb {
 	__u32 saddr;               /* Source device address */
 	__u32 daddr;               /* Destination device address */
 	int disconnect_reason;     /* Why we got disconnected */
-	
+
 	int media;                 /* Media type */
 	__u8 version[2];           /* IrLAN version */
-	
+
 	struct tsap_cb *tsap_data; /* Data TSAP */
 
 	int  use_udata;            /* Use Unit Data transfers */
@@ -192,7 +192,7 @@ struct irlan_cb {
 
 	__u32 max_sdu_size;
 	__u8  max_header_size;
-	
+
 	wait_queue_head_t open_wait;
 	struct timer_list watchdog_timer;
 };
@@ -219,7 +219,7 @@ void irlan_set_broadcast_filter(struct irlan_cb *self, int status);
 int irlan_insert_byte_param(struct sk_buff *skb, char *param, __u8 value);
 int irlan_insert_short_param(struct sk_buff *skb, char *param, __u16 value);
 int irlan_insert_string_param(struct sk_buff *skb, char *param, char *value);
-int irlan_insert_array_param(struct sk_buff *skb, char *name, __u8 *value, 
+int irlan_insert_array_param(struct sk_buff *skb, char *name, __u8 *value,
 			     __u16 value_len);
 
 int irlan_extract_param(__u8 *buf, char *name, char *value, __u16 *len);

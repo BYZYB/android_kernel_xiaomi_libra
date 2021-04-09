@@ -287,7 +287,7 @@ static struct sk_buff *bcsp_dequeue(struct hci_uart *hu)
 	struct bcsp_struct *bcsp = hu->priv;
 	unsigned long flags;
 	struct sk_buff *skb;
-	
+
 	/* First of all, check for unreliable messages in the queue,
 	   since they have priority */
 
@@ -433,7 +433,7 @@ static inline void bcsp_unslip_one_byte(struct bcsp_struct *bcsp, unsigned char 
 			break;
 		default:
 			memcpy(skb_put(bcsp->rx_skb, 1), &byte, 1);
-			if ((bcsp->rx_skb-> data[0] & 0x40) != 0 && 
+			if ((bcsp->rx_skb-> data[0] & 0x40) != 0 &&
 					bcsp->rx_state != BCSP_W4_CRC)
 				bcsp_crc_update(&bcsp->message_crc, byte);
 			bcsp->rx_count--;
@@ -444,7 +444,7 @@ static inline void bcsp_unslip_one_byte(struct bcsp_struct *bcsp, unsigned char 
 		switch (byte) {
 		case 0xdc:
 			memcpy(skb_put(bcsp->rx_skb, 1), &c0, 1);
-			if ((bcsp->rx_skb-> data[0] & 0x40) != 0 && 
+			if ((bcsp->rx_skb-> data[0] & 0x40) != 0 &&
 					bcsp->rx_state != BCSP_W4_CRC)
 				bcsp_crc_update(&bcsp-> message_crc, 0xc0);
 			bcsp->rx_esc_state = BCSP_ESCSTATE_NOESC;
@@ -453,8 +453,8 @@ static inline void bcsp_unslip_one_byte(struct bcsp_struct *bcsp, unsigned char 
 
 		case 0xdd:
 			memcpy(skb_put(bcsp->rx_skb, 1), &db, 1);
-			if ((bcsp->rx_skb-> data[0] & 0x40) != 0 && 
-					bcsp->rx_state != BCSP_W4_CRC) 
+			if ((bcsp->rx_skb-> data[0] & 0x40) != 0 &&
+					bcsp->rx_state != BCSP_W4_CRC)
 				bcsp_crc_update(&bcsp-> message_crc, 0xdb);
 			bcsp->rx_esc_state = BCSP_ESCSTATE_NOESC;
 			bcsp->rx_count--;
@@ -526,7 +526,7 @@ static void bcsp_complete_rx_pkt(struct hci_uart *hu)
 			} else {
 				BT_ERR ("Packet for unknown channel (%u %s)",
 					bcsp->rx_skb->data[1] & 0x0f,
-					bcsp->rx_skb->data[0] & 0x80 ? 
+					bcsp->rx_skb->data[0] & 0x80 ?
 					"reliable" : "unreliable");
 				kfree_skb(bcsp->rx_skb);
 			}
@@ -554,7 +554,7 @@ static int bcsp_recv(struct hci_uart *hu, void *data, int count)
 	struct bcsp_struct *bcsp = hu->priv;
 	unsigned char *ptr;
 
-	BT_DBG("hu %p count %d rx_state %d rx_count %ld", 
+	BT_DBG("hu %p count %d rx_state %d rx_count %ld",
 		hu, count, bcsp->rx_state, bcsp->rx_count);
 
 	ptr = data;
@@ -593,7 +593,7 @@ static int bcsp_recv(struct hci_uart *hu, void *data, int count)
 				continue;
 			}
 			bcsp->rx_state = BCSP_W4_DATA;
-			bcsp->rx_count = (bcsp->rx_skb->data[1] >> 4) + 
+			bcsp->rx_count = (bcsp->rx_skb->data[1] >> 4) +
 					(bcsp->rx_skb->data[2] << 4);	/* May be 0 */
 			continue;
 
@@ -645,7 +645,7 @@ static int bcsp_recv(struct hci_uart *hu, void *data, int count)
 				BCSP_CRC_INIT(bcsp->message_crc);
 
 				/* Do not increment ptr or decrement count
-				 * Allocate packet. Max len of a BCSP pkt= 
+				 * Allocate packet. Max len of a BCSP pkt=
 				 * 0xFFF (payload) +4 (header) +2 (crc) */
 
 				bcsp->rx_skb = bt_skb_alloc(0x1005, GFP_ATOMIC);

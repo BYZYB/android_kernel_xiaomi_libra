@@ -242,7 +242,7 @@ static int sb_pnp_probe(struct pnp_card_link *card, const struct pnp_card_device
 	struct sb_card_config *scc;
 	struct sb_module_options sbmo = {0}; /* Default to 0 for PnP */
 	struct pnp_dev *dev = pnp_request_card_device(card, card_id->devs[0].id, NULL);
-	
+
 	if(!dev){
 		return -EBUSY;
 	}

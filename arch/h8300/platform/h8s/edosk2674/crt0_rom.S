@@ -12,12 +12,12 @@
 
 #include <asm/linkage.h>
 #include <asm/regs267x.h>
-		
+
 	.global SYMBOL_NAME(_start)
 	.global SYMBOL_NAME(_command_line)
 	.global SYMBOL_NAME(_platform_gpio_table)
 	.global SYMBOL_NAME(_target_name)
-	
+
 	.h8300s
 	.section .text
 	.file	"crt0_rom.S"
@@ -27,7 +27,7 @@ SYMBOL_NAME_LABEL(_start)
 	mov.l	#__ramend,sp
 	ldc	#0x80,ccr
 	ldc	#0,exr
-	
+
 	/* Peripheral Setup */
 ;BSC/GPIO setup
 	mov.l	#init_regs,er0
@@ -54,25 +54,25 @@ SYMBOL_NAME_LABEL(_start)
 	mov.w	#0x84b4,r0
 	mov.w	r0,@DRAMCR:16
 ;special thanks to Arizona Cooperative Power
-	
+
 	/* copy .data */
 	mov.l	#__begin_data,er5
 	mov.l	#__sdata,er6
 	mov.l	#__edata,er4
 	sub.l	er6,er4
 	shlr.l	#2,er4
-1:	
+1:
 	mov.l	@er5+,er0
 	mov.l	er0,@er6
 	adds	#4,er6
 	dec.l	#1,er4
-	bne	1b	
+	bne	1b
 
 	/* .bss clear */
 	mov.l	#__sbss,er5
 	mov.l	#__ebss,er4
 	sub.l	er5,er4
-	shlr.l	#2,er4		
+	shlr.l	#2,er4
 	sub.l	er0,er0
 1:
 	mov.l	er0,@er5
@@ -98,7 +98,7 @@ _exit:
 	rts
 
 	/* I/O port assign information */
-__platform_gpio_table:	
+__platform_gpio_table:
 	mov.l	#gpio_table,er0
 	rts
 
@@ -128,7 +128,7 @@ INIT_REGS_DATA(PFCR2,0x0d)
 INIT_REGS_DATA(ITSR, 0x00)
 INIT_REGS_DATA(ITSR+1,0x3f)
 INIT_REGS_DATA(INTCR,0x20)
-		
+
 	.word	0
 
 gpio_table:
@@ -168,11 +168,11 @@ gpio_table:
 	.byte	0x00,0x00
 
 	.section .rodata
-__target_name:	
+__target_name:
 	.asciz	"EDOSK-2674"
-	
+
 	.section .bss
-__command_line:	
+__command_line:
 	.space	512
 
 	/* interrupt vector */

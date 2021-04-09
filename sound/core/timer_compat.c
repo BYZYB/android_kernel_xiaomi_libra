@@ -71,7 +71,7 @@ static int snd_timer_user_status_compat(struct file *file,
 {
 	struct snd_timer_user *tu;
 	struct snd_timer_status32 status;
-	
+
 	tu = file->private_data;
 	if (snd_BUG_ON(!tu->timeri))
 		return -ENXIO;

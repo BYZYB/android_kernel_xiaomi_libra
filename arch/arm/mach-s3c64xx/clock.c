@@ -980,7 +980,7 @@ static struct clk *clks[] __initdata = {
  * or resume code to re-set the clocks if the bootloader has changed
  * them.
  */
-void __init s3c64xx_register_clocks(unsigned long xtal, 
+void __init s3c64xx_register_clocks(unsigned long xtal,
 				    unsigned armclk_divlimit)
 {
 	unsigned int cnt;

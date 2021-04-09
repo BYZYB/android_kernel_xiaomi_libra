@@ -19,7 +19,7 @@
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  *
  */
-  
+
 #if 0
 #define PLUGIN_DEBUG
 #endif
@@ -152,7 +152,7 @@ int snd_pcm_plugin_build(struct snd_pcm_substream *plug,
 {
 	struct snd_pcm_plugin *plugin;
 	unsigned int channels;
-	
+
 	if (snd_BUG_ON(!plug))
 		return -ENXIO;
 	if (snd_BUG_ON(!src_format || !dst_format))
@@ -232,7 +232,7 @@ snd_pcm_sframes_t snd_pcm_plug_slave_size(struct snd_pcm_substream *plug, snd_pc
 	struct snd_pcm_plugin *plugin, *plugin_prev, *plugin_next;
 	snd_pcm_sframes_t frames;
 	int stream;
-	
+
 	if (snd_BUG_ON(!plug))
 		return -ENXIO;
 	if (clt_frames == 0)
@@ -279,7 +279,7 @@ static int snd_pcm_plug_formats(struct snd_mask *mask, snd_pcm_format_t format)
 		       SNDRV_PCM_FMTBIT_U32_LE | SNDRV_PCM_FMTBIT_S32_LE |
 		       SNDRV_PCM_FMTBIT_U32_BE | SNDRV_PCM_FMTBIT_S32_BE);
 	snd_mask_set(&formats, (__force int)SNDRV_PCM_FORMAT_MU_LAW);
-	
+
 	if (formats.bits[0] & (u32)linfmts)
 		formats.bits[0] |= (u32)linfmts;
 	if (formats.bits[1] & (u32)(linfmts >> 32))
@@ -400,12 +400,12 @@ int snd_pcm_plug_format_plugins(struct snd_pcm_substream *plug,
 		return -EINVAL;
 	}
 	tmpformat = srcformat;
-		
-	pdprintf("srcformat: format=%i, rate=%i, channels=%i\n", 
+
+	pdprintf("srcformat: format=%i, rate=%i, channels=%i\n",
 		 srcformat.format,
 		 srcformat.rate,
 		 srcformat.channels);
-	pdprintf("dstformat: format=%i, rate=%i, channels=%i\n", 
+	pdprintf("dstformat: format=%i, rate=%i, channels=%i\n",
 		 dstformat.format,
 		 dstformat.rate,
 		 dstformat.channels);

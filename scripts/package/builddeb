@@ -109,7 +109,7 @@ if [ "$ARCH" = "um" ] ; then
 	cp .config "$tmpdir/usr/share/doc/$packagename/config"
 	gzip "$tmpdir/usr/share/doc/$packagename/config"
 	cp $KBUILD_IMAGE "$tmpdir/usr/bin/linux-$version"
-else 
+else
 	cp System.map "$tmpdir/boot/System.map-$version"
 	cp .config "$tmpdir/boot/config-$version"
 	# Not all arches include the boot path in KBUILD_IMAGE

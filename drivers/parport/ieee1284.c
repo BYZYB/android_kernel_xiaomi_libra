@@ -167,7 +167,7 @@ int parport_poll_peripheral(struct parport *port,
  */
 
 int parport_wait_peripheral(struct parport *port,
-			    unsigned char mask, 
+			    unsigned char mask,
 			    unsigned char result)
 {
 	int ret;
@@ -298,7 +298,7 @@ static void parport_ieee1284_terminate (struct parport *port)
 
 		/* Event 27: nAck goes high */
 		r = parport_wait_peripheral (port,
-					     PARPORT_STATUS_ACK, 
+					     PARPORT_STATUS_ACK,
 					     PARPORT_STATUS_ACK);
 		if (r)
 			DPRINTK (KERN_INFO "%s: Timeout at event 27\n",
@@ -313,7 +313,7 @@ static void parport_ieee1284_terminate (struct parport *port)
 
 	DPRINTK (KERN_DEBUG "%s: In compatibility (forward idle) mode\n",
 		 port->name);
-}		
+}
 #endif /* IEEE1284 support */
 
 /**
@@ -361,7 +361,7 @@ int parport_negotiate (struct parport *port, int mode)
 
 	if (mode == IEEE1284_MODE_COMPAT)
 		/* Compatibility mode: no negotiation. */
-		return 0; 
+		return 0;
 
 	switch (mode) {
 	case IEEE1284_MODE_ECPSWE:

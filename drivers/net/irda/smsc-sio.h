@@ -11,7 +11,7 @@
 /*****************************
  * Generic SIO Flat (!?)     *
  *****************************/
- 
+
 /* Register 0x0d */
 #define SMSCSIOFLAT_DEVICEID_REG				0x0d
 

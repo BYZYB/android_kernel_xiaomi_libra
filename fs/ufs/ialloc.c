@@ -14,7 +14,7 @@
  * Laboratoire MASI - Institut Blaise Pascal
  * Universite Pierre et Marie Curie (Paris VI)
  *
- *  BSD ufs-inspired inode and directory allocation by 
+ *  BSD ufs-inspired inode and directory allocation by
  *  Stephen Tweedie (sct@dcs.ed.ac.uk), 1993
  *  Big-endian to little-endian byte-swapping/bitmaps by
  *        David S. Miller (davem@caip.rutgers.edu), 1995
@@ -62,13 +62,13 @@ void ufs_free_inode (struct inode * inode)
 	struct ufs_cylinder_group * ucg;
 	int is_directory;
 	unsigned ino, cg, bit;
-	
+
 	UFSD("ENTER, ino %lu\n", inode->i_ino);
 
 	sb = inode->i_sb;
 	uspi = UFS_SB(sb)->s_uspi;
 	usb1 = ubh_get_usb_first(uspi);
-	
+
 	ino = inode->i_ino;
 
 	mutex_lock(&UFS_SB(sb)->s_lock);
@@ -78,7 +78,7 @@ void ufs_free_inode (struct inode * inode)
 		mutex_unlock(&UFS_SB(sb)->s_lock);
 		return;
 	}
-	
+
 	cg = ufs_inotocg (ino);
 	bit = ufs_inotocgoff (ino);
 	ucpi = ufs_load_cylinder (sb, cg);
@@ -115,7 +115,7 @@ void ufs_free_inode (struct inode * inode)
 	ubh_mark_buffer_dirty (UCPI_UBH(ucpi));
 	if (sb->s_flags & MS_SYNCHRONOUS)
 		ubh_sync_block(UCPI_UBH(ucpi));
-	
+
 	ufs_mark_sb_dirty(sb);
 	mutex_unlock(&UFS_SB(sb)->s_lock);
 	UFSD("EXIT\n");
@@ -184,7 +184,7 @@ struct inode *ufs_new_inode(struct inode *dir, umode_t mode)
 	int err = -ENOSPC;
 
 	UFSD("ENTER\n");
-	
+
 	/* Cannot create files in a deleted directory */
 	if (!dir || !dir->i_nlink)
 		return ERR_PTR(-EPERM);
@@ -244,7 +244,7 @@ cg_found:
 		goto failed;
 	}
 	ucg = ubh_get_ucg(UCPI_UBH(ucpi));
-	if (!ufs_cg_chkmagic(sb, ucg)) 
+	if (!ufs_cg_chkmagic(sb, ucg))
 		ufs_panic (sb, "ufs_new_inode", "internal error, bad cg magic number");
 
 	start = ucpi->c_irotor;
@@ -278,7 +278,7 @@ cg_found:
 	fs32_sub(sb, &ucg->cg_cs.cs_nifree, 1);
 	uspi->cs_total.cs_nifree--;
 	fs32_sub(sb, &sbi->fs_cs(cg).cs_nifree, 1);
-	
+
 	if (S_ISDIR(mode)) {
 		fs32_add(sb, &ucg->cg_cs.cs_ndir, 1);
 		uspi->cs_total.cs_ndir++;

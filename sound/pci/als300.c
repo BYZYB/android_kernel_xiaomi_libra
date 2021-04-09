@@ -104,7 +104,7 @@
 #define snd_als300_dbgplay(format, args...) printk(KERN_ERR format, ##args)
 #else
 #define snd_als300_dbgplay(format, args...)
-#endif		
+#endif
 
 enum {DEVICE_ALS300, DEVICE_ALS300_PLUS};
 
@@ -143,7 +143,7 @@ struct snd_als300 {
 
 	int chip_type; /* ALS300 or ALS300+ */
 
-	char revision;	
+	char revision;
 };
 
 struct snd_als300_substream_data {
@@ -246,7 +246,7 @@ static irqreturn_t snd_als300plus_interrupt(int irq, void *dev_id)
 	u8 general, mpu, dram;
 	struct snd_als300 *chip = dev_id;
 	struct snd_als300_substream_data *data;
-	
+
 	general = inb(chip->port+ALS300P_IRQ_STATUS);
 	mpu = inb(chip->port+MPU_IRQ_STATUS);
 	dram = inb(chip->port+ALS300P_DRAM_IRQ_STATUS);
@@ -472,7 +472,7 @@ static int snd_als300_playback_prepare(struct snd_pcm_substream *substream)
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	unsigned short period_bytes = snd_pcm_lib_period_bytes(substream);
 	unsigned short buffer_bytes = snd_pcm_lib_buffer_bytes(substream);
-	
+
 	snd_als300_dbgcallenter();
 	spin_lock_irq(&chip->reg_lock);
 	tmp = snd_als300_gcr_read(chip->port, PLAYBACK_CONTROL);
@@ -480,7 +480,7 @@ static int snd_als300_playback_prepare(struct snd_pcm_substream *substream)
 
 	snd_als300_dbgplay("Period bytes: %d Buffer bytes %d\n",
 						period_bytes, buffer_bytes);
-	
+
 	/* set block size */
 	tmp &= 0xffff0000;
 	tmp |= period_bytes - 1;
@@ -582,7 +582,7 @@ static snd_pcm_uframes_t snd_als300_pointer(struct snd_pcm_substream *substream)
 
 	data = substream->runtime->private_data;
 	period_bytes = snd_pcm_lib_period_bytes(substream);
-	
+
 	snd_als300_dbgcallenter();
 	spin_lock(&chip->reg_lock);
 	current_ptr = (u16) snd_als300_gcr_read(chip->port,
@@ -652,7 +652,7 @@ static void snd_als300_init(struct snd_als300 *chip)
 {
 	unsigned long flags;
 	u32 tmp;
-	
+
 	snd_als300_dbgcallenter();
 	spin_lock_irqsave(&chip->reg_lock, flags);
 	chip->revision = (snd_als300_gcr_read(chip->port, MISC_CONTROL) >> 16)

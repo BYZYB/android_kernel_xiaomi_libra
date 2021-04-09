@@ -316,7 +316,7 @@ static int wm2000_exit_bypass(struct i2c_client *i2c, int analogue)
 	struct wm2000_priv *wm2000 = dev_get_drvdata(&i2c->dev);
 
 	BUG_ON(wm2000->anc_mode != ANC_BYPASS);
-	
+
 	wm2000_write(i2c, WM2000_REG_SYS_CTL1, 0);
 
 	if (analogue) {

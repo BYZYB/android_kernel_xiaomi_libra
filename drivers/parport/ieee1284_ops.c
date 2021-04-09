@@ -146,7 +146,7 @@ size_t parport_ieee1284_write_compat (struct parport *port,
 }
 
 /* Nibble mode. */
-size_t parport_ieee1284_read_nibble (struct parport *port, 
+size_t parport_ieee1284_read_nibble (struct parport *port,
 				     void *buffer, size_t len,
 				     int flags)
 {
@@ -210,7 +210,7 @@ size_t parport_ieee1284_read_nibble (struct parport *port,
 			/* Second nibble */
 			byte |= nibble << 4;
 			*buf++ = byte;
-		} else 
+		} else
 			byte = nibble;
 	}
 
@@ -891,7 +891,7 @@ size_t parport_ieee1284_epp_read_addr (struct parport *port,
 				      0);
 
 		/* Event 60: wait for Busy to go low */
-		if (parport_poll_peripheral (port, PARPORT_STATUS_BUSY, 
+		if (parport_poll_peripheral (port, PARPORT_STATUS_BUSY,
 					     PARPORT_STATUS_BUSY, 5))
 			break;
 

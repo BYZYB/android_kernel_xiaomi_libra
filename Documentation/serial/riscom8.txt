@@ -9,7 +9,7 @@ James Nelson <james4765@gmail.com> - 12-12-2004
 	(C) 1994-1996 D.Gorodchanin
 	See file LICENSE for terms and conditions.
 
-NOTE: English is not my native language. 
+NOTE: English is not my native language.
       I'm sorry for any mistakes in this text.
 
 Misc. notes for RISCom/8 serial driver, in no particular order :)
@@ -22,7 +22,7 @@ Misc. notes for RISCom/8 serial driver, in no particular order :)
 2) The driver partially supports famous 'setserial' program, you can use almost
    any of its options, excluding port & irq settings.
 
-3) There are some misc. defines at the beginning of riscom8.c, please read the 
+3) There are some misc. defines at the beginning of riscom8.c, please read the
    comments and try to change some of them in case of problems.
 
 4) I consider the current state of the driver as BETA.

@@ -1,5 +1,5 @@
 /* drivers/atm/zatm.c - ZeitNet ZN122x device driver */
- 
+
 /* Written 1995-2000 by Werner Almesberger, EPFL LRC/ICA */
 
 
@@ -70,7 +70,7 @@ static void event_dump(void)
 #else
 
 
-/* 
+/*
  * NULL pointer checking
  */
 
@@ -91,7 +91,7 @@ static int ec = 0;
 
 static void EVENT(const char *s,unsigned long a,unsigned long b)
 {
-	ev[ec] = s; 
+	ev[ec] = s;
 	ev_a[ec] = a;
 	ev_b[ec] = b;
 	ec = (ec+1) % EV;
@@ -1354,7 +1354,7 @@ out_tx:
 	kfree(zatm_dev->tx_map);
 out:
 	while (i-- > 0) {
-		pci_free_consistent(pdev, 2*MBX_SIZE(i), 
+		pci_free_consistent(pdev, 2*MBX_SIZE(i),
 				    (void *)zatm_dev->mbx_start[i],
 				    zatm_dev->mbx_dma[i]);
 	}

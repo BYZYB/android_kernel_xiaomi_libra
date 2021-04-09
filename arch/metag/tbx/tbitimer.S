@@ -70,7 +70,7 @@ ___TBITimerCtrl:
 	SETLNZ	[A0.3],D0Ar6,D1Ar5		/* ___TBITime(B/I)=-Start if enable */
 	MOV	PC,D1RtP			/* Return */
 	.size	___TBITimerCtrl,.-___TBITimerCtrl
-	
+
 /*
  * Return ___TBITimeStamp value
  *

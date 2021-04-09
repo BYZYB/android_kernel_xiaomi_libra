@@ -1,6 +1,6 @@
 /*
  * Linux ARCnet driver - COM90xx chipset (memory-mapped buffers)
- * 
+ *
  * Written 1994-1999 by Avery Pennarun.
  * Written 1999 by Martin Mares <mj@ucw.cz>.
  * Derived from skeleton.c by Donald Becker.
@@ -579,7 +579,7 @@ static void com90xx_setmask(struct net_device *dev, int mask)
 
 /*
  * Do a hardware reset on the card, and set up necessary registers.
- * 
+ *
  * This should be called as little as possible, because it disrupts the
  * token on the network (causes a RECON) and requires a significant delay.
  *

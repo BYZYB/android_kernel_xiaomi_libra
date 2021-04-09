@@ -2,7 +2,7 @@
  * arch/alpha/lib/dec_and_lock.c
  *
  * ll/sc version of atomic_dec_and_lock()
- * 
+ *
  */
 
 #include <linux/spinlock.h>

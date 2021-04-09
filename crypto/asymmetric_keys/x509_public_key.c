@@ -45,7 +45,7 @@ static int x509_check_signature(const struct public_key *pub,
 	int ret;
 
 	pr_devel("==>%s()\n", __func__);
-	
+
 	/* Allocate the hashing algorithm we're going to need and find out how
 	 * big the hash operational data will be.
 	 */

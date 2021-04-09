@@ -877,7 +877,7 @@ static int snd_info_dev_register_entry(struct snd_device *device)
  * The parent is assumed as card->proc_root.
  *
  * For releasing this entry, use snd_device_free() instead of
- * snd_info_free_entry(). 
+ * snd_info_free_entry().
  *
  * Return: Zero if successful, or a negative error code on failure.
  */

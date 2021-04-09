@@ -5,7 +5,7 @@
  *	    (gentzel@nova.enet.dec.com)
  *  scatter/gather added by Scott Taylor (n217cg@tamuts.tamu.edu)
  *  24F and multiple command support by John F. Carr (jfc@athena.mit.edu)
- *    John's work modified by Caleb Epstein (cae@jpmorgan.com) and 
+ *    John's work modified by Caleb Epstein (cae@jpmorgan.com) and
  *    Eric Youngdale (ericy@cais.com).
  *	Thanks to UltraStor for providing the necessary documentation
  *
@@ -18,7 +18,7 @@
  *	1. Find out why scatter/gather is limited to 16 requests per command.
  *         This is fixed, at least on the 24F, as of version 1.12 - CAE.
  *	2. Look at command linking (mscp.command_link and
- *	   mscp.command_link_id).  (Does not work with many disks, 
+ *	   mscp.command_link_id).  (Does not work with many disks,
  *				and no performance increase.  ERY).
  *	3. Allow multiple adapters.
  */
@@ -215,10 +215,10 @@ struct mscp {
 
 /* Used to store configuration info read from config i/o registers.  Most of
    this is not used yet, but might as well save it.
-   
+
    This structure also holds port addresses that are not at the same offset
    on the 14F and 24F.
-   
+
    This structure holds all data that must be duplicated to support multiple
    adapters.  */
 
@@ -614,7 +614,7 @@ static int ultrastor_24f_detect(struct scsi_host_template * tpnt)
              free_irq(config.interrupt, do_ultrastor_interrupt);
              return FALSE;
       }
-      
+
       if (request_irq(config.interrupt, do_ultrastor_interrupt, 0, "Ultrastor", shpnt))
 	{
 	  printk("Unable to allocate IRQ%u for UltraStor controller.\n",
@@ -729,7 +729,7 @@ static int ultrastor_queuecommand_lck(struct scsi_cmnd *SCpnt,
        READ command for a tape doesn't have a block offset, and the adapter
        incorrectly assumes that all reads from the tape read the same
        blocks.  Results will depend on read buffer size and other disk
-       activity. 
+       activity.
 
        ???  Which other device types should never use the cache?   */
     my_mscp->ca = SCpnt->device->type != TYPE_TAPE;
@@ -759,8 +759,8 @@ static int ultrastor_queuecommand_lck(struct scsi_cmnd *SCpnt,
     SCpnt->host_scribble = (unsigned char *)my_mscp;
 
     /* Find free OGM slot.  On 24F, look for OGM status byte == 0.
-       On 14F and 34F, wait for local interrupt pending flag to clear. 
-       
+       On 14F and 34F, wait for local interrupt pending flag to clear.
+
        FIXME: now we are using new_eh we should punt here and let the
        midlayer sort it out */
 
@@ -855,9 +855,9 @@ static int ultrastor_abort(struct scsi_cmnd *SCpnt)
     void (*done)(struct scsi_cmnd *);
     struct Scsi_Host *host = SCpnt->device->host;
 
-    if(config.slot) 
+    if(config.slot)
       return FAILED;  /* Do not attempt an abort for the 24f */
-      
+
     /* Simple consistency checking */
     if(!SCpnt->host_scribble)
       return FAILED;
@@ -872,7 +872,7 @@ static int ultrastor_abort(struct scsi_cmnd *SCpnt)
 	int port0 = (config.slot << 12) | 0xc80;
 	int i;
 	unsigned long flags;
-	
+
 	spin_lock_irqsave(host->host_lock, flags);
 	strcpy(out, "OGM %d:%x ICM %d:%x ports:  ");
 	for (i = 0; i < 16; i++)
@@ -898,7 +898,7 @@ static int ultrastor_abort(struct scsi_cmnd *SCpnt)
 	(inb(SYS_DOORBELL_INTR(config.doorbell_address)) & 1))
       {
 	printk("Ux4F: abort while completed command pending\n");
-	
+
 	spin_lock_irqsave(host->host_lock, flags);
 	/* FIXME: Ewww... need to think about passing host around properly */
 	ultrastor_interrupt(NULL);
@@ -961,7 +961,7 @@ static int ultrastor_abort(struct scsi_cmnd *SCpnt)
     done = config.mscp[mscp_index].done;
     config.mscp[mscp_index].done = NULL;
     SCpnt->result = DID_ABORT << 16;
-    
+
     /* Take the host lock to guard against scsi layer re-entry */
     done(SCpnt);
 
@@ -974,7 +974,7 @@ static int ultrastor_host_reset(struct scsi_cmnd * SCpnt)
     unsigned long flags;
     int i;
     struct Scsi_Host *host = SCpnt->device->host;
-    
+
 #if (ULTRASTOR_DEBUG & UD_RESET)
     printk("US14F: reset: called\n");
 #endif
@@ -1014,9 +1014,9 @@ static int ultrastor_host_reset(struct scsi_cmnd * SCpnt)
 #endif
 
     /* FIXME - if the device implements soft resets, then the command
-       will still be running.  ERY  
-       
-       Even bigger deal with new_eh! 
+       will still be running.  ERY
+
+       Even bigger deal with new_eh!
      */
 
     memset((unsigned char *)config.aborted, 0, sizeof config.aborted);
@@ -1107,7 +1107,7 @@ static void ultrastor_interrupt(void *dev_id)
       {
 #if ULTRASTOR_DEBUG & (UD_ABORT|UD_INTERRUPT)
 	printk("MSCP %d (%x): no command\n", mscp_index, (unsigned int) mscp);
-#endif	
+#endif
 #if ULTRASTOR_MAX_CMDS == 1
 	config.mscp_busy = FALSE;
 #else
@@ -1183,7 +1183,7 @@ static irqreturn_t do_ultrastor_interrupt(int irq, void *dev_id)
 {
     unsigned long flags;
     struct Scsi_Host *dev = dev_id;
-    
+
     spin_lock_irqsave(dev->host_lock, flags);
     ultrastor_interrupt(dev_id);
     spin_unlock_irqrestore(dev->host_lock, flags);
@@ -1199,7 +1199,7 @@ static struct scsi_host_template driver_template = {
 	.info              = ultrastor_info,
 	.queuecommand      = ultrastor_queuecommand,
 	.eh_abort_handler  = ultrastor_abort,
-	.eh_host_reset_handler  = ultrastor_host_reset,	
+	.eh_host_reset_handler  = ultrastor_host_reset,
 	.bios_param        = ultrastor_biosparam,
 	.can_queue         = ULTRASTOR_MAX_CMDS,
 	.sg_tablesize      = ULTRASTOR_14F_MAX_SG,

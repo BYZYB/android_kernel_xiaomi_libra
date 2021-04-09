@@ -150,7 +150,7 @@ static int load_asic(struct echoaudio *chip)
 	if (!err)
 		err = write_control_reg(chip, GML_CONVERTER_ENABLE | GML_48KHZ,
 					TRUE);
-	
+
 	DE_INIT(("load_asic() done\n"));
 	return err;
 }

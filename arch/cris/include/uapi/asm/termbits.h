@@ -115,7 +115,7 @@ struct ktermios {
  *     3             2            1
  *    10 987 654 321 098 765 432 109 876 543 210
  *                             |           | ||| CBAUD
- *                                         obaud    
+ *                                         obaud
  *
  *                                       ||CSIZE
  *
@@ -123,7 +123,7 @@ struct ktermios {
  *                                    |CREAD
  *                                   |CPARENB
  *
- *                                 |CPARODD 
+ *                                 |CPARODD
  *                                |HUPCL
  *                               |CLOCAL
  *                             |CBAUDEX

@@ -79,7 +79,7 @@ ___TBIThreadId:
 #endif
 	MOV 	PC,D1RtP			/* Return */
 	.size	___TBIThrdPrivId,.-___TBIThrdPrivId
-	.size	___TBIThreadId,.-___TBIThreadId 
+	.size	___TBIThreadId,.-___TBIThreadId
 
 
 /*

@@ -146,7 +146,7 @@ struct platform_device s3c_device_camif = {
 
 /* ASOC DMA */
 
-#ifdef CONFIG_PLAT_S5P 
+#ifdef CONFIG_PLAT_S5P
 static struct resource samsung_asoc_idma_resource = DEFINE_RES_IRQ(IRQ_I2S0);
 
 struct platform_device samsung_asoc_idma = {

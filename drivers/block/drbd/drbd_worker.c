@@ -839,7 +839,7 @@ int drbd_resync_finished(struct drbd_conf *mdev)
 	dt = (jiffies - mdev->rs_start - mdev->rs_paused) / HZ;
 	if (dt <= 0)
 		dt = 1;
-	
+
 	db = mdev->rs_total;
 	/* adjust for verify start and stop sectors, respective reached position */
 	if (mdev->state.conn == C_VERIFY_S || mdev->state.conn == C_VERIFY_T)

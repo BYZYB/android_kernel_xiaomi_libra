@@ -3,7 +3,7 @@
  *
  * Note that you can not swap over this thing, yet. Seems to work but
  * deadlocks sometimes - you can not swap over TCP in general.
- * 
+ *
  * Copyright 1997-2000, 2008 Pavel Machek <pavel@ucw.cz>
  * Parts copyright 2001 Steven Whitehouse <steve@chygwyn.com>
  *
@@ -567,7 +567,7 @@ static void do_nbd_request(struct request_queue *q)
 		__releases(q->queue_lock) __acquires(q->queue_lock)
 {
 	struct request *req;
-	
+
 	while ((req = blk_fetch_request(q)) != NULL) {
 		struct nbd_device *nbd;
 
@@ -628,7 +628,7 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *nbd,
 		nbd_send_req(nbd, &sreq);
 		return 0;
 	}
- 
+
 	case NBD_CLEAR_SOCK: {
 		struct file *file;
 
@@ -798,7 +798,7 @@ static const struct block_device_operations nbd_fops =
 };
 
 /*
- * And here should be modules and kernel interface 
+ * And here should be modules and kernel interface
  *  (Just smiley confuses emacs :-)
  */
 

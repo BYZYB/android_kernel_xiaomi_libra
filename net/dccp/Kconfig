@@ -50,7 +50,7 @@ config NET_DCCPPROBE
 
 	Documentation on how to use DCCP connection probing can be found
 	at:
-	
+
 	  http://www.linuxfoundation.org/collaborate/workgroups/networking/dccpprobe
 
 	To compile this code as a module, choose M here: the

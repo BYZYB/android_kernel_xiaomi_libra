@@ -7,7 +7,7 @@
 
 /*
  * Data types and macros for providing 32b PowerPC support.
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version
@@ -48,7 +48,7 @@ struct mcontext32 {
 	elf_vsrreghalf_t32      mc_vsregs __attribute__((__aligned__(16)));
 };
 
-struct ucontext32 { 
+struct ucontext32 {
 	unsigned int	  	uc_flags;
 	unsigned int 	  	uc_link;
 	compat_stack_t	 	uc_stack;

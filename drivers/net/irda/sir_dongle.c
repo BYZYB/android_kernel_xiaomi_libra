@@ -4,12 +4,12 @@
  *
  *	Copyright (c) 2002 Martin Diehl
  *
- *	This program is free software; you can redistribute it and/or 
- *	modify it under the terms of the GNU General Public License as 
- *	published by the Free Software Foundation; either version 2 of 
+ *	This program is free software; you can redistribute it and/or
+ *	modify it under the terms of the GNU General Public License as
+ *	published by the Free Software Foundation; either version 2 of
  *	the License, or (at your option) any later version.
  *
- ********************************************************************/    
+ ********************************************************************/
 
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -71,7 +71,7 @@ int sirdev_get_dongle(struct sir_dev *dev, IRDA_DONGLE type)
 
 	if (dev->dongle_drv != NULL)
 		return -EBUSY;
-	
+
 	/* serialize access to the list of registered dongles */
 	mutex_lock(&dongle_list_lock);
 

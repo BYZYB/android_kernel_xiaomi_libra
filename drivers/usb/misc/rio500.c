@@ -1,12 +1,12 @@
 /* -*- linux-c -*- */
 
-/* 
+/*
  * Driver for USB Rio 500
  *
  * Cesar Miquel (miquel@df.uba.ar)
- * 
+ *
  * based on hp_scanner.c by David E. Nelson (dnelson@jump.net)
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of the

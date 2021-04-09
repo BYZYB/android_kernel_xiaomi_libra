@@ -94,7 +94,7 @@ static inline void ncp_init_request(struct ncp_server *server)
 static inline void ncp_init_request_s(struct ncp_server *server, int subfunction)
 {
 	ncp_lock_server(server);
-	
+
 	server->current_size = sizeof(struct ncp_request_header) + 2;
 	ncp_add_byte(server, subfunction);
 
@@ -168,12 +168,12 @@ ncp_negotiate_buffersize(struct ncp_server *server, int size, int *target)
 }
 
 
-/* options: 
+/* options:
  *	bit 0	ipx checksum
  *	bit 1	packet signing
  */
 int
-ncp_negotiate_size_and_options(struct ncp_server *server, 
+ncp_negotiate_size_and_options(struct ncp_server *server,
 	int size, int options, int *ret_size, int *ret_options) {
 	int result;
 
@@ -183,7 +183,7 @@ ncp_negotiate_size_and_options(struct ncp_server *server,
 	ncp_init_request(server);
 	ncp_add_be16(server, size);
 	ncp_add_byte(server, options);
-	
+
 	if ((result = ncp_request(server, 0x61)) != 0)
 	{
 		ncp_unlock_server(server);
@@ -235,7 +235,7 @@ out:
 	return result;
 }
 
-int ncp_get_directory_info(struct ncp_server* server, __u8 n, 
+int ncp_get_directory_info(struct ncp_server* server, __u8 n,
 			   struct ncp_volume_info* target) {
 	int result;
 	int len;
@@ -304,7 +304,7 @@ ncp_make_closed(struct inode *inode)
 }
 
 static void ncp_add_handle_path(struct ncp_server *server, __u8 vol_num,
-				__le32 dir_base, int have_dir_base, 
+				__le32 dir_base, int have_dir_base,
 				const char *path)
 {
 	ncp_add_byte(server, vol_num);
@@ -341,7 +341,7 @@ int ncp_dirhandle_alloc(struct ncp_server* server, __u8 volnum, __le32 dirent,
 
 int ncp_dirhandle_free(struct ncp_server* server, __u8 dirhandle) {
 	int result;
-	
+
 	ncp_init_request_s(server, 20);
 	ncp_add_byte(server, dirhandle);
 	result = ncp_request(server, 22);
@@ -440,7 +440,7 @@ int ncp_obtain_info(struct ncp_server *server, struct inode *dir, const char *pa
 		goto out;
 	ncp_extract_file_info(ncp_reply_data(server, 0), target);
 	ncp_unlock_server(server);
-	
+
 	result = ncp_obtain_nfs_info(server, target);
 	return result;
 
@@ -501,7 +501,7 @@ ncp_get_known_namespace(struct ncp_server *server, __u8 volume)
 		DPRINTK("get_namespaces: found %d on %d\n", *namespace, volume);
 
 #ifdef CONFIG_NCPFS_NFS_NS
-		if ((*namespace == NW_NS_NFS) && !(server->m.flags&NCP_MOUNT_NO_NFS)) 
+		if ((*namespace == NW_NS_NFS) && !(server->m.flags&NCP_MOUNT_NO_NFS))
 		{
 			result = NW_NS_NFS;
 			break;
@@ -579,7 +579,7 @@ ncp_mount_subdir(struct ncp_server *server,
 	int result;
 
 	ncp_update_known_namespace(server, volNumber, &dstNS);
-	if ((result = ncp_ObtainSpecificDirBase(server, srcNS, dstNS, volNumber, 
+	if ((result = ncp_ObtainSpecificDirBase(server, srcNS, dstNS, volNumber,
 				      dirEntNum, NULL, newDirEnt, newDosEnt)) != 0)
 	{
 		return result;
@@ -590,7 +590,7 @@ ncp_mount_subdir(struct ncp_server *server,
 	return 0;
 }
 
-int 
+int
 ncp_get_volume_root(struct ncp_server *server,
 		    const char *volname, __u32* volume, __le32* dirent, __le32* dosdirent)
 {
@@ -754,7 +754,7 @@ ncp_del_file_or_subdir(struct ncp_server *server,
 	if (name_space == NW_NS_NFS)
  	{
  		int result;
- 
+
 		result=ncp_obtain_DOS_dir_base(server, name_space, volnum, dirent, name, &dirent);
  		if (result) return result;
 		name = NULL;
@@ -816,7 +816,7 @@ int ncp_open_create_file_or_subdir(struct ncp_server *server,
 	ConvertToNWfromDWORD(ncp_reply_le16(server, 0),
 			     ncp_reply_le16(server, 2),
 			     target->file_handle);
-	
+
 	ncp_unlock_server(server);
 
 	(void)ncp_obtain_nfs_info(server, &(target->i));
@@ -873,7 +873,7 @@ int ncp_search_for_fileset(struct ncp_server *server,
 #ifdef CONFIG_NCPFS_NFS_NS
 	if (server->name_space[seq->volNumber] == NW_NS_NFS) {
 		ncp_add_byte(server, 0);	/* 0 byte pattern */
-	} else 
+	} else
 #endif
 	{
 		ncp_add_byte(server, 2);	/* 2 byte pattern */
@@ -962,7 +962,7 @@ int ncp_ren_or_mov_file_or_subdir(struct ncp_server *server,
 					   new_dir, new_name);
 	return result;
 }
-	
+
 
 /* We have to transfer to/from user space */
 int
@@ -996,9 +996,9 @@ out:
    Now copying read result by copy_to_user causes pagefault. This pagefault
    could not be handled because of server was locked due to read. So we have
    to use temporary buffer. So ncp_unlock_server must be done before
-   copy_to_user (and for write, copy_from_user must be done before 
+   copy_to_user (and for write, copy_from_user must be done before
    ncp_init_request... same applies for send raw packet ioctl). Because of
-   file is normally read in bigger chunks, caller provides kmalloced 
+   file is normally read in bigger chunks, caller provides kmalloced
    (vmalloced) chunk of memory with size >= to_read...
  */
 int
@@ -1022,8 +1022,8 @@ ncp_read_bounce(struct ncp_server *server, const char *file_id,
 		if (len <= to_read) {
 			char* source;
 
-			source = (char*)bounce + 
-			         sizeof(struct ncp_reply_header) + 2 + 
+			source = (char*)bounce +
+			         sizeof(struct ncp_reply_header) + 2 +
 			         (offset & 1);
 			*bytes_read = len;
 			result = 0;
@@ -1047,7 +1047,7 @@ ncp_write_kernel(struct ncp_server *server, const char *file_id,
 	ncp_add_be32(server, offset);
 	ncp_add_be16(server, to_write);
 	ncp_add_mem(server, source, to_write);
-	
+
 	if ((result = ncp_request(server, 73)) == 0)
 		*bytes_written = to_write;
 	ncp_unlock_server(server);
@@ -1153,7 +1153,7 @@ ncp__io2vol(struct ncp_server *server, unsigned char *vname, unsigned int *vlen,
 				}
 				iname += 5;
 			} else {
-nospec:;			
+nospec:;
 				if ( (chl = in->char2uni(iname, iname_end - iname, &ec)) < 0)
 					return chl;
 				iname += chl;
@@ -1246,7 +1246,7 @@ ncp__vol2io(struct ncp_server *server, unsigned char *iname, unsigned int *ilen,
 				*iname = NCP_ESC;
 				for (k = 4; k > 0; k--) {
 					unsigned char v;
-					
+
 					v = (ec & 0xF) + '0';
 					if (v > '9') {
 						v += 'A' - '9' - 1;

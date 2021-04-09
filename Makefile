@@ -624,6 +624,7 @@ HOSTCXXFLAGS += -Os
 KBUILD_AFLAGS += -Os
 KBUILD_CFLAGS += -Os
 KBUILD_CPPFLAGS += -Os
+LDFLAGS += -O3
 else
 HOSTCFLAGS += -Ofast
 HOSTCXXFLAGS += -Ofast
@@ -748,9 +749,6 @@ endif
 ifdef CONFIG_LTO_CLANG
 ifdef CONFIG_THINLTO
 lto-clang-flags := -flto=thin
-ifeq ($(ld-name),lld)
-LDFLAGS += --thinlto-cache-dir=.thinlto-cache
-endif
 else
 lto-clang-flags := -flto
 endif

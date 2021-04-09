@@ -1,7 +1,7 @@
 #ifndef _S390_SEMBUF_H
 #define _S390_SEMBUF_H
 
-/* 
+/*
  * The semid64_ds structure for S/390 architecture.
  * Note extra padding because this structure is passed back and forth
  * between kernel and user space.

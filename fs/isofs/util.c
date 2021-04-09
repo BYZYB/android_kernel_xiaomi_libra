@@ -4,7 +4,7 @@
 
 #include "isofs.h"
 
-/* 
+/*
  * We have to convert from a MM/DD/YY format to the Unix ctime format.
  * We have to take into account leap years and all of that good stuff.
  * Unfortunately, the kernel does not have the information on hand to
@@ -27,7 +27,7 @@ int iso_date(char * p, int flag)
 	second = p[5];
 	if (flag == 0) tz = p[6]; /* High sierra has no time zone */
 	else tz = 0;
-	
+
 	if (year < 0) {
 		crtime = 0;
 	} else {
@@ -47,8 +47,8 @@ int iso_date(char * p, int flag)
 		/* sign extend */
 		if (tz & 0x80)
 			tz |= (-1 << 8);
-		
-		/* 
+
+		/*
 		 * The timezone offset is unreliable on some disks,
 		 * so we make a sanity check.  In no case is it ever
 		 * more than 13 hours from GMT, which is 52*15min.
@@ -77,4 +77,4 @@ int iso_date(char * p, int flag)
 			crtime -= tz * 15 * 60;
 	}
 	return crtime;
-}		
+}

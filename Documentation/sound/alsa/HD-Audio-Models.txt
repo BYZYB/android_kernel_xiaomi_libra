@@ -144,7 +144,7 @@ Conexant 5045
 
 Conexant 5047
 =============
-  laptop	Basic Laptop config 
+  laptop	Basic Laptop config
   laptop-hp	Laptop config for some HP models (subdevice 30A5)
   laptop-eapd	Laptop config with EAPD support
   test		for testing/debugging purpose, almost all controls

@@ -203,7 +203,7 @@ int prepare_config(const char *path, struct config *config)
 			sscanf(val, "%u", &config->verbose);
 
 		else if (strncmp("output", opt, strlen(opt)) == 0)
-			config->output = prepare_output(val); 
+			config->output = prepare_output(val);
 
 		else if (strncmp("cpu", opt, strlen(opt)) == 0)
 			sscanf(val, "%u", &config->cpu);

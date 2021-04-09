@@ -75,7 +75,7 @@ static int pci_conf1_mq_write(unsigned int seg, unsigned int bus,
 	void *adr __iomem = XQUAD_PORT_ADDR(0xcfc, BUS2QUAD(bus));
 
 	WARN_ON(seg);
-	if ((bus >= MAX_MP_BUSSES) || (devfn > 255) || (reg > 255)) 
+	if ((bus >= MAX_MP_BUSSES) || (devfn > 255) || (reg > 255))
 		return -EINVAL;
 
 	raw_spin_lock_irqsave(&pci_config_lock, flags);
@@ -157,7 +157,7 @@ int __init pci_numaq_init(void)
 		for_each_online_node(quad) {
 			if (quad == 0)
 				continue;
-			printk("Scanning PCI bus %d for quad %d\n", 
+			printk("Scanning PCI bus %d for quad %d\n",
 				QUADLOCAL2BUS(quad,0), quad);
 			pci_scan_bus_with_sysdata(QUADLOCAL2BUS(quad, 0));
 		}

@@ -306,7 +306,7 @@ static inline uint32_t cfi_build_cmd_addr(uint32_t cmd_ofs,
 	unsigned interleave = cfi_interleave(cfi);
 	unsigned type = cfi->device_type;
 	uint32_t addr;
-	
+
 	addr = (cmd_ofs * type) * interleave;
 
 	/* Modify the unlock address if we are in compatibility mode.

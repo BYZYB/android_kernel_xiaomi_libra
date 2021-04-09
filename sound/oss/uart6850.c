@@ -129,7 +129,7 @@ static void poll_uart6850(unsigned long dummy)
 
 	uart6850_timer.expires = 1 + jiffies;
 	add_timer(&uart6850_timer);
-	
+
 	/*
 	 *	Come back later
 	 */
@@ -348,9 +348,9 @@ static int __init setup_uart6850(char *str)
 {
 	/* io, irq */
 	int ints[3];
-	
+
 	str = get_options(str, ARRAY_SIZE(ints), ints);
-	
+
 	io = ints[1];
 	irq = ints[2];
 

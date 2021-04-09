@@ -414,9 +414,9 @@ int snd_card_disconnect(struct snd_card *card)
 	snd_cards[card->number] = NULL;
 	snd_cards_lock &= ~(1 << card->number);
 	mutex_unlock(&snd_card_mutex);
-	
+
 	/* phase 2: replace file->f_op with special dummy operations */
-	
+
 	spin_lock(&card->files_lock);
 	list_for_each_entry(mfile, &card->files_list, list) {
 		/* it's critical part, use endless loop */
@@ -430,7 +430,7 @@ int snd_card_disconnect(struct snd_card *card)
 		mfile->file->f_op = &snd_shutdown_f_ops;
 		fops_get(mfile->file->f_op);
 	}
-	spin_unlock(&card->files_lock);	
+	spin_unlock(&card->files_lock);
 
 	/* phase 3: notify all connected devices about disconnection */
 	/* at this point, they cannot respond to any calls except release() */
@@ -453,7 +453,7 @@ int snd_card_disconnect(struct snd_card *card)
 #ifdef CONFIG_PM
 	wake_up(&card->power_sleep);
 #endif
-	return 0;	
+	return 0;
 }
 
 EXPORT_SYMBOL(snd_card_disconnect);
@@ -553,7 +553,7 @@ static void snd_card_set_id_no_lock(struct snd_card *card, const char *nid)
 	int i, len, idx_flag = 0, loops = SNDRV_CARDS;
 	const char *spos, *src;
 	char *id;
-	
+
 	if (nid == NULL) {
 		id = card->shortname;
 		spos = src = id;
@@ -578,7 +578,7 @@ static void snd_card_set_id_no_lock(struct snd_card *card, const char *nid)
 	*id = '\0';
 
 	id = card->id;
-	
+
 	if (*id == '\0')
 		strcpy(id, "Default");
 
@@ -871,7 +871,7 @@ int __exit snd_card_info_done(void)
  *
  *  Return: Zero otherwise a negative error code.
  */
-  
+
 int snd_component_add(struct snd_card *card, const char *component)
 {
 	char *ptr;

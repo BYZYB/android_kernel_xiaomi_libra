@@ -343,7 +343,7 @@ do_kdsk_ioctl(struct kbd_data *kbd, struct kbentry __user *user_kbe,
 #endif
 #if MAX_NR_KEYMAPS < 256
 	if (tmp.kb_table >= MAX_NR_KEYMAPS)
-		return -EINVAL;	
+		return -EINVAL;
 #endif
 
 	switch (cmd) {

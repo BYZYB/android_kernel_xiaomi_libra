@@ -1,6 +1,6 @@
 /*
  * Linux ARCnet driver - COM20020 PCMCIA support
- * 
+ *
  * Written 1994-1999 by Avery Pennarun,
  *    based on an ISA version by David Woodhouse.
  * Derived from ibmtr_cs.c by Steve Kipisz (pcmcia-cs 3.1.4)
@@ -19,14 +19,14 @@
  * Director, National Security Agency.  This software may only be used
  * and distributed according to the terms of the GNU General Public License as
  * modified by SRC, incorporated herein by reference.
- * 
+ *
  * **********************
  * Changes:
  * Arnaldo Carvalho de Melo <acme@conectiva.com.br> - 08/08/2000
  * - reorganize kmallocs in com20020_attach, checking all for failure
  *   and releasing the previous allocations if one fails
  * **********************
- * 
+ *
  * For more details, see drivers/net/arcnet.c
  *
  * **********************
@@ -56,7 +56,7 @@ static void regdump(struct net_device *dev)
 #ifdef DEBUG
     int ioaddr = dev->base_addr;
     int count;
-    
+
     netdev_dbg(dev, "register dump:\n");
     for (count = ioaddr; count < ioaddr + 16; count++)
     {
@@ -65,18 +65,18 @@ static void regdump(struct net_device *dev)
 	pr_cont(" %02X", inb(count));
     }
     pr_cont("\n");
-    
+
     netdev_dbg(dev, "buffer0 dump:\n");
 	/* set up the address register */
         count = 0;
 	outb((count >> 8) | RDDATAflag | AUTOINCflag, _ADDR_HI);
 	outb(count & 0xff, _ADDR_LO);
-    
+
     for (count = 0; count < 256+32; count++)
     {
 	if (!(count % 16))
 	    pr_cont("%04X:", count);
-	
+
 	/* copy the data */
 	pr_cont(" %02X", inb(_MEMDATA));
     }
@@ -230,13 +230,13 @@ static int com20020_config(struct pcmcia_device *link)
     }
     else
 	i = pcmcia_request_io(link);
-    
+
     if (i != 0)
     {
 	dev_dbg(&link->dev, "requestIO failed totally!\n");
 	goto failed;
     }
-	
+
     ioaddr = dev->base_addr = link->resource[0]->start;
     dev_dbg(&link->dev, "got ioaddr %Xh\n", ioaddr);
 
@@ -259,7 +259,7 @@ static int com20020_config(struct pcmcia_device *link)
 	regdump(dev);
 	goto failed;
     }
-    
+
     lp = netdev_priv(dev);
     lp->card_name = "PCMCIA COM20020";
     lp->card_flags = ARC_CAN_10MBIT; /* pretend all of them can 10Mbit */
@@ -267,7 +267,7 @@ static int com20020_config(struct pcmcia_device *link)
     SET_NETDEV_DEV(dev, &link->dev);
 
     i = com20020_found(dev, 0);	/* calls register_netdev */
-    
+
     if (i != 0) {
 	dev_notice(&link->dev,
 		   "com20020_found() failed\n");

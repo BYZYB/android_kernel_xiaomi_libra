@@ -529,7 +529,7 @@ int format_counters(struct thread_data *t, struct core_data *c,
 	if (do_rapl & RAPL_CORES)
 		outp += sprintf(outp, fmt6, p->energy_cores * rapl_energy_units / interval_float);
 	if (do_rapl & RAPL_GFX)
-		outp += sprintf(outp, fmt5, p->energy_gfx * rapl_energy_units / interval_float); 
+		outp += sprintf(outp, fmt5, p->energy_gfx * rapl_energy_units / interval_float);
 	if (do_rapl & RAPL_DRAM)
 		outp += sprintf(outp, fmt5, p->energy_dram * rapl_energy_units / interval_float);
 	if (do_rapl & RAPL_PKG_PERF_STATUS )
@@ -1600,7 +1600,7 @@ int print_thermal(struct thread_data *t, struct core_data *c, struct pkg_data *p
 	cpu = t->cpu_id;
 
 	/* DTS is per-core, no need to print for each thread */
-	if (!(t->flags & CPU_IS_FIRST_THREAD_IN_CORE)) 
+	if (!(t->flags & CPU_IS_FIRST_THREAD_IN_CORE))
 		return 0;
 
 	if (cpu_migrate(cpu)) {
@@ -1652,7 +1652,7 @@ int print_thermal(struct thread_data *t, struct core_data *c, struct pkg_data *p
 
 	return 0;
 }
-	
+
 void print_power_limit_msr(int cpu, unsigned long long msr, char *label)
 {
 	fprintf(stderr, "cpu%d: %s: %sabled (%f Watts, %f sec, clamp %sabled)\n",

@@ -1,5 +1,5 @@
-/*	
- * unsigned long __xdiv64_32(unsigned long long n, unsigned long d); 
+/*
+ * unsigned long __xdiv64_32(unsigned long long n, unsigned long d);
  */
 
 #include <linux/linkage.h>

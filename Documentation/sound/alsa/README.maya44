@@ -3,7 +3,7 @@ current maya44 code based on.  Some contents might be obsoleted, but I
 keep here as reference -- tiwai
 
 ----------------------------------------------------------------
- 
+
 STATE OF DEVELOPMENT:
 
 This driver is being developed on the initiative of Piotr Makowski (oponek@gmail.com) and financed by Lars Bergmann.
@@ -52,7 +52,7 @@ pci/ice1724/maya44.c        - Maya44 specific code
 pci/ice1724/maya44.h
 pci/ice1724/ice1724.patch
 pci/ice1724/ice1724.h.patch - PROPOSED patch to ice1724.h (see SAMPLING RATES)
-i2c/other/wm8776.c  - low-level access routines for Wolfson WM8776 codecs 
+i2c/other/wm8776.c  - low-level access routines for Wolfson WM8776 codecs
 include/wm8776.h
 
 

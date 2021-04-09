@@ -87,7 +87,7 @@ static void assabet_pcmcia_socket_suspend(struct soc_pcmcia_socket *skt)
 	ASSABET_BCR_set(ASSABET_BCR_CF_BUS_OFF | ASSABET_BCR_CF_RST);
 }
 
-static struct pcmcia_low_level assabet_pcmcia_ops = { 
+static struct pcmcia_low_level assabet_pcmcia_ops = {
 	.owner			= THIS_MODULE,
 	.hw_init		= assabet_pcmcia_hw_init,
 	.socket_state		= assabet_pcmcia_socket_state,

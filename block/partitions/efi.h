@@ -3,14 +3,14 @@
  * Per Intel EFI Specification v1.02
  * http://developer.intel.com/technology/efi/efi.htm
  *
- * By Matt Domsch <Matt_Domsch@dell.com>  Fri Sep 22 22:15:56 CDT 2000  
+ * By Matt Domsch <Matt_Domsch@dell.com>  Fri Sep 22 22:15:56 CDT 2000
  *   Copyright 2000,2001 Dell Inc.
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- * 
+ *
  ************************************************************/
 
 #ifndef FS_PART_EFI_H_INCLUDED
@@ -43,7 +43,7 @@
 
 #define PARTITION_SYSTEM_GUID \
     EFI_GUID( 0xC12A7328, 0xF81F, 0x11d2, \
-              0xBA, 0x4B, 0x00, 0xA0, 0xC9, 0x3E, 0xC9, 0x3B) 
+              0xBA, 0x4B, 0x00, 0xA0, 0xC9, 0x3E, 0xC9, 0x3B)
 #define LEGACY_MBR_PARTITION_GUID \
     EFI_GUID( 0x024DEE41, 0x33E7, 0x11d3, \
               0x9D, 0x69, 0x00, 0x08, 0xC7, 0x81, 0xF3, 0x9F)
@@ -121,7 +121,7 @@ extern int efi_partition(struct parsed_partitions *state);
  * of the file.
  * --------------------------------------------------------------------------
  * Local variables:
- * c-indent-level: 4 
+ * c-indent-level: 4
  * c-brace-imaginary-offset: 0
  * c-brace-offset: -4
  * c-argdecl-indent: 4

@@ -262,7 +262,7 @@ static int __init combiner_of_init(struct device_node *np,
 			__func__, max_nr);
 	}
 
-	/* 
+	/*
 	 * FIXME: This is a hardwired COMBINER_IRQ(0,0). Once all devices
 	 * get their IRQ from DT, remove this in order to get dynamic
 	 * allocation.

@@ -3,7 +3,7 @@
  *
  * This file is distributed under the GNU GENERAL PUBLIC LICENSE (GPL)
  * Version 2 (June 1991). See the "COPYING" file distributed with this
- * software for more info.  
+ * software for more info.
  */
 
 /* The low level driver for the WaveFront ICS2115 MIDI interface(s)
@@ -38,13 +38,13 @@
  * device. You won't be able to distinguish the source of any MIDI
  * data except via SysEx ID, but thats probably OK, since for the most
  * part, the WaveFront won't be sending any MIDI data at all.
- *  
+ *
  * The main reason to turn on Virtual MIDI Mode is to provide two
  * completely independent 16-channel MIDI buses, one to the
  * WaveFront and one to any external MIDI devices. Given the 32
  * voice nature of the WaveFront, its pretty easy to find a use
  * for all 16 channels driving just that synth.
- *  
+ *
  */
 
 #include <asm/io.h>
@@ -54,14 +54,14 @@
 #include <sound/core.h>
 #include <sound/snd_wavefront.h>
 
-static inline int 
+static inline int
 wf_mpu_status (snd_wavefront_midi_t *midi)
 
 {
 	return inb (midi->mpu_status_port);
 }
 
-static inline int 
+static inline int
 input_avail (snd_wavefront_midi_t *midi)
 
 {
@@ -75,14 +75,14 @@ output_ready (snd_wavefront_midi_t *midi)
 	return !(wf_mpu_status(midi) & OUTPUT_READY);
 }
 
-static inline int 
+static inline int
 read_data (snd_wavefront_midi_t *midi)
 
 {
 	return inb (midi->mpu_data_port);
 }
 
-static inline void 
+static inline void
 write_data (snd_wavefront_midi_t *midi, unsigned char byte)
 
 {
@@ -96,15 +96,15 @@ get_wavefront_midi (struct snd_rawmidi_substream *substream)
 	struct snd_card *card;
 	snd_wavefront_card_t *acard;
 
-	if (substream == NULL || substream->rmidi == NULL) 
+	if (substream == NULL || substream->rmidi == NULL)
 	        return NULL;
 
 	card = substream->rmidi->card;
 
-	if (card == NULL) 
+	if (card == NULL)
 	        return NULL;
 
-	if (card->private_data == NULL) 
+	if (card->private_data == NULL)
  	        return NULL;
 
 	acard = card->private_data;
@@ -124,10 +124,10 @@ static void snd_wavefront_midi_output_write(snd_wavefront_card_t *card)
 	/* Its not OK to try to change the status of "virtuality" of
 	   the MIDI interface while we're outputting stuff.  See
 	   snd_wavefront_midi_{enable,disable}_virtual () for the
-	   other half of this.  
+	   other half of this.
 
 	   The first loop attempts to flush any data from the
-	   current output device, and then the second 
+	   current output device, and then the second
 	   emits the switch byte (if necessary), and starts
 	   outputting data for the output device currently in use.
 	*/
@@ -144,7 +144,7 @@ static void snd_wavefront_midi_output_write(snd_wavefront_card_t *card)
 			if (output_ready (midi))
 				break;
 		}
-	
+
 		spin_lock_irqsave (&midi->virtual, flags);
 		if ((midi->mode[midi->output_mpu] & MPU401_MODE_OUTPUT) == 0) {
 			spin_unlock_irqrestore (&midi->virtual, flags);
@@ -187,7 +187,7 @@ static void snd_wavefront_midi_output_write(snd_wavefront_card_t *card)
 			if (output_ready (midi))
 				break;
 		}
-	
+
 		spin_lock_irqsave (&midi->virtual, flags);
 		if (!midi->isvirtual)
 			mask = 0;
@@ -328,7 +328,7 @@ static void snd_wavefront_midi_input_trigger(struct snd_rawmidi_substream *subst
 	snd_wavefront_midi_t *midi;
 	snd_wavefront_mpu_id mpu;
 
-	if (substream == NULL || substream->rmidi == NULL) 
+	if (substream == NULL || substream->rmidi == NULL)
 	        return;
 
 	if (substream->rmidi->private_data == NULL)
@@ -354,7 +354,7 @@ static void snd_wavefront_midi_output_timer(unsigned long data)
 	snd_wavefront_card_t *card = (snd_wavefront_card_t *)data;
 	snd_wavefront_midi_t *midi = &card->wavefront.midi;
 	unsigned long flags;
-	
+
 	spin_lock_irqsave (&midi->virtual, flags);
 	midi->timer.expires = 1 + jiffies;
 	add_timer(&midi->timer);
@@ -368,7 +368,7 @@ static void snd_wavefront_midi_output_trigger(struct snd_rawmidi_substream *subs
 	snd_wavefront_midi_t *midi;
 	snd_wavefront_mpu_id mpu;
 
-	if (substream == NULL || substream->rmidi == NULL) 
+	if (substream == NULL || substream->rmidi == NULL)
 	        return;
 
 	if (substream->rmidi->private_data == NULL)
@@ -409,7 +409,7 @@ snd_wavefront_midi_interrupt (snd_wavefront_card_t *card)
 	unsigned long flags;
 	snd_wavefront_midi_t *midi;
 	static struct snd_rawmidi_substream *substream = NULL;
-	static int mpu = external_mpu; 
+	static int mpu = external_mpu;
 	int max = 128;
 	unsigned char byte;
 
@@ -426,11 +426,11 @@ snd_wavefront_midi_interrupt (snd_wavefront_card_t *card)
 		if (input_avail (midi)) {
 			byte = read_data (midi);
 
-			if (midi->isvirtual) {				
+			if (midi->isvirtual) {
 				if (byte == WF_EXTERNAL_SWITCH) {
 					substream = midi->substream_input[external_mpu];
 					mpu = external_mpu;
-				} else if (byte == WF_INTERNAL_SWITCH) { 
+				} else if (byte == WF_INTERNAL_SWITCH) {
 					substream = midi->substream_output[internal_mpu];
 					mpu = internal_mpu;
 				} /* else just leave it as it is */
@@ -449,7 +449,7 @@ snd_wavefront_midi_interrupt (snd_wavefront_card_t *card)
 		} else {
 			break;
 		}
-	} 
+	}
 	spin_unlock_irqrestore (&midi->virtual, flags);
 
 	snd_wavefront_midi_output_write(card);
@@ -511,7 +511,7 @@ snd_wavefront_midi_start (snd_wavefront_card_t *card)
 	*/
 
 	dev->interrupts_are_midi = 1;
-	
+
 	outb (UART_MODE_ON, midi->mpu_command_port);
 
 	for (ok = 0, i = 50000; i > 0 && !ok; i--) {
@@ -530,7 +530,7 @@ snd_wavefront_midi_start (snd_wavefront_card_t *card)
 	}
 
 	/* Route external MIDI to WaveFront synth (by default) */
-    
+
 	if (snd_wavefront_cmd (dev, WFC_MISYNTH_ON, rbuf, wbuf)) {
 		snd_printk ("can't enable MIDI-IN-2-synth routing.\n");
 		/* XXX error ? */
@@ -538,7 +538,7 @@ snd_wavefront_midi_start (snd_wavefront_card_t *card)
 
 	/* Turn on Virtual MIDI, but first *always* turn it off,
 	   since otherwise consecutive reloads of the driver will
-	   never cause the hardware to generate the initial "internal" or 
+	   never cause the hardware to generate the initial "internal" or
 	   "external" source bytes in the MIDI data stream. This
 	   is pretty important, since the internal hardware generally will
 	   be used to generate none or very little MIDI output, and
@@ -547,7 +547,7 @@ snd_wavefront_midi_start (snd_wavefront_card_t *card)
 	   the internal interface. Duh.
 	*/
 
-	if (snd_wavefront_cmd (dev, WFC_VMIDI_OFF, rbuf, wbuf)) { 
+	if (snd_wavefront_cmd (dev, WFC_VMIDI_OFF, rbuf, wbuf)) {
 		snd_printk ("virtual MIDI mode not disabled\n");
 		return 0; /* We're OK, but missing the external MIDI dev */
 	}
@@ -557,7 +557,7 @@ snd_wavefront_midi_start (snd_wavefront_card_t *card)
 	if (snd_wavefront_cmd (dev, WFC_VMIDI_ON, rbuf, wbuf)) {
 		snd_printk ("cannot enable virtual MIDI mode.\n");
 		snd_wavefront_midi_disable_virtual (card);
-	} 
+	}
 	return 0;
 }
 

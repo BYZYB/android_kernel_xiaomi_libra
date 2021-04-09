@@ -148,9 +148,9 @@ mounted it at /sys, the cpufreq interface is located in a subdirectory
 (e.g. /sys/devices/system/cpu/cpu0/cpufreq/ for the first CPU).
 
 cpuinfo_min_freq :		this file shows the minimum operating
-				frequency the processor can run at(in kHz) 
+				frequency the processor can run at(in kHz)
 cpuinfo_max_freq :		this file shows the maximum operating
-				frequency the processor can run at(in kHz) 
+				frequency the processor can run at(in kHz)
 cpuinfo_transition_latency	The time it takes on this CPU to
 				switch between two frequencies in nano
 				seconds. If unknown or known to be

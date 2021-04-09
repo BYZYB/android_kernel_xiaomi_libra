@@ -98,7 +98,7 @@ struct mfc_cache {
 #define MFC_HASH(a,b)	(((((__force u32)(__be32)a)>>24)^(((__force u32)(__be32)b)>>26))&(MFC_LINES-1))
 #else
 #define MFC_HASH(a,b)	((((__force u32)(__be32)a)^(((__force u32)(__be32)b)>>2))&(MFC_LINES-1))
-#endif		
+#endif
 
 struct rtmsg;
 extern int ipmr_get_route(struct net *net, struct sk_buff *skb,

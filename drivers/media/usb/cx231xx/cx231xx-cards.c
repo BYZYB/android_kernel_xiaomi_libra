@@ -640,7 +640,7 @@ struct cx231xx_board cx231xx_boards[] = {
 		.decoder = CX231XX_AVDECODER,
 		.output_mode = OUT_MODE_VIP11,
 		.ctl_pin_status_mask = 0xFFFFFFC4,
-		.agc_analog_digital_select_gpio = 0x0c, 
+		.agc_analog_digital_select_gpio = 0x0c,
 			/* According with PV CxPlrCAP.inf file */
 		.gpio_pin_status_mask = 0x4001000,
 		.norm = V4L2_STD_NTSC,

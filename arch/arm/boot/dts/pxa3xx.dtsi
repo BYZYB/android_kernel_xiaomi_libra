@@ -20,7 +20,7 @@
 			reg = <0x43100000 90>;
 			interrupts = <45>;
 			#address-cells = <1>;
-			#size-cells = <1>;	
+			#size-cells = <1>;
 			status = "disabled";
 		};
 

@@ -77,9 +77,9 @@ static int __ocfs2_page_mkwrite(struct file *file, struct buffer_head *di_bh,
 	 * There are cases that lead to the page no longer bebongs to the
 	 * mapping.
 	 * 1) pagecache truncates locally due to memory pressure.
-	 * 2) pagecache truncates when another is taking EX lock against 
+	 * 2) pagecache truncates when another is taking EX lock against
 	 * inode lock. see ocfs2_data_convert_worker.
-	 * 
+	 *
 	 * The i_size check doesn't catch the case where nodes truncated and
 	 * then re-extended the file. We'll re-check the page mapping after
 	 * taking the page lock inside of ocfs2_write_begin_nolock().

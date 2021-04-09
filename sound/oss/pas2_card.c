@@ -22,7 +22,7 @@ static unsigned char irq_bits[] = {
 };
 
 static unsigned char sb_irq_bits[] = {
-	0x00, 0x00, 0x08, 0x10, 0x00, 0x18, 0x00, 0x20, 
+	0x00, 0x00, 0x08, 0x10, 0x00, 0x18, 0x00, 0x20,
 	0x00, 0x08, 0x28, 0x30, 0x38, 0, 0
 };
 
@@ -61,15 +61,15 @@ static struct address_info cfg2;
 
 char            pas_model = 0;
 static char    *pas_model_names[] = {
-	"", 
-	"Pro AudioSpectrum+", 
-	"CDPC", 
-	"Pro AudioSpectrum 16", 
+	"",
+	"Pro AudioSpectrum+",
+	"CDPC",
+	"Pro AudioSpectrum 16",
 	"Pro AudioSpectrum 16D"
 };
 
 /*
- * pas_read() and pas_write() are equivalents of inb and outb 
+ * pas_read() and pas_write() are equivalents of inb and outb
  * These routines perform the I/O address translation required
  * to support other than the default base address
  */
@@ -250,13 +250,13 @@ static int __init config_pas_hw(struct address_info *hw_config)
 			 * bit 1 = SB emulation
 			 * bit 0 = MPU401 emulation (CDPC only :-( )
 			 */
-			
+
 			pas_write(0x02, 0xF788);
 
 			/*
 			 * "Emulation address"
 			 */
-			
+
 			pas_write((sb_config->io_base >> 4) & 0x0f, 0xF789);
 			pas_sb_base = sb_config->io_base;
 
@@ -440,7 +440,7 @@ static int __init setup_pas2(char *str)
 {
 	/* io, irq, dma, dma2, sb_io, sb_irq, sb_dma, sb_dma2 */
 	int ints[9];
-	
+
 	str = get_options(str, ARRAY_SIZE(ints), ints);
 
 	io	= ints[1];

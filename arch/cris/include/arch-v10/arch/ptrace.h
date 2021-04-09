@@ -51,7 +51,7 @@
 #define F_DCCR_BITNR 10
 
 /* pt_regs not only specifices the format in the user-struct during
- * ptrace but is also the frame format used in the kernel prologue/epilogues 
+ * ptrace but is also the frame format used in the kernel prologue/epilogues
  * themselves
  */
 

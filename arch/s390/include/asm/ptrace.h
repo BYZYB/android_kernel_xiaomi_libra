@@ -17,7 +17,7 @@ extern long psw_user_bits;
  * The pt_regs struct defines the way the registers are stored on
  * the stack during a system call.
  */
-struct pt_regs 
+struct pt_regs
 {
 	unsigned long args[1];
 	psw_t psw;

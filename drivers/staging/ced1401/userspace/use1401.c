@@ -106,7 +106,7 @@
 ** string I/O, the +2 for GetString refers to two spare bytes at the start
 ** used to hold the string length and returning an error code for NT. Note
 ** again that these are (and must be) DLL-owned temporary buffers. pPar
-** and nPar are a PARAM structure used in NT (it holds an error code and a 
+** and nPar are a PARAM structure used in NT (it holds an error code and a
 ** TCSBLOCK structure). pDesc and nDesc are the VXTRANSFERDESC structure,
 ** pBlk and nBlk are the TCSBLOCK structure. pGet and nGet indicate the
 ** TGET_TX_BLOCK structure used for GetTransfer.
@@ -316,7 +316,7 @@ static short U14Status1401(short sHand, LONG lCode, TCSBLOCK* pBlk)
     if ((sHand < 0) || (sHand >= MAX1401))  /* Check parameters */
         return U14ERR_BADHAND;
 #ifndef _WIN64
-    if (!USE_NT_DIOC(sHand)) 
+    if (!USE_NT_DIOC(sHand))
     {   /* Windows 9x DIOC methods? */
         if (DeviceIoControl(aHand1401[sHand], lCode, NULL, 0, pBlk,sizeof(TCSBLOCK),&dwBytes,NULL))
             return (short)((dwBytes>=sizeof(TCSBLOCK)) ? U14ERR_NOERROR : U14ERR_DRIVCOMMS);
@@ -351,7 +351,7 @@ static short U14Control1401(short sHand, LONG lCode, TCSBLOCK* pBlk)
         return U14ERR_BADHAND;
 
 #ifndef _WIN64
-    if (!USE_NT_DIOC(sHand))                    
+    if (!USE_NT_DIOC(sHand))
     {                            /* Windows 9x DIOC methods */
         if (DeviceIoControl(aHand1401[sHand], lCode, NULL, 0, pBlk, sizeof(TCSBLOCK), &dwBytes, NULL))
             return (short)(dwBytes >= sizeof(TCSBLOCK) ? U14ERR_NOERROR : U14ERR_DRIVCOMMS);
@@ -1154,7 +1154,7 @@ U14API(int) U14MonitorRev(short hand)
     {                                           /* Do it the hard way for older hardware */
         iErr = U14SendString(hand, ";CLIST;");     /* ask for command levels */
         if (iErr == U14ERR_NOERROR)
-        {     
+        {
             while (iErr == U14ERR_NOERROR)
             {
                 char wstr[50];
@@ -1361,7 +1361,7 @@ U14API(short) U14Open1401(short n1401)
     long     lRetVal = -1;
     short    sErr;
     short    hand = 0;
-    
+
     if ((n1401 < 0) || (n1401 > MAX1401))       // must check the 1401 number
         return U14ERR_BAD1401NUM;
 
@@ -1385,13 +1385,13 @@ U14API(short) U14Open1401(short n1401)
             U14Close1401(hand);    /* If there is a problem we should close */
             return (short)lDriverVersion;      /* and return the error code */
         }
-    
+
         if (lDriverRev < MINDRIVERMAJREV)       /* late enough version?     */
         {
             U14Close1401(hand);    /* If there is a problem we should close */
             return U14ERR_DRIVTOOOLD;           /* too old                  */
         }
-    
+
         asLastRetCode[hand] = U14ERR_NOERROR; /* Initialise this 1401s info */
         abGrabbed[hand] = FALSE;          /* we are not in single step mode */
         U14SetTimeout(hand, 3000);      /* set 3 seconds as default timeout */
@@ -1735,7 +1735,7 @@ U14API(short) U14GetString(short hand, char* pBuffer, WORD wMaxLen)
                     int iOK;
 
                     if (wMaxLen > MAXSTRLEN)        /* Truncate length */
-                        wMaxLen = MAXSTRLEN;    
+                        wMaxLen = MAXSTRLEN;
 
                     *((WORD *)tstr) = wMaxLen;      /* set len */
 
@@ -2119,11 +2119,11 @@ U14API(short) U14GetTransfer(short hand, TGET_TX_BLOCK *pTransBlock)
     short sErr = CheckHandle(hand);
 #ifdef _IS_WINDOWS_
     if (sErr == U14ERR_NOERROR)
-    { 
+    {
         DWORD dwBytes = 0;
         BOOL bOK = DeviceIoControl(aHand1401[hand], (DWORD)U14_GETTRANSFER, NULL, 0, pTransBlock,
                               sizeof(TGET_TX_BLOCK), &dwBytes, NULL);
-    
+
         if (bOK && (dwBytes >= sizeof(TGET_TX_BLOCK)))
             sErr = U14ERR_NOERROR;
         else
@@ -2209,7 +2209,7 @@ U14API(short) U14UnSetTransfer(short hand, WORD wArea)
        TCSBLOCK csBlock;
        csBlock.ints[0] = (short)wArea;       /* Area number into control block */
        sErr = U14Control1401(hand, U14_UNSETTRANSFER, &csBlock);  /* Free area */
-   
+
        VirtualUnlock(apAreas[hand][wArea], auAreas[hand][wArea]);/* Unlock */
        apAreas[hand][wArea] = NULL;                         /* Clear locations */
        auAreas[hand][wArea] = 0;
@@ -2501,7 +2501,7 @@ U14API(short) U14SetCircular(short hand, WORD wArea, BOOL bToHost,
         txDesc.lpvBuff = pvBuff;
         txDesc.dwLength = dwLength;
         txDesc.eSize = (short)bToHost;       /* Use this for direction flag */
-   
+
         if (DeviceIoControl(aHand1401[hand],(DWORD)U14_SETCIRCULAR,
                            &txDesc, sizeof(TRANSFERDESC),
                            &rWork, sizeof(PARAMBLK),&dwBytes,NULL))
@@ -2563,7 +2563,7 @@ U14API(int) U14GetCircBlk(short hand, WORD wArea, DWORD *pdwOffs)
             lErr = rWork.sState;
         else
             lErr = U14ERR_DRIVCOMMS;
-   
+
         if (lErr == U14ERR_NOERROR)             // Did everything go OK?
         {                                       // Yes, we can pass the results back
             lErr = rWork.csBlock.longs[1];      // Return the block information
@@ -2625,7 +2625,7 @@ U14API(int) U14FreeCircBlk(short hand, WORD wArea, DWORD dwOffs, DWORD dwSize,
         cb.nArea = wArea;                       // Area number into control block
         cb.dwOffset = dwOffs;
         cb.dwSize = dwSize;
-    
+
         lErr = CED_FreeCircBlock(aHand1401[hand], &cb);
         if (lErr == U14ERR_NOERROR)             // Did everything work OK?
         {                                       // Yes, we can pass the results back
@@ -2698,14 +2698,14 @@ U14API(short) U14To1401(short hand, const char* pAddrHost,DWORD dwSize,
 #define file_exist(name) (_access(name, 0) != -1)
 #define file_open(name) _lopen(name, OF_READ)
 #define file_close(h)   _lclose(h)
-#define file_seek(h, pos) _llseek(h, pos, FILE_BEGIN) 
+#define file_seek(h, pos) _llseek(h, pos, FILE_BEGIN)
 #define file_read(h, buffer, size) (_lread(h, buffer, size) == size)
 #endif
 #ifdef LINUX
 #define file_exist(name) (access(name, F_OK) != -1)
 #define file_open(name) open(name, O_RDONLY)
 #define file_close(h)   close(h)
-#define file_seek(h, pos) lseek(h, pos, SEEK_SET) 
+#define file_seek(h, pos) lseek(h, pos, SEEK_SET)
 #define file_read(h, buffer, size) (read(h, buffer, size) == (ssize_t)size)
 static DWORD GetModuleFileName(void* dummy, char* buffer, int max)
 {
@@ -2963,7 +2963,7 @@ U14API(int) U14InitLib(void)
             bWindows9x = TRUE;                      // Flag we have Win9x
         }
 #endif
-        
+
         for (i = 0; i < MAX1401; i++)               // initialise the device area
         {
             aHand1401[i] = INVALID_HANDLE_VALUE;    // Clear handle values

@@ -86,7 +86,7 @@ EXPORT_SYMBOL(xfrm4_tunnel_deregister);
 	for (handler = rcu_dereference(head);		\
 	     handler != NULL;				\
 	     handler = rcu_dereference(handler->next))	\
-	
+
 static int tunnel4_rcv(struct sk_buff *skb)
 {
 	struct xfrm_tunnel *handler;

@@ -388,7 +388,7 @@ sba_search_bitmap(struct ioc *ioc, struct device *dev,
 
 		DBG_RES("%s() o %ld %p", __func__, o, res_ptr);
 		while(res_ptr < res_end)
-		{ 
+		{
 			DBG_RES("    %p %lx %lx\n", res_ptr, mask, *res_ptr);
 			WARN_ON(mask == 0);
 			tpide = ptr_to_pide(ioc, res_ptr, bitshiftcnt);
@@ -534,7 +534,7 @@ typedef unsigned long space_t;
  *
  * Given a virtual address (vba, arg2) and space id, (sid, arg1)
  * sba_io_pdir_entry() loads the I/O PDIR entry pointed to by
- * pdir_ptr (arg0). 
+ * pdir_ptr (arg0).
  * Using the bass-ackwards HP bit numbering, Each IO Pdir entry
  * for Astro/Ike looks like:
  *
@@ -715,7 +715,7 @@ sba_map_single(struct device *dev, void *addr, size_t size,
 	       enum dma_data_direction direction)
 {
 	struct ioc *ioc;
-	unsigned long flags; 
+	unsigned long flags;
 	dma_addr_t iovp;
 	dma_addr_t offset;
 	u64 *pdir_start;
@@ -797,7 +797,7 @@ sba_unmap_single(struct device *dev, dma_addr_t iova, size_t size,
 #if DELAYED_RESOURCE_CNT > 0
 	struct sba_dma_pair *d;
 #endif
-	unsigned long flags; 
+	unsigned long flags;
 	dma_addr_t offset;
 
 	DBG_RUN("%s() iovp 0x%lx/%x\n", __func__, (long) iova, size);
@@ -852,7 +852,7 @@ sba_unmap_single(struct device *dev, dma_addr_t iova, size_t size,
 	** we don't need the syncdma. The issue here is I/O MMU cachelines
 	** are *not* coherent in all cases.  May be hwrev dependent.
 	** Need to investigate more.
-	asm volatile("syncdma");	
+	asm volatile("syncdma");
 	*/
 }
 
@@ -981,7 +981,7 @@ sba_map_sg(struct device *dev, struct scatterlist *sglist, int nents,
 	**
 	** map the virtual addresses to the I/O Pdir
 	** o dma_address will contain the pdir index
-	** o dma_len will contain the number of bytes to map 
+	** o dma_len will contain the number of bytes to map
 	** o address contains the virtual address.
 	*/
 	filled = iommu_fill_pdir(ioc, sglist, nents, 0, sba_io_pdir_entry);
@@ -1015,7 +1015,7 @@ sba_map_sg(struct device *dev, struct scatterlist *sglist, int nents,
  *
  * See Documentation/DMA-API-HOWTO.txt
  */
-static void 
+static void
 sba_unmap_sg(struct device *dev, struct scatterlist *sglist, int nents,
 	     enum dma_data_direction direction)
 {
@@ -1150,7 +1150,7 @@ sba_alloc_pdir(unsigned int pdir_size)
 	 * Because we always allocate 2^N sized IO pdirs, either of the
 	 * "bad" regions will be the last 128K if at all. That's easy
 	 * to test for.
-	 * 
+	 *
 	 */
 	if (pdir_order <= (19-12)) {
 		if (((virt_to_phys(pdir_base)+pdir_size-1) & PIRANHA_ADDR_MASK) == PIRANHA_ADDR_VAL) {
@@ -1226,7 +1226,7 @@ static int setup_ibase_imask_callback(struct device *dev, void *data)
 }
 
 /* setup Mercury or Elroy IBASE/IMASK registers. */
-static void 
+static void
 setup_ibase_imask(struct parisc_device *sba, struct ioc *ioc, int ioc_num)
 {
 	struct ibase_data_struct ibase_data = {
@@ -1488,7 +1488,7 @@ sba_ioc_init(struct parisc_device *sba, struct ioc *ioc, int ioc_num)
 	*/
 	WRITE_REG(0 | 31, ioc->ioc_hpa+IOC_PCOM);
 
-	ioc->ibase = 0; /* used by SBA_IOVA and related macros */	
+	ioc->ibase = 0; /* used by SBA_IOVA and related macros */
 
 	DBG_INIT("%s() DONE\n", __func__);
 }
@@ -1512,7 +1512,7 @@ static void __iomem *ioc_remap(struct sba_device *sba_dev, unsigned int offset)
 }
 
 static void sba_hw_init(struct sba_device *sba_dev)
-{ 
+{
 	int i;
 	int num_ioc;
 	u64 ioc_ctl;
@@ -1734,7 +1734,7 @@ sba_common_init(struct sba_device *sba_dev)
 			/* mark that part of the io pdir busy */
 			while (p_start < p_end)
 				*p_start++ = -1;
-				
+
 		}
 
 #ifdef DEBUG_DMB_TRAP
@@ -1785,7 +1785,7 @@ static int sba_proc_info(struct seq_file *m, void *p)
 		(int) ((ioc->res_size << 3) * sizeof(u64)), /* 8 bits/byte */
 		total_pages);
 
-	len += seq_printf(m, "Resource bitmap : %d bytes (%d pages)\n", 
+	len += seq_printf(m, "Resource bitmap : %d bytes (%d pages)\n",
 		ioc->res_size, ioc->res_size << 3);   /* 8 bits per byte */
 
 	len += seq_printf(m, "LMMIO_BASE/MASK/ROUTE %08x %08x %08x\n",
@@ -1827,7 +1827,7 @@ static int sba_proc_info(struct seq_file *m, void *p)
 		min, max, (int) ((max * 1000)/min));
 
 	len += seq_printf(m, "pci_map_sg()    : %12ld calls  %12ld pages (avg %d/1000)\n",
-		ioc->msg_calls, ioc->msg_pages, 
+		ioc->msg_calls, ioc->msg_pages,
 		(int) ((ioc->msg_pages * 1000)/ioc->msg_calls));
 
 	len += seq_printf(m, "pci_unmap_sg()  : %12ld calls  %12ld pages (avg %d/1000)\n",
@@ -1940,8 +1940,8 @@ static int sba_driver_callback(struct parisc_device *dev)
 		version = ike_rev;
 	} else if (IS_PLUTO(dev)) {
 		static char pluto_rev[]="Pluto ?.?";
-		pluto_rev[6] = '0' + (char) ((func_class & 0xf0) >> 4); 
-		pluto_rev[8] = '0' + (char) (func_class & 0x0f); 
+		pluto_rev[6] = '0' + (char) ((func_class & 0xf0) >> 4);
+		pluto_rev[8] = '0' + (char) (func_class & 0x0f);
 		version = pluto_rev;
 	} else {
 		static char reo_rev[] = "REO rev ?";
@@ -2066,7 +2066,7 @@ void sba_directed_lmmio(struct parisc_device *pci_hba, struct resource *r)
 
 		if ((size & (ROPES_PER_IOC-1)) != rope)
 			continue;	/* directed down different rope */
-		
+
 		r->start = (base & ~1UL) | PCI_F_EXTEND;
 		size = ~ READ_REG32(reg + LMMIO_DIRECT0_MASK);
 		r->end = r->start + size;

@@ -64,14 +64,14 @@ dma_alloc_noncoherent(struct device *dev, size_t size, dma_addr_t *dma_handle,
 }
 
 static inline void
-dma_free_coherent(struct device *dev, size_t size, 
+dma_free_coherent(struct device *dev, size_t size,
 		    void *vaddr, dma_addr_t dma_handle)
 {
 	hppa_dma_ops->free_consistent(dev, size, vaddr, dma_handle);
 }
 
 static inline void
-dma_free_noncoherent(struct device *dev, size_t size, 
+dma_free_noncoherent(struct device *dev, size_t size,
 		    void *vaddr, dma_addr_t dma_handle)
 {
 	hppa_dma_ops->free_consistent(dev, size, vaddr, dma_handle);
@@ -212,9 +212,9 @@ parisc_walk_tree(struct device *dev)
 	BUG_ON(!dev->platform_data);
 	return dev->platform_data;
 }
-		
+
 #define GET_IOC(dev) (HBA_DATA(parisc_walk_tree(dev))->iommu)
-	
+
 
 #ifdef CONFIG_IOMMU_CCIO
 struct parisc_device;

@@ -230,7 +230,7 @@ static int vxfs_fill_super(struct super_block *sbp, void *dp, int silent)
 	}
 
 	return 0;
-	
+
 out_free_ilist:
 	vxfs_put_fake_inode(infp->vsi_fship);
 	vxfs_put_fake_inode(infp->vsi_ilist);

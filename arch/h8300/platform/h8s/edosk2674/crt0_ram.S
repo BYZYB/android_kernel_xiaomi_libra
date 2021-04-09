@@ -12,7 +12,7 @@
 
 #include <asm/linkage.h>
 #include <asm/regs267x.h>
-			
+
 #if !defined(CONFIG_BLKDEV_RESERVE)
 #if defined(CONFIG_GDB_DEBUG)
 #define RAMEND (__ramend - 0xc000)
@@ -22,12 +22,12 @@
 #else
 #define RAMEND CONFIG_BLKDEV_RESERVE_ADDRESS
 #endif
-	
+
 	.global SYMBOL_NAME(_start)
 	.global SYMBOL_NAME(_command_line)
 	.global SYMBOL_NAME(_platform_gpio_table)
 	.global SYMBOL_NAME(_target_name)
-	
+
 	.h8300s
 
 	.section .text
@@ -48,9 +48,9 @@ SYMBOL_NAME_LABEL(_start)
 
 #if defined(CONFIG_MTD_UCLINUX)
 	/* move romfs image */
-	jsr	@__move_romfs	
+	jsr	@__move_romfs
 #endif
-	
+
 	/* .bss clear */
 	mov.l	#__sbss,er5
 	mov.l	er5,er6
@@ -58,7 +58,7 @@ SYMBOL_NAME_LABEL(_start)
 	sub.l	er5,er4
 	shlr	#2,er4
 	sub.l	er0,er0
-1:	
+1:
 	mov.l	er0,@er5
 	adds	#4,er5
 	dec.l	#1,er4
@@ -82,7 +82,7 @@ _exit:
 	rts
 
 	/* I/O port assign information */
-__platform_gpio_table:	
+__platform_gpio_table:
 	mov.l	#gpio_table,er0
 	rts
 
@@ -123,8 +123,8 @@ gpio_table:
 	;; PHDDR
 	.byte	0x0f,0x0f
 
-__target_name:	
+__target_name:
 	.asciz	"EDOSK-2674"
-	
+
 	.section .bootvec,"ax"
 	jmp	@SYMBOL_NAME(_start)

@@ -58,7 +58,7 @@ ___TBIHandleDFR:
 
 	/* Can assume that at least one exception happened since this
 	 * handler wouldnt have been called otherwise.
-	 * 
+	 *
 	 * Replace the signal number and at the same time, prepare
 	 * the mask to acknowledge the exception
 	 *
@@ -121,7 +121,7 @@ ___TBIHandleDFR:
 
 	/* Can assume that at least one exception happened since this
 	 * handler wouldnt have been called otherwise.
-	 * 
+	 *
 	 * Replace the signal number and at the same time, prepare
 	 * the mask to acknowledge the exception
 	 *

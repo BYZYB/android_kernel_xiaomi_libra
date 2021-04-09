@@ -26,9 +26,9 @@
  *
  *  Purpose:
  *	Single Fixed-point to Single Floating-point
- *	Single Fixed-point to Double Floating-point 
- *	Double Fixed-point to Single Floating-point 
- *	Double Fixed-point to Double Floating-point 
+ *	Single Fixed-point to Double Floating-point
+ *	Double Fixed-point to Single Floating-point
+ *	Double Fixed-point to Double Floating-point
  *
  *  External Interfaces:
  *	dbl_to_dbl_fcnvxf(srcptr,nullptr,dstptr,status)
@@ -65,21 +65,21 @@ sgl_to_sgl_fcnvxf(
 	register unsigned int result = 0;
 
 	src = *srcptr;
-	/* 
-	 * set sign bit of result and get magnitude of source 
+	/*
+	 * set sign bit of result and get magnitude of source
 	 */
 	if (src < 0) {
-		Sgl_setone_sign(result);  
+		Sgl_setone_sign(result);
 		Int_negate(src);
 	}
 	else {
 		Sgl_setzero_sign(result);
-        	/* Check for zero */ 
-        	if (src == 0) { 
-                	Sgl_setzero(result); 
+        	/* Check for zero */
+        	if (src == 0) {
+                	Sgl_setzero(result);
 			*dstptr = result;
-                	return(NOEXCEPTION); 
-        	} 
+                	return(NOEXCEPTION);
+        	}
 	}
 	/*
 	 * Generate exponent and normalized mantissa
@@ -100,12 +100,12 @@ sgl_to_sgl_fcnvxf(
 	/* check for inexact */
 	if (Int_isinexact_to_sgl(src)) {
 		switch (Rounding_mode()) {
-			case ROUNDPLUS: 
-				if (Sgl_iszero_sign(result)) 
+			case ROUNDPLUS:
+				if (Sgl_iszero_sign(result))
 					Sgl_increment(result);
 				break;
-			case ROUNDMINUS: 
-				if (Sgl_isone_sign(result)) 
+			case ROUNDMINUS:
+				if (Sgl_isone_sign(result))
 					Sgl_increment(result);
 				break;
 			case ROUNDNEAREST:
@@ -122,7 +122,7 @@ sgl_to_sgl_fcnvxf(
 }
 
 /*
- *  Single Fixed-point to Double Floating-point 
+ *  Single Fixed-point to Double Floating-point
  */
 
 int
@@ -136,11 +136,11 @@ sgl_to_dbl_fcnvxf(
 	register unsigned int resultp1 = 0, resultp2 = 0;
 
 	src = *srcptr;
-	/* 
-	 * set sign bit of result and get magnitude of source 
+	/*
+	 * set sign bit of result and get magnitude of source
 	 */
 	if (src < 0) {
-		Dbl_setone_sign(resultp1);  
+		Dbl_setone_sign(resultp1);
 		Int_negate(src);
 	}
 	else {
@@ -173,7 +173,7 @@ sgl_to_dbl_fcnvxf(
 }
 
 /*
- *  Double Fixed-point to Single Floating-point 
+ *  Double Fixed-point to Single Floating-point
  */
 
 int
@@ -187,11 +187,11 @@ dbl_to_sgl_fcnvxf(
 	unsigned int result = 0, srcp2;
 
 	Dint_copyfromptr(srcptr,srcp1,srcp2);
-	/* 
-	 * set sign bit of result and get magnitude of source 
+	/*
+	 * set sign bit of result and get magnitude of source
 	 */
 	if (srcp1 < 0) {
-		Sgl_setone_sign(result);  
+		Sgl_setone_sign(result);
 		Dint_negate(srcp1,srcp2);
 	}
 	else {
@@ -216,15 +216,15 @@ dbl_to_sgl_fcnvxf(
 		Find_ms_one_bit(srcp2,dst_exponent);
 		/*  left justify source, with msb at bit position 1  */
 		if (dst_exponent >= 0) {
-			srcp1 = srcp2 << dst_exponent;    
+			srcp1 = srcp2 << dst_exponent;
 			srcp2 = 0;
 		}
 		else {
 			srcp1 = srcp2 >> 1;
-			srcp2 <<= 31; 
+			srcp2 <<= 31;
 		}
 		/*
-		 *  since msb set is in second word, need to 
+		 *  since msb set is in second word, need to
 		 *  adjust bit position count
 		 */
 		dst_exponent += 32;
@@ -240,12 +240,12 @@ dbl_to_sgl_fcnvxf(
 		/*  left justify source, with msb at bit position 1  */
 		if (dst_exponent > 0) {
 			Variable_shift_double(srcp1,srcp2,(32-dst_exponent),
-			 srcp1); 
+			 srcp1);
 			srcp2 <<= dst_exponent;
 		}
 		/*
 		 * If dst_exponent = 0, we don't need to shift anything.
-		 * If dst_exponent = -1, src = - 2**63 so we won't need to 
+		 * If dst_exponent = -1, src = - 2**63 so we won't need to
 		 * shift srcp2.
 		 */
 		else srcp1 >>= -(dst_exponent);
@@ -256,12 +256,12 @@ dbl_to_sgl_fcnvxf(
 	/* check for inexact */
 	if (Dint_isinexact_to_sgl(srcp1,srcp2)) {
 		switch (Rounding_mode()) {
-			case ROUNDPLUS: 
-				if (Sgl_iszero_sign(result)) 
+			case ROUNDPLUS:
+				if (Sgl_iszero_sign(result))
 					Sgl_increment(result);
 				break;
-			case ROUNDMINUS: 
-				if (Sgl_isone_sign(result)) 
+			case ROUNDMINUS:
+				if (Sgl_isone_sign(result))
 					Sgl_increment(result);
 				break;
 			case ROUNDNEAREST:
@@ -278,7 +278,7 @@ dbl_to_sgl_fcnvxf(
 }
 
 /*
- *  Double Fixed-point to Double Floating-point 
+ *  Double Fixed-point to Double Floating-point
  */
 
 int
@@ -292,8 +292,8 @@ dbl_to_dbl_fcnvxf(
 	register unsigned int srcp2, resultp1 = 0, resultp2 = 0;
 
 	Dint_copyfromptr(srcptr,srcp1,srcp2);
-	/* 
-	 * set sign bit of result and get magnitude of source 
+	/*
+	 * set sign bit of result and get magnitude of source
 	 */
 	if (srcp1 < 0) {
 		Dbl_setone_sign(resultp1);
@@ -321,7 +321,7 @@ dbl_to_dbl_fcnvxf(
 		Find_ms_one_bit(srcp2,dst_exponent);
 		/*  left justify source, with msb at bit position 1  */
 		if (dst_exponent >= 0) {
-			srcp1 = srcp2 << dst_exponent;    
+			srcp1 = srcp2 << dst_exponent;
 			srcp2 = 0;
 		}
 		else {
@@ -329,7 +329,7 @@ dbl_to_dbl_fcnvxf(
 			srcp2 <<= 31;
 		}
 		/*
-		 *  since msb set is in second word, need to 
+		 *  since msb set is in second word, need to
 		 *  adjust bit position count
 		 */
 		dst_exponent += 32;
@@ -344,12 +344,12 @@ dbl_to_dbl_fcnvxf(
 		/*  left justify source, with msb at bit position 1  */
 		if (dst_exponent > 0) {
 			Variable_shift_double(srcp1,srcp2,(32-dst_exponent),
-			 srcp1); 
+			 srcp1);
 			srcp2 <<= dst_exponent;
 		}
 		/*
 		 * If dst_exponent = 0, we don't need to shift anything.
-		 * If dst_exponent = -1, src = - 2**63 so we won't need to 
+		 * If dst_exponent = -1, src = - 2**63 so we won't need to
 		 * shift srcp2.
 		 */
 		else srcp1 >>= -(dst_exponent);
@@ -361,12 +361,12 @@ dbl_to_dbl_fcnvxf(
 	/* check for inexact */
 	if (Dint_isinexact_to_dbl(srcp2)) {
 		switch (Rounding_mode()) {
-			case ROUNDPLUS: 
+			case ROUNDPLUS:
 				if (Dbl_iszero_sign(resultp1)) {
 					Dbl_increment(resultp1,resultp2);
 				}
 				break;
-			case ROUNDMINUS: 
+			case ROUNDMINUS:
 				if (Dbl_isone_sign(resultp1)) {
 					Dbl_increment(resultp1,resultp2);
 				}

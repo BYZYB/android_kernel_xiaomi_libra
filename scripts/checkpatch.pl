@@ -2027,7 +2027,7 @@ sub process {
 			if ($chk_author && $line =~ /^\s*signed-off-by:.*(quicinc|qualcomm)\.com/i) {
 				WARN("BAD_SIGN_OFF",
 				     "invalid Signed-off-by identity\n" . $line );
-			}			
+			}
 
 # Check for duplicate signatures
 			my $sig_nospace = $line;

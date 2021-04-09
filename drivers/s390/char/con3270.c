@@ -135,7 +135,7 @@ con3270_rebuild_update(struct con3270 *cp)
 	struct string *s, *n;
 	int nr;
 
-	/* 
+	/*
 	 * Throw away update list and create a new one,
 	 * containing all lines that will fit on the screen.
 	 */
@@ -432,7 +432,7 @@ con3270_cline_add(struct con3270 *cp)
 static inline void
 con3270_cline_insert(struct con3270 *cp, unsigned char c)
 {
-	cp->cline->string[cp->cline->len++] = 
+	cp->cline->string[cp->cline->len++] =
 		cp->view.ascebc[(c < ' ') ? ' ' : c];
 	if (list_empty(&cp->cline->update)) {
 		list_add_tail(&cp->cline->update, &cp->update);
@@ -607,7 +607,7 @@ con3270_init(void)
 	INIT_LIST_HEAD(&condev->update);
 	setup_timer(&condev->timer, (void (*)(unsigned long)) con3270_update,
 		    (unsigned long) condev);
-	tasklet_init(&condev->readlet, 
+	tasklet_init(&condev->readlet,
 		     (void (*)(unsigned long)) con3270_read_tasklet,
 		     (unsigned long) condev->read);
 

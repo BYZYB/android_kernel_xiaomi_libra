@@ -64,7 +64,7 @@ static int set_format(int dev, int fmt)
 
 	if (audio_devs[dev]->local_conversion)
 		return audio_devs[dev]->local_conversion;
-	else 
+	else
 		return audio_devs[dev]->local_format;
 }
 
@@ -104,12 +104,12 @@ int audio_open(int dev, struct file *file)
 			goto error_3;
 		}
 	}
-	
+
 	audio_devs[dev]->local_conversion = 0;
 
 	if (dev_type == SND_DEV_AUDIO)
 		set_format(dev, AFMT_MU_LAW);
-	else 
+	else
 		set_format(dev, bits);
 
 	audio_devs[dev]->audio_mode = AM_NONE;
@@ -143,7 +143,7 @@ static void sync_output(int dev)
 	dmap->flags |= DMA_POST;
 
 	/* Align the write pointer with fragment boundaries */
-	
+
 	if ((l = dmap->user_counter % dmap->fragment_size) > 0)
 	{
 		int len;
@@ -153,7 +153,7 @@ static void sync_output(int dev)
 		memset(dmap->raw_buf + offs, dmap->neutral_byte, len);
 		DMAbuf_move_wrpointer(dev, len);
 	}
-	
+
 	/*
 	 * Clean all unused buffer fragments.
 	 */
@@ -229,7 +229,7 @@ int audio_write(int dev, struct file *file, const char __user *buf, int count)
 
 	p = 0;
 	c = count;
-	
+
 	if(count < 0)
 		return -EINVAL;
 
@@ -246,7 +246,7 @@ int audio_write(int dev, struct file *file, const char __user *buf, int count)
 		  sync_output(dev);
 		  return 0;
 	}
-	
+
 	while (c)
 	{
 		if ((err = DMAbuf_getwrbuffer(dev, &dma_buf, &buf_size, !!(file->f_flags & O_NONBLOCK))) < 0)
@@ -278,7 +278,7 @@ int audio_write(int dev, struct file *file, const char __user *buf, int count)
 			}
 			if(copy_from_user(dma_buf, &(buf)[p], l))
 				return -EFAULT;
-		} 
+		}
 		else audio_devs[dev]->d->copy_user (dev,
 						dma_buf, 0,
 						buf, p,
@@ -348,7 +348,7 @@ int audio_read(int dev, struct file *file, char __user *buf, int count)
 		{
 			translate_bytes(dsp_ulaw, (unsigned char *) dmabuf, l);
 		}
-		
+
 		{
 			char           *fixit = dmabuf;
 
@@ -381,7 +381,7 @@ int audio_ioctl(int dev, struct file *file, unsigned int cmd, void __user *arg)
 		        printk(KERN_DEBUG"/dev/dsp%d: No coprocessor for this device\n", dev); */
 		return -ENXIO;
 	}
-	else switch (cmd) 
+	else switch (cmd)
 	{
 		case SNDCTL_DSP_SYNC:
 			if (!(audio_devs[dev]->open_mode & OPEN_WRITE))
@@ -411,7 +411,7 @@ int audio_ioctl(int dev, struct file *file, unsigned int cmd, void __user *arg)
 		case SNDCTL_DSP_GETFMTS:
 			val = audio_devs[dev]->format_mask | AFMT_MU_LAW;
 			break;
-	
+
 		case SNDCTL_DSP_SETFMT:
 			if (get_user(val, p))
 				return -EFAULT;
@@ -431,7 +431,7 @@ int audio_ioctl(int dev, struct file *file, unsigned int cmd, void __user *arg)
   			if ((audio_devs[dev]->audio_mode & AM_READ) && !(audio_devs[dev]->flags & DMA_DUPLEX))
   				return -EBUSY;
 			return dma_ioctl(dev, cmd, arg);
-		
+
 		case SNDCTL_DSP_NONBLOCK:
 			spin_lock(&file->f_lock);
 			file->f_flags |= O_NONBLOCK;
@@ -450,7 +450,7 @@ int audio_ioctl(int dev, struct file *file, unsigned int cmd, void __user *arg)
 				if (audio_devs[dev]->d->trigger)	/* Supports SETTRIGGER */
 					val |= DSP_CAP_TRIGGER;
 				break;
-			
+
 		case SOUND_PCM_WRITE_RATE:
 			if (get_user(val, p))
 				return -EFAULT;
@@ -460,7 +460,7 @@ int audio_ioctl(int dev, struct file *file, unsigned int cmd, void __user *arg)
 		case SOUND_PCM_READ_RATE:
 			val = audio_devs[dev]->d->set_speed(dev, 0);
 			break;
-			
+
 		case SNDCTL_DSP_STEREO:
 			if (get_user(val, p))
 				return -EFAULT;
@@ -478,7 +478,7 @@ int audio_ioctl(int dev, struct file *file, unsigned int cmd, void __user *arg)
 		case SOUND_PCM_READ_CHANNELS:
 			val = audio_devs[dev]->d->set_channels(dev, 0);
 			break;
-		
+
 		case SOUND_PCM_READ_BITS:
 			val = audio_devs[dev]->d->set_bits(dev, 0);
 			break;
@@ -496,7 +496,7 @@ int audio_ioctl(int dev, struct file *file, unsigned int cmd, void __user *arg)
 			if (audio_devs[dev]->open_mode & OPEN_READ)
 				audio_devs[dev]->dmap_in->applic_profile = val;
 			return 0;
-		
+
 		case SNDCTL_DSP_GETODELAY:
 			dmap = audio_devs[dev]->dmap_out;
 			if (!(audio_devs[dev]->open_mode & OPEN_WRITE))
@@ -506,14 +506,14 @@ int audio_ioctl(int dev, struct file *file, unsigned int cmd, void __user *arg)
 				val=0;
 				break;
 			}
-		
+
 			spin_lock_irqsave(&dmap->lock,flags);
 			/* Compute number of bytes that have been played */
 			count = DMAbuf_get_buffer_pointer (dev, dmap, DMODE_OUTPUT);
 			if (count < dmap->fragment_size && dmap->qhead != 0)
 				count += dmap->bytes_in_use;	/* Pointer wrap not handled yet */
 			count += dmap->byte_counter;
-		
+
 			/* Subtract current count from the number of bytes written by app */
 			count = dmap->user_counter - count;
 			if (count < 0)
@@ -521,7 +521,7 @@ int audio_ioctl(int dev, struct file *file, unsigned int cmd, void __user *arg)
 			spin_unlock_irqrestore(&dmap->lock,flags);
 			val = count;
 			break;
-		
+
 		default:
 			return dma_ioctl(dev, cmd, arg);
 	}
@@ -562,7 +562,7 @@ void reorganize_buffers(int dev, struct dma_buffparms *dmap, int recording)
 		nc = 1;
 		sz = 8;
 	}
-	
+
 	sz = sr * nc * sz;
 
 	sz /= 8;		/* #bits -> #bytes */
@@ -573,7 +573,7 @@ void reorganize_buffers(int dev, struct dma_buffparms *dmap, int recording)
 	dmap->needs_reorg = 0;
 
 	if (dmap->fragment_size == 0)
-	{	
+	{
 		/* Compute the fragment size using the default algorithm */
 
 		/*
@@ -654,7 +654,7 @@ void reorganize_buffers(int dev, struct dma_buffparms *dmap, int recording)
 	{
 		memset(dmap->raw_buf, dmap->neutral_byte, dmap->bytes_in_use);
 	}
-	
+
 	for (i = 0; i < dmap->nbufs; i++)
 	{
 		dmap->counts[i] = 0;
@@ -665,7 +665,7 @@ void reorganize_buffers(int dev, struct dma_buffparms *dmap, int recording)
 
 static int dma_subdivide(int dev, struct dma_buffparms *dmap, int fact)
 {
-	if (fact == 0) 
+	if (fact == 0)
 	{
 		fact = dmap->subdivision;
 		if (fact == 0)
@@ -747,7 +747,7 @@ static int dma_ioctl(int dev, unsigned int cmd, void __user *arg)
 	int fact, ret, changed, bits, count, err;
 	unsigned long flags;
 
-	switch (cmd) 
+	switch (cmd)
 	{
 		case SNDCTL_DSP_SUBDIVIDE:
 			ret = 0;
@@ -781,14 +781,14 @@ static int dma_ioctl(int dev, unsigned int cmd, void __user *arg)
 			info.fragstotal = dmap->nbufs;
 			if (cmd == SNDCTL_DSP_GETISPACE)
 				info.fragments = dmap->qlen;
-			else 
+			else
 			{
 				if (!DMAbuf_space_in_queue(dev))
 					info.fragments = 0;
 				else
 				{
 					info.fragments = DMAbuf_space_in_queue(dev);
-					if (audio_devs[dev]->d->local_qlen) 
+					if (audio_devs[dev]->d->local_qlen)
 					{
 						int tmp = audio_devs[dev]->d->local_qlen(dev);
 						if (tmp && info.fragments)
@@ -809,7 +809,7 @@ static int dma_ioctl(int dev, unsigned int cmd, void __user *arg)
 
 			if (cmd == SNDCTL_DSP_GETISPACE && dmap->qlen)
 				info.bytes -= dmap->counts[dmap->qhead];
-			else 
+			else
 			{
 				info.fragments = info.bytes / dmap->fragment_size;
 				info.bytes -= dmap->user_counter % dmap->fragment_size;
@@ -832,7 +832,7 @@ static int dma_ioctl(int dev, unsigned int cmd, void __user *arg)
 			{
 				spin_lock_irqsave(&dmap_in->lock,flags);
 				changed = (audio_devs[dev]->enable_bits ^ bits) & PCM_ENABLE_INPUT;
-				if (changed && audio_devs[dev]->go) 
+				if (changed && audio_devs[dev]->go)
 				{
 					reorganize_buffers(dev, dmap_in, 1);
 					if ((err = audio_devs[dev]->d->prepare_for_input(dev,
@@ -853,7 +853,7 @@ static int dma_ioctl(int dev, unsigned int cmd, void __user *arg)
 				changed = (audio_devs[dev]->enable_bits ^ bits) & PCM_ENABLE_OUTPUT;
 				if (changed &&
 				    (dmap_out->mapping_flags & DMA_MAP_MAPPED || dmap_out->qlen > 0) &&
-				    audio_devs[dev]->go) 
+				    audio_devs[dev]->go)
 				{
 					if (!(dmap_out->flags & DMA_ALLOC_DONE))
 						reorganize_buffers(dev, dmap_out, 0);
@@ -868,7 +868,7 @@ static int dma_ioctl(int dev, unsigned int cmd, void __user *arg)
 #if 0
 			if (changed && audio_devs[dev]->d->trigger)
 				audio_devs[dev]->d->trigger(dev, bits * audio_devs[dev]->go);
-#endif				
+#endif
 			/* Falls through... */
 
 		case SNDCTL_DSP_GETTRIGGER:

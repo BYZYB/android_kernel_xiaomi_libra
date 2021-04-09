@@ -15,7 +15,7 @@
 #include <asm/tbx.h>
 
 /* BEGIN HACK */
-/* define these for now while doing inital conversion to GAS 
+/* define these for now while doing inital conversion to GAS
    will fix properly later */
 
 /* Signal identifiers always have the TBID_SIGNAL_BIT set and contain the
@@ -226,7 +226,7 @@ ___TBIBoingVec:
  */
 	MOV	D1Ar1,A0FrP			/* Pass in pCtx */
 	CALLR	D1RtP,___TBIBoingRTH		/* Use RTH to invoke handler */
-	
+
 /*
  * Perform critical state restore and execute background thread.
  *

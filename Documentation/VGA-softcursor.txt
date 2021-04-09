@@ -28,7 +28,7 @@ and the most significant one turns on highlight (or sometimes blinking--it
 depends on the configuration of your VGA).
 
    The third parameter consists of character attribute bits you want to set.
-Bit setting takes place before bit toggling, so you can simply clear a bit by 
+Bit setting takes place before bit toggling, so you can simply clear a bit by
 including it in both the set mask and the toggle mask.
 
 Examples:

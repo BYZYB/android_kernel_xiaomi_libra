@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2002  David Howells (dhowells@redhat.com)
  * - Incorporating suggestions made by Linus Torvalds and Dave Miller
- * 
+ *
  * CRIS port by Axis Communications
  */
 

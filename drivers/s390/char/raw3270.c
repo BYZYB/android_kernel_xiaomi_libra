@@ -368,7 +368,7 @@ raw3270_irq (struct ccw_device *cdev, unsigned long intparm, struct irb *irb)
 	case RAW3270_IO_DONE:
 		break;
 	case RAW3270_IO_BUSY:
-		/* 
+		/*
 		 * Intervention required by the operator. We have to wait
 		 * for unsolicited device end.
 		 */

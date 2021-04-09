@@ -72,7 +72,7 @@ int snd_gus_iwffff_remove_sample(void *private_data, struct iwffff_wave *wave,
 	struct snd_gus_card *gus = private_data;
 
 	if (wave->format & IWFFFF_WAVE_ROM)
-		return 0;	/* it's probably ok - verify the address? */	
+		return 0;	/* it's probably ok - verify the address? */
 	return snd_gf1_mem_free(&gus->gf1.mem_alloc, wave->address.memory);
 }
 

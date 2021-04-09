@@ -89,7 +89,7 @@ int sb_dsp_command(sb_devc * devc, unsigned char val)
 	unsigned long limit;
 
 	limit = jiffies + HZ / 10;	/* Timeout */
-	
+
 	/*
 	 * Note! the i<500000 is an emergency exit. The sb_dsp_command() is sometimes
 	 * called while interrupts are disabled. This means that the timer is
@@ -183,7 +183,7 @@ static void sb_intr (sb_devc *devc)
 		}
 	}
 	/*
-	 * Acknowledge interrupts 
+	 * Acknowledge interrupts
 	 */
 
 	if (src & 0x01)
@@ -211,7 +211,7 @@ static irqreturn_t sbintr(int irq, void *dev_id)
 	case MDL_ESSPCI:
 		pci_intr (devc);
 		break;
-		
+
 	case MDL_ESS:
 		ess_intr (devc);
 		break;
@@ -431,7 +431,7 @@ static int init_Jazz16(sb_devc * devc, struct address_info *hw_config)
 		return 0;
 
 	/*
-	 * Now we have configured a standard Jazz16 device. 
+	 * Now we have configured a standard Jazz16 device.
 	 */
 	devc->model = MDL_JAZZ;
 	strcpy(name, "Jazz16");
@@ -464,7 +464,7 @@ static void relocate_ess1688(sb_devc * devc)
 	}
 
 	DDB(printk("Doing ESS1688 address selection\n"));
-	
+
 	/*
 	 * ES1688 supports two alternative ways for software address config.
 	 * First try the so called Read-Sequence-Key method.
@@ -516,9 +516,9 @@ int sb_dsp_detect(struct address_info *hw_config, int pci, int pciio, struct sb_
 	sb_info.dev = -1;
 
 	/*
-	 * Initialize variables 
+	 * Initialize variables
 	 */
-	
+
 	DDB(printk("sb_dsp_detect(%x) entered\n", hw_config->io_base));
 
 	spin_lock_init(&devc->lock);
@@ -530,7 +530,7 @@ int sb_dsp_detect(struct address_info *hw_config, int pci, int pciio, struct sb_
 
 	devc->dma16 = -1;
 	devc->pcibase = pciio;
-	
+
 	if(pci == SB_PCI_ESSMAESTRO)
 	{
 		devc->model = MDL_ESSPCI;
@@ -538,17 +538,17 @@ int sb_dsp_detect(struct address_info *hw_config, int pci, int pciio, struct sb_
 		hw_config->driver_use_1 |= SB_PCI_IRQ;
 		hw_config->card_subtype	= MDL_ESSPCI;
 	}
-	
+
 	if(pci == SB_PCI_YAMAHA)
 	{
 		devc->model = MDL_YMPCI;
 		devc->caps |= SB_PCI_IRQ;
 		hw_config->driver_use_1 |= SB_PCI_IRQ;
 		hw_config->card_subtype	= MDL_YMPCI;
-		
+
 		printk("Yamaha PCI mode.\n");
 	}
-	
+
 	if (devc->sbmo.acer)
 	{
 		unsigned long flags;
@@ -611,16 +611,16 @@ int sb_dsp_detect(struct address_info *hw_config, int pci, int pciio, struct sb_
 				}
 		}
 	}
-	
+
 	if(devc->type == MDL_ESSPCI)
 		devc->model = MDL_ESSPCI;
-		
+
 	if(devc->type == MDL_YMPCI)
 	{
 		printk("YMPCI selected\n");
 		devc->model = MDL_YMPCI;
 	}
-		
+
 	/*
 	 * Save device information for sb_dsp_init()
 	 */
@@ -642,7 +642,7 @@ int sb_dsp_init(struct address_info *hw_config, struct module *owner)
 	char name[100];
 	extern int sb_be_quiet;
 	int	mixer22, mixer30;
-	
+
 /*
  * Check if we had detected a SB device earlier
  */
@@ -671,14 +671,14 @@ int sb_dsp_init(struct address_info *hw_config, struct module *owner)
 
 	if (!((devc->caps & SB_NO_AUDIO) && (devc->caps & SB_NO_MIDI)) && hw_config->irq > 0)
 	{			/* IRQ setup */
-		
+
 		/*
 		 *	ESS PCI cards do shared PCI IRQ stuff. Since they
 		 *	will get shared PCI irq lines we must cope.
 		 */
-		 
+
 		int i=(devc->caps&SB_PCI_IRQ)?IRQF_SHARED:0;
-		
+
 		if (request_irq(hw_config->irq, sbintr, i, "soundblaster", devc) < 0)
 		{
 			printk(KERN_ERR "SB: Can't allocate IRQ%d\n", hw_config->irq);
@@ -732,7 +732,7 @@ int sb_dsp_init(struct address_info *hw_config, struct module *owner)
 	}			/* IRQ setup */
 
 	last_sb = devc;
-	
+
 	switch (devc->major)
 	{
 		case 1:		/* SB 1.0 or 1.5 */
@@ -761,21 +761,21 @@ int sb_dsp_init(struct address_info *hw_config, struct module *owner)
 
 		case 4:
 			devc->model = hw_config->card_subtype = MDL_SB16;
-			/* 
+			/*
 			 * ALS007 and ALS100 return DSP version 4.2 and have 2 post-reset !=0
 			 * registers at 0x3c and 0x4c (output ctrl registers on ALS007) whereas
 			 * a "standard" SB16 doesn't have a register at 0x4c.  ALS100 actively
 			 * updates register 0x22 whenever 0x30 changes, as per the SB16 spec.
 			 * Since ALS007 doesn't, this can be used to differentiate the 2 cards.
 			 */
-			if ((devc->minor == 2) && sb_getmixer(devc,0x3c) && sb_getmixer(devc,0x4c)) 
+			if ((devc->minor == 2) && sb_getmixer(devc,0x3c) && sb_getmixer(devc,0x4c))
 			{
 				mixer30 = sb_getmixer(devc,0x30);
 				sb_setmixer(devc,0x22,(mixer22=sb_getmixer(devc,0x22)) & 0x0f);
 				sb_setmixer(devc,0x30,0xff);
 				/* ALS100 will force 0x30 to 0xf8 like SB16; ALS007 will allow 0xff. */
 				/* Register 0x22 & 0xf0 on ALS100 == 0xf0; on ALS007 it == 0x10.     */
-				if ((sb_getmixer(devc,0x30) != 0xff) || ((sb_getmixer(devc,0x22) & 0xf0) != 0x10)) 
+				if ((sb_getmixer(devc,0x30) != 0xff) || ((sb_getmixer(devc,0x22) & 0xf0) != 0x10))
 				{
 					devc->submodel = SUBMDL_ALS100;
 					if (hw_config->name == NULL)
@@ -877,7 +877,7 @@ int sb_dsp_init(struct address_info *hw_config, struct module *owner)
 
 /* if (sbmpu) below we allow mpu401 to manage the midi devs
    otherwise we have to unload them. (Andrzej Krzysztofowicz) */
-   
+
 void sb_dsp_unload(struct address_info *hw_config, int sbmpu)
 {
 	sb_devc *devc;
@@ -1198,7 +1198,7 @@ int probe_sbmpu(struct address_info *hw_config, struct module *owner)
 	{
 		/* The real vibra16 is fine about this, but we have to go
 		   wipe up after Cyrix again */
-		   	   
+
 		if(devc->model == MDL_SB16 && devc->minor >= 12)
 		{
 			unsigned char   bits = sb_getmixer(devc, 0x84) & ~0x06;
@@ -1263,7 +1263,7 @@ int probe_sbmpu(struct address_info *hw_config, struct module *owner)
 		default:
 			return 0;
 	}
-	
+
 	ret = probe_uart401(hw_config, owner);
 	if (ret)
 		last_sb->midi_irq_cookie=midi_devs[hw_config->slots[4]]->devc;

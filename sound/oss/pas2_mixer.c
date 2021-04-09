@@ -245,7 +245,7 @@ static int pas_mixer_ioctl(int dev, unsigned int cmd, void __user *arg)
 				level = ((mode_control & 0x03) + 1) * 20;
 		} else {
 			int i = 0;
-			
+
 			level &= 0x7f;
 			if (level)
 				i = (level / 20) - 1;
@@ -283,23 +283,23 @@ static int pas_mixer_ioctl(int dev, unsigned int cmd, void __user *arg)
 			case SOUND_MIXER_RECSRC:
 				v = rec_devices;
 				break;
-				
+
 			case SOUND_MIXER_STEREODEVS:
 				v = SUPPORTED_MIXER_DEVICES & ~(SOUND_MASK_BASS | SOUND_MASK_TREBLE);
 				break;
-				
+
 			case SOUND_MIXER_DEVMASK:
 				v = SUPPORTED_MIXER_DEVICES;
 				break;
-				
+
 			case SOUND_MIXER_RECMASK:
 				v = POSSIBLE_RECORDING_DEVICES & SUPPORTED_MIXER_DEVICES;
 				break;
-				
+
 			case SOUND_MIXER_CAPS:
 				v = 0;	/* No special capabilities */
 				break;
-				
+
 			default:
 				v = levels[cmd & 0xff];
 				break;

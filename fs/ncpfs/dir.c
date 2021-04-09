@@ -44,7 +44,7 @@ extern int ncp_symlink(struct inode *, struct dentry *, const char *);
 #else
 #define ncp_symlink NULL
 #endif
-		      
+
 const struct file_operations ncp_dir_operations =
 {
 	.llseek		= generic_file_llseek,
@@ -120,7 +120,7 @@ static inline int ncp_case_sensitive(const struct inode *i)
  * Note: leave the hash unchanged if the directory
  * is case-sensitive.
  */
-static int 
+static int
 ncp_hash_dentry(const struct dentry *dentry, const struct inode *inode,
 		struct qstr *this)
 {
@@ -204,7 +204,7 @@ ncp_force_unlink(struct inode *dir, struct dentry* dentry)
 	struct inode *inode;
 
 	memset(&info, 0, sizeof(info));
-	
+
         /* remove the Read-Only flag on the NW server */
 	inode = dentry->d_inode;
 
@@ -243,7 +243,7 @@ ncp_force_rename(struct inode *old_dir, struct dentry* old_dentry, char *_old_na
 	int new_nwattr_changed = 0;
 
 	memset(&info, 0, sizeof(info));
-	
+
         /* remove the Read-Only flag on the NW server */
 
 	info.attributes = old_nwattr & ~(aRONLY|aRENAMEINHIBIT|aDELETEINHIBIT);
@@ -263,7 +263,7 @@ ncp_force_rename(struct inode *old_dir, struct dentry* old_dentry, char *_old_na
 	        res = ncp_ren_or_mov_file_or_subdir(NCP_SERVER(old_dir),
         	                                    old_dir, _old_name,
                 	                            new_dir, _new_name);
-	} 
+	}
 	if (res)
 		goto leave_me;
 	/* file was successfully renamed, so:
@@ -272,7 +272,7 @@ ncp_force_rename(struct inode *old_dir, struct dentry* old_dentry, char *_old_na
 	new_nwattr_changed = old_nwattr_changed;
 	new_nwattr = old_nwattr;
 	old_nwattr_changed = 0;
-	
+
 leave_me:;
 	if (old_nwattr_changed) {
 		info.attributes = old_nwattr;
@@ -748,7 +748,7 @@ ncp_do_readdir(struct file *filp, void *dirent, filldir_t filldir,
 	}
 	/* We MUST NOT use server->buffer_size handshaked with server if we are
 	   using UDP, as for UDP server uses max. buffer size determined by
-	   MTU, and for TCP server uses hardwired value 65KB (== 66560 bytes). 
+	   MTU, and for TCP server uses hardwired value 65KB (== 66560 bytes).
 	   So we use 128KB, just to be sure, as there is no way how to know
 	   this value in advance. */
 	bufsize = 131072;
@@ -767,7 +767,7 @@ ncp_do_readdir(struct file *filp, void *dirent, filldir_t filldir,
 			break;
 		while (cnt--) {
 			size_t onerpl;
-			
+
 			if (rpls < offsetof(struct nw_info_struct, entryName))
 				break;	/* short packet */
 			ncp_extract_file_info(rpl, &entry.i);
@@ -923,7 +923,7 @@ int ncp_create_new(struct inode *dir, struct dentry *dentry, umode_t mode,
 	int error, result, len;
 	int opmode;
 	__u8 __name[NCP_MAXPATHLEN + 1];
-	
+
 	PPRINTK("ncp_create_new: creating %s/%s, mode=%hx\n",
 		dentry->d_parent->d_name.name, dentry->d_name.name, mode);
 
@@ -935,12 +935,12 @@ int ncp_create_new(struct inode *dir, struct dentry *dentry, umode_t mode,
 		goto out;
 
 	error = -EACCES;
-	
-	if (S_ISREG(mode) && 
-	    (server->m.flags & NCP_MOUNT_EXTRAS) && 
+
+	if (S_ISREG(mode) &&
+	    (server->m.flags & NCP_MOUNT_EXTRAS) &&
 	    (mode & S_IXUGO))
 		attributes |= aSYSTEM | aSHARED;
-	
+
 	result = ncp_open_create_file_or_subdir(server, dir, __name,
 				OC_MODE_CREATE | OC_MODE_OPEN | OC_MODE_REPLACE,
 				attributes, AR_READ | AR_WRITE, &finfo);
@@ -1074,7 +1074,7 @@ static int ncp_unlink(struct inode *dir, struct dentry *dentry)
 	server = NCP_SERVER(dir);
 	DPRINTK("ncp_unlink: unlinking %s/%s\n",
 		dentry->d_parent->d_name.name, dentry->d_name.name);
-	
+
 	/*
 	 * Check whether to close the file ...
 	 */
@@ -1232,7 +1232,7 @@ ncp_date_dos2unix(__le16 t, __le16 d)
 	month = ((date >> 5) - 1) & 15;
 	year = date >> 9;
 	secs = (time & 31) * 2 + 60 * ((time >> 5) & 63) + (time >> 11) * 3600 +
-		86400 * ((date & 31) - 1 + day_n[month] + (year / 4) + 
+		86400 * ((date & 31) - 1 + day_n[month] + (year / 4) +
 		year * 365 - ((year & 3) == 0 && month < 2 ? 1 : 0) + 3653);
 	/* days since 1.1.70 plus 80's leap day */
 	return local2utc(secs);

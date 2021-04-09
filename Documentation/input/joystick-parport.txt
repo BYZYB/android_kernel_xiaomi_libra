@@ -198,7 +198,7 @@ were not compatible with each other:
 					  +----------> Analog X
 
 	Sinclair Spectrum +2A/+3           Amiga 1200
-                                     
+
     +-----------> Up                     +-----------> Button 3
     | +---------> Fire                   | +---------> Right
     | |                                  | | +-------> Left
@@ -494,7 +494,7 @@ Old parallel ports may not have this feature.
 	  6  | Genesis pad (6+2 buttons)
 	  7  | Saturn pad (8 buttons)
 	  8  | Multisystem 1-button joystick (v0.8.0.2 pin-out)
-	  9  | Two Multisystem 1-button joysticks (v0.8.0.2 pin-out) 
+	  9  | Two Multisystem 1-button joysticks (v0.8.0.2 pin-out)
 	 10  | Amiga CD32 pad
 
   Should you want to use more than one of these joysticks/pads at once, you

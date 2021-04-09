@@ -28,7 +28,7 @@
 
 
 /*
- * Some string constants used by the various core logics. 
+ * Some string constants used by the various core logics.
  */
 
 const char *const pci_io_names[] = {
@@ -247,7 +247,7 @@ void pcibios_fixup_bus(struct pci_bus *bus)
 	if (pci_has_flag(PCI_PROBE_ONLY) && dev &&
  		   (dev->class >> 8) == PCI_CLASS_BRIDGE_PCI) {
  		pci_read_bridge_bases(bus);
-	} 
+	}
 
 	list_for_each_entry(dev, &bus->devices, bus_list) {
 		pdev_save_srm_config(dev);
@@ -344,7 +344,7 @@ common_init_pci(void)
 		hose->need_domain_info = need_domain_info;
 		next_busno = bus->busn_res.end + 1;
 		/* Don't allow 8-bit bus number overflow inside the hose -
-		   reserve some space for bridges. */ 
+		   reserve some space for bridges. */
 		if (next_busno > 224) {
 			next_busno = 0;
 			need_domain_info = 1;
@@ -393,7 +393,7 @@ sys_pciconfig_iobase(long which, unsigned long bus, unsigned long dfn)
 
 	/* from hose or from bus.devfn */
 	if (which & IOBASE_FROM_HOSE) {
-		for(hose = hose_head; hose; hose = hose->next) 
+		for(hose = hose_head; hose; hose = hose->next)
 			if (hose->index == bus) break;
 		if (!hose) return -ENODEV;
 	} else {

@@ -1,5 +1,5 @@
 /* apc - Driver definitions for power management functions
- * of Aurora Personality Chip (APC) on SPARCstation-4/5 and 
+ * of Aurora Personality Chip (APC) on SPARCstation-4/5 and
  * derivatives
  *
  * Copyright (c) 2001 Eric Brower (ebrower@usa.net)
@@ -45,7 +45,7 @@
 #define APC_FANCTL_LO	0x01	/* Fan speed low	*/
 
 /*
- * CPWR - Convenience power outlet state values 
+ * CPWR - Convenience power outlet state values
  */
 #define APC_CPOWER_ON	0x00	/* Conv power on	*/
 #define APC_CPOWER_OFF	0x01	/* Conv power off	*/
@@ -55,7 +55,7 @@
  *
  * WARNING: Internal usage of bit ports is platform dependent--
  * don't modify BPORT settings unless you know what you are doing.
- * 
+ *
  * On SS5 BPA seems to toggle onboard ethernet loopback... -E
  */
 #define APC_BPORT_A		0x01	/* Bit Port A		*/

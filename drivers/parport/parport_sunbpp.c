@@ -1,5 +1,5 @@
 /* parport_sunbpp.c: Parallel-port routines for SBUS
- * 
+ *
  * Author: Derrick J. Brashear <shadow@dementia.org>
  *
  * based on work by:
@@ -15,7 +15,7 @@
  *          Tom Dyas
  *
  * Updated to new SBUS device framework: David S. Miller <davem@davemloft.net>
- * 
+ *
  */
 
 #include <linux/string.h>
@@ -228,7 +228,7 @@ static void parport_sunbpp_restore_state(struct parport *p, struct parport_state
 	parport_sunbpp_write_control(p, s->u.pc.ctr);
 }
 
-static struct parport_operations parport_sunbpp_ops = 
+static struct parport_operations parport_sunbpp_ops =
 {
 	.write_data	= parport_sunbpp_write_data,
 	.read_data	= parport_sunbpp_read_data,

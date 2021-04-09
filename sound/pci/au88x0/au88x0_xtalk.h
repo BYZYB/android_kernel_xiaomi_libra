@@ -22,7 +22,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/* The crosstalk canceler supports 5 stereo input channels. The result is 
+/* The crosstalk canceler supports 5 stereo input channels. The result is
    available at one single output route pair (stereo). */
 
 #ifndef _AU88X0_CXTALK_H

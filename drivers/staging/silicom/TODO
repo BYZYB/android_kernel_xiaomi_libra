@@ -2,7 +2,7 @@ TODO:
 	- checkpatch.pl cleanups
 	- locking audit
 	- single module with all functionality
-	- userland 
+	- userland
 	- fix monolithic build.
 
 

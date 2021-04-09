@@ -1,6 +1,6 @@
 /*
  * Linux ARCnet driver - RFC1051 ("simple" standard) packet encapsulation
- * 
+ *
  * Written 1994-1999 by Avery Pennarun.
  * Derived from skeleton.c by Donald Becker.
  *
@@ -84,7 +84,7 @@ MODULE_LICENSE("GPL");
 
 /*
  * Determine a packet's protocol ID.
- * 
+ *
  * With ARCnet we have to convert everything to Ethernet-style stuff.
  */
 static __be16 type_trans(struct sk_buff *skb, struct net_device *dev)
@@ -201,7 +201,7 @@ static int build_header(struct sk_buff *skb, struct net_device *dev,
 	/* see linux/net/ethernet/eth.c to see where I got the following */
 
 	if (dev->flags & (IFF_LOOPBACK | IFF_NOARP)) {
-		/* 
+		/*
 		 * FIXME: fill in the last byte of the dest ipaddr here to better
 		 * comply with RFC1051 in "noarp" mode.
 		 */

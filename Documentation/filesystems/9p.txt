@@ -147,7 +147,7 @@ on sourceforge (http://sourceforge.net/projects/v9fs).
 News and other information is maintained on a Wiki.
 (http://sf.net/apps/mediawiki/v9fs/index.php).
 
-Bug reports may be issued through the kernel.org bugzilla 
+Bug reports may be issued through the kernel.org bugzilla
 (http://bugzilla.kernel.org)
 
 For more information on the Plan 9 Operating System check out

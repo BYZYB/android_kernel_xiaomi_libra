@@ -89,7 +89,7 @@ void __init gemini_init_irq(void)
 			irq_set_handler(i, handle_edge_irq);
 			mode |= 1 << i;
 			level |= 1 << i;
-		} else {			
+		} else {
 			irq_set_handler(i, handle_level_irq);
 		}
 		set_irq_flags(i, IRQF_VALID | IRQF_PROBE);

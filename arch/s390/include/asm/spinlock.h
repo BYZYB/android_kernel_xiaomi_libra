@@ -79,7 +79,7 @@ static inline void arch_spin_unlock(arch_spinlock_t *lp)
 {
 	_raw_compare_and_swap(&lp->owner_cpu, lp->owner_cpu, 0);
 }
-		
+
 /*
  * Read-write spinlocks, allowing multiple readers
  * but only one writer.

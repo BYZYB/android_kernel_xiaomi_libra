@@ -221,7 +221,7 @@ wildfire_init_irq(void)
 	}
 }
 
-static void 
+static void
 wildfire_device_interrupt(unsigned long vector)
 {
 	int irq;
@@ -275,9 +275,9 @@ wildfire_device_interrupt(unsigned long vector)
  *61        Interrupt Line B from slot 7 PCI1
  *62        Interrupt Line C from slot 7 PCI1
  *63        Interrupt Line D from slot 7 PCI1
- * 
  *
- * IdSel	
+ *
+ * IdSel
  *   0	 Cypress Bridge I/O (ISA summary interrupt)
  *   1	 64 bit PCI 0 option slot 1 (SCSI QLogic builtin)
  *   2	 64 bit PCI 0 option slot 2

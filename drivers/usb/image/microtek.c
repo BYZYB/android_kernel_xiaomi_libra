@@ -533,7 +533,7 @@ mts_build_transfer_context(struct scsi_cmnd *srb, struct mts_desc* desc)
 {
 	int pipe;
 	struct scatterlist * sg;
-	
+
 	MTS_DEBUG_GOT_HERE();
 
 	desc->context.instance = desc;
@@ -597,7 +597,7 @@ mts_scsi_queuecommand_lck(struct scsi_cmnd *srb, mts_scsi_cmnd_callback callback
 		goto out;
 	}
 
-	
+
 	usb_fill_bulk_urb(desc->urb,
 		      desc->usb_dev,
 		      usb_sndbulkpipe(desc->usb_dev,desc->ep_out),
@@ -610,7 +610,7 @@ mts_scsi_queuecommand_lck(struct scsi_cmnd *srb, mts_scsi_cmnd_callback callback
 
 	mts_build_transfer_context( srb, desc );
 	desc->context.final_callback = callback;
-	
+
 	/* here we need ATOMIC as we are called with the iolock */
 	res=usb_submit_urb(desc->urb, GFP_ATOMIC);
 

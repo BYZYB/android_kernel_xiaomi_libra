@@ -5,7 +5,7 @@
 <book id="libataDevGuide">
  <bookinfo>
   <title>libATA Developer's Guide</title>
-  
+
   <authorgroup>
    <author>
     <firstname>Jeff</firstname>
@@ -121,7 +121,7 @@ unsigned int (*mode_filter) (struct ata_port *, struct ata_device *, unsigned in
 	<para>
 	Hooks called prior to the issue of SET FEATURES - XFER MODE
 	command.  The optional ->mode_filter() hook is called when libata
-	has built a mask of the possible modes. This is passed to the 
+	has built a mask of the possible modes. This is passed to the
 	->mode_filter() function which should return a mask of valid modes
 	after filtering those unsuitable due to hardware limits. It is not
 	valid to use this interface to add modes.
@@ -970,7 +970,7 @@ and other resources, etc.
 	as transmission errors sometimes cause this kind of errors.
 	</para>
      </sect2>
-     
+
      <sect2 id="excatDevErr">
         <title>ATA/ATAPI device error (non-NCQ / non-CHECK CONDITION)</title>
 
@@ -1566,7 +1566,7 @@ and other resources, etc.
 	<blockquote>
 	<para>
 	If more than $N (3?) transmission errors happen in 15 minutes,
-	</para>	
+	</para>
 	<itemizedlist>
 	<listitem>
 	<para>
@@ -1610,7 +1610,7 @@ and other resources, etc.
   and SCSI specifications.
   </para>
   <para>
-  Thanks to Alan Cox for pointing out similarities 
+  Thanks to Alan Cox for pointing out similarities
   between SATA and SCSI, and in general for motivation to hack on
   libata.
   </para>

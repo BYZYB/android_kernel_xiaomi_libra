@@ -198,7 +198,7 @@ struct pdc_memory_map {		/* PDC_MEMORY_MAP */
 #endif
 
 struct pdc_tod {
-	unsigned long tod_sec; 
+	unsigned long tod_sec;
 	unsigned long tod_usec;
 };
 

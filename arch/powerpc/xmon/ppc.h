@@ -148,7 +148,7 @@ extern const int powerpc_num_opcodes;
 
 /* A macro to extract the major opcode from an instruction.  */
 #define PPC_OP(i) (((i) >> 26) & 0x3f)
-
+
 /* The operands table is an array of struct powerpc_operand.  */
 
 struct powerpc_operand
@@ -292,7 +292,7 @@ extern const struct powerpc_operand powerpc_operands[];
 
 /* This operand is for the DQ field in a DQ form instruction.  */
 #define PPC_OPERAND_DQ (0100000)
-
+
 /* The POWER and PowerPC assemblers use a few macros.  We keep them
    with the operands table for simplicity.  The macro table is an
    array of struct powerpc_macro.  */

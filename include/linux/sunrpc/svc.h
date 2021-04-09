@@ -264,8 +264,8 @@ struct svc_rqst {
 						 * reserved for this request
 						 */
 
-	struct cache_req	rq_chandle;	/* handle passed to caches for 
-						 * request delaying 
+	struct cache_req	rq_chandle;	/* handle passed to caches for
+						 * request delaying
 						 */
 	bool			rq_dropme;
 	/* Catering to nfsd */
@@ -391,7 +391,7 @@ struct svc_version {
 						 * Only used for nfsacl so far. */
 
 	/* Override dispatch function (e.g. when caching replies).
-	 * A return value of 0 means drop the request. 
+	 * A return value of 0 means drop the request.
 	 * vs_dispatch == NULL means use default dispatcher.
 	 */
 	int			(*vs_dispatch)(struct svc_rqst *, __be32 *);

@@ -185,7 +185,7 @@ int pmu_probe(void)
 	return 0;
 }
 
-static int 
+static int
 pmu_init(void)
 {
 	int timeout;
@@ -252,7 +252,7 @@ pmu_init(void)
 	}
 
 	pmu_fully_inited = 1;
-	
+
 	/* Enable backlight */
 	pmu_enable_backlight(1);
 
@@ -268,7 +268,7 @@ pmu_get_model(void)
 }
 
 /* Send an ADB command */
-static int 
+static int
 pmu_send_request(struct adb_request *req, int sync)
 {
     int i, ret;
@@ -280,7 +280,7 @@ pmu_send_request(struct adb_request *req, int sync)
    }
 
     ret = -EINVAL;
-	
+
     switch (req->data[0]) {
     case PMU_PACKET:
 		for (i = 0; i < req->nbytes - 1; ++i)
@@ -366,7 +366,7 @@ pmu_send_request(struct adb_request *req, int sync)
     	req->complete = 1;
     	return ret;
     }
-    	
+
     if (sync) {
 	while (!req->complete)
 		pmu_poll();
@@ -376,7 +376,7 @@ pmu_send_request(struct adb_request *req, int sync)
 }
 
 /* Enable/disable autopolling */
-static int 
+static int
 pmu_autopoll(int devs)
 {
 	struct adb_request req;
@@ -398,7 +398,7 @@ pmu_autopoll(int devs)
 }
 
 /* Reset the ADB bus */
-static int 
+static int
 pmu_reset_bus(void)
 {
 	struct adb_request req;
@@ -438,12 +438,12 @@ pmu_reset_bus(void)
 
 	if (save_autopoll != 0)
 		pmu_autopoll(save_autopoll);
-		
+
 	return 0;
 }
 
 /* Construct and send a pmu request */
-int 
+int
 pmu_request(struct adb_request *req, void (*done)(struct adb_request *),
 	    int nbytes, ...)
 {
@@ -505,7 +505,7 @@ pmu_queue_request(struct adb_request *req)
 	return 0;
 }
 
-static void 
+static void
 send_byte(int x)
 {
 	via1[ACR] |= SR_CTRL;
@@ -513,7 +513,7 @@ send_byte(int x)
 	via2[B] &= ~TREQ;		/* assert TREQ */
 }
 
-static void 
+static void
 recv_byte(void)
 {
 	char c;
@@ -523,7 +523,7 @@ recv_byte(void)
 	via2[B] &= ~TREQ;
 }
 
-static void 
+static void
 pmu_start(void)
 {
 	unsigned long flags;
@@ -548,7 +548,7 @@ out:
 	local_irq_restore(flags);
 }
 
-void 
+void
 pmu_poll(void)
 {
 	unsigned long flags;
@@ -684,7 +684,7 @@ finish:
 	return IRQ_HANDLED;
 }
 
-static void 
+static void
 pmu_done(struct adb_request *req)
 {
 	req->complete = 1;
@@ -693,7 +693,7 @@ pmu_done(struct adb_request *req)
 }
 
 /* Interrupt data could be the result data from an ADB cmd */
-static void 
+static void
 pmu_handle_data(unsigned char *data, int len)
 {
 	static int show_pmu_ints = 1;
@@ -742,7 +742,7 @@ static int backlight_enabled = 0;
 
 #define LEVEL_TO_BRIGHT(lev)	((lev) < 1? 0x7f: 0x4a - ((lev) << 1))
 
-static void 
+static void
 pmu_enable_backlight(int on)
 {
 	struct adb_request req;
@@ -776,7 +776,7 @@ pmu_enable_backlight(int on)
 	backlight_enabled = on;
 }
 
-static void 
+static void
 pmu_set_brightness(int level)
 {
 	int bright;
@@ -793,7 +793,7 @@ pmu_set_brightness(int level)
 		    PMU_POW_BACKLIGHT | (bright < 0x7f ? PMU_POW_ON : PMU_POW_OFF));
 }
 
-void 
+void
 pmu_enable_irled(int on)
 {
 	struct adb_request req;
@@ -804,7 +804,7 @@ pmu_enable_irled(int on)
 		pmu_poll();
 }
 
-static void 
+static void
 set_volume(int level)
 {
 }

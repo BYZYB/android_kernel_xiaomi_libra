@@ -1,8 +1,5 @@
-
 #ccflags-y += -DCONFIG_IEEE80211_NOWEP=y
 #ccflags-y += -std=gnu89
-#ccflags-y += -O2
-#CC            = gcc
 
 ccflags-y := -DSW_ANTE
 ccflags-y += -DTX_TRACK
@@ -35,4 +32,3 @@ r8187se-y :=			\
 		ieee80211/ieee80211_crypt_wep.o
 
 obj-$(CONFIG_R8187SE)	+= r8187se.o
-

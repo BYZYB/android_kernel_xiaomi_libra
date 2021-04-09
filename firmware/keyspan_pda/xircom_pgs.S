@@ -1,18 +1,18 @@
 /*  $Id: loop.s,v 1.23 2000/03/20 09:49:06 warner Exp $
- * 
+ *
  *  Firmware for the Keyspan PDA Serial Adapter, a USB serial port based on
  *  the EzUSB microcontroller.
- * 
+ *
  *  (C) Copyright 2000 Brian Warner <warner@lothar.com>
- * 
+ *
  * 	This program is free software; you can redistribute it and/or modify
  * 	it under the terms of the GNU General Public License as published by
  * 	the Free Software Foundation; either version 2 of the License, or
  * 	(at your option) any later version.
- * 
+ *
  *  "Keyspan PDA Serial Adapter" is probably a copyright of Keyspan, the
  *  company.
- * 
+ *
  *  This serial adapter is basically an EzUSB chip and an RS-232 line driver
  *  in a little widget that has a DB-9 on one end and a USB plug on the other.
  *  It uses the EzUSB's internal UART0 (using the pins from Port C) and timer2
@@ -29,7 +29,7 @@
  *  don't appear to be available online anymore). If we get multiple
  *  EzUSB-based drivers into the kernel, it might be useful to pull them out
  *  into a separate .h file.
- * 
+ *
  * THEORY OF OPERATION:
  *
  *   There are two 256-byte ring buffers, one for tx, one for rx.
@@ -110,7 +110,7 @@
  *  -Brian Warner <warner@lothar.com>
  *
  */
-	
+
 #define HIGH(x) (((x) & 0xff00) / 256)
 #define LOW(x) ((x) & 0xff)
 
@@ -121,7 +121,7 @@
 ;;; our bit assignments
 #define TX_RUNNING 0
 #define DO_TX_UNTHROTTLE 1
-	
+
 	;; stack from 0x60 to 0x7f: should really set SP to 0x60-1, not 0x60
 #define STACK #0x60-1
 
@@ -135,7 +135,7 @@
 #define IN0BUF #0x7f00
 #define IN0BC #0x7fb5
 #define OUT0BUF #0x7ec0
-#define OUT0BC #0x7fc5		
+#define OUT0BC #0x7fc5
 #define IN2BUF #0x7e00
 #define IN2BC #0x7fb9
 #define IN2CS #0x7fb8
@@ -164,7 +164,7 @@
 #define SUDPTRH #0x7fd4
 #define SUDPTRL #0x7fd5
 #define SETUPDAT #0x7fe8
-		
+
 	;; usb interrupt : enable is EIE.0 (0xe8), flag is EXIF.4 (0x91)
 
 	.org 0
@@ -173,7 +173,7 @@
 	.org 23H
 	ljmp serial_int
 	.byte 0
-	
+
 	.org 43H
 	ljmp USB_Jump_Table
 	.byte 0			; filled in by the USB core
@@ -185,7 +185,7 @@ rx_ring_out:	.byte 0
 tx_ring_in:	.byte 0
 tx_ring_out:	.byte 0
 tx_unthrottle_threshold:	.byte 0
-		
+
 	.org 0x100H		; wants to be on a page boundary
 USB_Jump_Table:
 	ljmp	ISR_Sudav	; Setup Data Available
@@ -196,7 +196,7 @@ USB_Jump_Table:
 	.byte 0
 	ljmp	0		; Global Suspend
 	.byte 	0
-	ljmp	0		; USB Reset  	
+	ljmp	0		; USB Reset
 	.byte	0
 	ljmp	0		; Reserved
 	.byte	0
@@ -215,7 +215,7 @@ USB_Jump_Table:
 
 
 	.org 0x200
-		
+
 start:	mov SP,STACK-1 ; set stack
 	;; clear local variables
 	clr a
@@ -226,7 +226,7 @@ start:	mov SP,STACK-1 ; set stack
 	mov tx_unthrottle_threshold, a
 	clr TX_RUNNING
 	clr DO_TX_UNTHROTTLE
-	
+
 	;; clear fifo with "fe"
 	mov r1, 0
 	mov a, #0xfe
@@ -244,14 +244,14 @@ clear_rx_ring_loop:
 	djnz r1, clear_rx_ring_loop
 
 ;;; turn on the RS-232 driver chip (bring the STANDBY pin low)
-;;; on Xircom the STANDBY is wired to PB6 and PC4 
+;;; on Xircom the STANDBY is wired to PB6 and PC4
 	mov dptr, PORTBCFG
         mov a, #0xBf
         movx @dptr, a
 	mov dptr, PORTCCFG
         mov a, #0xef
         movx @dptr, a
-	
+
 	;; set OEC.4
         mov a, #0x10
         mov dptr,OEC
@@ -282,7 +282,7 @@ clear_rx_ring_loop:
 	mov dptr, PORTCCFG
 	mov a, #0x03
 	movx @dptr, a
-	
+
 	;; set up interrupts, autovectoring
 	;; set BKPT
 	mov dptr, USBBAV
@@ -295,11 +295,11 @@ clear_rx_ring_loop:
 	movx @dptr, a		; clear SUDAVI
 	mov dptr, USBIEN
 	movx @dptr, a
-	
+
 	mov dptr, IN07IEN
 	mov a,#0x04		; enable IN2 int
 	movx @dptr, a
-	
+
 	mov dptr, OUT07IEN
 	mov a,#0x04		; enable OUT2 int
 	movx @dptr, a
@@ -314,7 +314,7 @@ clear_rx_ring_loop:
         mov dptr,USBBAV
         movx @dptr, a
 
-	mov a, #0x20             ; turn on the RED led 
+	mov a, #0x20             ; turn on the RED led
         mov dptr,OEA
         movx @dptr, a
 
@@ -335,30 +335,30 @@ clear_rx_ring_loop:
 #define BAUD_TIMEOUT(rate) (65536 - (24 * 1000 * 1000) / (32 * rate))
 #define BAUD_HIGH(rate) HIGH(BAUD_TIMEOUT(rate))
 #define BAUD_LOW(rate) LOW(BAUD_TIMEOUT(rate))
-		
+
 	mov T2CON, #030h	; rclk=1,tclk=1,cp=0,tr2=0(enable later)
 	mov r3, #5
 	acall set_baud
 	setb TR2
 	mov SCON, #050h
-	
+
 #if 0
 	mov r1, #0x40
 	mov a, #0x41
-send:	
+send:
 	mov SBUF, a
 	inc a
 	anl a, #0x3F
 	orl a, #0x40
 ;	xrl a, #0x02
-wait1:	
+wait1:
 	jnb TI, wait1
 	clr TI
 	djnz r1, send
 ;done:	sjmp done
 
 #endif
-	
+
 	setb EUSB
 	setb EA
 	setb ES0
@@ -383,11 +383,11 @@ renum_wait3:
 	mov a, #0x06		; DISCON=0, DISCOE=1, RENUM=1
 	movx @dptr, a
 	;; we are back online. the host device will now re-query us
-	
-	
+
+
 main:	sjmp main
 
-	
+
 
 ISR_Sudav:
 	push dps
@@ -423,8 +423,8 @@ ISR_Sudav:
 	cjne a, #0x00, setup_bmreq_type_not_standard
 	;; standard request: now main switch is on bRequest
 	ljmp setup_bmreq_is_standard
-	
-setup_bmreq_type_not_standard:	
+
+setup_bmreq_type_not_standard:
 	;; a still has bmreq&0x60
 	cjne a, #0x40, setup_bmreq_type_not_vendor
 	;; Anchor reserves bRequest 0xa0-0xaf, we use small ones
@@ -490,7 +490,7 @@ setup_ctrl_06_not_00:
 	clr c
 	subb a, tx_ring_out	; in-out
 	ljmp setup_return_one_byte
-setup_ctrl_06_not_01:	
+setup_ctrl_06_not_01:
 	ljmp setup_stall
 setup_ctrl_not_06:
 	cjne r2, #0x07, setup_ctrl_not_07
@@ -499,12 +499,12 @@ setup_ctrl_not_06:
 	ljmp setup_done_ack
 setup_ctrl_not_07:
 	ljmp setup_stall
-	
+
 setup_bmreq_type_not_vendor:
 	ljmp setup_stall
 
 
-setup_bmreq_is_standard:	
+setup_bmreq_is_standard:
 	cjne r2, #0x00, setup_breq_not_00
 	;; 00:	Get_Status (sub-switch on bmRequestType: device, ep, int)
 	cjne r1, #0x80, setup_Get_Status_not_device
@@ -531,9 +531,9 @@ setup_Get_Status_not_endpoint:
 	cjne r1, #0x81, setup_Get_Status_not_interface
 	;; Get_Status(interface): return two zeros
 	sjmp setup_return_two_zero_bytes
-setup_Get_Status_not_interface:	
+setup_Get_Status_not_interface:
 	ljmp setup_stall
-	
+
 setup_breq_not_00:
 	cjne r2, #0x01, setup_breq_not_01
 	;; 01:	Clear_Feature (sub-switch on wValueL: stall, remote wakeup)
@@ -546,7 +546,7 @@ setup_Clear_Feature_not_stall:
 	ljmp setup_done_ack
 setup_Clear_Feature_not_rwake:
 	ljmp setup_stall
-	
+
 setup_breq_not_01:
 	cjne r2, #0x03, setup_breq_not_03
 	;; 03:	Set_Feature (sub-switch on wValueL: stall, remote wakeup)
@@ -559,8 +559,8 @@ setup_Set_Feature_not_stall:
 	ljmp setup_done_ack
 setup_Set_Feature_not_rwake:
 	ljmp setup_stall
-	
-setup_breq_not_03:	
+
+setup_breq_not_03:
 	cjne r2, #0x06, setup_breq_not_06
 	;; 06:	Get_Descriptor (s-switch on wValueH: dev, config[n], string[n])
 	cjne r4, #0x01, setup_Get_Descriptor_not_device
@@ -625,16 +625,16 @@ setup_Get_Descriptor_not_config:
 	movx @dptr, a
 	;; done
 	ljmp setup_done_ack
-	
+
 setup_Get_Descriptor_not_string:
 	ljmp setup_stall
-	
+
 setup_breq_not_06:
 	cjne r2, #0x08, setup_breq_not_08
 	;; Get_Configuration. always 1. return one byte.
 	;; this is reusable
 	mov a, #1
-setup_return_one_byte:	
+setup_return_one_byte:
 	mov dptr, IN0BUF
 	movx @dptr, a
 	mov a, #1
@@ -658,14 +658,14 @@ setup_breq_not_0a:
 setup_breq_not_0b:
 	ljmp setup_stall
 
-		
-setup_done_ack:	
+
+setup_done_ack:
 	;; now clear HSNAK
 	mov dptr, EP0CS
 	mov a, #0x02
 	movx @dptr, a
 	sjmp setup_done
-setup_stall:	
+setup_stall:
 	;; unhandled. STALL
 	;EP0CS |= bmEPSTALL
 	mov dptr, EP0CS
@@ -673,8 +673,8 @@ setup_stall:
 	orl a, EP0STALLbit
 	movx @dptr, a
 	sjmp setup_done
-	
-setup_done:	
+
+setup_done:
 	pop acc
 	pop dph1
 	pop dpl1
@@ -684,7 +684,7 @@ setup_done:
 	reti
 
 ;;; ==============================================================
-	
+
 set_baud:			; baud index in r3
 	;; verify a < 10
 	mov a, r3
@@ -716,7 +716,7 @@ set_baud:			; baud index in r3
 set_baud__badbaud:
 	setb c			; c=1: failure
 	ret
-	
+
 ;;; ==================================================
 control_pins:
 	cjne r1, #0x41, control_pins_in
@@ -727,7 +727,7 @@ control_pins_out:
 	anl a, #0x80
 	mov r3, a
 	mov dptr, OUTC
-	movx a, @dptr		; only change bit 7 
+	movx a, @dptr		; only change bit 7
 	anl a, #0x7F		; ~0x84
 	orl a, r3
 	movx @dptr, a		; other pins are inputs, bits ignored
@@ -739,7 +739,7 @@ control_pins_in:
 	ljmp setup_return_one_byte
 
 ;;; ========================================
-	
+
 ISR_Ep2in:
 	push dps
 	push dpl
@@ -767,7 +767,7 @@ ISR_Ep2in:
         movx @dptr, a
 
 
-	
+
 	pop acc
 	pop dph1
 	pop dpl1
@@ -816,7 +816,7 @@ OUT_loop:
 	mov a,dpl1
 	cjne a, tx_ring_out, OUT_no_overflow
 	sjmp OUT_overflow
-OUT_no_overflow:	
+OUT_no_overflow:
 	inc tx_ring_in		; tx_ring_in++
 	inc dps			; switch to DPTR0: source
 	inc dptr
@@ -825,7 +825,7 @@ OUT_no_overflow:
 OUT_overflow:
 	;; signal overflow
 	;; fall through
-OUT_done:	
+OUT_done:
 	;; ack
 	mov dptr,OUT2BC
 	movx @dptr,a
@@ -837,7 +837,7 @@ OUT_done:
         mov a, #0x20             ; Turn off the green LED
         mov dptr,OEA
         movx @dptr, a
-	
+
 	pop acc
 	pop dph1
 	pop dpl1
@@ -855,12 +855,12 @@ dump_stat:
 	;;   rx_ring[0..15]
 	clr a
 	mov dps, a
-	
+
 	mov dptr, IN4CS
 	movx a, @dptr
 	jb acc.1, dump_stat__done; busy: cannot dump, old one still pending
 	mov dptr, IN4BUF
-	
+
 	mov a, tx_ring_in
 	movx @dptr, a
 	inc dptr
@@ -874,7 +874,7 @@ dump_stat:
 	mov a, rx_ring_out
 	movx @dptr, a
 	inc dptr
-	
+
 	clr a
 	jnb TX_RUNNING, dump_stat__no_tx_running
 	inc a
@@ -894,11 +894,11 @@ dump_stat__tx_ring_loop:
 	inc dps
 	djnz r1, dump_stat__tx_ring_loop
 	inc dps
-	
+
 	mov a, #0xfc
 	movx @dptr, a
 	inc dptr
-	
+
 	;; rx_ring[0..15]
 	inc dps
 	mov dptr, #rx_ring	; DPTR1: source
@@ -911,18 +911,18 @@ dump_stat__rx_ring_loop:
 	inc dptr
 	inc dps
 	djnz r1, dump_stat__rx_ring_loop
-	
+
 	;; now send it
 	clr a
 	mov dps, a
 	mov dptr, IN4BC
 	mov a, #38
 	movx @dptr, a
-dump_stat__done:	
+dump_stat__done:
 	ret
-		
+
 ;;; ============================================================
-	
+
 maybe_start_tx:
 	;; make sure the tx process is running.
 	jb TX_RUNNING, start_tx_done
@@ -931,7 +931,7 @@ start_tx:
 	mov a, tx_ring_in
 	cjne a,tx_ring_out, start_tx__work
 	ret			; no work
-start_tx__work:	
+start_tx__work:
 	;; tx was not running. send the first character, setup the TI int
 	inc tx_ring_out		; [++tx_ring_out]
 	mov dph, #HIGH(tx_ring)
@@ -961,7 +961,7 @@ start_tx__maybe_unthrottle_tx:
 	setb DO_TX_UNTHROTTLE
 	;; prod rx, which will actually send the message when in2 becomes free
 	ljmp start_in
-	
+
 
 serial_int:
 	push dps
@@ -979,7 +979,7 @@ serial_int__not_tx:
 	jnb RI, serial_int__not_rx
 	lcall get_rx_char
 	clr RI			; clear int
-serial_int__not_rx:	
+serial_int__not_rx:
 	;; return
 	pop acc
 	pop dph1
@@ -1000,7 +1000,7 @@ get_rx_char:
 	cjne a, rx_ring_out, get_rx_char__no_overflow
 	;; signal overflow
 	ret
-get_rx_char__no_overflow:	
+get_rx_char__no_overflow:
 	inc rx_ring_in
 	;; kick off USB INpipe
 	acall start_in
@@ -1021,7 +1021,7 @@ start_in:
 	mov a, rx_ring_in
 	cjne a, rx_ring_out, start_in__have_work
 	ret			; nope
-start_in__have_work:	
+start_in__have_work:
 	;; now copy as much data as possible into the pipe. 63 bytes max.
 	clr a
 	mov dps, a
@@ -1075,7 +1075,7 @@ start_in__do_tx_unthrottle:
 	mov dptr, IN2BC
 	movx @dptr, a
 	ret
-	
+
 putchar:
 	clr TI
 	mov SBUF, a
@@ -1084,7 +1084,7 @@ putchar_wait:
 	clr TI
 	ret
 
-	
+
 baud_table:			; baud_high, then baud_low
 	;; baud[0]: 110
 	.byte BAUD_HIGH(110)
@@ -1122,7 +1122,7 @@ desc_device:
 	.byte 0xcd, 0x06, 0x04, 0x01, 0x89, 0xab, 1, 2, 3, 0x01
 ;;; The "real" device id, which must match the host driver, is that
 ;;; "0xcd 0x06 0x04 0x01" sequence, which is 0x06cd, 0x0104
-	
+
 desc_config1:
 	.byte 0x09, 0x02, 0x20, 0x00, 0x01, 0x01, 0x00, 0x80, 0x32
 	.byte 0x09, 0x04, 0x00, 0x00, 0x02, 0xff, 0xff, 0xff, 0x00
@@ -1154,19 +1154,19 @@ string_mfg:	.byte string_mfg_end-string_mfg
 ;	.byte "ACME usb widgets"
 	.byte 0x41, 0x00, 0x43, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x20, 0x00, 0x75, 0x00, 0x73, 0x00, 0x62, 0x00, 0x20, 0x00, 0x77, 0x00, 0x69, 0x00, 0x64, 0x00, 0x67, 0x00, 0x65, 0x00, 0x74, 0x00, 0x73, 0x00
 string_mfg_end:
-	
+
 string_product:	.byte string_product_end-string_product
 	.byte 3
 ;	.byte "ACME USB serial widget"
 	.byte 0x41, 0x00, 0x43, 0x00, 0x4d, 0x00, 0x45, 0x00, 0x20, 0x00, 0x55, 0x00, 0x53, 0x00, 0x42, 0x00, 0x20, 0x00, 0x73, 0x00, 0x65, 0x00, 0x72, 0x00, 0x69, 0x00, 0x61, 0x00, 0x6c, 0x00, 0x20, 0x00, 0x77, 0x00, 0x69, 0x00, 0x64, 0x00, 0x67, 0x00, 0x65, 0x00, 0x74, 0x00
 string_product_end:
-	
+
 string_serial:	.byte string_serial_end-string_serial
 	.byte 3
 ;	.byte "47"
 	.byte 0x34, 0x00, 0x37, 0x00
 string_serial_end:
-		
+
 ;;; ring buffer memory
 	;; tx_ring_in+1 is where the next input byte will go
 	;; [tx_ring_out] has been sent
@@ -1180,13 +1180,13 @@ string_serial_end:
 	;;  read/send [tx_ring_out+1], then tx_ring_out++
 
 	;; rx_ring_in works the same way
-	
+
 	.org 0x1000
 tx_ring:
 	.skip 0x100		; 256 bytes
 rx_ring:
 	.skip 0x100		; 256 bytes
-	
-	
+
+
 	.END
-	
+

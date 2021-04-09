@@ -64,7 +64,7 @@
  *
  * Type 0:
  *
- *  3 3|3 3 2 2|2 2 2 2|2 2 2 2|1 1 1 1|1 1 1 1|1 1 
+ *  3 3|3 3 2 2|2 2 2 2|2 2 2 2|1 1 1 1|1 1 1 1|1 1
  *  3 2|1 0 9 8|7 6 5 4|3 2 1 0|9 8 7 6|5 4 3 2|1 0 9 8|7 6 5 4|3 2 1 0
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  * | | | | | | | | | | | | | | | | | | | | | | | |F|F|F|R|R|R|R|R|R|0|0|
@@ -76,7 +76,7 @@
  *
  * Type 1:
  *
- *  3 3|3 3 2 2|2 2 2 2|2 2 2 2|1 1 1 1|1 1 1 1|1 1 
+ *  3 3|3 3 2 2|2 2 2 2|2 2 2 2|1 1 1 1|1 1 1 1|1 1
  *  3 2|1 0 9 8|7 6 5 4|3 2 1 0|9 8 7 6|5 4 3 2|1 0 9 8|7 6 5 4|3 2 1 0
  * +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
  * | | | | | | | | | | |B|B|B|B|B|B|B|B|D|D|D|D|D|F|F|F|R|R|R|R|R|R|0|1|
@@ -87,11 +87,11 @@
  *	15:11	Device number (5 bits)
  *	10:8	function number
  *	 7:2	register number
- *  
+ *
  * Notes:
- *	The function number selects which function of a multi-function device 
+ *	The function number selects which function of a multi-function device
  *	(e.g., SCSI and Ethernet).
- * 
+ *
  *	The register selects a DWORD (32 bit) register offset.  Hence it
  *	doesn't get shifted by 2 bits as we want to "drop" the bottom two
  *	bits.
@@ -215,7 +215,7 @@ lca_read_config(struct pci_bus *bus, unsigned int devfn, int where,
 	return PCIBIOS_SUCCESSFUL;
 }
 
-static int 
+static int
 lca_write_config(struct pci_bus *bus, unsigned int devfn, int where, int size,
 		 u32 value)
 {
@@ -231,12 +231,12 @@ lca_write_config(struct pci_bus *bus, unsigned int devfn, int where, int size,
 	return PCIBIOS_SUCCESSFUL;
 }
 
-struct pci_ops lca_pci_ops = 
+struct pci_ops lca_pci_ops =
 {
 	.read =		lca_read_config,
 	.write =	lca_write_config,
 };
-
+
 void
 lca_pci_tbi(struct pci_controller *hose, dma_addr_t start, dma_addr_t end)
 {
@@ -244,7 +244,7 @@ lca_pci_tbi(struct pci_controller *hose, dma_addr_t start, dma_addr_t end)
 	*(vulp)LCA_IOC_TBIA = 0;
 	mb();
 }
-
+
 void __init
 lca_init_arch(void)
 {
@@ -442,7 +442,7 @@ lca_machine_check(unsigned long vector, unsigned long la_ptr)
 		printk(KERN_CRIT "  Reason: %s (long frame%s):\n",
 		       reason, el.c->retry ? ", retryable" : "");
 		printk(KERN_CRIT
-		       "    reason: %#lx  exc_addr: %#lx  dc_stat: %#lx\n", 
+		       "    reason: %#lx  exc_addr: %#lx  dc_stat: %#lx\n",
 		       el.l->pt[0], el.l->exc_addr, el.l->dc_stat);
 		printk(KERN_CRIT "    car: %#lx\n", el.l->car);
 		if (el.l->esr & ESR_EAV) {
@@ -486,9 +486,9 @@ lca_clock_print(void)
         printk("\tPrimary clock divisor\t0x%lx\n", LCA_GET_PRIMARY(pmr_reg));
         printk("\tOverride clock divisor\t0x%lx\n", LCA_GET_OVERRIDE(pmr_reg));
         printk("\tInterrupt override is %s\n",
-	       (pmr_reg & LCA_PMR_INTO) ? "on" : "off"); 
+	       (pmr_reg & LCA_PMR_INTO) ? "on" : "off");
         printk("\tDMA override is %s\n",
-	       (pmr_reg & LCA_PMR_DMAO) ? "on" : "off"); 
+	       (pmr_reg & LCA_PMR_DMAO) ? "on" : "off");
 
 }
 

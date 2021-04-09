@@ -48,7 +48,7 @@ _GLOBAL(\name)
 #endif
 	li	r0,1
 	stb	r0,PACASOFTIRQEN(r13)
-	
+
 	/* Interrupts will make use return to LR, so get something we want
 	 * in there
 	 */

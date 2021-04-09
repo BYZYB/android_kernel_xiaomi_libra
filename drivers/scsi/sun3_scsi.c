@@ -101,7 +101,7 @@ static void NCR5380_print(struct Scsi_Host *instance);
 
 /* #define SUPPORT_TAGS */
 
-#define	ENABLE_IRQ()	enable_irq( IRQ_SUN3_SCSI ); 
+#define	ENABLE_IRQ()	enable_irq( IRQ_SUN3_SCSI );
 
 
 static irqreturn_t scsi_sun3_intr(int irq, void *dummy);
@@ -169,7 +169,7 @@ static inline unsigned short sun3_udc_read(unsigned char reg)
 	udelay(SUN3_DMA_DELAY);
 	ret = dregs->udc_data;
 	udelay(SUN3_DMA_DELAY);
-	
+
 	return ret;
 }
 
@@ -197,7 +197,7 @@ static struct Scsi_Host *default_instance;
  * Returns : 1 if a host adapter was found, 0 if not.
  *
  */
- 
+
 int __init sun3scsi_detect(struct scsi_host_template * tpnt)
 {
 	unsigned long ioaddr;
@@ -224,7 +224,7 @@ int __init sun3scsi_detect(struct scsi_host_template * tpnt)
 		(setup_can_queue > 0) ? setup_can_queue : CAN_QUEUE;
 	tpnt->cmd_per_lun =
 		(setup_cmd_per_lun > 0) ? setup_cmd_per_lun : CMD_PER_LUN;
-	tpnt->sg_tablesize = 
+	tpnt->sg_tablesize =
 		(setup_sg_tablesize >= 0) ? setup_sg_tablesize : SG_TABLESIZE;
 
 	if (setup_hostid >= 0)
@@ -258,7 +258,7 @@ int __init sun3scsi_detect(struct scsi_host_template * tpnt)
 	instance = scsi_register (tpnt, sizeof(struct NCR5380_hostdata));
 	if(instance == NULL)
 		return 0;
-		
+
 	default_instance = instance;
 
         instance->io_port = (unsigned long) ioaddr;
@@ -282,7 +282,7 @@ int __init sun3scsi_detect(struct scsi_host_template * tpnt)
 		return 0;
 #endif
 	}
-	
+
 	printk("scsi%d: Sun3 5380 at port %lX irq", instance->host_no, instance->io_port);
 	if (instance->irq == SCSI_IRQ_NONE)
 		printk ("s disabled");
@@ -332,7 +332,7 @@ static void sun3_scsi_reset_boot(struct Scsi_Host *instance)
 
 	NCR5380_local_declare();
 	NCR5380_setup(instance);
-	
+
 	/*
 	 * Do a SCSI reset to clean up the bus during initialization. No
 	 * messing with the queues, interrupts, or locks necessary here.
@@ -399,7 +399,7 @@ static irqreturn_t scsi_sun3_intr(int irq, void *dummy)
 }
 
 /*
- * Debug stuff - to be called on NMI, or sysrq key. Use at your own risk; 
+ * Debug stuff - to be called on NMI, or sysrq key. Use at your own risk;
  * reentering NCR5380_print_status seems to have ugly side effects
  */
 
@@ -423,7 +423,7 @@ void sun3_sun3_debug (void)
 static unsigned long sun3scsi_dma_setup(void *data, unsigned long count, int write_flag)
 {
 #ifdef OLDDMA
-	if(write_flag) 
+	if(write_flag)
 		memcpy(dmabuf, data, count);
 	else {
 		sun3_dma_orig_addr = data;
@@ -437,33 +437,33 @@ static unsigned long sun3scsi_dma_setup(void *data, unsigned long count, int wri
 
 //	addr = sun3_dvma_page((unsigned long)data, (unsigned long)dmabuf);
 	addr = (void *)dvma_map((unsigned long) data, count);
-		
+
 	sun3_dma_orig_addr = addr;
 	sun3_dma_orig_count = count;
 #endif
 	dregs->fifo_count = 0;
 	sun3_udc_write(UDC_RESET, UDC_CSR);
-	
+
 	/* reset fifo */
 	dregs->csr &= ~CSR_FIFO;
 	dregs->csr |= CSR_FIFO;
-	
+
 	/* set direction */
 	if(write_flag)
 		dregs->csr |= CSR_SEND;
 	else
 		dregs->csr &= ~CSR_SEND;
-	
+
 	/* byte count for fifo */
 	dregs->fifo_count = count;
 
 	sun3_udc_write(UDC_RESET, UDC_CSR);
-	
+
 	/* reset fifo */
 	dregs->csr &= ~CSR_FIFO;
 	dregs->csr |= CSR_FIFO;
-	
-	if(dregs->fifo_count != count) { 
+
+	if(dregs->fifo_count != count) {
 		printk("scsi%d: fifo_mismatch %04x not %04x\n",
 		       default_instance->host_no, dregs->fifo_count,
 		       (unsigned int) count);
@@ -489,10 +489,10 @@ static unsigned long sun3scsi_dma_setup(void *data, unsigned long count, int wri
 		udc_regs->mode_lo = UDC_MODE_LRECV;
 		udc_regs->rsel = UDC_RSEL_RECV;
 	}
-	
+
 	/* announce location of regs block */
 	sun3_udc_write(((dvma_vtob(udc_regs) & 0xff0000) >> 8),
-		       UDC_CHN_HI); 
+		       UDC_CHN_HI);
 
 	sun3_udc_write((dvma_vtob(udc_regs) & 0xffff), UDC_CHN_LO);
 
@@ -501,7 +501,7 @@ static unsigned long sun3scsi_dma_setup(void *data, unsigned long count, int wri
 
 	/* interrupt enable */
 	sun3_udc_write(UDC_INT_ENABLE, UDC_CSR);
-	
+
        	return count;
 
 }
@@ -510,7 +510,7 @@ static inline unsigned long sun3scsi_dma_count(struct Scsi_Host *instance)
 {
 	unsigned short resid;
 
-	dregs->udc_addr = 0x32; 
+	dregs->udc_addr = 0x32;
 	udelay(SUN3_DMA_DELAY);
 	resid = dregs->udc_data;
 	udelay(SUN3_DMA_DELAY);
@@ -538,7 +538,7 @@ static inline int sun3scsi_dma_start(unsigned long count, unsigned char *data)
 {
 
     sun3_udc_write(UDC_CHN_START, UDC_CSR);
-    
+
     return 0;
 }
 
@@ -548,13 +548,13 @@ static int sun3scsi_dma_finish(int write_flag)
 	unsigned short count;
 	unsigned short fifo;
 	int ret = 0;
-	
+
 	sun3_dma_active = 0;
 #if 1
 	// check to empty the fifo on a read
 	if(!write_flag) {
 		int tmo = 20000; /* .2 sec */
-		
+
 		while(1) {
 			if(dregs->csr & CSR_FIFO_EMPTY)
 				break;
@@ -566,7 +566,7 @@ static int sun3scsi_dma_finish(int write_flag)
 			udelay(10);
 		}
 	}
-		
+
 #endif
 
 	count = sun3scsi_dma_count(default_instance);
@@ -581,7 +581,7 @@ static int sun3scsi_dma_finish(int write_flag)
 			printk("basr now %02x\n", NCR5380_read(BUS_AND_STATUS_REG));
 			ret = count;
 		}
-		
+
 		/* copy in what we dma'd no matter what */
 		memcpy(sun3_dma_orig_addr, dmabuf, sun3_dma_orig_count);
 		sun3_dma_orig_addr = NULL;
@@ -599,7 +599,7 @@ static int sun3scsi_dma_finish(int write_flag)
 
 		data = dregs->fifo_data;
 		vaddr = (unsigned char *)dvma_btov(sun3_dma_orig_addr);
-		
+
 		vaddr += (sun3_dma_orig_count - fifo);
 
 		vaddr[-2] = (data & 0xff00) >> 8;
@@ -616,13 +616,13 @@ static int sun3scsi_dma_finish(int write_flag)
 	/* reset fifo */
 	dregs->csr &= ~CSR_FIFO;
 	dregs->csr |= CSR_FIFO;
-	
+
 	sun3_dma_setup_done = NULL;
 
 	return ret;
 
 }
-	
+
 #include "sun3_NCR5380.c"
 
 static struct scsi_host_template driver_template = {

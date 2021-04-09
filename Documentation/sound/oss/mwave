@@ -14,7 +14,7 @@ I have Windows 95 on /dev/hda1, swap on /dev/hda2, and Red Hat 5 on /dev/hda3.
 
 The steps, then:
 
-    Boot to Linux. 
+    Boot to Linux.
     Mount Windows 95 file system (assume mount point = /dos95).
     mkdir /dos95/linux
     mkdir /dos95/linux/boot

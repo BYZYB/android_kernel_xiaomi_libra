@@ -441,7 +441,7 @@ void flush_dcache_icache_page(struct page *page)
 	}
 #elif defined(CONFIG_8xx) || defined(CONFIG_PPC64)
 	/* On 8xx there is no need to kmap since highmem is not supported */
-	__flush_dcache_icache(page_address(page)); 
+	__flush_dcache_icache(page_address(page));
 #else
 	__flush_dcache_icache_phys(page_to_pfn(page) << PAGE_SHIFT);
 #endif
@@ -500,7 +500,7 @@ EXPORT_SYMBOL(flush_icache_user_range);
  * fault has been handled by updating a PTE in the linux page tables.
  * We use it to preload an HPTE into the hash table corresponding to
  * the updated linux PTE.
- * 
+ *
  * This must always be called with the pte lock held.
  */
 void update_mmu_cache(struct vm_area_struct *vma, unsigned long address,

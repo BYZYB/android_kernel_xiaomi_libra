@@ -24,9 +24,9 @@
 #define MSG_ORDERED_Q_TAG	0x22 /* O/O */
 #define MSG_IGN_WIDE_RESIDUE	0x23 /* O/O */
 
-/* Identify message */		     /* M/M */	
-#define MSG_IDENTIFYFLAG	0x80 
-#define MSG_IDENTIFY_DISCFLAG	0x40 
+/* Identify message */		     /* M/M */
+#define MSG_IDENTIFYFLAG	0x80
+#define MSG_IDENTIFY_DISCFLAG	0x40
 #define MSG_IDENTIFY(lun, disc)	(((disc) ? 0xc0 : MSG_IDENTIFYFLAG) | (lun))
 #define MSG_ISIDENTIFY(m)	((m) & MSG_IDENTIFYFLAG)
 

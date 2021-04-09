@@ -2,10 +2,10 @@
 
 #include <asm/linkage.h>
 
-#if defined(__H8300H__) 
+#if defined(__H8300H__)
 	.h8300h
 #endif
-#if defined(__H8300S__) 
+#if defined(__H8300S__)
 	.h8300s
 #endif
 
@@ -15,7 +15,7 @@
 .globl	__move_romfs
 _romfs_sig_len = 8
 
-__move_romfs:	
+__move_romfs:
 	mov.l	#__sbss,er0
 	mov.l	#_romfs_sig,er1
 	mov.b	#_romfs_sig_len,r3l
@@ -51,7 +51,7 @@ __move_romfs:
 	rts
 
 	.section	.rodata
-_romfs_sig:	
+_romfs_sig:
 	.ascii	"-rom1fs-"
 
 	.end

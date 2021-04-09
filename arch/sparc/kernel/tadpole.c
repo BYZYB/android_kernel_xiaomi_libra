@@ -23,8 +23,8 @@ void (*cpu_pwr_save)(void);
 static inline unsigned int ldphys(unsigned int addr)
 {
 	unsigned long data;
-    
-	__asm__ __volatile__("\n\tlda [%1] %2, %0\n\t" : 
+
+	__asm__ __volatile__("\n\tlda [%1] %2, %0\n\t" :
 			     "=r" (data) :
 			     "r" (addr), "i" (ASI_M_BYPASS));
 	return data;
@@ -102,7 +102,7 @@ void __init clock_stop_probe(void)
 {
 	phandle node, clk_nd;
 	char name[20];
-    
+
 	prom_getstring(prom_root_node, "name", name, sizeof(name));
 	if (strncmp(name, "Tadpole", 7))
 		return;

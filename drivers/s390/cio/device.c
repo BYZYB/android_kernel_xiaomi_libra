@@ -913,7 +913,7 @@ io_subchannel_recog_done(struct ccw_device *cdev)
 			wake_up(&ccw_device_init_wq);
 		break;
 	case DEV_STATE_OFFLINE:
-		/* 
+		/*
 		 * We can't register the device in interrupt context so
 		 * we schedule a work item.
 		 */

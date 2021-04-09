@@ -234,10 +234,10 @@ is the amount of memory apparently needed for every set of parameters:
 
 ** Appendix: How to study the protocol ? **
 
-1. Generate effects using the force editor provided with the DirectX SDK, or 
-use Immersion Studio (freely available at their web site in the developer section: 
+1. Generate effects using the force editor provided with the DirectX SDK, or
+use Immersion Studio (freely available at their web site in the developer section:
 www.immersion.com)
-2. Start a soft spying RS232 or USB (depending on where you connected your 
+2. Start a soft spying RS232 or USB (depending on where you connected your
 joystick/wheel). I used ComPortSpy from fCoder (alpha version!)
 3. Play the effect, and watch what happens on the spy screen.
 

@@ -75,7 +75,7 @@ loop:
 	}
 
 	if (fs_info->trans_no_join) {
-		/* 
+		/*
 		 * If we are JOIN_NOLOCK we're already committing a current
 		 * transaction, we just need a handle to deal with something
 		 * when committing the transaction, such as inode cache and
@@ -364,7 +364,7 @@ again:
 	 * and then we deadlock with somebody doing a freeze.
 	 *
 	 * If we are ATTACH, it means we just want to catch the current
-	 * transaction and commit it, so we needn't do sb_start_intwrite(). 
+	 * transaction and commit it, so we needn't do sb_start_intwrite().
 	 */
 	if (type < TRANS_JOIN_NOLOCK)
 		sb_start_intwrite(root->fs_info->sb);

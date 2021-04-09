@@ -63,7 +63,7 @@
 
 /* Number of possible pages in the lowmem region */
 LOWMEM_PAGES = (((1<<32) - __PAGE_OFFSET) >> PAGE_SHIFT)
-	
+
 /* Enough space to fit pagetables for the low memory linear map */
 MAPPING_BEYOND_END = PAGE_TABLE_SIZE(LOWMEM_PAGES) << PAGE_SHIFT
 
@@ -87,7 +87,7 @@ RESERVE_BRK(pagetables, INIT_MAP_SIZE)
 __HEAD
 ENTRY(startup_32)
 	movl pa(stack_start),%ecx
-	
+
 	/* test KEEP_SEGMENTS flag to see if the bootloader is asking
 		us to not reload segments */
 	testb $(1<<6), BP_loadflags(%esi)
@@ -486,7 +486,7 @@ check_x87:
 	.byte 0xDB,0xE4		/* fsetpm for 287, ignored by 387 */
 	ret
 
-	
+
 #include "verify_cpu.S"
 
 /*
@@ -562,7 +562,7 @@ ENTRY(early_idt_handler_array)
 	.fill early_idt_handler_array + i*EARLY_IDT_HANDLER_SIZE - ., 1, 0xcc
 	.endr
 ENDPROC(early_idt_handler_array)
-	
+
 early_idt_handler_common:
 	/*
 	 * The stack is the hardware frame, an error code or zero, and the

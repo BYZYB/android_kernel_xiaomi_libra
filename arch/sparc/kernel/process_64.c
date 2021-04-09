@@ -100,7 +100,7 @@ static void show_regwindow32(struct pt_regs *regs)
 	struct reg_window32 __user *rw;
 	struct reg_window32 r_w;
 	mm_segment_t old_fs;
-	
+
 	__asm__ __volatile__ ("flushw");
 	rw = compat_ptr((unsigned)regs->u_regs[14]);
 	old_fs = get_fs();
@@ -110,7 +110,7 @@ static void show_regwindow32(struct pt_regs *regs)
 		return;
 	}
 
-	set_fs (old_fs);			
+	set_fs (old_fs);
 	printk("l0: %08x l1: %08x l2: %08x l3: %08x "
 	       "l4: %08x l5: %08x l6: %08x l7: %08x\n",
 	       r_w.locals[0], r_w.locals[1], r_w.locals[2], r_w.locals[3],
@@ -145,7 +145,7 @@ static void show_regwindow(struct pt_regs *regs)
 				return;
 			}
 			rwk = &r_w;
-			set_fs (old_fs);			
+			set_fs (old_fs);
 		}
 	} else {
 		show_regwindow32(regs);
@@ -391,7 +391,7 @@ unsigned long thread_saved_pc(struct task_struct *tsk)
 {
 	struct thread_info *ti = task_thread_info(tsk);
 	unsigned long ret = 0xdeadbeefUL;
-	
+
 	if (ti && ti->ksp) {
 		unsigned long *sp;
 		sp = (unsigned long *)(ti->ksp + STACK_BIAS);
@@ -627,7 +627,7 @@ int copy_thread(unsigned long clone_flags, unsigned long sp,
 
 	if (unlikely(p->flags & PF_KTHREAD)) {
 		memset(child_trap_frame, 0, child_stack_sz);
-		__thread_flag_byte_ptr(t)[TI_FLAG_BYTE_CWP] = 
+		__thread_flag_byte_ptr(t)[TI_FLAG_BYTE_CWP] =
 			(current_pt_regs()->tstate + 1) & TSTATE_CWP;
 		t->current_ds = ASI_P;
 		t->kregs->u_regs[UREG_G1] = sp; /* function */
@@ -642,7 +642,7 @@ int copy_thread(unsigned long clone_flags, unsigned long sp,
 		regs->u_regs[UREG_FP] &= 0x00000000ffffffffUL;
 	}
 	t->kregs->u_regs[UREG_FP] = sp;
-	__thread_flag_byte_ptr(t)[TI_FLAG_BYTE_CWP] = 
+	__thread_flag_byte_ptr(t)[TI_FLAG_BYTE_CWP] =
 		(regs->tstate + 1) & TSTATE_CWP;
 	t->current_ds = ASI_AIUS;
 	if (sp != regs->u_regs[UREG_FP]) {
@@ -741,7 +741,7 @@ unsigned long get_wchan(struct task_struct *task)
 	struct thread_info *tp;
 	struct reg_window *rw;
         unsigned long ret = 0;
-	int count = 0; 
+	int count = 0;
 
 	if (!task || task == current ||
             task->state == TASK_RUNNING)

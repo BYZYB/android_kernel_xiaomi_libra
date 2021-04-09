@@ -1,6 +1,6 @@
-/*  Driver for the PPA3 parallel port SCSI HBA embedded in 
+/*  Driver for the PPA3 parallel port SCSI HBA embedded in
  * the Iomega ZIP drive
- * 
+ *
  * (c) 1996     Grant R. Guenther  grant@torque.net
  *              David Campbell
  *
@@ -12,7 +12,7 @@
 
 #define   PPA_VERSION   "2.07 (for Linux 2.4.x)"
 
-/* 
+/*
  * this driver has been hacked by Matteo Frigo (athena@theory.lcs.mit.edu)
  * to support EPP and scatter-gather.                        [0.26-athena]
  *
@@ -68,7 +68,7 @@
  *  for short periods of time.
  * Add udelay() to ppa_select()
  *  by Peter Cherriman <pjc@ecs.soton.ac.uk> and
- *     Oleg Makarenko <omakarenko@cyberplat.ru>         
+ *     Oleg Makarenko <omakarenko@cyberplat.ru>
  *                                                      [2.07]
  */
 /* ------ END OF USER CONFIGURABLE PARAMETERS ----- */
@@ -89,7 +89,7 @@
 /* batteries not included :-) */
 
 /*
- * modes in which the driver can operate 
+ * modes in which the driver can operate
  */
 #define   PPA_AUTODETECT        0	/* Autodetect mode                */
 #define   PPA_NIBBLE            1	/* work in standard 4 bit mode    */

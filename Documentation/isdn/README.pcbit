@@ -7,7 +7,7 @@ developed in cooperation with Portugal Telecom and Inesc.
 The driver interfaces with the standard kernel isdn facilities
 originally developed by Fritz Elfert in the isdn4linux project.
 
-The common versions of the pcbit board require a firmware that is 
+The common versions of the pcbit board require a firmware that is
 distributed (and copyrighted) by the manufacturer. To load this
 firmware you need "pcbitctl" available on the standard isdn4k-utils
 package or in the pcbit package available in:
@@ -36,5 +36,5 @@ mailing list (isdn4linux@listserv.isdn4linux.de) or directly from me.
 
 regards,
   Pedro.
-		
+
 <roque@di.fc.ul.pt>

@@ -128,7 +128,7 @@ typedef struct cpm_buf_desc {
 
 
 /* In 2.4 ppc, the PROFF_S?C? are used as byte offsets into DPRAM.
- * In 2.0, we use a more structured C struct map of DPRAM, and so 
+ * In 2.0, we use a more structured C struct map of DPRAM, and so
  * instead, we need only a parameter ram `slot'  */
 
 #define PRSLOT_SCC1	0

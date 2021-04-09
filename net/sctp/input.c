@@ -464,7 +464,7 @@ void sctp_icmp_proto_unreachable(struct sock *sk,
 						jiffies + (HZ/20)))
 				sctp_association_hold(asoc);
 		}
-			
+
 	} else {
 		struct net *net = sock_net(sk);
 

@@ -284,7 +284,7 @@ static void perf_tool__fill_defaults(struct perf_tool *tool)
 			tool->finished_round = process_finished_round_stub;
 	}
 }
- 
+
 void mem_bswap_32(void *src, int byte_size)
 {
 	u32 *m = src;

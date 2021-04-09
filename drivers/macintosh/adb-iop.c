@@ -19,13 +19,13 @@
 #include <linux/init.h>
 #include <linux/proc_fs.h>
 
-#include <asm/macintosh.h> 
-#include <asm/macints.h> 
+#include <asm/macintosh.h>
+#include <asm/macints.h>
 #include <asm/mac_iop.h>
 #include <asm/mac_oss.h>
 #include <asm/adb_iop.h>
 
-#include <linux/adb.h> 
+#include <linux/adb.h>
 
 /*#define DEBUG_ADB_IOP*/
 

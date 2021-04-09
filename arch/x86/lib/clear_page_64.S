@@ -3,9 +3,9 @@
 #include <asm/alternative-asm.h>
 
 /*
- * Zero a page. 	
+ * Zero a page.
  * rdi	page
- */			
+ */
 ENTRY(clear_page_c)
 	CFI_STARTPROC
 	movl $4096/8,%ecx

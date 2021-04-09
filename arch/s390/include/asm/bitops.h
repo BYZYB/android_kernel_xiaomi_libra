@@ -187,7 +187,7 @@ test_and_clear_bit_cs(unsigned long nr, volatile unsigned long *ptr)
 }
 
 /*
- * SMP safe test_and_change_bit routine based on compare and swap (CS) 
+ * SMP safe test_and_change_bit routine based on compare and swap (CS)
  */
 static inline int
 test_and_change_bit_cs(unsigned long nr, volatile unsigned long *ptr)
@@ -219,7 +219,7 @@ static inline void __set_bit(unsigned long nr, volatile unsigned long *ptr)
 		: "=Q" (*(char *) addr) : "Q" (_oi_bitmap[nr & 7]) : "cc" );
 }
 
-static inline void 
+static inline void
 __constant_set_bit(const unsigned long nr, volatile unsigned long *ptr)
 {
 	unsigned long addr;
@@ -236,7 +236,7 @@ __constant_set_bit(const unsigned long nr, volatile unsigned long *ptr)
 /*
  * fast, non-SMP clear_bit routine
  */
-static inline void 
+static inline void
 __clear_bit(unsigned long nr, volatile unsigned long *ptr)
 {
 	unsigned long addr;
@@ -247,7 +247,7 @@ __clear_bit(unsigned long nr, volatile unsigned long *ptr)
 		: "=Q" (*(char *) addr) : "Q" (_ni_bitmap[nr & 7]) : "cc" );
 }
 
-static inline void 
+static inline void
 __constant_clear_bit(const unsigned long nr, volatile unsigned long *ptr)
 {
 	unsigned long addr;
@@ -261,8 +261,8 @@ __constant_clear_bit(const unsigned long nr, volatile unsigned long *ptr)
  __constant_clear_bit((nr),(addr)) : \
  __clear_bit((nr),(addr)) )
 
-/* 
- * fast, non-SMP change_bit routine 
+/*
+ * fast, non-SMP change_bit routine
  */
 static inline void __change_bit(unsigned long nr, volatile unsigned long *ptr)
 {
@@ -274,8 +274,8 @@ static inline void __change_bit(unsigned long nr, volatile unsigned long *ptr)
 		: "=Q" (*(char *) addr) : "Q" (_oi_bitmap[nr & 7]) : "cc" );
 }
 
-static inline void 
-__constant_change_bit(const unsigned long nr, volatile unsigned long *ptr) 
+static inline void
+__constant_change_bit(const unsigned long nr, volatile unsigned long *ptr)
 {
 	unsigned long addr;
 
@@ -376,7 +376,7 @@ static inline int __test_bit(unsigned long nr, const volatile unsigned long *ptr
 	return (ch >> (nr & 7)) & 1;
 }
 
-static inline int 
+static inline int
 __constant_test_bit(unsigned long nr, const volatile unsigned long *addr) {
     return (((volatile char *) addr)
 	    [(nr^(BITS_PER_LONG-8))>>3] & (1<<(nr&7))) != 0;

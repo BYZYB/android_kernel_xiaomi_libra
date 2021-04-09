@@ -22,6 +22,6 @@ ENTRY(__lshrdi3)
 	mov  %o4, %o0
 	mov  %o5, %o1
 3:
-	retl 
-	 nop 
+	retl
+	 nop
 ENDPROC(__lshrdi3)

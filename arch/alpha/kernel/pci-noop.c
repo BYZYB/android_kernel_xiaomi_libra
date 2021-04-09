@@ -56,7 +56,7 @@ sys_pciconfig_iobase(long which, unsigned long bus, unsigned long dfn)
 
 	/* from hose or from bus.devfn */
 	if (which & IOBASE_FROM_HOSE) {
-		for (hose = hose_head; hose; hose = hose->next) 
+		for (hose = hose_head; hose; hose = hose->next)
 			if (hose->index == bus)
 				break;
 		if (!hose)

@@ -1,6 +1,6 @@
 /*  Architecture specific parts of HP's STI (framebuffer) driver.
  *  Structures are HP-UX compatible for XFree86 usage.
- * 
+ *
  *    Linux/PA-RISC Project (http://www.parisc-linux.org/)
  *    Copyright (C) 2001 Helge Deller (deller a parisc-linux org)
  *
@@ -70,7 +70,7 @@
 #define CRT_ID_ARTIST		S9000_ID_ARTIST	/* Artist */
 #define CRT_ID_SUMMIT		0x2FC1066B      /* Summit FX2, FX4, FX6 ... */
 #define CRT_ID_LEGO		0x35ACDA30	/* Lego FX5, FX10 ... */
-#define CRT_ID_PINNACLE		0x35ACDA16	/* Pinnacle FXe */ 
+#define CRT_ID_PINNACLE		0x35ACDA16	/* Pinnacle FXe */
 
 /* structure for ioctl(GCDESCRIBE) */
 
@@ -105,7 +105,7 @@ struct	grf_fbinfo {
 #define	GCUNLOCK_MINIMUM _IO('G', 10)
 #define	GCSTATIC_CMAP	_IO('G', 11)
 #define	GCVARIABLE_CMAP _IO('G', 12)
-#define GCTERM		_IOWR('G',20,int)	/* multi-headed Tomcat */ 
+#define GCTERM		_IOWR('G',20,int)	/* multi-headed Tomcat */
 #define GCDESCRIBE	_IOR('G', 21, struct grf_fbinfo)
 #define GCFASTLOCK	_IO('G', 26)
 

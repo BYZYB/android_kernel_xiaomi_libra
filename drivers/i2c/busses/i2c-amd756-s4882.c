@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
- 
+
 /*
  * We select the channels by sending commands to the Philips
  * PCA9556 chip at I2C address 0x18. The main adapter is used for

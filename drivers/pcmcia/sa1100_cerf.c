@@ -73,7 +73,7 @@ cerf_pcmcia_configure_socket(struct soc_pcmcia_socket *skt,
 	return 0;
 }
 
-static struct pcmcia_low_level cerf_pcmcia_ops = { 
+static struct pcmcia_low_level cerf_pcmcia_ops = {
 	.owner			= THIS_MODULE,
 	.hw_init		= cerf_pcmcia_hw_init,
 	.hw_shutdown		= cerf_pcmcia_hw_shutdown,

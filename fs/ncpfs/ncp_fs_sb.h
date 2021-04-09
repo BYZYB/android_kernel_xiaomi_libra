@@ -83,7 +83,7 @@ struct ncp_server {
 	int sign_wanted;	/* 1=Server needs signed packets */
 	int sign_active;	/* 0=don't do signing, 1=do */
 	char sign_root[8];	/* generated from password and encr. key */
-	char sign_last[16];	
+	char sign_last[16];
 
 	/* Authentication info: NDS or BINDERY, username */
 	struct {

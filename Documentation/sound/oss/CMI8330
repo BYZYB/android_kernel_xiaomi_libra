@@ -1,4 +1,4 @@
-Documentation for CMI 8330 (SoundPRO) 
+Documentation for CMI 8330 (SoundPRO)
 -------------------------------------
 Alessandro Zummo <azummo@ita.flashnet.it>
 
@@ -27,7 +27,7 @@ CONFIG_SOUND_MPU401=m
  for MPU401 support.
 
 
-(I suggest you to use "make menuconfig" or "make xconfig" 
+(I suggest you to use "make menuconfig" or "make xconfig"
  for a more comfortable configuration editing)
 
 
@@ -59,7 +59,7 @@ Stefan Laudat <Stefan.Laudat@asit.ro>
 
 [Note: The CMI 8338 is unrelated and is supported by cmpci.o]
 
-	
+
 	In order to use CMI8330 under Linux  you just have to use a proper isapnp.conf, a good isapnp and a little bit of patience.  I use isapnp 1.17, but
 you may get a better one I guess at http://www.roestock.demon.co.uk/isapnptools/.
 
@@ -70,7 +70,7 @@ CONFIG_SOUND_OSS=m
 CONFIG_SOUND_SB=m
 CONFIG_SOUND_ADLIB=m
 CONFIG_SOUND_MPU401=m
-# Mikro$chaft sound system (kinda useful here ;))	
+# Mikro$chaft sound system (kinda useful here ;))
 CONFIG_SOUND_MSS=m
 
 	The /etc/isapnp.conf file will be:
@@ -86,7 +86,7 @@ CONFIG_SOUND_MSS=m
 (VERIFYLD N)
 
 
-# WSS 
+# WSS
 
 (CONFIGURE CMI0001/16777472 (LD 0
 (IO 0 (SIZE 8) (BASE 0x0530))
@@ -114,8 +114,8 @@ CONFIG_SOUND_MSS=m
 (ACT Y)
 ))
 
-# SoundBlaster 
- 
+# SoundBlaster
+
 (CONFIGURE CMI0001/16777472 (LD 3
 (IO 0 (SIZE 16) (BASE 0x0220))
 (INT 0 (IRQ 5 (MODE +E)))

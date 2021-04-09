@@ -9,7 +9,7 @@
  *        + Module parameters  can now be specified only in the
  *          same format as the kernel boot options.
  *
- *             boot option    old module param 
+ *             boot option    old module param
  *             -----------    ------------------
  *             addr,...       io_port=addr,...
  *             lc:[y|n]       linked_comm=[1|0]
@@ -1285,7 +1285,7 @@ static int port_detect(unsigned long port_base, unsigned int j,
 	shost->cmd_per_lun = MAX_CMD_PER_LUN;
 
 	ha = (struct hostdata *)shost->hostdata;
-	
+
 	memset(ha, 0, sizeof(struct hostdata));
 	ha->subversion = subversion;
 	ha->protocol_rev = protocol_rev;

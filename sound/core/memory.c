@@ -1,6 +1,6 @@
 /*
  *  Copyright (c) by Jaroslav Kysela <perex@perex.cz>
- * 
+ *
  *  Misc memory accessors
  *
  *

@@ -1567,7 +1567,7 @@ static u32 MT2063_Tune(struct mt2063_state *state, u32 f_in)
 	 * Save original LO1 and LO2 register values
 	 */
 	ofLO1 = state->AS_Data.f_LO1;
-	ofLO2 = state->AS_Data.f_LO2; 
+	ofLO2 = state->AS_Data.f_LO2;
 
 	/*
 	 * Find and set RF Band setting

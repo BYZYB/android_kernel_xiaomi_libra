@@ -97,7 +97,7 @@ static int jffs2_garbage_collect_thread(void *_c)
 			schedule();
 		} else
 			spin_unlock(&c->erase_completion_lock);
-			
+
 
 		/* Problem - immediately after bootup, the GCD spends a lot
 		 * of time in places like jffs2_kill_fragtree(); so much so

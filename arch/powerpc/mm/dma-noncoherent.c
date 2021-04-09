@@ -257,7 +257,7 @@ void __dma_free_coherent(size_t size, void *vaddr)
 {
 	struct ppc_vm_region *c;
 	unsigned long flags, addr;
-	
+
 	size = PAGE_ALIGN(size);
 
 	spin_lock_irqsave(&consistent_lock, flags);

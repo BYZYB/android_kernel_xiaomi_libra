@@ -292,7 +292,7 @@ xfs_qm_mount_quotas(
 			return;
 		}
 	}
-	/* 
+	/*
 	 * If one type of quotas is off, then it will lose its
 	 * quotachecked status, since we won't be doing accounting for
 	 * that type anymore.
@@ -719,7 +719,7 @@ xfs_qm_init_quotainfo(
 		qinf->qi_isoftlimit = be64_to_cpu(ddqp->d_ino_softlimit);
 		qinf->qi_rtbhardlimit = be64_to_cpu(ddqp->d_rtb_hardlimit);
 		qinf->qi_rtbsoftlimit = be64_to_cpu(ddqp->d_rtb_softlimit);
- 
+
 		xfs_qm_dqdestroy(dqp);
 	} else {
 		qinf->qi_btimelimit = XFS_QM_BTIMELIMIT;

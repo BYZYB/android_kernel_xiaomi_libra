@@ -1,5 +1,5 @@
 /*
- * arch/arm/mach-ixp4xx/include/mach/irqs.h 
+ * arch/arm/mach-ixp4xx/include/mach/irqs.h
  *
  * IRQ definitions for IXP4XX based systems
  *

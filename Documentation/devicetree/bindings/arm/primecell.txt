@@ -35,7 +35,7 @@ serial@fff36000 {
 	clock-names = "apb_pclk";
 
 	dmas = <&dma-controller 4>, <&dma-controller 5>;
-	dma-names = "rx", "tx";	
+	dma-names = "rx", "tx";
 
 	pinctrl-0 = <&uart0_default_mux>, <&uart0_default_mode>;
 	pinctrl-1 = <&uart0_sleep_mode>;

@@ -7,7 +7,7 @@ This loads the driver for the Gravis Ultrasound family of sound cards.
 The gus module takes the following arguments
 
 io		I/O address of the Ultrasound card (eg. io=0x220)
-irq		IRQ of the Sound Blaster card 
+irq		IRQ of the Sound Blaster card
 dma     	DMA channel for the Sound Blaster
 dma16   	2nd DMA channel, only needed for full duplex operation
 type		1 for PnP card

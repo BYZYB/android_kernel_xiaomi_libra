@@ -47,7 +47,7 @@ create_params (unsigned long *buffer)
 				k=i;
 			}
 		}
-	  
+
 		tag = tag_next(tag);
 		tag->hdr.tag = ATAG_MEM;
 		tag->hdr.size = tag_size(tag_mem32);
@@ -58,11 +58,11 @@ create_params (unsigned long *buffer)
 
 		buffer[2*k+1]=0xffffffff;                    /* mark as copied */
 	}
-	
+
 	/* The command line */
 	tag = tag_next(tag);
 	tag->hdr.tag = ATAG_CMDLINE;
-	
+
 	c=(unsigned char *)(&buffer[34]);
 	j=0;
 	while (*c) tag->u.cmdline.cmdline[j++]=*c++;
@@ -99,7 +99,7 @@ of_decode_int(const unsigned char *p)
 	i = (i + *p++) << 8;
 	return (i + *p);
 }
-  
+
 int
 OF_finddevice(ofw_handle_t openfirmware, char *name)
 {
@@ -156,7 +156,7 @@ OF_getproplen(ofw_handle_t openfirmware, int handle, char *prop)
 		return -1;
 	return args[5];
 }
-  
+
 int
 OF_getprop(ofw_handle_t openfirmware, int handle, char *prop, void *buf, unsigned int buflen)
 {
@@ -184,12 +184,12 @@ OF_getprop(ofw_handle_t openfirmware, int handle, char *prop, void *buf, unsigne
 		return -1;
 	return args[7];
 }
-  
+
 asmlinkage void ofw_init(ofw_handle_t o, int *nomr, int *pointer)
 {
 	int phandle,i,mem_len,buffer[32];
 	char temp[15];
-  
+
 	temp[0]='/';
 	temp[1]='m';
 	temp[2]='e';

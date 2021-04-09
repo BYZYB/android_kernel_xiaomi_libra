@@ -21,7 +21,7 @@
  *   along with this program; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  *
- */      
+ */
 
 #include <asm/io.h>
 #include <linux/delay.h>
@@ -157,7 +157,7 @@ DEFINE_REGSET(OFF, 0);		/* offset */
 
 
 /*
- *  
+ *
  */
 
 enum { ICHD_MDMIN, ICHD_MDMOUT, ICHD_MDMLAST = ICHD_MDMOUT };
@@ -211,7 +211,7 @@ struct intel8x0m {
 	struct snd_ac97 *ac97;
 
 	spinlock_t reg_lock;
-	
+
 	struct snd_dma_buffer bdbars;
 	u32 bdbars_count;
 	u32 int_sta_reg;		/* interrupt status register */
@@ -314,7 +314,7 @@ static unsigned int get_ich_codec_bit(struct intel8x0m *chip, unsigned int codec
 static int snd_intel8x0m_codec_semaphore(struct intel8x0m *chip, unsigned int codec)
 {
 	int time;
-	
+
 	if (codec > 1)
 		return -EIO;
 	codec = get_ich_codec_bit(chip, codec);
@@ -340,13 +340,13 @@ static int snd_intel8x0m_codec_semaphore(struct intel8x0m *chip, unsigned int co
 	/* I don't care about the semaphore */
 	return -EBUSY;
 }
- 
+
 static void snd_intel8x0m_codec_write(struct snd_ac97 *ac97,
 				      unsigned short reg,
 				      unsigned short val)
 {
 	struct intel8x0m *chip = ac97->private_data;
-	
+
 	if (snd_intel8x0m_codec_semaphore(chip, ac97->num) < 0) {
 		if (! chip->in_ac97_init)
 			snd_printk(KERN_ERR "codec_write %d: semaphore is not ready for register 0x%x\n", ac97->num, reg);
@@ -518,7 +518,7 @@ static irqreturn_t snd_intel8x0m_interrupt(int irq, void *dev_id)
 	/* ack them */
 	iputdword(chip, chip->int_sta_reg, status & chip->int_sta_mask);
 	spin_unlock(&chip->reg_lock);
-	
+
 	return IRQ_HANDLED;
 }
 
@@ -800,7 +800,7 @@ static int snd_intel8x0m_pcm(struct intel8x0m *chip)
 	chip->pcm_devs = device;
 	return 0;
 }
-	
+
 
 /*
  *  Mixer part
@@ -832,7 +832,7 @@ static int snd_intel8x0m_mixer(struct intel8x0m *chip, int ac97_clock)
 	};
 
 	chip->in_ac97_init = 1;
-	
+
 	memset(&ac97, 0, sizeof(ac97));
 	ac97.private_data = chip;
 	ac97.private_free = snd_intel8x0m_mixer_free_ac97;
@@ -881,7 +881,7 @@ static int snd_intel8x0m_ich_chip_init(struct intel8x0m *chip, int probing)
 {
 	unsigned long end_time;
 	unsigned int cnt, status, nstatus;
-	
+
 	/* put logic to right state */
 	/* first clear status bits */
 	status = ICH_RCS | ICH_MIINT | ICH_MOINT;
@@ -964,7 +964,7 @@ static int snd_intel8x0m_chip_init(struct intel8x0m *chip, int probing)
 {
 	unsigned int i;
 	int err;
-	
+
 	if ((err = snd_intel8x0m_ich_chip_init(chip, probing)) < 0)
 		return err;
 	iagetword(chip, 0);	/* clear semaphore flag */
@@ -1311,7 +1311,7 @@ static int snd_intel8x0m_probe(struct pci_dev *pci,
 		snd_card_free(card);
 		return err;
 	}
-	
+
 	snd_intel8x0m_proc_init(chip);
 
 	sprintf(card->longname, "%s at irq %i",

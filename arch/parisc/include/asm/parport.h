@@ -1,4 +1,4 @@
-/* 
+/*
  *
  * parport.h: ia32-compatible parport initialisation
  *

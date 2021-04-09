@@ -48,7 +48,7 @@ static ssize_t mmio_nvram_read(char *buf, size_t count, loff_t *index)
 	memcpy_fromio(buf, mmio_nvram_start + *index, count);
 
 	spin_unlock_irqrestore(&mmio_nvram_lock, flags);
-	
+
 	*index += count;
 	return count;
 }
@@ -84,7 +84,7 @@ static ssize_t mmio_nvram_write(char *buf, size_t count, loff_t *index)
 	memcpy_toio(mmio_nvram_start + *index, buf, count);
 
 	spin_unlock_irqrestore(&mmio_nvram_lock, flags);
-	
+
 	*index += count;
 	return count;
 }

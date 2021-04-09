@@ -85,10 +85,10 @@
 #define MCU_SIM_MBAR_AS_MASK        0x00000001
 
 #define MCU_SIM_PEPAR               0x00B4
-    
+
 #define MCU_DISABLE_INTRPTS         0x2700
 #define MCU_SIM_AVR                 0x00
-    
+
 #define MCU_SIM_MCR                 0x00005cff
 
 #define MCU_SIM_CLKOCR              0x00
@@ -103,7 +103,7 @@
 
 #include <asm/m68360_regs.h>
 
-	
+
 /*
  * By the time this RAM specific code begins to execute, DPRAM
  * and DRAM should already be mapped and accessible.
@@ -173,7 +173,7 @@ clear_dpram:
 	cmpal	%a0, %a1
 	bhi	clear_dpram
 
-configure_memory_controller:    
+configure_memory_controller:
 	/* Set up Global Memory Register (GMR) */
 	move.l	#MCU_SIM_GMR, %d0
 	move.l	%d0, GMR
@@ -197,7 +197,7 @@ configure_chip_select_0:
 	move.l	#0x0, BR6
 	move.l	#0x0, BR7
 
-	move.w	#MCU_SIM_PEPAR, PEPAR 
+	move.w	#MCU_SIM_PEPAR, PEPAR
 
 	/* point to vector table: */
 	move.l	#_romvec, %a0
@@ -290,7 +290,7 @@ _dprbase:
      * These are the exception vectors at boot up, they are copied into RAM
      * and then overwritten as needed.
      */
- 
+
 .section ".data..initvect","awx"
     .long   RAMEND	/* Reset: Initial Stack Pointer                 - 0.  */
     .long   _start      /* Reset: Initial Program Counter               - 1.  */

@@ -53,7 +53,7 @@ anslcd_write_byte_data ( unsigned char c )
 }
 
 static ssize_t
-anslcd_write( struct file * file, const char __user * buf, 
+anslcd_write( struct file * file, const char __user * buf,
 				size_t count, loff_t *ppos )
 {
 	const char __user *p = buf;
@@ -67,7 +67,7 @@ anslcd_write( struct file * file, const char __user * buf,
 		return -EFAULT;
 
 	mutex_lock(&anslcd_mutex);
-	for ( i = *ppos; count > 0; ++i, ++p, --count ) 
+	for ( i = *ppos; count > 0; ++i, ++p, --count )
 	{
 		char c;
 		__get_user(c, p);
@@ -166,7 +166,7 @@ anslcd_init(void)
 	of_node_put(node);
 
 	anslcd_ptr = ioremap(ANSLCD_ADDR, 0x20);
-	
+
 	retval = misc_register(&anslcd_dev);
 	if(retval < 0){
 		printk(KERN_INFO "LCD: misc_register failed\n");

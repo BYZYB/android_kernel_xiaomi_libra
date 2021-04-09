@@ -23,7 +23,7 @@
  *
  * DISTRIBUTION RELEASE 1.
  *
- * For more information, please consult 
+ * For more information, please consult
  *
  * NCR 5380 Family
  * SCSI Protocol Controller
@@ -31,27 +31,27 @@
 */
 
 /*
- * Options : 
+ * Options :
  * AUTOSENSE - if defined, REQUEST SENSE will be performed automatically
- *      for commands that return with a CHECK CONDITION status. 
+ *      for commands that return with a CHECK CONDITION status.
  *
  * PSEUDO_DMA - enables PSEUDO-DMA hardware, should give a 3-4X performance
  * increase compared to polled I/O.
  *
  * PARITY - enable parity checking.  Not supported.
  *
- * UNSAFE - leave interrupts enabled during pseudo-DMA transfers. 
+ * UNSAFE - leave interrupts enabled during pseudo-DMA transfers.
  *		You probably want this.
  *
- * The card is detected and initialized in one of several ways : 
- * 1.  Autoprobe (default) - since the board is memory mapped, 
+ * The card is detected and initialized in one of several ways :
+ * 1.  Autoprobe (default) - since the board is memory mapped,
  *     a BIOS signature is scanned for to locate the registers.
  *     An interrupt is triggered to autoprobe for the interrupt
  *     line.
  *
- * 2.  With command line overrides - dtc=address,irq may be 
+ * 2.  With command line overrides - dtc=address,irq may be
  *     used on the LILO command line to override the defaults.
- * 
+ *
 */
 
 /*----------------------------------------------------------------*/
@@ -92,7 +92,7 @@
 
 /*
  * The DTC3180 & 3280 boards are memory mapped.
- * 
+ *
  */
 
 /*
@@ -114,14 +114,14 @@
 #define CSR_INT_BASE (CSR_SCSI_BUFF_INTR | CSR_5380_INTR)
 
 
-#define DTC_BLK_CNT		0x101	/* rw 
+#define DTC_BLK_CNT		0x101	/* rw
 					 * # of 128-byte blocks to transfer */
 
 
 #define D_CR_ACCESS             0x80	/* ro set=can access 3280 registers */
 
 #define DTC_SWITCH_REG		0x3982	/* ro - DIP switches */
-#define DTC_RESUME_XFER		0x3982	/* wo - resume data xfer 
+#define DTC_RESUME_XFER		0x3982	/* wo - resume data xfer
 					 * after disconnect/reconnect*/
 
 #define DTC_5380_OFFSET		0x3880	/* 8 registers here, see NCR5380.h */
@@ -194,15 +194,15 @@ static void __init dtc_setup(char *str, int *ints)
 }
 #endif
 
-/* 
+/*
  * Function : int dtc_detect(struct scsi_host_template * tpnt)
  *
  * Purpose : detects and initializes DTC 3180/3280 controllers
- *	that were autoprobed, overridden on the LILO command line, 
+ *	that were autoprobed, overridden on the LILO command line,
  *	or specified at compile time.
  *
  * Inputs : tpnt - template for this SCSI adapter.
- * 
+ *
  * Returns : 1 if a host adapter was found, 0 if not.
  *
 */
@@ -314,17 +314,17 @@ found:
 /*
  * Function : int dtc_biosparam(Disk * disk, struct block_device *dev, int *ip)
  *
- * Purpose : Generates a BIOS / DOS compatible H-C-S mapping for 
+ * Purpose : Generates a BIOS / DOS compatible H-C-S mapping for
  *	the specified device / size.
- * 
+ *
  * Inputs : size = size of device in sectors (512 bytes), dev = block device
- *	major / minor, ip[] = {heads, sectors, cylinders}  
+ *	major / minor, ip[] = {heads, sectors, cylinders}
  *
  * Returns : always 0 (success), initializes ip
- *	
+ *
 */
 
-/* 
+/*
  * XXX Most SCSI boards use this mapping, I could be incorrect.  Some one
  * using hard disks on a trantor should verify that this mapping corresponds
  * to that used by the BIOS / ASPI driver by running the linux fdisk program
@@ -344,15 +344,15 @@ static int dtc_biosparam(struct scsi_device *sdev, struct block_device *dev,
 
 
 /****************************************************************
- * Function : int NCR5380_pread (struct Scsi_Host *instance, 
+ * Function : int NCR5380_pread (struct Scsi_Host *instance,
  *	unsigned char *dst, int len)
  *
- * Purpose : Fast 5380 pseudo-dma read function, reads len bytes to 
+ * Purpose : Fast 5380 pseudo-dma read function, reads len bytes to
  *	dst
- * 
+ *
  * Inputs : dst = destination, len = length in bytes
  *
- * Returns : 0 on success, non zero on a failure such as a watchdog 
+ * Returns : 0 on success, non zero on a failure such as a watchdog
  * 	timeout.
 */
 
@@ -399,15 +399,15 @@ static inline int NCR5380_pread(struct Scsi_Host *instance, unsigned char *dst, 
 }
 
 /****************************************************************
- * Function : int NCR5380_pwrite (struct Scsi_Host *instance, 
+ * Function : int NCR5380_pwrite (struct Scsi_Host *instance,
  *	unsigned char *src, int len)
  *
  * Purpose : Fast 5380 pseudo-dma write function, transfers len bytes from
  *	src
- * 
+ *
  * Inputs : src = source, len = length in bytes
  *
- * Returns : 0 on success, non zero on a failure such as a watchdog 
+ * Returns : 0 on success, non zero on a failure such as a watchdog
  * 	timeout.
 */
 

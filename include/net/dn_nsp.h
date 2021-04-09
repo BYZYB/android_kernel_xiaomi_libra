@@ -2,7 +2,7 @@
 #define _NET_DN_NSP_H
 /******************************************************************************
     (c) 1995-1998 E.M. Serrat		emserrat@geocities.com
-    
+
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation; either version 2 of the License, or
@@ -20,7 +20,7 @@ extern void dn_nsp_send_oth_ack(struct sock *sk);
 extern void dn_nsp_delayed_ack(struct sock *sk);
 extern void dn_send_conn_ack(struct sock *sk);
 extern void dn_send_conn_conf(struct sock *sk, gfp_t gfp);
-extern void dn_nsp_send_disc(struct sock *sk, unsigned char type, 
+extern void dn_nsp_send_disc(struct sock *sk, unsigned char type,
 			unsigned short reason, gfp_t gfp);
 extern void dn_nsp_return_disc(struct sk_buff *skb, unsigned char type,
 				unsigned short reason);

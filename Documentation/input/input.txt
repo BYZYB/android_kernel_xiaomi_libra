@@ -146,10 +146,10 @@ thus need this specific driver.
 
 3.1.5 iforce
 ~~~~~~~~~~~~
-  A driver for I-Force joysticks and wheels, both over USB and RS232. 
+  A driver for I-Force joysticks and wheels, both over USB and RS232.
 It includes ForceFeedback support now, even though Immersion
 Corp. considers the protocol a trade secret and won't disclose a word
-about it. 
+about it.
 
 3.2 Event handlers
 ~~~~~~~~~~~~~~~~~~
@@ -167,7 +167,7 @@ it.
 
   The right way would be to pass the events to keyboard.c directly,
 best if keyboard.c would itself be an event handler. This is done in
-the input patch, available on the webpage mentioned below. 
+the input patch, available on the webpage mentioned below.
 
 3.2.2 mousedev
 ~~~~~~~~~~~~~~
@@ -204,7 +204,7 @@ accordingly. These values won't be used if you use a mouse only.
 ExplorerPS/2 (IntelliMouse Explorer) protocols, depending on what the
 program reading the data wishes. You can set GPM and X to any of
 these. You'll need ImPS/2 if you want to make use of a wheel on a USB
-mouse and ExplorerPS/2 if you want to use extra (up to 5) buttons. 
+mouse and ExplorerPS/2 if you want to use extra (up to 5) buttons.
 
 3.2.3 joydev
 ~~~~~~~~~~~~
@@ -212,7 +212,7 @@ mouse and ExplorerPS/2 if you want to use extra (up to 5) buttons.
 drivers/char/joystick/joystick.c used to in earlier versions. See
 joystick-api.txt in the Documentation subdirectory for details.  As
 soon as any joystick is connected, it can be accessed in /dev/input
-on: 
+on:
 
 	crw-r--r--   1 root     root      13,   0 Apr  1 10:50 js0
 	crw-r--r--   1 root     root      13,   1 Apr  1 10:50 js1
@@ -227,7 +227,7 @@ And so on up to js31.
   evdev is the generic input event interface. It passes the events
 generated in the kernel straight to the program, with timestamps. The
 API is still evolving, but should be useable now. It's described in
-section 5. 
+section 5.
 
   This should be the way for GPM and X to get keyboard and mouse
 events. It allows for multihead in X without any specific multihead
@@ -248,7 +248,7 @@ And so on up to event31.
 ~~~~~~~~~~~~~~~~~~~~~~~~
   Typing a couple keys on the keyboard should be enough to check that
 a USB keyboard works and is correctly connected to the kernel keyboard
-driver. 
+driver.
 
   Doing a "cat /dev/input/mouse0" (c, 13, 32) will verify that a mouse
 is also emulated; characters should appear if you move it.

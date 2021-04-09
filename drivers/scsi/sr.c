@@ -431,7 +431,7 @@ static int sr_prep_fn(struct request_queue *q, struct request *rq)
 
 	/*
 	 * we do lazy blocksize switching (when reading XA sectors,
-	 * see CDROMREADMODE2 ioctl) 
+	 * see CDROMREADMODE2 ioctl)
 	 */
 	s_size = cd->device->sector_size;
 	if (s_size > 2048) {
@@ -641,7 +641,7 @@ static const struct block_device_operations sr_bdops =
 	.ioctl		= sr_block_ioctl,
 	.check_events	= sr_block_check_events,
 	.revalidate_disk = sr_block_revalidate_disk,
-	/* 
+	/*
 	 * No compat_ioctl for now because sr_block_ioctl never
 	 * seems to pass arbitrary ioctls down to host drivers.
 	 */
@@ -664,7 +664,7 @@ static int sr_open(struct cdrom_device_info *cdi, int purpose)
 	return 0;
 
 error_out:
-	return retval;	
+	return retval;
 }
 
 static void sr_release(struct cdrom_device_info *cdi)
@@ -918,7 +918,7 @@ static void get_capabilities(struct scsi_cd *cd)
 	if ((buffer[n + 2] & 0x8) == 0)
 		/* not a DVD drive */
 		cd->cdi.mask |= CDC_DVD;
-	if ((buffer[n + 3] & 0x20) == 0) 
+	if ((buffer[n + 3] & 0x20) == 0)
 		/* can't write DVD-RAM media */
 		cd->cdi.mask |= CDC_DVD_RAM;
 	if ((buffer[n + 3] & 0x10) == 0)
@@ -957,7 +957,7 @@ static void get_capabilities(struct scsi_cd *cd)
 
 /*
  * sr_packet() is the entry point for the generic commands generated
- * by the Uniform CD-ROM layer. 
+ * by the Uniform CD-ROM layer.
  */
 static int sr_packet(struct cdrom_device_info *cdi,
 		struct packet_command *cgc)

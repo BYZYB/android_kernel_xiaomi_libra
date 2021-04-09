@@ -133,7 +133,7 @@ adummy_proc_read(struct atm_dev *dev, loff_t *pos, char *page)
 static struct atmdev_ops adummy_ops =
 {
 	.open =		adummy_open,
-	.close =	adummy_close,	
+	.close =	adummy_close,
 	.send =		adummy_send,
 	.proc_read =	adummy_proc_read,
 	.owner =	THIS_MODULE

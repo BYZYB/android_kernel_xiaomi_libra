@@ -112,7 +112,7 @@ static void enter_4op_mode(void)
 static int opl3_ioctl(int dev, unsigned int cmd, void __user * arg)
 {
 	struct sbi_instrument ins;
-	
+
 	switch (cmd) {
 		case SNDCTL_FM_LOAD_INSTR:
 			printk(KERN_WARNING "Warning: Obsolete ioctl(SNDCTL_FM_LOAD_INSTR) used. Fix the program.\n");
@@ -482,7 +482,7 @@ static int opl3_start_note (int dev, int voice, int note, int volume)
 	/*
 	 * Kill previous note before playing
 	 */
-	
+
 	opl3_command(map->ioaddr, KSL_LEVEL + map->op[1], 0xff);	/*
 									 * Carrier
 									 * volume to
@@ -505,7 +505,7 @@ static int opl3_start_note (int dev, int voice, int note, int volume)
 									 */
 
 	instr = devc->act_i[voice];
-	
+
 	if (!instr)
 		instr = &devc->i_map[0];
 
@@ -547,21 +547,21 @@ static int opl3_start_note (int dev, int voice, int note, int volume)
 	/*
 	 * Set Sound Characteristics
 	 */
-	
+
 	opl3_command(map->ioaddr, AM_VIB + map->op[0], instr->operators[0]);
 	opl3_command(map->ioaddr, AM_VIB + map->op[1], instr->operators[1]);
 
 	/*
 	 * Set Attack/Decay
 	 */
-	
+
 	opl3_command(map->ioaddr, ATTACK_DECAY + map->op[0], instr->operators[4]);
 	opl3_command(map->ioaddr, ATTACK_DECAY + map->op[1], instr->operators[5]);
 
 	/*
 	 * Set Sustain/Release
 	 */
-	
+
 	opl3_command(map->ioaddr, SUSTAIN_RELEASE + map->op[0], instr->operators[6]);
 	opl3_command(map->ioaddr, SUSTAIN_RELEASE + map->op[1], instr->operators[7]);
 
@@ -575,7 +575,7 @@ static int opl3_start_note (int dev, int voice, int note, int volume)
 	/*
 	 * Set Feedback/Connection
 	 */
-	
+
 	fpc = instr->operators[10];
 
 	if (pan != 0xffff)
@@ -605,35 +605,35 @@ static int opl3_start_note (int dev, int voice, int note, int volume)
 		/*
 		 * Set Sound Characteristics
 		 */
-	
+
 		opl3_command(map->ioaddr, AM_VIB + map->op[2], instr->operators[OFFS_4OP + 0]);
 		opl3_command(map->ioaddr, AM_VIB + map->op[3], instr->operators[OFFS_4OP + 1]);
 
 		/*
 		 * Set Attack/Decay
 		 */
-		
+
 		opl3_command(map->ioaddr, ATTACK_DECAY + map->op[2], instr->operators[OFFS_4OP + 4]);
 		opl3_command(map->ioaddr, ATTACK_DECAY + map->op[3], instr->operators[OFFS_4OP + 5]);
 
 		/*
 		 * Set Sustain/Release
 		 */
-		
+
 		opl3_command(map->ioaddr, SUSTAIN_RELEASE + map->op[2], instr->operators[OFFS_4OP + 6]);
 		opl3_command(map->ioaddr, SUSTAIN_RELEASE + map->op[3], instr->operators[OFFS_4OP + 7]);
 
 		/*
 		 * Set Wave Select
 		 */
-		
+
 		opl3_command(map->ioaddr, WAVE_SELECT + map->op[2], instr->operators[OFFS_4OP + 8]);
 		opl3_command(map->ioaddr, WAVE_SELECT + map->op[3], instr->operators[OFFS_4OP + 9]);
 
 		/*
 		 * Set Feedback/Connection
 		 */
-		
+
 		fpc = instr->operators[OFFS_4OP + 10];
 		if (!(fpc & 0x30))
 			 fpc |= 0x30;	/*
@@ -1155,16 +1155,16 @@ static int opl3_init(int ioaddr, struct module *owner)
 
 	if (owner)
 		synth_devs[me]->owner = owner;
-	
+
 	sequencer_init();
 	devc->v_alloc = &opl3_operations.alloc;
 	devc->chn_info = &opl3_operations.chn_info[0];
 
 	if (devc->model == 2)
 	{
-		if (devc->is_opl4) 
+		if (devc->is_opl4)
 			strcpy(devc->fm_info.name, "Yamaha OPL4/OPL3 FM");
-		else 
+		else
 			strcpy(devc->fm_info.name, "Yamaha OPL3");
 
 		devc->v_alloc->max_voice = devc->nr_voice = 18;
@@ -1245,9 +1245,9 @@ static int __init setup_opl3(char *str)
 {
         /* io  */
 	int ints[2];
-	
+
 	str = get_options(str, ARRAY_SIZE(ints), ints);
-	
+
 	io = ints[1];
 
 	return 1;

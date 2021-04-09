@@ -66,7 +66,7 @@ static int gfs2_drevalidate(struct dentry *dentry, unsigned int flags)
 		error = gfs2_glock_nq_init(dip->i_gl, LM_ST_SHARED, 0, &d_gh);
 		if (error)
 			goto fail;
-	} 
+	}
 
 	error = gfs2_dir_check(parent->d_inode, &dentry->d_name, ip);
 	switch (error) {

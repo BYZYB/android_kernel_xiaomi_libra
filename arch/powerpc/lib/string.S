@@ -15,7 +15,7 @@
 	.section __ex_table,"a"
 	PPC_LONG_ALIGN
 	.text
-	
+
 _GLOBAL(strcpy)
 	addi	r5,r3,-1
 	addi	r4,r4,-1

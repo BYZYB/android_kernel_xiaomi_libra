@@ -1,5 +1,5 @@
 /*********************************************************************
- *                
+ *
  * Filename:      irmod.h
  * Version:       0.3
  * Description:   IrDA module and utilities functions
@@ -11,16 +11,16 @@
  *
  *     Copyright (c) 1998-2000 Dag Brattli, All Rights Reserved.
  *     Copyright (c) 2000-2002 Jean Tourrilhes <jt@hpl.hp.com>
- *      
- *     This program is free software; you can redistribute it and/or 
- *     modify it under the terms of the GNU General Public License as 
- *     published by the Free Software Foundation; either version 2 of 
+ *
+ *     This program is free software; you can redistribute it and/or
+ *     modify it under the terms of the GNU General Public License as
+ *     published by the Free Software Foundation; either version 2 of
  *     the License, or (at your option) any later version.
- *  
+ *
  *     Neither Dag Brattli nor University of Tromsø admit liability nor
- *     provide warranty for any of this software. This material is 
+ *     provide warranty for any of this software. This material is
  *     provided "AS-IS" and at no charg.
- *     
+ *
  ********************************************************************/
 
 #ifndef IRMOD_H
@@ -43,8 +43,8 @@ typedef enum {
 
 typedef enum { FLOW_STOP, FLOW_START } LOCAL_FLOW;
 
-/*  
- *  IrLMP disconnect reasons. The order is very important, since they 
+/*
+ *  IrLMP disconnect reasons. The order is very important, since they
  *  correspond to disconnect reasons sent in IrLMP disconnect frames, so
  *  please do not touch :-)
  */
@@ -71,13 +71,13 @@ struct qos_info;		/* in <net/irda/qos.h> */
 typedef struct {
 	int (*data_indication)(void *priv, void *sap, struct sk_buff *skb);
 	int (*udata_indication)(void *priv, void *sap, struct sk_buff *skb);
-	void (*connect_confirm)(void *instance, void *sap, 
+	void (*connect_confirm)(void *instance, void *sap,
 				struct qos_info *qos, __u32 max_sdu_size,
 				__u8 max_header_size, struct sk_buff *skb);
-	void (*connect_indication)(void *instance, void *sap, 
-				   struct qos_info *qos, __u32 max_sdu_size, 
+	void (*connect_indication)(void *instance, void *sap,
+				   struct qos_info *qos, __u32 max_sdu_size,
 				   __u8 max_header_size, struct sk_buff *skb);
-	void (*disconnect_indication)(void *instance, void *sap, 
+	void (*disconnect_indication)(void *instance, void *sap,
 				      LM_REASON reason, struct sk_buff *);
 	void (*flow_indication)(void *instance, void *sap, LOCAL_FLOW flow);
 	void (*status_indication)(void *instance,

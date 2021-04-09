@@ -3,7 +3,7 @@
 
 /* verbatim copy of asm-i386 version */
 
-/* 
+/*
  * The msqid64_ds structure for CRIS architecture.
  * Note extra padding because this structure is passed back and forth
  * between kernel and user space.

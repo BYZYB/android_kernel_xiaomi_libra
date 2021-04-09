@@ -3,8 +3,8 @@ The Linux kernel supports the following overcommit handling modes
 0	-	Heuristic overcommit handling. Obvious overcommits of
 		address space are refused. Used for a typical system. It
 		ensures a seriously wild allocation fails while allowing
-		overcommit to reduce swap usage.  root is allowed to 
-		allocate slightly more memory in this mode. This is the 
+		overcommit to reduce swap usage.  root is allowed to
+		allocate slightly more memory in this mode. This is the
 		default.
 
 1	-	Always overcommit. Appropriate for some scientific
@@ -35,11 +35,11 @@ Gotchas
 -------
 
 The C language stack growth does an implicit mremap. If you want absolute
-guarantees and run close to the edge you MUST mmap your stack for the 
+guarantees and run close to the edge you MUST mmap your stack for the
 largest size you think you will need. For typical stack usage this does
 not matter much but it's a corner case if you really really care
 
-In mode 2 the MAP_NORESERVE flag is ignored. 
+In mode 2 the MAP_NORESERVE flag is ignored.
 
 
 How It Works

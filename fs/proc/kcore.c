@@ -86,8 +86,8 @@ static size_t get_kcore_size(int *nphdr, size_t *elf_buflen)
 			size = try;
 		*nphdr = *nphdr + 1;
 	}
-	*elf_buflen =	sizeof(struct elfhdr) + 
-			(*nphdr + 2)*sizeof(struct elf_phdr) + 
+	*elf_buflen =	sizeof(struct elfhdr) +
+			(*nphdr + 2)*sizeof(struct elf_phdr) +
 			3 * ((sizeof(struct elf_note)) +
 			     roundup(sizeof(CORE_STR), 4)) +
 			roundup(sizeof(struct elf_prstatus), 4) +
@@ -486,7 +486,7 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
 	start = kc_offset_to_vaddr(*fpos - elf_buflen);
 	if ((tsz = (PAGE_SIZE - (start & ~PAGE_MASK))) > buflen)
 		tsz = buflen;
-		
+
 	while (buflen) {
 		struct kcore_list *m;
 
@@ -524,7 +524,7 @@ read_kcore(struct file *file, char __user *buffer, size_t buflen, loff_t *fpos)
 				 * we clear too and hope it will trigger the
 				 * EFAULT again.
 				 */
-				if (n) { 
+				if (n) {
 					if (clear_user(buffer + tsz - n,
 								n))
 						return -EFAULT;

@@ -58,7 +58,7 @@ static void snd_hda_generate_beep(struct work_struct *work)
 	}
 }
 
-/* (non-standard) Linear beep tone calculation for IDT/STAC codecs 
+/* (non-standard) Linear beep tone calculation for IDT/STAC codecs
  *
  * The tone frequency of beep generator on IDT/STAC codecs is
  * defined from the 8bit tone parameter, in Hz,

@@ -168,19 +168,19 @@ static void bdev_writeseg(struct super_block *sb, u64 ofs, size_t len)
 }
 
 
-static void erase_end_io(struct bio *bio, int err) 
-{ 
-	const int uptodate = test_bit(BIO_UPTODATE, &bio->bi_flags); 
-	struct super_block *sb = bio->bi_private; 
-	struct logfs_super *super = logfs_super(sb); 
+static void erase_end_io(struct bio *bio, int err)
+{
+	const int uptodate = test_bit(BIO_UPTODATE, &bio->bi_flags);
+	struct super_block *sb = bio->bi_private;
+	struct logfs_super *super = logfs_super(sb);
 
-	BUG_ON(!uptodate); /* FIXME: Retry io or write elsewhere */ 
-	BUG_ON(err); 
-	BUG_ON(bio->bi_vcnt == 0); 
-	bio_put(bio); 
+	BUG_ON(!uptodate); /* FIXME: Retry io or write elsewhere */
+	BUG_ON(err);
+	BUG_ON(bio->bi_vcnt == 0);
+	bio_put(bio);
 	if (atomic_dec_and_test(&super->s_pending_writes))
-		wake_up(&wq); 
-} 
+		wake_up(&wq);
+}
 
 static int do_erase(struct super_block *sb, u64 ofs, pgoff_t index,
 		size_t nr_pages)

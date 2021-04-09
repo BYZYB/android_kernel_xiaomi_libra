@@ -235,7 +235,7 @@ static int ipmi_ioctl(struct file   *file,
 	struct ipmi_file_private *priv = file->private_data;
 	void __user *arg = (void __user *)data;
 
-	switch (cmd) 
+	switch (cmd)
 	{
 	case IPMICTL_SEND_COMMAND:
 	{
@@ -277,7 +277,7 @@ static int ipmi_ioctl(struct file   *file,
 		struct list_head *entry;
 		struct ipmi_recv_msg  *msg;
 		unsigned long    flags;
-		
+
 
 		rv = 0;
 		if (copy_from_user(&rsp, arg, sizeof(rsp))) {
@@ -624,7 +624,7 @@ static int ipmi_ioctl(struct file   *file,
 		break;
 	}
 	}
-  
+
 	return rv;
 }
 

@@ -2,16 +2,16 @@
  *  sym53c416.c
  *  Low-level SCSI driver for sym53c416 chip.
  *  Copyright (C) 1998 Lieven Willems (lw_linux@hotmail.com)
- * 
- *  Changes : 
- * 
+ *
+ *  Changes :
+ *
  *  Marcelo Tosatti <marcelo@conectiva.com.br> : Added io_request_lock locking
  *  Alan Cox <alan@lxorguk.ukuu.org.uk> : Cleaned up code formatting
  *				 Fixed an irq locking bug
  *				 Added ISAPnP support
  *  Bjoern A. Zeeb <bzeeb@zabbadoz.net> : Initial irq locking updates
  *					  Added another card with ISAPnP support
- * 
+ *
  *  LILO command line usage: sym53c416=<PORTBASE>[,<IRQ>]
  *
  *  This program is free software; you can redistribute it and/or modify it
@@ -466,7 +466,7 @@ static irqreturn_t sym53c416_intr_handle(int irq, void *dev_id)
 			outb(INIT_COMM_COMPLETE_SEQ, base + COMMAND_REG);
 			break;
 		}
-		
+
 		case PHASE_RESERVED_1:
 		case PHASE_RESERVED_2:
 		{
@@ -615,7 +615,7 @@ int __init sym53c416_detect(struct scsi_host_template *tpnt)
 	int i;
 	int count;
 	struct pnp_dev *idev = NULL;
-	
+
 #ifdef MODULE
 	int ints[3];
 
@@ -663,7 +663,7 @@ int __init sym53c416_detect(struct scsi_host_template *tpnt)
 				printk(KERN_WARNING "sym53c416: unable to activate PnP device.\n");
 				pnp_device_detach(idev);
 				continue;
-			
+
 			}
 
 			i[0] = 2;
@@ -691,7 +691,7 @@ int __init sym53c416_detect(struct scsi_host_template *tpnt)
 			hosts[i].irq = sym53c416_probeirq(hosts[i].base, hosts[i].scsi_id);
 		if (!hosts[i].irq)
 			goto fail_release_region;
-	
+
 		shpnt = scsi_register(tpnt, 0);
 		if (!shpnt)
 			goto fail_release_region;
@@ -765,7 +765,7 @@ DEF_SCSI_QCMD(sym53c416_queuecommand)
 static int sym53c416_host_reset(Scsi_Cmnd *SCpnt)
 {
 	int base;
-	int scsi_id = -1;	
+	int scsi_id = -1;
 	int i;
 	unsigned long flags;
 
@@ -830,7 +830,7 @@ static struct scsi_host_template driver_template = {
 	.proc_name =		"sym53c416",
 	.name =			"Symbios Logic 53c416",
 	.detect =		sym53c416_detect,
-	.info =			sym53c416_info,	
+	.info =			sym53c416_info,
 	.queuecommand =		sym53c416_queuecommand,
 	.eh_host_reset_handler =sym53c416_host_reset,
 	.release = 		sym53c416_release,

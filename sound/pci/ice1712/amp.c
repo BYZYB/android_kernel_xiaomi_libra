@@ -19,7 +19,7 @@
  *   along with this program; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307 USA
  *
- */      
+ */
 
 #include <linux/delay.h>
 #include <linux/interrupt.h>
@@ -43,7 +43,7 @@ static int snd_vt1724_amp_init(struct snd_ice1712 *ice)
 		WM_ATTEN_L,	0x0000,	/* 0 db */
 		WM_ATTEN_R,	0x0000,	/* 0 db */
 		WM_DAC_CTRL,	0x0008,	/* 24bit I2S */
-		WM_INT_CTRL,	0x0001, /* 24bit I2S */	
+		WM_INT_CTRL,	0x0001, /* 24bit I2S */
 	};
 
 	unsigned int i;

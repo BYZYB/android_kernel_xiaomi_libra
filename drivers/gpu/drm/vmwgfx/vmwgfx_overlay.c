@@ -453,7 +453,7 @@ int vmw_overlay_pause_all(struct vmw_private *dev_priv)
 
 static bool vmw_overlay_available(const struct vmw_private *dev_priv)
 {
-	return (dev_priv->overlay_priv != NULL && 
+	return (dev_priv->overlay_priv != NULL &&
 		((dev_priv->fifo.capabilities & VMW_OVERLAY_CAP_MASK) ==
 		 VMW_OVERLAY_CAP_MASK));
 }

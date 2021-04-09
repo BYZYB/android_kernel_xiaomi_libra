@@ -328,7 +328,7 @@ int rpaphp_add_slot(struct device_node *dn)
 			return -ENOMEM;
 
 		slot->type = simple_strtoul(type, NULL, 10);
-				
+
 		dbg("Found drc-index:0x%x drc-name:%s drc-type:%s\n",
 				indexes[i + 1], name, type);
 
@@ -356,7 +356,7 @@ static void __exit cleanup_slots(void)
 	/*
 	 * Unregister all of our slots with the pci_hotplug subsystem,
 	 * and free up all memory that we had allocated.
-	 * memory will be freed in release_slot callback. 
+	 * memory will be freed in release_slot callback.
 	 */
 
 	list_for_each_safe(tmp, n, &rpaphp_slot_head) {

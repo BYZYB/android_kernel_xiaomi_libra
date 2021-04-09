@@ -23,7 +23,7 @@ skills of this suitably-embarrassed author; any help/patches to turn
 ramster-tools into more distributable rpms/debs useful for a wider range
 of distros would be appreciated.  The source RPM that can be used as a
 starting point is available at:
-    http://oss.oracle.com/projects/tmem/files/RAMster/ 
+    http://oss.oracle.com/projects/tmem/files/RAMster/
 
 As a result of this author's ignorance, userland setup described in this
 HOWTO assumes an EL6 distro and is described in EL6 syntax.  Apologies
@@ -68,7 +68,7 @@ On each system:
 
 4) Install ramster-tools as root.  An x86_64 rpm for EL6-based systems
    can be found at:
-    http://oss.oracle.com/projects/tmem/files/RAMster/ 
+    http://oss.oracle.com/projects/tmem/files/RAMster/
    (Sorry but for now, non-EL6 users must recreate ramster-tools on
    their own from source.  See above.)
 

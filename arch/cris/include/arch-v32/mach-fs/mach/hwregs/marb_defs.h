@@ -6,7 +6,7 @@
  *   file:           ../../inst/memarb/rtl/guinness/marb_top.r
  *     id:           <not found>
  *     last modfied: Mon Apr 11 16:12:16 2005
- * 
+ *
  *   by /n/asic/design/tools/rdesc/src/rdes2c --outfile marb_defs.h ../../inst/memarb/rtl/guinness/marb_top.r
  *      id: $Id: marb_defs.h,v 1.1 2007/02/13 11:55:30 starvik Exp $
  * Any changes here will be lost.
@@ -265,7 +265,7 @@ enum {
  *   file:           ../../inst/memarb/rtl/guinness/marb_top.r
  *     id:           <not found>
  *     last modfied: Mon Apr 11 16:12:16 2005
- * 
+ *
  *   by /n/asic/design/tools/rdesc/src/rdes2c --outfile marb_defs.h ../../inst/memarb/rtl/guinness/marb_top.r
  *      id: $Id: marb_defs.h,v 1.1 2007/02/13 11:55:30 starvik Exp $
  * Any changes here will be lost.

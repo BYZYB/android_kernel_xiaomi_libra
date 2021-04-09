@@ -132,8 +132,8 @@ static struct scsi_host_template arcmsr_scsi_host_template = {
 	.change_queue_depth	= arcmsr_adjust_disk_queue_depth,
 	.can_queue		= ARCMSR_MAX_FREECCB_NUM,
 	.this_id			= ARCMSR_SCSI_INITIATOR_ID,
-	.sg_tablesize	        	= ARCMSR_DEFAULT_SG_ENTRIES, 
-	.max_sectors    	    	= ARCMSR_MAX_XFER_SECTORS_C, 
+	.sg_tablesize	        	= ARCMSR_DEFAULT_SG_ENTRIES,
+	.max_sectors    	    	= ARCMSR_MAX_XFER_SECTORS_C,
 	.cmd_per_lun		= ARCMSR_MAX_CMD_PERLUN,
 	.use_clustering		= ENABLE_CLUSTERING,
 	.shost_attrs		= arcmsr_host_attrs,
@@ -484,7 +484,7 @@ static int arcmsr_alloc_ccb_pool(struct AdapterControlBlock *acb)
 	return 0;
 }
 
-static void arcmsr_message_isr_bh_fn(struct work_struct *work) 
+static void arcmsr_message_isr_bh_fn(struct work_struct *work)
 {
 	struct AdapterControlBlock *acb = container_of(work,struct AdapterControlBlock, arcmsr_do_message_isr_bh);
 	switch (acb->adapter_type) {
@@ -507,7 +507,7 @@ static void arcmsr_message_isr_bh_fn(struct work_struct *work)
 						*acb_dev_map = readb(devicemap);
 						temp =*acb_dev_map;
 						for(lun = 0; lun < ARCMSR_MAX_TARGETLUN; lun++) {
-							if((temp & 0x01)==1 && (diff & 0x01) == 1) {	
+							if((temp & 0x01)==1 && (diff & 0x01) == 1) {
 								scsi_add_device(acb->host, 0, target, lun);
 							}else if((temp & 0x01) == 0 && (diff & 0x01) == 1) {
 								psdev = scsi_device_lookup(acb->host, 0, target, lun);
@@ -545,7 +545,7 @@ static void arcmsr_message_isr_bh_fn(struct work_struct *work)
 						*acb_dev_map = readb(devicemap);
 						temp =*acb_dev_map;
 						for(lun = 0; lun < ARCMSR_MAX_TARGETLUN; lun++) {
-							if((temp & 0x01)==1 && (diff & 0x01) == 1) {	
+							if((temp & 0x01)==1 && (diff & 0x01) == 1) {
 								scsi_add_device(acb->host, 0, target, lun);
 							}else if((temp & 0x01) == 0 && (diff & 0x01) == 1) {
 								psdev = scsi_device_lookup(acb->host, 0, target, lun);
@@ -637,8 +637,8 @@ static int arcmsr_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 	host->max_lun = ARCMSR_MAX_TARGETLUN;
 	host->max_id = ARCMSR_MAX_TARGETID;		/*16:8*/
 	host->max_cmd_len = 16;	 			/*this is issue of 64bit LBA ,over 2T byte*/
-	host->can_queue = ARCMSR_MAX_FREECCB_NUM;	/* max simultaneous cmds */		
-	host->cmd_per_lun = ARCMSR_MAX_CMD_PERLUN;	    
+	host->can_queue = ARCMSR_MAX_FREECCB_NUM;	/* max simultaneous cmds */
+	host->cmd_per_lun = ARCMSR_MAX_CMD_PERLUN;
 	host->this_id = ARCMSR_SCSI_INITIATOR_ID;
 	host->unique_id = (bus << 8) | dev_fun;
 	pci_set_drvdata(pdev, host);
@@ -822,7 +822,7 @@ static void arcmsr_report_sense_info(struct CommandControlBlock *ccb)
 static u32 arcmsr_disable_outbound_ints(struct AdapterControlBlock *acb)
 {
 	u32 orig_mask = 0;
-	switch (acb->adapter_type) {	
+	switch (acb->adapter_type) {
 	case ACB_ADAPTER_TYPE_A : {
 		struct MessageUnit_A __iomem *reg = acb->pmuA;
 		orig_mask = readl(&reg->outbound_intmask);
@@ -847,7 +847,7 @@ static u32 arcmsr_disable_outbound_ints(struct AdapterControlBlock *acb)
 	return orig_mask;
 }
 
-static void arcmsr_report_ccb_state(struct AdapterControlBlock *acb, 
+static void arcmsr_report_ccb_state(struct AdapterControlBlock *acb,
 			struct CommandControlBlock *ccb, bool error)
 {
 	uint8_t id, lun;
@@ -907,7 +907,7 @@ static void arcmsr_drain_donequeue(struct AdapterControlBlock *acb, struct Comma
 			struct scsi_cmnd *abortcmd = pCCB->pcmd;
 			if (abortcmd) {
 				id = abortcmd->device->id;
-				lun = abortcmd->device->lun;				
+				lun = abortcmd->device->lun;
 				abortcmd->result |= DID_ABORT << 16;
 				arcmsr_ccb_complete(pCCB);
 				printk(KERN_NOTICE "arcmsr%d: pCCB ='0x%p' isr got aborted command \n",
@@ -1004,7 +1004,7 @@ static void arcmsr_remove(struct pci_dev *pdev)
 	del_timer_sync(&acb->eternal_timer);
 	arcmsr_disable_outbound_ints(acb);
 	arcmsr_stop_adapter_bgrb(acb);
-	arcmsr_flush_adapter_cache(acb);	
+	arcmsr_flush_adapter_cache(acb);
 	acb->acb_flags |= ACB_F_SCSISTOPADAPTER;
 	acb->acb_flags &= ~ACB_F_IOP_INITED;
 
@@ -1543,7 +1543,7 @@ static void arcmsr_hbc_postqueue_isr(struct AdapterControlBlock *acb)
 **********************************************************************************
 ** Handle a message interrupt
 **
-** The only message interrupt we expect is in response to a query for the current adapter config.  
+** The only message interrupt we expect is in response to a query for the current adapter config.
 ** We want this in order to compare the drivemap so that we can detect newly-attached drives.
 **********************************************************************************
 */
@@ -1760,7 +1760,7 @@ static int arcmsr_iop_message_xfer(struct AdapterControlBlock *acb,
 			retvalue = ARCMSR_MESSAGE_FAIL;
 			goto message_out;
 		}
-				
+
 		ptmpQbuffer = ver_addr;
 		while ((acb->rqbuf_firstindex != acb->rqbuf_lastindex)
 			&& (allxfer_len < 1031)) {
@@ -1813,10 +1813,10 @@ static int arcmsr_iop_message_xfer(struct AdapterControlBlock *acb,
 			goto message_out;
 		}
 		if(acb->fw_flag == FW_DEADLOCK) {
-			pcmdmessagefld->cmdmessage.ReturnCode = 
+			pcmdmessagefld->cmdmessage.ReturnCode =
 			ARCMSR_MESSAGE_RETURNCODE_BUS_HANG_ON;
 		}else{
-			pcmdmessagefld->cmdmessage.ReturnCode = 
+			pcmdmessagefld->cmdmessage.ReturnCode =
 			ARCMSR_MESSAGE_RETURNCODE_OK;
 		}
 		ptmpuserbuffer = ver_addr;
@@ -2133,7 +2133,7 @@ static bool arcmsr_get_hba_config(struct AdapterControlBlock *acb)
 		iop_device_map++;
 		count--;
 	}
-	printk(KERN_NOTICE "Areca RAID Controller%d: F/W %s & Model %s\n", 
+	printk(KERN_NOTICE "Areca RAID Controller%d: F/W %s & Model %s\n",
 		acb->host->host_no,
 		acb->firm_version,
 		acb->firm_model);
@@ -2208,7 +2208,7 @@ static bool arcmsr_get_hbb_config(struct AdapterControlBlock *acb)
 		iop_device_map++;
 		count--;
 	}
-	
+
 	printk(KERN_NOTICE "Areca RAID Controller%d: F/W %s & Model %s\n",
 		acb->host->host_no,
 		acb->firm_version,
@@ -2410,7 +2410,7 @@ static int arcmsr_polling_hbb_ccbdone(struct AdapterControlBlock *acb,
 				, ccb
 				, atomic_read(&acb->ccboutstandingcount));
 			continue;
-		} 
+		}
 		error = (flag_ccb & ARCMSR_CCBREPLY_FLAG_ERROR_MODE0) ? true : false;
 		arcmsr_report_ccb_state(acb, ccb, error);
 	}

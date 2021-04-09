@@ -1,6 +1,6 @@
 /*
  * definitions for sys_call_table, each line represents an
- * entry in the table in the form 
+ * entry in the table in the form
  * SYSCALL(31 bit syscall, 64 bit syscall, 31 bit emulated syscall)
  *
  * this file is meant to be included from entry.S and entry64.S

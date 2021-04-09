@@ -2,19 +2,19 @@
  * RocketPort device driver for Linux
  *
  * Written by Theodore Ts'o, 1995, 1996, 1997, 1998, 1999, 2000.
- * 
+ *
  * Copyright (C) 1995, 1996, 1997, 1998, 1999, 2000, 2003 by Comtrol, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
  * published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
@@ -27,14 +27,14 @@
  * from user mode) and the timer bottom half (tasklet).  This is a polled driver, interrupts
  * are not used.
  *
- * Critical data: 
- * -  rp_table[], accessed through passed "info" pointers, is a global (static) array of 
- *    serial port state information and the xmit_buf circular buffer.  Protected by 
+ * Critical data:
+ * -  rp_table[], accessed through passed "info" pointers, is a global (static) array of
+ *    serial port state information and the xmit_buf circular buffer.  Protected by
  *    a per port spinlock.
  * -  xmit_flags[], an array of ints indexed by line (port) number, indicating that there
  *    is data to be transmitted.  Protected by atomic bit operations.
  * -  rp_num_ports, int indicating number of open ports, protected by atomic operations.
- * 
+ *
  * rp_write() and rp_write_char() functions use a per port semaphore to protect against
  * simultaneous access to the same port by more than one process.
  */
@@ -103,7 +103,7 @@ static void rp_do_poll(unsigned long dummy);
 
 static struct tty_driver *rocket_driver;
 
-static struct rocket_version driver_version = {	
+static struct rocket_version driver_version = {
 	ROCKET_VERSION, ROCKET_DATE
 };
 
@@ -218,8 +218,8 @@ static Byte_t sBitMapSetTbl[8] = {
 static int sClockPrescale = 0x14;
 
 /*
- *  Line number is the ttySIx number (x), the Minor number.  We 
- *  assign them sequentially, starting at zero.  The following 
+ *  Line number is the ttySIx number (x), the Minor number.  We
+ *  assign them sequentially, starting at zero.  The following
  *  array keeps track of the line number assigned to a given board/aiop/channel.
  */
 static unsigned char lineNumbers[MAX_RP_PORTS];
@@ -307,9 +307,9 @@ static inline int rocket_paranoia_check(struct r_port *info,
 }
 
 
-/*  Serial port receive data function.  Called (from timer poll) when an AIOPIC signals 
- *  that receive data is present on a serial port.  Pulls data from FIFO, moves it into the 
- *  tty layer.  
+/*  Serial port receive data function.  Called (from timer poll) when an AIOPIC signals
+ *  that receive data is present on a serial port.  Pulls data from FIFO, moves it into the
+ *  tty layer.
  */
 static void rp_do_receive(struct r_port *info, CHANNEL_t *cp,
 		unsigned int ChanStatus)
@@ -340,7 +340,7 @@ static void rp_do_receive(struct r_port *info, CHANNEL_t *cp,
 		}
 	}
 
-	/* 
+	/*
 	 * if we previously entered status mode, then read down the
 	 * FIFO one word at a time, pulling apart the character and
 	 * the status.  Update error counters depending on status
@@ -415,9 +415,9 @@ static void rp_do_receive(struct r_port *info, CHANNEL_t *cp,
 }
 
 /*
- *  Serial port transmit data function.  Called from the timer polling loop as a 
+ *  Serial port transmit data function.  Called from the timer polling loop as a
  *  result of a bit set in xmit_flags[], indicating data (from the tty layer) is ready
- *  to be sent out the serial port.  Data is buffered in rp_table[line].xmit_buf, it is 
+ *  to be sent out the serial port.  Data is buffered in rp_table[line].xmit_buf, it is
  *  moved to the port's xmit FIFO.  *info is critical data, protected by spinlocks.
  */
 static void rp_do_transmit(struct r_port *info)
@@ -485,7 +485,7 @@ static void rp_do_transmit(struct r_port *info)
 /*
  *  Called when a serial port signals it has read data in it's RX FIFO.
  *  It checks what interrupts are pending and services them, including
- *  receiving serial data.  
+ *  receiving serial data.
  */
 static void rp_handle_port(struct r_port *info)
 {
@@ -587,8 +587,8 @@ static void rp_do_poll(unsigned long dummy)
 
 		/*
 		 *  xmit_flags contains bit-significant flags, indicating there is data
-		 *  to xmit on the port. Bit 0 is port 0 on this board, bit 1 is port 
-		 *  1, ... (32 total possible).  The variable i has the aiop and ch 
+		 *  to xmit on the port. Bit 0 is port 0 on this board, bit 1 is port
+		 *  1, ... (32 total possible).  The variable i has the aiop and ch
 		 *  numbers encoded in it (port 0-7 are aiop0, 8-15 are aiop1, etc).
 		 */
 		if (xmitmask) {
@@ -611,8 +611,8 @@ static void rp_do_poll(unsigned long dummy)
 }
 
 /*
- *  Initializes the r_port structure for a port, as well as enabling the port on 
- *  the board.  
+ *  Initializes the r_port structure for a port, as well as enabling the port on
+ *  the board.
  *  Inputs:  board, aiop, chan numbers
  */
 static void init_r_port(int board, int aiop, int chan, struct pci_dev *pci_dev)
@@ -699,7 +699,7 @@ static void init_r_port(int board, int aiop, int chan, struct pci_dev *pci_dev)
 }
 
 /*
- *  Configures a rocketport port according to its termio settings.  Called from 
+ *  Configures a rocketport port according to its termio settings.  Called from
  *  user mode into the driver (exception handler).  *info CD manipulation is spinlock protected.
  */
 static void configure_r_port(struct tty_struct *tty, struct r_port *info,
@@ -875,8 +875,8 @@ static void dtr_rts(struct tty_port *port, int on)
 }
 
 /*
- *  Exception handler that opens a serial port.  Creates xmit_buf storage, fills in 
- *  port's r_port struct.  Initializes the port hardware.  
+ *  Exception handler that opens a serial port.  Creates xmit_buf storage, fills in
+ *  port's r_port struct.  Initializes the port hardware.
  */
 static int rp_open(struct tty_struct *tty, struct file *filp)
 {
@@ -890,7 +890,7 @@ static int rp_open(struct tty_struct *tty, struct file *filp)
 	if (info == NULL)
 		return -ENXIO;
 	port = &info->port;
-	
+
 	page = __get_free_page(GFP_KERNEL);
 	if (!page)
 		return -ENOMEM;
@@ -995,7 +995,7 @@ static void rp_close(struct tty_struct *tty, struct file *filp)
 	struct tty_port *port = &info->port;
 	int timeout;
 	CHANNEL_t *cp;
-	
+
 	if (rocket_paranoia_check(info, "rp_close"))
 		return;
 
@@ -1031,7 +1031,7 @@ static void rp_close(struct tty_struct *tty, struct file *filp)
 		sClrDTR(cp);
 
 	rp_flush_buffer(tty);
-		
+
 	tty_ldisc_flush(tty);
 
 	clear_bit((info->aiop * 8) + info->chan, (void *) &xmit_flags[info->board]);
@@ -1153,7 +1153,7 @@ static int sGetChanRI(CHANNEL_T * ChP)
 /*  Here are the routines used by rp_ioctl.  These are all called from exception handlers.  */
 
 /*
- *  Returns the state of the serial modem control lines.  These next 2 functions 
+ *  Returns the state of the serial modem control lines.  These next 2 functions
  *  are the way kernel versions > 2.5 handle modem control lines rather than IOCTLs.
  */
 static int rp_tiocmget(struct tty_struct *tty)
@@ -1163,7 +1163,7 @@ static int rp_tiocmget(struct tty_struct *tty)
 
 	ChanStatus = sGetChanStatusLo(&info->channel);
 	control = info->channel.TxControl[3];
-	result = ((control & SET_RTS) ? TIOCM_RTS : 0) | 
+	result = ((control & SET_RTS) ? TIOCM_RTS : 0) |
 		((control & SET_DTR) ?  TIOCM_DTR : 0) |
 		((ChanStatus & CD_ACT) ? TIOCM_CAR : 0) |
 		(sGetChanRI(&info->channel) ? TIOCM_RNG : 0) |
@@ -1173,7 +1173,7 @@ static int rp_tiocmget(struct tty_struct *tty)
 	return result;
 }
 
-/* 
+/*
  *  Sets the modem control lines
  */
 static int rp_tiocmset(struct tty_struct *tty,
@@ -1584,7 +1584,7 @@ static int rp_put_char(struct tty_struct *tty, unsigned char ch)
  *  Exception handler - write routine, called when user app writes to the device.
  *  A per port write mutex is used to protect from another process writing to
  *  this port at the same time.  This other process could be running on the other CPU
- *  or get control of the CPU if the copy_from_user() blocks due to a page fault (swapped out). 
+ *  or get control of the CPU if the copy_from_user() blocks due to a page fault (swapped out).
  *  Spinlocks protect the info xmit members.
  */
 static int rp_write(struct tty_struct *tty,
@@ -1611,7 +1611,7 @@ static int rp_write(struct tty_struct *tty,
 		info->xmit_fifo_room = TXFIFO_SIZE - sGetTxCnt(cp);
 
         /*
-	 *  If the write queue for the port is empty, and there is FIFO space, stuff bytes 
+	 *  If the write queue for the port is empty, and there is FIFO space, stuff bytes
 	 *  into FIFO.  Use the write queue for temp storage.
          */
 	if (!tty->stopped && info->xmit_cnt == 0 && info->xmit_fifo_room > 0) {
@@ -1664,7 +1664,7 @@ static int rp_write(struct tty_struct *tty,
 
 	if ((retval > 0) && !tty->stopped)
 		set_bit((info->aiop * 8) + info->chan, (void *) &xmit_flags[info->board]);
-	
+
 end:
  	if (info->xmit_cnt < WAKEUP_CHARS) {
  		tty_wakeup(tty);
@@ -2304,7 +2304,7 @@ static int __init init_ISA(int i)
 		rcktpt_io_addr[i] = 0;
 		return (0);
 	}
-  
+
 	rocketModel[i].startingPortNumber = nextLineNumber;
 
 	for (aiop = 0; aiop < num_aiops; aiop++) {
@@ -2332,7 +2332,7 @@ static int __init init_ISA(int i)
 	rocketModel[i].numPorts = total_num_chan;
 	rocketModel[i].model = MODEL_ISA;
 
-	printk(KERN_INFO "RocketPort ISA card #%d found at 0x%lx - %d AIOPs %s\n", 
+	printk(KERN_INFO "RocketPort ISA card #%d found at 0x%lx - %d AIOPs %s\n",
 	       i, rcktpt_io_addr[i], num_aiops, type_string);
 
 	printk(KERN_INFO "Installing %s, creating /dev/ttyR%d - %ld\n",
@@ -2386,7 +2386,7 @@ static int __init rp_init(void)
 		goto err;
 
 	/*
-	 *  If board 1 is non-zero, there is at least one ISA configured.  If controller is 
+	 *  If board 1 is non-zero, there is at least one ISA configured.  If controller is
 	 *  zero, use the default controller IO address of board1 + 0x40.
 	 */
 	if (board1) {
@@ -3151,8 +3151,8 @@ static unsigned char GetLineNumber(int ctrl, int aiop, int ch)
 
 /*
  *  Stores the line number associated with a given controller (board), aiop
- *  and channel number.  
- *  Returns:  The line number assigned 
+ *  and channel number.
+ *  Returns:  The line number assigned
  */
 static unsigned char SetLineNumber(int ctrl, int aiop, int ch)
 {

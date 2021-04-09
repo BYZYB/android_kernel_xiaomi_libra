@@ -140,7 +140,7 @@ ccw_device_cancel_halt_clear(struct ccw_device *cdev)
 
 	sch = to_subchannel(cdev->dev.parent);
 	if (cio_update_schib(sch))
-		return -ENODEV; 
+		return -ENODEV;
 	if (!sch->schib.pmcw.ena)
 		/* Not operational -> done. */
 		return 0;

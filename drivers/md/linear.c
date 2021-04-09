@@ -10,10 +10,10 @@
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2, or (at your option)
    any later version.
-   
+
    You should have received a copy of the GNU General Public License
    (for example /usr/src/linux/COPYING); if not, write to the Free
-   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  
+   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
 #include <linux/blkdev.h>
@@ -25,7 +25,7 @@
 #include "linear.h"
 
 /*
- * find which device holds a particular offset 
+ * find which device holds a particular offset
  */
 static inline struct dev_info *which_dev(struct mddev *mddev, sector_t sector)
 {
@@ -360,7 +360,7 @@ static void linear_make_request(struct mddev *mddev, struct bio *bio)
 		bio_pair_release(bp);
 		return;
 	}
-		    
+
 	bio->bi_bdev = tmp_dev->rdev->bdev;
 	bio->bi_sector = bio->bi_sector - start_sector
 		+ tmp_dev->rdev->data_offset;

@@ -397,7 +397,7 @@ bool demand_page(struct lg_cpu *cpu, unsigned long vaddr, int errcode)
 		if (!(pgd_flags(gpgd) & _PAGE_PRESENT))
 			return false;
 
-		/* 
+		/*
 		 * This kills the Guest if it has weird flags or tries to
 		 * refer to a "physical" address outside the bounds.
 		 */
@@ -415,7 +415,7 @@ bool demand_page(struct lg_cpu *cpu, unsigned long vaddr, int errcode)
 		if (!(pmd_flags(gpmd) & _PAGE_PRESENT))
 			return false;
 
-		/* 
+		/*
 		 * This kills the Guest if it has weird flags or tries to
 		 * refer to a "physical" address outside the bounds.
 		 */
@@ -1129,7 +1129,7 @@ void map_switcher_in_guest(struct lg_cpu *cpu, struct lguest_pages *pages)
 	/* Switcher page should always be mapped by now! */
 	BUG_ON(!pgdir->switcher_mapped);
 
-	/* 
+	/*
 	 * Remember that we have two pages for each Host CPU, so we can run a
 	 * Guest on each CPU without them interfering.  We need to make sure
 	 * those pages are mapped correctly in the Guest, but since we usually

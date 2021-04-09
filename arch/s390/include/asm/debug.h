@@ -28,23 +28,23 @@ typedef struct __debug_entry debug_entry_t;
 
 struct debug_view;
 
-typedef struct debug_info {	
+typedef struct debug_info {
 	struct debug_info* next;
 	struct debug_info* prev;
 	atomic_t ref_count;
-	spinlock_t lock;			
+	spinlock_t lock;
 	int level;
 	int nr_areas;
 	int pages_per_area;
 	int buf_size;
-	int entry_size;	
+	int entry_size;
 	debug_entry_t*** areas;
 	int active_area;
 	int *active_pages;
 	int *active_entries;
 	struct dentry* debugfs_root_entry;
 	struct dentry* debugfs_entries[DEBUG_MAX_VIEWS];
-	struct debug_view* views[DEBUG_MAX_VIEWS];	
+	struct debug_view* views[DEBUG_MAX_VIEWS];
 	char name[DEBUG_MAX_NAME_LEN];
 	umode_t mode;
 } debug_info_t;
@@ -68,8 +68,8 @@ typedef int (debug_input_proc_t) (debug_info_t* id,
 				  size_t in_buf_size, loff_t* offset);
 
 int debug_dflt_header_fn(debug_info_t* id, struct debug_view* view,
-		         int area, debug_entry_t* entry, char* out_buf);						
-				
+		         int area, debug_entry_t* entry, char* out_buf);
+
 struct debug_view {
 	char name[DEBUG_MAX_NAME_LEN];
 	debug_prolog_proc_t* prolog_proc;
@@ -85,10 +85,10 @@ extern struct debug_view debug_sprintf_view;
 
 /* do NOT use the _common functions */
 
-debug_entry_t* debug_event_common(debug_info_t* id, int level, 
+debug_entry_t* debug_event_common(debug_info_t* id, int level,
                                   const void* data, int length);
 
-debug_entry_t* debug_exception_common(debug_info_t* id, int level, 
+debug_entry_t* debug_exception_common(debug_info_t* id, int level,
                                       const void* data, int length);
 
 /* Debug Feature API: */
@@ -198,7 +198,7 @@ int debug_unregister_view(debug_info_t* id, struct debug_view* view);
 /*
    define the debug levels:
    - 0 No debugging output to console or syslog
-   - 1 Log internal errors to syslog, ignore check conditions 
+   - 1 Log internal errors to syslog, ignore check conditions
    - 2 Log internal errors and check conditions to syslog
    - 3 Log internal errors to console, log check conditions to syslog
    - 4 Log internal errors and check conditions to console

@@ -388,7 +388,7 @@ static int mixer_get(int d)
 	case SOUND_MIXER_MIC:
 	case SOUND_MIXER_SYNTH:
 #endif
-		return (dev.left_levels[d] >> 8) * 100 / 0xff | 
+		return (dev.left_levels[d] >> 8) * 100 / 0xff |
 			(((dev.right_levels[d] >> 8) * 100 / 0xff) << 8);
 	default:
 		return 0;
@@ -611,7 +611,7 @@ static int mixer_ioctl(unsigned int cmd, unsigned long arg)
 #endif
 					SOUND_MASK_VOLUME;
 				break;
-				  
+
 			case SOUND_MIXER_RECMASK:
 #ifdef MSND_CLASSIC
 				val =   0;
@@ -622,7 +622,7 @@ static int mixer_ioctl(unsigned int cmd, unsigned long arg)
 					val |= SOUND_MASK_DIGITAL1;
 #endif
 				break;
-				  
+
 			case SOUND_MIXER_CAPS:
 				val =   SOUND_CAP_EXCL_INPUT;
 				break;
@@ -634,7 +634,7 @@ static int mixer_ioctl(unsigned int cmd, unsigned long arg)
 			}
 		}
 
-		return put_user(val, (int __user *)arg); 
+		return put_user(val, (int __user *)arg);
 	}
 
 	return -EINVAL;

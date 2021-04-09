@@ -17,7 +17,7 @@
 #include <asm/pgtable.h>
 #include <asm/processor.h>
 
-/* 
+/*
  * Determines which bits in DCCR the user has access to.
  * 1 = access, 0 = no access.
  */
@@ -60,14 +60,14 @@ inline int put_reg(struct task_struct *task, unsigned int regno,
  *
  * Make sure the single step bit is not set.
  */
-void 
+void
 ptrace_disable(struct task_struct *child)
 {
        /* Todo - pending singlesteps? */
        clear_tsk_thread_flag(child, TIF_SYSCALL_TRACE);
 }
 
-/* 
+/*
  * Note that this implementation of ptrace behaves differently from vanilla
  * ptrace.  Contrary to what the man page says, in the PTRACE_PEEKTEXT,
  * PTRACE_PEEKDATA, and PTRACE_PEEKUSER requests the data variable is not
@@ -83,7 +83,7 @@ long arch_ptrace(struct task_struct *child, long request,
 	unsigned long __user *datap = (unsigned long __user *)data;
 
 	switch (request) {
-		/* Read word at location address. */ 
+		/* Read word at location address. */
 		case PTRACE_PEEKTEXT:
 		case PTRACE_PEEKDATA:
 			ret = generic_ptrace_peekdata(child, addr, data);
@@ -101,13 +101,13 @@ long arch_ptrace(struct task_struct *child, long request,
 			ret = put_user(tmp, datap);
 			break;
 		}
-		
+
 		/* Write the word at location address. */
 		case PTRACE_POKETEXT:
 		case PTRACE_POKEDATA:
 			ret = generic_ptrace_pokedata(child, addr, data);
 			break;
- 
+
  		/* Write the word at location address in the USER area. */
 		case PTRACE_POKEUSR:
 			ret = -EIO;
@@ -130,16 +130,16 @@ long arch_ptrace(struct task_struct *child, long request,
 		case PTRACE_GETREGS: {
 		  	int i;
 			unsigned long tmp;
-			
+
 			ret = 0;
 			for (i = 0; i <= PT_MAX; i++) {
 				tmp = get_reg(child, i);
-				
+
 				if (put_user(tmp, datap)) {
 					ret = -EFAULT;
 					break;
 				}
-				
+
 				datap++;
 			}
 
@@ -150,23 +150,23 @@ long arch_ptrace(struct task_struct *child, long request,
 		case PTRACE_SETREGS: {
 			int i;
 			unsigned long tmp;
-			
+
 			ret = 0;
 			for (i = 0; i <= PT_MAX; i++) {
 				if (get_user(tmp, datap)) {
 					ret = -EFAULT;
 					break;
 				}
-				
+
 				if (i == PT_DCCR) {
 					tmp &= DCCR_MASK;
 					tmp |= get_reg(child, PT_DCCR) & ~DCCR_MASK;
 				}
-				
+
 				put_reg(child, i, tmp);
 				datap++;
 			}
-			
+
 			break;
 		}
 
@@ -182,15 +182,15 @@ void do_syscall_trace(void)
 {
 	if (!test_thread_flag(TIF_SYSCALL_TRACE))
 		return;
-	
+
 	if (!(current->ptrace & PT_PTRACED))
 		return;
-	
+
 	/* the 0x80 provides a way for the tracing parent to distinguish
 	   between a syscall stop and SIGTRAP delivery */
 	ptrace_notify(SIGTRAP | ((current->ptrace & PT_TRACESYSGOOD)
 				 ? 0x80 : 0));
-	
+
 	/*
 	 * This isn't the same as continuing with a signal, but it will do for
 	 * normal use.

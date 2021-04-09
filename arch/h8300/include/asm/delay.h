@@ -22,7 +22,7 @@ static inline void __delay(unsigned long loops)
  * lookup table, really, as the multiplications take much too long with
  * short delays.  This is a "reasonable" implementation, though (and the
  * first constant multiplications gets optimized away if the delay is
- * a constant)  
+ * a constant)
  */
 
 extern unsigned long loops_per_jiffy;

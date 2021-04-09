@@ -78,7 +78,7 @@ dbl_fsqrt(
                  * Return quiet NaN or positive infinity.
 		 *  Fall through to negative test if negative infinity.
                  */
-		if (Dbl_iszero_sign(srcp1) || 
+		if (Dbl_iszero_sign(srcp1) ||
 		    Dbl_isnotzero_mantissa(srcp1,srcp2)) {
                 	Dbl_copytoptr(srcp1,srcp2,dstptr);
                 	return(NOEXCEPTION);
@@ -94,7 +94,7 @@ dbl_fsqrt(
 	}
 
         /*
-         * check for negative source operand 
+         * check for negative source operand
          */
 	if (Dbl_isone_sign(srcp1)) {
 		/* trap if INVALIDTRAP enabled */
@@ -127,7 +127,7 @@ dbl_fsqrt(
 	}
 	/*
 	 * Add comment here.  Explain following algorithm.
-	 * 
+	 *
 	 * Trust me, it works.
 	 *
 	 */
@@ -140,7 +140,7 @@ dbl_fsqrt(
 			Dbl_leftshiftby1(newbitp1,newbitp2);
 			/* update result */
 			Dbl_addition(resultp1,resultp2,newbitp1,newbitp2,
-			 resultp1,resultp2);  
+			 resultp1,resultp2);
 			Dbl_subtract(srcp1,srcp2,sump1,sump2,srcp1,srcp2);
 			Dbl_rightshiftby2(newbitp1,newbitp2);
 		}
@@ -168,7 +168,7 @@ dbl_fsqrt(
 		     Dbl_increment(resultp1,resultp2);
 		     break;
 		case ROUNDNEAREST:
-		     /* stickybit is always true, so guardbit 
+		     /* stickybit is always true, so guardbit
 		      * is enough to determine rounding */
 		     if (guardbit) {
 			    Dbl_increment(resultp1,resultp2);
