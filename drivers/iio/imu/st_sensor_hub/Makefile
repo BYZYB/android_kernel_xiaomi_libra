@@ -22,3 +22,5 @@ obj-$(CONFIG_IIO_ST_HUB_RAM_LOADER) += st_hub_ymodem.o
 
 obj-$(CONFIG_IIO_ST_HUB_DRIVERS) += st_sensor_hub_core.o
 st_sensor_hub_core-y := st_sensor_hub.o
+
+CFLAGS_st_sensor_hub.o := $(call cc-disable-warning, incompatible-pointer-types-discards-qualifiers)
