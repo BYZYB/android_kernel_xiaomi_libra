@@ -553,7 +553,7 @@ static int ioctl(struct inode *inode, struct file *file, unsigned int cmd, unsig
 static int suspend(struct platform_device *pdev, pm_message_t state)
 {
 	if (g_bIsPlaying) {
-		DbgOutInfo(("tspdrv: can't suspend, still playing effects.\n"));
+		DbgOutErr(("tspdrv: can't suspend, still playing effects.\n"));
 		return -EBUSY;
 	} else {
 		DbgOutInfo(("tspdrv: suspend.\n"));
@@ -563,14 +563,14 @@ static int suspend(struct platform_device *pdev, pm_message_t state)
 
 static int resume(struct platform_device *pdev)
 {
-	DbgOutErr(("tspdrv: resume.\n"));
+	DbgOutInfo(("tspdrv: resume.\n"));
 
 	return 0;
 }
 
 static void platform_release(struct device *dev)
 {
-	DbgOutErr(("tspdrv: platform_release.\n"));
+	DbgOutInfo(("tspdrv: platform_release.\n"));
 }
 
 module_init(tspdrv_init);
