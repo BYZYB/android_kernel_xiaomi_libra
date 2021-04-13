@@ -395,6 +395,7 @@ static int enter_state(suspend_state_t state)
 	return error;
 }
 
+#ifdef CONFIG_PM_SLEEP_TRACE
 static void pm_suspend_marker(char *annotation)
 {
 	struct timespec ts;
@@ -415,6 +416,7 @@ static void pm_suspend_marker(char *annotation)
 			ts.tv_sec - old_ts.tv_sec);
 	}
 }
+#endif
 
 /**
  * pm_suspend - Externally visible function for suspending the system.
@@ -433,8 +435,8 @@ int pm_suspend(suspend_state_t state)
 	if (state <= PM_SUSPEND_ON || state >= PM_SUSPEND_MAX)
 		return -EINVAL;
 
-	pm_suspend_marker("entry");
 #ifdef CONFIG_PM_SLEEP_TRACE
+	pm_suspend_marker("entry");
 	getnstimeofday(&ts_suspend_start);
 #endif
 	error = enter_state(state);
@@ -448,7 +450,9 @@ int pm_suspend(suspend_state_t state)
 		update_suspend_trace_stats_time(ts_suspend_success_end.tv_sec - ts_suspend_start.tv_sec);
 #endif
 	}
+#ifdef CONFIG_PM_SLEEP_TRACE
 	pm_suspend_marker("exit");
+#endif
 	return error;
 }
 EXPORT_SYMBOL(pm_suspend);
