@@ -594,12 +594,6 @@ static int qpnp_flash_led_module_disable(struct qpnp_flash_led *led,
 				return -EINVAL;
 			}
 		}
-		rc = qpnp_pon_set_rb_spare(led->pon_dev, false);
-		if (rc) {
-			dev_err(&led->spmi_dev->dev,
-				"failed to set rb_spare\n");
-			return -EINVAL;
-		}
 	}
 
 	if (flash_node->trigger & FLASH_LED0_TRIGGER) {
@@ -796,12 +790,6 @@ static void qpnp_flash_led_work(struct work_struct *work)
 	}
 
 	if (flash_node->type == TORCH) {
-		rc = qpnp_pon_set_rb_spare(led->pon_dev, true);
-		if (rc) {
-			dev_err(&led->spmi_dev->dev,
-				"failed to set rb_spare\n");
-			goto exit_flash_led_work;
-		}
 		rc = qpnp_led_masked_write(led->spmi_dev,
 			FLASH_LED_UNLOCK_SECURE(led->base),
 			FLASH_SECURE_MASK, FLASH_UNLOCK_SECURE);
