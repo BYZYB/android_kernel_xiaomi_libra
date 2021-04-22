@@ -56,8 +56,6 @@ struct es9018_priv {
 	enum of_gpio_flags clock_49m_flags;
 	int clock_49m_gpio;
 	bool custom_filter_enabled;
-	int hw_major;
-	int hw_minor;
 };
 
 struct imped_setting_t {
@@ -415,9 +413,6 @@ static int es9018_probe(struct snd_soc_codec *codec)
 		return -ENOMEM;
 	}
 
-	es9018->hw_major = get_hw_version_major();
-	es9018->hw_minor = get_hw_version_minor();
-
 	es9018->pinctrl = devm_pinctrl_get(codec->dev);
 	if (IS_ERR_OR_NULL(es9018->pinctrl)) {
 		dev_err(codec->dev, "%s: Unable to get pinctrl handle\n", __func__);
@@ -501,27 +496,6 @@ static int es9018_probe(struct snd_soc_codec *codec)
 	}
 
 	es9018->opa_gpio = -1;
-	if ((es9018->hw_major == 2) && (es9018->hw_minor == 2)) {
-		es9018->opa_gpio = of_get_named_gpio_flags(codec->dev->of_node,
-			"ess,opa-gpio", 0, &es9018->opa_flags);
-		dev_dbg(codec->dev, "opa gpio %d\n", es9018->opa_gpio);
-		if (gpio_is_valid(es9018->opa_gpio)) {
-			if (es9018->opa_flags == OF_GPIO_ACTIVE_LOW) {
-				ret = gpio_request_one(es9018->opa_gpio,
-					GPIOF_OUT_INIT_HIGH, "ess,opa-gpio");
-			} else {
-				ret = gpio_request_one(es9018->opa_gpio,
-					GPIOF_OUT_INIT_LOW, "ess,opa-gpio");
-			}
-			if (ret < 0) {
-				dev_err(codec->dev, "Failed to request opa-gpio(%d)\n", ret);
-				goto switch_free;
-			}
-		} else {
-			dev_info(codec->dev, "Failed to parse opa-gpio(%d)\n", ret);
-		}
-	}
-
 	es9018->clock_gpio = -1;
 	es9018->clock_flags = 0;
 	es9018->clock_45m_gpio = of_get_named_gpio_flags(codec->dev->of_node,
@@ -598,23 +572,6 @@ static int es9018_probe(struct snd_soc_codec *codec)
 	es9018_data = es9018;
 	snd_soc_codec_set_drvdata(codec, es9018);
 
-	if ((es9018->hw_major == 2) && (es9018->hw_minor == 2)) {
-		es9018_power(es9018, true);
-		mdelay(1);
-		es9018_reset(es9018, false);
-		usleep(1000);
-		/* send the cached change to hardware */
-		codec->cache_only = false;
-		/*disable soft start per datasheet */
-		ret = snd_soc_update_bits(codec,
-			ES9018_SOFT_START_SETTINGS,
-			ES9018_SOFT_START_MSK, 0);
-		/* assert the reset pin */
-		es9018_reset(es9018, true);
-		codec->cache_sync = true;
-		codec->cache_only = true; /* block to touch hardware */
-	}
-
 	return 0;
 
 clock_45m_free:
@@ -622,9 +579,6 @@ clock_45m_free:
 opa_free:
 	if (gpio_is_valid(es9018->opa_gpio))
 		gpio_free(es9018->opa_gpio);
-switch_free:
-	if (gpio_is_valid(es9018->switch_gpio))
-		gpio_free(es9018->switch_gpio);
 mute_free:
 	if (gpio_is_valid(es9018->mute_gpio))
 		gpio_free(es9018->mute_gpio);
@@ -678,9 +632,6 @@ static int es9018_set_bias_on(struct snd_soc_codec *codec)
 	dev_dbg(codec->dev, "%s: enter\n", __func__);
 	/* mute before transition */
 	es9018_mute(es9018, true);
-
-	if (!((es9018->hw_major == 2) && (es9018->hw_minor == 2)))
-		es9018_power(es9018, true);
 
 	/* enable the clock */
 	es9018_clock(es9018, true);
@@ -745,9 +696,6 @@ static int es9018_set_bias_on(struct snd_soc_codec *codec)
 	es9018_opa(es9018, true);
 	/* done, switch on and unmute */
 	es9018_switch(es9018, true);
-	/* for p2c, need note unmute */
-	if (!((es9018->hw_major == 2) && (es9018->hw_minor == 2)))
-		es9018_mute(es9018, false);
 
 	return 0;
 
@@ -755,8 +703,6 @@ bus_access_err:
 	codec->cache_only = true;
 	es9018_reset(es9018, true);
 	es9018_mute(es9018, false);
-	if (!((es9018->hw_major == 2) && (es9018->hw_minor == 2)))
-		es9018_power(es9018, false);
 	return ret;
 }
 
@@ -782,8 +728,6 @@ static void es9018_set_bias_off(struct snd_soc_codec *codec)
 	codec->cache_sync = true;
 	codec->cache_only = true; /* block to touch hardware */
 	es9018_clock(es9018, false);
-	if (!((es9018->hw_major == 2) && (es9018->hw_minor == 2)))
-		es9018_power(es9018, false);
 	es9018_mute(es9018, false);
 }
 

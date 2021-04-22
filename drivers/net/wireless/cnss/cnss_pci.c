@@ -49,7 +49,6 @@
 #include <soc/qcom/ramdump.h>
 #include <soc/qcom/memory_dump.h>
 #include <net/cnss.h>
-#include <asm/bootinfo.h>
 #include <net/cnss_common.h>
 
 #ifdef CONFIG_WCNSS_MEM_PRE_ALLOC
@@ -870,11 +869,6 @@ int cnss_get_fw_files_for_target(struct cnss_fw_files *pfw_files,
 {
 	if (!pfw_files)
 		return -ENODEV;
-
-	if (get_hw_version_devid() == 3) {
-		/* Load board data for A10 */
-		strcpy(FW_FILES_QCA6174_FW_3_0.board_data, "bd30_a10.bin");
-	}
 
 	switch (target_version) {
 	case AR6320_REV1_VERSION:

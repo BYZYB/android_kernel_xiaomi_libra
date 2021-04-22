@@ -73,7 +73,6 @@
 
 #include <linux/pwm.h>
 #include <linux/platform_device.h>
-#include <asm/bootinfo.h>
 
 #define SUPPORT_TIMED_OUTPUT 1
 #define SUPPORT_WRITE_PAT    0

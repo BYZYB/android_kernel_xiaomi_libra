@@ -35,8 +35,6 @@
 #include "st_sensor_hub.h"
 #include "st_hub_ymodem.h"
 
-#include <asm/bootinfo.h>
-
 #define ST_HUB_TOGGLE_DURATION_MS			(20)
 #define ST_HUB_TOGGLE_DURATION_LOW_MS			(10)
 #define ST_HUB_TOGGLE_RESET_LOW_MS			(100)
@@ -2102,15 +2100,9 @@ int st_sensor_hub_common_probe(struct st_hub_data *hdata)
 	if (err < 0)
 		return err;
 
-
-	if(2 == get_hw_version_devid())
-		err = request_firmware_nowait(THIS_MODULE, true, ST_HUB_FIRMWARE_NAME,
-						hdata->dev, GFP_KERNEL, hdata,
-						st_hub_load_firmware);
-	else
-		err = request_firmware_nowait(THIS_MODULE, true, ST_HUB_FIRMWARE_NAME_A,
-						hdata->dev, GFP_KERNEL, hdata,
-						st_hub_load_firmware);
+	err = request_firmware_nowait(THIS_MODULE, true, ST_HUB_FIRMWARE_NAME_A,
+					hdata->dev, GFP_KERNEL, hdata,
+					st_hub_load_firmware);
 	if (err < 0)
 		return err;
 #else /* CONFIG_IIO_ST_HUB_RAM_LOADER */

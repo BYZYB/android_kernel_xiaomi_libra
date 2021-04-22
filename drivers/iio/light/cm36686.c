@@ -34,7 +34,6 @@
 #include <linux/regulator/driver.h>
 #include <linux/regulator/consumer.h>
 #include <linux/of_irq.h>
-#include <asm/bootinfo.h>
 
 #define CM36686_I2C_NAME		"cm36686"
 #define CM_PROX_IIO_NAME		"distance"

@@ -31,7 +31,6 @@
 #include <linux/hrtimer.h>
 #include <linux/qpnp/pwm.h>
 #include <linux/regulator/consumer.h>
-#include <asm/bootinfo.h>
 #include <linux/gpio.h>
 #include <linux/of_gpio.h>
 #include "../staging/android/timed_output.h"
