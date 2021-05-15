@@ -1,5 +1,7 @@
         Linux kernel release 3.x <http://kernel.org/>
 
+Forked from: https://github.com/xiaomi-classic-dev/android_kernel_xiaomi_leo
+
 These are the release notes for Linux version 3.  Read them carefully,
 as they tell you what this is all about, explain how to install the
 kernel, and what to do if something goes wrong.
@@ -409,4 +411,3 @@ IF SOMETHING GOES WRONG:
 
    gdb'ing a non-running kernel currently fails because gdb (wrongly)
    disregards the starting offset for which the kernel is compiled.
-

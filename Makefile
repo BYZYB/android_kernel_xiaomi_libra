@@ -234,10 +234,10 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
 	  else echo sh; fi ; fi)
 
-HOSTCC       = gcc
-HOSTCXX      = g++
-HOSTCFLAGS   = -fomit-frame-pointer
-HOSTCXXFLAGS =
+HOSTCC := gcc
+HOSTCXX := g++
+HOSTCFLAGS := -Ofast -fomit-frame-pointer
+HOSTCXXFLAGS := -Ofast
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -317,31 +317,21 @@ $(srctree)/scripts/Kbuild.include: ;
 include $(srctree)/scripts/Kbuild.include
 
 # Make variables (CC, etc...)
-AR = $(CROSS_COMPILE)ar
-AS = $(CROSS_COMPILE)as
-AWK = awk
-CC = $(CROSS_COMPILE)gcc
-CHECK = sparse
-CPP = $(CC) -E
-DEPMOD = /sbin/depmod
-GENKSYMS = scripts/genksyms/genksyms
-LD = $(CROSS_COMPILE)ld
-LDGOLD = $(CROSS_COMPILE)ld.gold
-NM = $(CROSS_COMPILE)nm
-OBJCOPY = $(CROSS_COMPILE)objcopy
-OBJDUMP = $(CROSS_COMPILE)objdump
-PERL = perl
-STRIP = $(CROSS_COMPILE)strip
-
-AFLAGS_KERNEL =
-AFLAGS_MODULE =
-CFLAGS_GCOV = -fprofile-arcs -ftest-coverage
-CFLAGS_KERNEL =
-CFLAGS_MODULE =
-LDFLAGS_MODULE =
-
-CHECKFLAGS := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ $(CF)
+AFLAGS_KERNEL :=
+AFLAGS_MODULE :=
+AR := $(CROSS_COMPILE)ar
+AS := $(CROSS_COMPILE)as
+AWK := awk
+CC := $(CROSS_COMPILE)gcc
+CFLAGS_GCOV := -fprofile-arcs -ftest-coverage -fno-tree-loop-im
+CFLAGS_KERNEL :=
+CFLAGS_MODULE :=
+CHECK := sparse
+CHECKFLAGS := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ -Wno-return-void $(CF)
 CLANG_FLAGS := -no-integrated-as
+CPP := $(CC) -E
+DEPMOD := depmod
+GENKSYMS := scripts/genksyms/genksyms
 INSTALLKERNEL := installkernel
 KBUILD_AFLAGS := -D__ASSEMBLY__
 KBUILD_AFLAGS_KERNEL :=
@@ -351,6 +341,14 @@ KBUILD_CFLAGS_KERNEL :=
 KBUILD_CFLAGS_MODULE := -DMODULE
 KBUILD_CPPFLAGS := -D__KERNEL__
 KBUILD_LDFLAGS_MODULE := -T $(srctree)/scripts/module-common.lds
+LD := $(CROSS_COMPILE)ld
+LDFLAGS_MODULE :=
+LDGOLD := $(CROSS_COMPILE)ld.gold
+NM := $(CROSS_COMPILE)nm
+OBJCOPY := $(CROSS_COMPILE)objcopy
+OBJDUMP := $(CROSS_COMPILE)objdump
+PERL := perl
+STRIP := $(CROSS_COMPILE)strip
 
 # Use USERINCLUDE when you must reference the UAPI directories only.
 USERINCLUDE := \
@@ -592,7 +590,7 @@ ifneq ($(GCC_TOOLCHAIN),)
 CLANG_FLAGS += --gcc-toolchain=$(GCC_TOOLCHAIN)
 endif
 ifdef CONFIG_MODULES
-KBUILD_CFLAGS += -mno-global-merge
+KBUILD_CFLAGS += -fcatch-undefined-behavior -mno-global-merge
 endif
 KBUILD_AFLAGS += $(CLANG_FLAGS)
 KBUILD_CFLAGS += $(CLANG_FLAGS)
@@ -619,15 +617,11 @@ KBUILD_CFLAGS += $(call cc-option, -fdata-sections,) \
 endif
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-HOSTCFLAGS += -Os
-HOSTCXXFLAGS += -Os
 KBUILD_AFLAGS += -Os
 KBUILD_CFLAGS += -Os
 KBUILD_CPPFLAGS += -Os
 LDFLAGS += -O3
 else
-HOSTCFLAGS += -Ofast
-HOSTCXXFLAGS += -Ofast
 KBUILD_AFLAGS += -Ofast
 KBUILD_CFLAGS += -Ofast
 KBUILD_CPPFLAGS += -Ofast
@@ -685,23 +679,24 @@ KBUILD_CFLAGS += $(stackp-flag)
 # Use make W=1 to enable them (see scripts/Makefile.extrawarn)
 ifeq ($(cc-name),clang)
 KBUILD_CFLAGS += -Wno-address-of-packed-member \
-                 -Wno-asm-operand-widths \
-                 -Wno-deprecated-declarations \
-                 -Wno-format-invalid-specifier \
-                 -Wno-gnu \
-                 -Wno-pointer-to-enum-cast \
-                 -Wno-pointer-to-int-cast \
-                 -Wno-tautological-compare \
-                 -Wno-unused-const-variable
+		-Wno-asm-operand-widths \
+		-Wno-deprecated-declarations \
+		-Wno-format-invalid-specifier \
+		-Wno-gnu \
+		-Wno-pointer-to-enum-cast \
+		-Wno-pointer-to-int-cast \
+		-Wno-tautological-compare \
+		-Wno-unused-const-variable
+KBUILD_CPPFLAGS += $(call cc-option,-Qunused-arguments,)
 else
 KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member) \
-                 $(call cc-disable-warning, attribute-alias) \
-                 $(call cc-disable-warning, discarded-array-qualifiers) \
-                 $(call cc-disable-warning, format-security) \
-                 $(call cc-disable-warning, incompatible-pointer-types) \
-                 $(call cc-disable-warning, shift-overflow) \
-                 $(call cc-disable-warning, unused-but-set-variable) \
-                 $(call cc-disable-warning, unused-const-variable)
+		$(call cc-disable-warning, attribute-alias) \
+		$(call cc-disable-warning, discarded-array-qualifiers) \
+		$(call cc-disable-warning, format-security) \
+		$(call cc-disable-warning, incompatible-pointer-types) \
+		$(call cc-disable-warning, shift-overflow) \
+		$(call cc-disable-warning, unused-but-set-variable) \
+		$(call cc-disable-warning, unused-const-variable)
 endif
 
 ifdef CONFIG_FRAME_POINTER
@@ -776,10 +771,10 @@ CHECKFLAGS += $(NOSTDINC_FLAGS)
 KBUILD_CFLAGS += $(call cc-disable-warning, pointer-sign)
 
 # disable invalid "can't wrap" optimizations for signed / pointers
-KBUILD_CFLAGS += $(call cc-option, -fno-common) \
-                 $(call cc-option, -fno-strict-aliasing) \
-                 $(call cc-option, -fno-strict-overflow) \
-                 $(call cc-option, -fno-var-tracking-assignments)
+KBUILD_CFLAGS	+= $(call cc-option, -fno-common)
+KBUILD_CFLAGS	+= $(call cc-option, -fno-strict-aliasing)
+KBUILD_CFLAGS	+= $(call cc-option, -fno-strict-overflow)
+KBUILD_CFLAGS	+= $(call cc-option, -fno-var-tracking-assignments)
 
 # clang sets -fmerge-all-constants by default as optimization, but this
 # is non-conforming behavior for C and in fact breaks the kernel, so we
