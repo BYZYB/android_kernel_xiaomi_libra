@@ -92,7 +92,7 @@
 #endif
 
 
-#ifdef CONFIG_SYSCTL
+#if defined(CONFIG_SYSCTL)
 
 /* External variables not in a header file. */
 #ifdef CONFIG_USB
@@ -860,7 +860,7 @@ static struct ctl_table kern_table[] = {
 		.mode		= 0644,
 		.proc_handler	= proc_dointvec,
 	},
-#ifdef CONFIG_PRINTK
+#if defined(CONFIG_PRINTK)
 	{
 		.procname	= "printk",
 		.data		= &console_loglevel,
@@ -935,7 +935,7 @@ static struct ctl_table kern_table[] = {
 		.mode		= 0444,
 		.proc_handler	= proc_dointvec,
 	},
-#ifdef CONFIG_LOCKUP_DETECTOR
+#if defined(CONFIG_LOCKUP_DETECTOR)
 	{
 		.procname       = "watchdog",
 		.data           = &watchdog_enabled,
@@ -982,7 +982,7 @@ static struct ctl_table kern_table[] = {
 		.proc_handler   = proc_dointvec,
 	},
 #endif
-#ifdef CONFIG_X86
+#if defined(CONFIG_X86)
 	{
 		.procname	= "panic_on_unrecovered_nmi",
 		.data		= &panic_on_unrecovered_nmi,
@@ -1035,7 +1035,7 @@ static struct ctl_table kern_table[] = {
 		.proc_handler	= proc_dointvec,
 	},
 #endif
-#ifdef CONFIG_ASLR
+#if defined(CONFIG_ASLR) && defined(CONFIG_MMU)
 	{
 		.procname	= "randomize_va_space",
 		.data		= &randomize_va_space,
@@ -1863,7 +1863,7 @@ static struct ctl_table debug_table[] = {
 		.proc_handler	= proc_dointvec
 	},
 #endif
-#ifdef CONFIG_OPTPROBES
+#if defined(CONFIG_OPTPROBES)
 	{
 		.procname	= "kprobes-optimization",
 		.data		= &sysctl_kprobes_optimization,
