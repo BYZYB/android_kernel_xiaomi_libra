@@ -371,7 +371,15 @@ ifeq ($(cc-name),clang)
 KBUILD_CFLAGS += \
 		-fdiagnostics-color \
 		-mcpu=cortex-a53 \
-		-mtune=cortex-a53
+		-mtune=cortex-a53 \
+		-mllvm -polly \
+		-mllvm -polly-ast-use-context \
+		-mllvm -polly-detect-keep-going \
+		-mllvm -polly-invariant-load-hoisting \
+		-mllvm -polly-opt-fusion=max \
+		-mllvm -polly-run-dce \
+		-mllvm -polly-run-inliner \
+		-mllvm -polly-vectorizer=stripmine
 else
 KBUILD_CFLAGS += \
 		-fdiagnostics-color \
