@@ -273,6 +273,9 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
 			goto err_vm_insert_page_failed;
 		}
 
+		if (index + 1 > alloc->pages_high)
+			alloc->pages_high = index + 1;
+
 		trace_binder_alloc_page_end(alloc, index);
 		/* vm_insert_page does not seem to increment the refcount */
 	}
@@ -865,6 +868,7 @@ void binder_alloc_print_pages(struct seq_file *m,
 	}
 	mutex_unlock(&alloc->mutex);
 	seq_printf(m, "  pages: %d:%d:%d\n", active, lru, free);
+	seq_printf(m, "  pages high watermark: %zu\n", alloc->pages_high);
 }
 
 /**
@@ -935,8 +939,8 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
 	/* Same as mmget_not_zero() in later kernel versions */
 	if (!atomic_inc_not_zero(&alloc->vma_vm_mm->mm_users))
 		goto err_mmget;
-	if (!down_write_trylock(&mm->mmap_sem))
-		goto err_down_write_mmap_sem_failed;
+	if (!down_read_trylock(&mm->mmap_sem))
+		goto err_down_read_mmap_sem_failed;
 	vma = binder_alloc_get_vma(alloc);
 
 	list_del_init(item);
@@ -949,8 +953,8 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
 
 		trace_binder_unmap_user_end(alloc, index);
 	}
-	up_write(&mm->mmap_sem);
-	mmput(mm);
+	up_read(&mm->mmap_sem);
+	mmput_async(mm);
 
 	trace_binder_unmap_kernel_start(alloc, index);
 
@@ -963,8 +967,8 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
 	mutex_unlock(&alloc->mutex);
 	return LRU_REMOVED_RETRY;
 
-err_down_write_mmap_sem_failed:
-	mmput(mm);
+err_down_read_mmap_sem_failed:
+	mmput_async(mm);
 err_mmget:
 err_page_already_freed:
 	mutex_unlock(&alloc->mutex);
@@ -1189,4 +1193,3 @@ void binder_alloc_copy_from_buffer(struct binder_alloc *alloc,
 	binder_alloc_do_buffer_copy(alloc, false, buffer, buffer_offset,
 				    dest, bytes);
 }
-
