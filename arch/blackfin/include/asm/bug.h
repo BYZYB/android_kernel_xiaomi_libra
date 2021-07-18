@@ -7,6 +7,8 @@
 #ifndef _BLACKFIN_BUG_H
 #define _BLACKFIN_BUG_H
 
+#ifdef CONFIG_BUG
+
 /*
  * This can be any undefined 16-bit opcode, meaning
  * ((opcode & 0xc000) != 0xc000)
@@ -63,6 +65,8 @@
 
 #define HAVE_ARCH_BUG
 #define HAVE_ARCH_WARN_ON
+
+#endif
 
 #include <asm-generic/bug.h>
 

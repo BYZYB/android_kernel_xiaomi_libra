@@ -265,6 +265,7 @@ config PHYS_OFFSET
 
 config GENERIC_BUG
 	def_bool y
+	depends on BUG
 
 config ARM_USER_ACCESSIBLE_TIMER_BASE
 	hex "Base address of user-accessible timer counter page"

@@ -2,6 +2,7 @@
 #define _M68K_BUG_H
 
 #ifdef CONFIG_MMU
+#ifdef CONFIG_BUG
 #ifdef CONFIG_DEBUG_BUGVERBOSE
 #ifndef CONFIG_SUN3
 #define BUG() do { \
@@ -21,6 +22,7 @@
 #endif
 
 #define HAVE_ARCH_BUG
+#endif
 #endif /* CONFIG_MMU */
 
 #include <asm-generic/bug.h>

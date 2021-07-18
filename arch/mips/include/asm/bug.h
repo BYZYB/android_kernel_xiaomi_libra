@@ -4,6 +4,8 @@
 #include <linux/compiler.h>
 #include <asm/sgidefs.h>
 
+#ifdef CONFIG_BUG
+
 #include <asm/break.h>
 
 static inline void __noreturn BUG(void)
@@ -33,6 +35,8 @@ static inline void  __BUG_ON(unsigned long condition)
 #define HAVE_ARCH_BUG_ON
 
 #endif /* _MIPS_ISA > _MIPS_ISA_MIPS1 */
+
+#endif
 
 #include <asm-generic/bug.h>
 

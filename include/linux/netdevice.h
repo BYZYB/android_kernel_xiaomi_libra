@@ -2716,7 +2716,13 @@ static inline bool can_checksum_protocol(netdev_features_t features,
 		 protocol == htons(ETH_P_FCOE)));
 }
 
+#ifdef CONFIG_BUG
 extern void netdev_rx_csum_fault(struct net_device *dev);
+#else
+static inline void netdev_rx_csum_fault(struct net_device *dev)
+{
+}
+#endif
 /* rx skb timestamps */
 extern void		net_enable_timestamp(void);
 extern void		net_disable_timestamp(void);

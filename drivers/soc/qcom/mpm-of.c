@@ -865,10 +865,8 @@ static void __init __of_mpm_init(struct device_node *node)
 
 		list = of_get_property(node, mpm_of_map[i].map, &size);
 
-		if (!list || !size) {
-			__WARN();
+		if (!list || !size)
 			continue;
-		}
 
 		/*
 		 * Size is in bytes. Convert to size of uint32_t
