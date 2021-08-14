@@ -236,8 +236,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 
 HOSTCC := gcc
 HOSTCXX := g++
-HOSTCFLAGS := -Ofast -fomit-frame-pointer
-HOSTCXXFLAGS := -Ofast
+HOSTCFLAGS := -Ofast -fomit-frame-pointer -pipe
+HOSTCXXFLAGS := -Ofast -pipe
 
 # Decide whether to build built-in, modular, or both.
 # Normally, just do built-in.
@@ -336,10 +336,10 @@ INSTALLKERNEL := installkernel
 KBUILD_AFLAGS := -D__ASSEMBLY__
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_AFLAGS_MODULE := -DMODULE
-KBUILD_CFLAGS :=
+KBUILD_CFLAGS := -pipe
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_CFLAGS_MODULE := -DMODULE
-KBUILD_CPPFLAGS := -D__KERNEL__
+KBUILD_CPPFLAGS := -D__KERNEL__ -pipe
 KBUILD_LDFLAGS_MODULE := -T $(srctree)/scripts/module-common.lds
 LD := $(CROSS_COMPILE)ld
 LDFLAGS_MODULE :=
