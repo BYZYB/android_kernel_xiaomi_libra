@@ -343,7 +343,7 @@ KBUILD_CPPFLAGS := -D__KERNEL__
 KBUILD_LDFLAGS_MODULE := -T $(srctree)/scripts/module-common.lds
 LD := $(CROSS_COMPILE)ld
 LDFLAGS_MODULE :=
-LDGOLD := $(CROSS_COMPILE)ld.gold
+LDLLD = ld.lld
 NM := $(CROSS_COMPILE)nm
 OBJCOPY := $(CROSS_COMPILE)objcopy
 OBJDUMP := $(CROSS_COMPILE)objdump
@@ -621,10 +621,8 @@ endif
 # Make toolchain changes before including arch/$(SRCARCH)/Makefile to ensure
 # ar/cc/ld-* macros return correct values.
 ifdef CONFIG_LTO_CLANG
-# use GNU gold with LLVMgold for LTO linking, and LD for vmlinux_link
-LDFINAL_vmlinux := $(LD)
-LD := $(LDGOLD)
-LDFLAGS += -plugin LLVMgold.so
+# use LLVM linker LLD for LTO linking and vmlinux_link
+LD := $(LDLLD)
 # use llvm-ar for building symbol tables from IR files, and llvm-dis instead
 # of objdump for processing symbol versions and exports
 LLVM_AR := llvm-ar
@@ -708,7 +706,10 @@ KBUILD_CFLAGS += -Wno-address-of-packed-member \
 		-Wno-pointer-to-int-cast \
 		-Wno-tautological-compare \
 		-Wno-unused-const-variable
-KBUILD_CPPFLAGS += $(call cc-option,-Qunused-arguments,)
+ifeq ($(ld-name),lld)
+KBUILD_CFLAGS += -fuse-ld=lld
+endif
+KBUILD_CPPFLAGS += -Qunused-arguments
 else
 KBUILD_CFLAGS += $(call cc-disable-warning, address-of-packed-member) \
 		$(call cc-disable-warning, attribute-alias) \

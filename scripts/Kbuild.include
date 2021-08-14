@@ -160,8 +160,8 @@ ld-option = $(call try-run, $(LD) $(LDFLAGS) $(1) -v,$(1),$(2))
 ar-option = $(call try-run, $(AR) rc$(1) "$$TMP",$(1),$(2))
 
 # ld-name
-# Expands to either bfd or gold
-ld-name = $(shell $(LD) -v 2>&1 | grep -q "GNU gold" && echo gold || echo bfd)
+# Expands to either bfd or lld
+ld-name = $(shell $(LD) -v 2>&1 | grep -q "LLD" && echo lld || echo bfd)
 
 # ld-version
 # Usage: $(call ld-version)
