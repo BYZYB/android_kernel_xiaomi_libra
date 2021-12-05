@@ -202,7 +202,20 @@ void emergency_sync(void)
  */
 SYSCALL_DEFINE1(syncfs, int, fd)
 {
-	return 0;
+	struct fd f = fdget(fd);
+	struct super_block *sb;
+	int ret;
+
+	if (!f.file)
+		return -EBADF;
+	sb = f.file->f_dentry->d_sb;
+
+	down_read(&sb->s_umount);
+	ret = sync_filesystem(sb);
+	up_read(&sb->s_umount);
+
+	fdput(f);
+	return ret;
 }
 
 /**
@@ -216,9 +229,19 @@ SYSCALL_DEFINE1(syncfs, int, fd)
  * @datasync is set only metadata needed to access modified file data is
  * written.
  */
-inline int vfs_fsync_range(struct file *file, loff_t start, loff_t end, int datasync)
+int vfs_fsync_range(struct file *file, loff_t start, loff_t end, int datasync)
 {
-	return 0;
+	struct inode *inode = file->f_mapping->host;
+
+	if (!file->f_op->fsync)
+		return -EINVAL;
+	if (!datasync && (inode->i_state & I_DIRTY_TIME)) {
+		spin_lock(&inode->i_lock);
+		inode->i_state &= ~I_DIRTY_TIME;
+		spin_unlock(&inode->i_lock);
+		mark_inode_dirty_sync(inode);
+	}
+	return file->f_op->fsync(file, start, end, datasync);
 }
 EXPORT_SYMBOL(vfs_fsync_range);
 
@@ -236,9 +259,17 @@ int vfs_fsync(struct file *file, int datasync)
 }
 EXPORT_SYMBOL(vfs_fsync);
 
-static inline int do_fsync(unsigned int fd, int datasync)
+static int do_fsync(unsigned int fd, int datasync)
 {
-	return 0;
+	struct fd f = fdget(fd);
+	int ret = -EBADF;
+
+	if (f.file) {
+		ret = vfs_fsync(f.file, datasync);
+		fdput(f);
+		inc_syscfs(current);
+	}
+	return ret;
 }
 
 SYSCALL_DEFINE1(fsync, unsigned int, fd)
@@ -318,7 +349,85 @@ EXPORT_SYMBOL(generic_write_sync);
 SYSCALL_DEFINE4(sync_file_range, int, fd, loff_t, offset, loff_t, nbytes,
 				unsigned int, flags)
 {
-	return 0;
+	int ret;
+	struct fd f;
+	struct address_space *mapping;
+	loff_t endbyte;			/* inclusive */
+	umode_t i_mode;
+
+	ret = -EINVAL;
+	if (flags & ~VALID_FLAGS)
+		goto out;
+
+	endbyte = offset + nbytes;
+
+	if ((s64)offset < 0)
+		goto out;
+	if ((s64)endbyte < 0)
+		goto out;
+	if (endbyte < offset)
+		goto out;
+
+	if (sizeof(pgoff_t) == 4) {
+		if (offset >= (0x100000000ULL << PAGE_CACHE_SHIFT)) {
+			/*
+			 * The range starts outside a 32 bit machine's
+			 * pagecache addressing capabilities.  Let it "succeed"
+			 */
+			ret = 0;
+			goto out;
+		}
+		if (endbyte >= (0x100000000ULL << PAGE_CACHE_SHIFT)) {
+			/*
+			 * Out to EOF
+			 */
+			nbytes = 0;
+		}
+	}
+
+	if (nbytes == 0)
+		endbyte = LLONG_MAX;
+	else
+		endbyte--;		/* inclusive */
+
+	ret = -EBADF;
+	f = fdget(fd);
+	if (!f.file)
+		goto out;
+
+	i_mode = file_inode(f.file)->i_mode;
+	ret = -ESPIPE;
+	if (!S_ISREG(i_mode) && !S_ISBLK(i_mode) && !S_ISDIR(i_mode) &&
+			!S_ISLNK(i_mode))
+		goto out_put;
+
+	mapping = f.file->f_mapping;
+	if (!mapping) {
+		ret = -EINVAL;
+		goto out_put;
+	}
+
+	ret = 0;
+	if (flags & SYNC_FILE_RANGE_WAIT_BEFORE) {
+		ret = filemap_fdatawait_range(mapping, offset, endbyte);
+		if (ret < 0)
+			goto out_put;
+	}
+
+	if (flags & SYNC_FILE_RANGE_WRITE) {
+		ret = __filemap_fdatawrite_range(mapping, offset, endbyte,
+						 WB_SYNC_NONE);
+		if (ret < 0)
+			goto out_put;
+	}
+
+	if (flags & SYNC_FILE_RANGE_WAIT_AFTER)
+		ret = filemap_fdatawait_range(mapping, offset, endbyte);
+
+out_put:
+	fdput(f);
+out:
+	return ret;
 }
 
 /* It would be nice if people remember that not all the world's an i386
