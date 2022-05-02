@@ -234,8 +234,13 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
 	  else echo sh; fi ; fi)
 
-HOSTCC := gcc
-HOSTCXX := g++
+ifneq ($(cc-name),clang)
+HOSTCC = gcc
+HOSTCXX = g++
+else
+HOSTCC = clang
+HOSTCXX = clang++
+endif
 HOSTCFLAGS := -Ofast -fomit-frame-pointer -pipe
 HOSTCXXFLAGS := -Ofast -pipe
 
@@ -369,8 +374,6 @@ LINUXINCLUDE := \
 # Use arch specific optimization
 ifeq ($(cc-name),clang)
 AR := llvm-ar
-HOSTCC := clang
-HOSTCXX := clang++
 NM := llvm-nm
 OBJCOPY := llvm-objcopy
 OBJDUMP := llvm-objdump
