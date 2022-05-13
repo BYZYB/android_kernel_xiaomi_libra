@@ -40,6 +40,14 @@
 					fsmgr_flags = "wait";
 					status = "ok";
 				};
+				vendor {
+					compatible = "android,vendor";
+					dev = "/dev/block/platform/soc.0/f9824900.sdhci/by-name/cust";
+					type = "ext4";
+					mnt_flags = "ro,noatime,discard,noauto_da_alloc";
+					fsmgr_flags = "wait";
+					status = "ok";
+				};
 			};
 		};
 	};
